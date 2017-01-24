@@ -37,9 +37,9 @@ HandlerRegistry.addRule(MyRule())
 
 This can be simplified with some extra Jython code, which we'll see later. First, let's look at what's happening with the raw functionality.
 
-When a Jython script is loaded it is provided with a _JSR223 scope_ that predefines a number of variables. These include the most commonly used core types and values from ESH (e.g., State, Command, OnOffType, etc.). This means you don't need a Jython `import` statement to load them.
+When a Jython script is loaded it is provided with a _JSR223 scope_ that predefines a number of variables. These include the most commonly used core types and values from ESH (e.g., State, Command, OnOffType, etc.). This means you don't need a Jython import statement to load them.
 
-For defining rules, additional symbols must be defined. Rather than using a Jython `import` (remember, JSR223 support is for other languages too), these additional symbols are imported using:
+For defining rules, additional symbols must be defined. Rather than using a Jython import (remember, JSR223 support is for other languages too), these additional symbols are imported using:
 
 ```python
 ScriptExtension.importPreset("RuleSupport")
@@ -96,6 +96,8 @@ The `item_triggered` decorator creates a rule that will trigger on changes to Te
 
 One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages and modules to structure your code into reusable components. The following are some initial experiments in that direction.
 
+There are example scripts in the `scripts/examples` subdirectory.
+
 ### Module: `openhab.log`
 
 This module bridges the Python standard `logging` module with ESH logging. Example usage:
@@ -125,6 +127,20 @@ Trigger decorators:
 * __time_triggered__ - run a function periodically
 * __item_triggered__ - run a function based on an item event
 
+### Module: `openhab.items`
+
+This module allows runtime creation and removal of items.
+
+```python
+import openhab.items
+
+openhab.items.add("_Test", "String")
+
+# later...
+openhab.items.remove("_Test")
+
+```
+
 ### Module: `openhab.testing`
 
 One of the challenges of ESH/openHAB rule development is verifying that rules are behaving correctly and have broken as the code evolves. This module supports running automated tests within a runtime context. To run tests directly from scripts:
@@ -137,10 +153,34 @@ class MyTest(unittest.TestCase):
 	def test_something(self):
 		"Some test code..."
 
-run_test(MyTest()) 
+run_test(MyTest) 
 ```
 
 The module also defines a rule class, `TestRunner` that will run a testcase when an switch item is turned on and store the test results in a string item.
+
+### Module: `openhab.osgi`
+
+Provides utility function for retrieving, registering and removing OSGI services.
+
+```python
+import openhab.osgi
+
+item_registry = osgi.get_service("org.eclipse.smarthome.core.items.ItemRegistry")
+```
+
+### Module: `openhab.osgi.events`
+
+Provides an OSGI EventAdmin event monitor and rule trigger. This can trigger off any OSGI event (including ESH events). _Rule manager events are filtered to avoid circular loops in the rule execution._
+
+```python
+class ExampleRule(SimpleRule):
+    def __init__(self):
+        self.triggers = [ openhab.osgi.events.OsgiEventTrigger() ]
+            
+    def execute(self, module, inputs):
+        event = inputs['event']
+        # do something with event
+```
 
 ### Module: `openhab.jsr223`
 
@@ -153,3 +193,15 @@ from openhab.jsr223.scope import events
 def update_data(data):
 	events.postUpdate("TestString1", str(data))
 ```
+
+### Module: `openhab`
+
+This module (really a Python package) patches the default scope `items` object so that items can be accessed as if they were attributes (rather than a dictionary).
+
+```python
+import openhab
+
+print items.TestString1
+```
+
+Note that this patch will be applied when any module in the `openhab` package is loaded.

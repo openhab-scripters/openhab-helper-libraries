@@ -34,6 +34,10 @@ class ItemCommandTrigger(Trigger):
             config["command"] = command
         Trigger.__init__(self, triggerName, "core.ItemStateChangeTrigger", Configuration(config))
 
+EVERY_SECOND = "0/1 * * * * ?"
+EVERY_MINUTE = "0 * * * * ?"
+EVERY_HOUR = "0 0 * * * ?"
+
 class CronTrigger(Trigger):
     def __init__(self, cronExpression, triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
@@ -91,22 +95,12 @@ class _FunctionRule(scope.SimpleRule):
             import traceback
             print traceback.format_exc()
 
-#def _handler_registry():
-#    # Special handling for dynamic HandlerRegistry
-#    scope.ScriptExtension.importPreset("RuleSupport")
-#    registry = scope.HandlerRegistry;
-#    if registry is None:
-#        print "\n".join(scope.keys())
-#        raise Exception("HandlerRegistry is not available in scope.")
-#    return registry
-
-def cron_triggered(cron_expression):
+def time_triggered(cron_expression):
     def decorator(fn):
         rule = _FunctionRule(fn, [CronTrigger(cron_expression)])
         scope.HandlerRegistry.addRule(rule)
         return fn
     return decorator
-
 
 ITEM_CHANGE = "ItemStateChangedEvent"
 ITEM_UPDATE = "ItemStateEvent"
@@ -122,7 +116,7 @@ def item_triggered(item_name, event_types=None, result_item_name=None):
             if result_item_name:
                 scope.events.postUpdate(result_item_name, str(result_value))
         rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], extended=True)
-        scope.scope.HandlerRegistry.addRule(rule)
+        scope.HandlerRegistry.addRule(rule)
         return fn
     return decorator
 

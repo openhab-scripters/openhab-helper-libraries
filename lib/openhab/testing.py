@@ -10,6 +10,13 @@ ScriptExtension.importPreset("RuleSimple")
 
 from openhab.jsr223.scope import SimpleRule
 
+_result_template = """{{
+  "run": {run},
+  "errors": {errors},
+  "failures": {failures},
+  "skipped": {skipped}
+}}"""
+
 def _run_test(test_case):
     def _format_errors(errors):
         return "[{}]".format(",\n    ".join('{{"name":"{}", "stack":"{}"}}'.format(
@@ -18,14 +25,9 @@ def _run_test(test_case):
     suite = loader.loadTestsFromTestCase(test_case)
     runner = unittest.TextTestRunner(resultclass=unittest.TestResult)
     result = runner.run(suite)
-    json_result = """{{
-  "run": {run},
-  "errors": {errors},
-  "failures": {failures},
-  "skipped": {skipped}
-}}            
-            """.format(run=result.testsRun, errors=_format_errors(result.errors), 
-                       failures=_format_errors(result.failures), skipped=result.skipped)
+    json_result = _result_template.format(
+        run=result.testsRun, errors=_format_errors(result.errors), 
+        failures=_format_errors(result.failures), skipped=result.skipped)
     return (not (result.errors or result.failures), json_result)      
 
 def run_test(test_case, logger=logging.root):
@@ -35,6 +37,7 @@ def run_test(test_case, logger=logging.root):
         logger.info(result)
     else:
         logger.error(result)
+    return (status, result)
         
 class TestRunner(SimpleRule):
     """

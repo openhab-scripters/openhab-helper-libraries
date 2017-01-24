@@ -1,5 +1,6 @@
 """
-This example demonstrates the logging bridge and trigger function decorators.
+This example demonstrates the logging bridge and trigger function decorators. It
+also indirectly uses the openhab.jsr223 module.
 
 Note that TestSwitch2 must be defined in an items file.
 """
