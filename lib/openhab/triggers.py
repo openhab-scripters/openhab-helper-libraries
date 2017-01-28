@@ -65,8 +65,11 @@ class _StartupTriggerHandlerFactory(scope.TriggerHandlerFactory):
         def setRuleEngineCallback(self, rule_engine_callback):
             rule_engine_callback.triggered(self.trigger, {})
             
+        def dispose(self):
+            pass
+        
     def get(self, trigger):
-        return StartupTriggerHandlerFactory.Handler(trigger)
+        return _StartupTriggerHandlerFactory.Handler(trigger)
     
     def ungetHandler(self, module, ruleUID, handler):
         pass

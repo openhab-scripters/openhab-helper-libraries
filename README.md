@@ -4,7 +4,7 @@ This is a repository of experimental Jython code that can be used with the Smart
 
 ## Applications
 
-The JSR223 scripting extensions can be used for general scripting purposes, including defining rules and associated SmartHome rule "modules" (triggers, conditions, actions).
+The JSR223 scripting extensions can be used for general scripting purposes, including defining rules and associated SmartHome rule "modules" (triggers, conditions, actions). Some possible applications include integration testing of complex rule behaviors or prototyping new OH2/ESH functionality.
 
 The scripting can be used for other purposes like automated integration testing or to access the OSGI framework (using or creating services, for example).
 
