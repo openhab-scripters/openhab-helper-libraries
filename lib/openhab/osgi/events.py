@@ -5,6 +5,8 @@ import uuid
 from org.osgi.framework import FrameworkUtil
 from org.osgi.service.event import EventHandler, EventConstants, EventAdmin
 from org.osgi.service.cm import ManagedService
+
+from org.eclipse.smarthome.automation import Visibility
 from org.eclipse.smarthome.config.core import Configuration
 
 from openhab.log import logging
@@ -93,7 +95,6 @@ class OsgiEventTriggerHandlerFactory(scope.TriggerHandlerFactory):
         def on_event(self, event):
             try:
                 if self.rule_engine_callback and event.getProperty('source') != 'RuleRegistryImpl':
-                    print "@@@@@ TRIGGER", event, event.getProperty('source'), self.rule_engine_callback is not None
                     self.rule_engine_callback.triggered(self.trigger, {'event': event})
             except:
                 import traceback
@@ -112,11 +113,14 @@ class OsgiEventTriggerHandlerFactory(scope.TriggerHandlerFactory):
         self.handlers.remove(handler)
         OsgiEventAdmin.remove_listener(handler.on_event)
 
-# TODO How can we pass the triggering event to the rule?
+TRIGGER_MODULE_ID = "jsr223.OsgiEventTrigger"
 
-MODULE_ID = "jsr223.OsgiEventTrigger"
-scope.HandlerRegistry.addTriggerType(scope.TriggerType(MODULE_ID, [], []))
-scope.HandlerRegistry.addTriggerHandler(MODULE_ID, OsgiEventTriggerHandlerFactory())
+scope.HandlerRegistry.addTriggerType(scope.TriggerType(TRIGGER_MODULE_ID, [],
+    "an OSGI event is published", 
+    "Triggers when an OSGI event is published",
+    set(), Visibility.VISIBLE, []))
+
+scope.HandlerRegistry.addTriggerHandler(TRIGGER_MODULE_ID, OsgiEventTriggerHandlerFactory())
 
 class OsgiEventTrigger(scope.Trigger):
     def __init__(self):

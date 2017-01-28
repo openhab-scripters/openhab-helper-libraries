@@ -1,6 +1,8 @@
 import uuid
+import java.util
 from org.eclipse.smarthome.automation import Trigger
 from org.eclipse.smarthome.config.core import Configuration
+from org.eclipse.smarthome.automation import Visibility
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 from org.eclipse.smarthome.automation.type import TriggerType
 
@@ -73,7 +75,13 @@ class _StartupTriggerHandlerFactory(scope.TriggerHandlerFactory):
         pass
     
 STARTUP_MODULE_ID = "jsr223.StartupTrigger"
-scope.HandlerRegistry.addTriggerType(TriggerType(STARTUP_MODULE_ID, [], []))
+
+scope.HandlerRegistry.addTriggerType(TriggerType(
+    STARTUP_MODULE_ID, [],
+    "the rule is activated", 
+    "Triggers when a rule is activated the first time",
+    set(), Visibility.VISIBLE, []))
+
 scope.HandlerRegistry.addTriggerHandler(STARTUP_MODULE_ID, _StartupTriggerHandlerFactory())
 
 class StartupTrigger(Trigger):
