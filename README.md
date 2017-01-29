@@ -92,6 +92,30 @@ def my_item_function():
 ```
 The `item_triggered` decorator creates a rule that will trigger on changes to TestString1. The function result will be posted to TestString2. The `items` object is from the default scope and allows access to item state. If the function needs to send commands or access other items, it can be  done using the `events` scope object. 
 
+## Component Scripts
+
+These scripts are in the `scripts/components` subdirectory. They should be copied to the `automation/jsr223` directory of your openHAB 2 installation to use them.
+
+### Script: `StartupTrigger.py`
+
+Defines a rule trigger that triggers immediately when a rule is activated. This is similar to the same type of trigger in openHAB 1.x.
+
+### Script: `OsgiEventTrigger.py`
+
+This rule trigger responds to events on the OSGI EventAdmin event bus.
+
+### Script: `LogAction.py`
+
+This is a simple rule action that will log a message to the openHAB log file.
+
+### Script `JythonTransform.py`
+
+This script defines a transformation service (identified by "JYTHON") that will process a value using a Jython script. This is similar to the Javascript transformer.
+
+### Script: `JythonConsoleCommand.py`
+
+This script defines an command extension to the OSGI console. The example command prints some Jython  platform details to the console output.
+
 ## Jython Modules
 
 One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages and modules to structure your code into reusable components. The following are some initial experiments in that direction.
@@ -122,7 +146,7 @@ Trigger classes:
 * __CronTrigger__
 * __StartupTrigger__ - fires when rule is activated (implemented in Jython)
 
-Trigger decorators:
+Trigger function decorators:
 
 * __time_triggered__ - run a function periodically
 * __item_triggered__ - run a function based on an item event
