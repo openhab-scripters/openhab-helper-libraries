@@ -1,11 +1,8 @@
 import uuid
 import java.util
 from org.eclipse.smarthome.automation import Trigger
-from org.eclipse.smarthome.config.core import Configuration
-from org.eclipse.smarthome.automation import Visibility
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 from org.eclipse.smarthome.automation.type import TriggerType
-
 
 from openhab.jsr223 import scope
 scope.ScriptExtension.importPreset("RuleFactories")
@@ -56,37 +53,6 @@ class ItemEventTrigger(Trigger):
                 "eventTypes": eventTypes
                 }))
 
-class _StartupTriggerHandlerFactory(scope.TriggerHandlerFactory):    
-        
-    class Handler(TriggerHandler):
-        def __init__(self, trigger):
-            self.trigger = trigger
-            
-        def setRuleEngineCallback(self, rule_engine_callback):
-            rule_engine_callback.triggered(self.trigger, {})
-            
-        def dispose(self):
-            pass
-        
-    def get(self, trigger):
-        return _StartupTriggerHandlerFactory.Handler(trigger)
-    
-    def ungetHandler(self, module, ruleUID, handler):
-        pass
-    
-    def dispose(self):
-        pass
-    
-STARTUP_MODULE_ID = "jsr223.StartupTrigger"
-
-scope.HandlerRegistry.addTriggerType(TriggerType(
-    STARTUP_MODULE_ID, [],
-    "the rule is activated", 
-    "Triggers when a rule is activated the first time",
-    set(), Visibility.VISIBLE, []))
-
-scope.HandlerRegistry.addTriggerHandler(STARTUP_MODULE_ID, _StartupTriggerHandlerFactory())
-
 class StartupTrigger(Trigger):
     def __init__(self, triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
@@ -130,4 +96,3 @@ def item_triggered(item_name, event_types=None, result_item_name=None):
         scope.HandlerRegistry.addRule(rule)
         return fn
     return decorator
-

@@ -13,9 +13,10 @@ def get_service(class_or_name):
         return bundle_context.getService(ref) if ref else None
     
 def register_service(service, interface_names, properties=None):
-    ref = bundle_context.registerService(interfaceNames, service, properties)
+    ref = bundle_context.registerService(interface_names, service, properties)
     for name in interface_names:
-        registered_services[i] = (service, ref)
+        registered_services[name] = (service, ref)
+    return ref
         
 def unregister_service(service):
     keys = registered_services.keys()

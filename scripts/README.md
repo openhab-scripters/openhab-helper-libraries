@@ -1,0 +1,1 @@
+These scripts must be copied to your automation/jsr223 directory to be activated.
