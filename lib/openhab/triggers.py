@@ -3,6 +3,7 @@ import java.util
 from org.eclipse.smarthome.automation import Trigger
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 from org.eclipse.smarthome.automation.type import TriggerType
+from org.eclipse.smarthome.config.core import Configuration
 
 from openhab.jsr223 import scope
 scope.ScriptExtension.importPreset("RuleFactories")

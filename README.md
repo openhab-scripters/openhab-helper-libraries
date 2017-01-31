@@ -116,6 +116,19 @@ This script defines a transformation service (identified by "JYTHON") that will 
 
 This script defines an command extension to the OSGI console. The example command prints some Jython  platform details to the console output.
 
+### Scripts: Jython-based Providers
+
+   * `JythonThingProvider.py`
+   * `JythonThingTypeProvider.py`
+   * `JythonBindingInfoProvider.py`
+   * `JythonItemProvider.py`
+   
+These components are used to support Thing handler implementations.
+
+### Script: `EchoThing.py`
+
+Experimental Thing binding and handler implemented in Jython. (At the time of this writing, it requires a small change to the ESH source code for it to work.) This simple Thing will write state updates on its input channel to items states linked to the output channel.
+
 ## Jython Modules
 
 One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages and modules to structure your code into reusable components. The following are some initial experiments in that direction.
