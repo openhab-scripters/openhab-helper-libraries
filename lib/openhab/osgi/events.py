@@ -14,6 +14,8 @@ scope.ScriptExtension.importPreset("RuleSupport")
 from openhab.osgi import bundle_context
 from openhab.log import logging
 
+import java.util
+
 log = logging.getLogger("OsgiEventAdmin")
 
 def hashtable(*key_values):
