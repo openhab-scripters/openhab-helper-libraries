@@ -76,7 +76,7 @@ class _FunctionRule(scope.SimpleRule):
 def time_triggered(cron_expression):
     def decorator(fn):
         rule = _FunctionRule(fn, [CronTrigger(cron_expression)])
-        scope.HandlerRegistry.addRule(rule)
+        scope.ruleRegistry.add(rule)
         return fn
     return decorator
 
@@ -94,6 +94,6 @@ def item_triggered(item_name, event_types=None, result_item_name=None):
             if result_item_name:
                 scope.events.postUpdate(result_item_name, str(result_value))
         rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], extended=True)
-        scope.HandlerRegistry.addRule(rule)
+        scope.ruleRegistry.add(rule)
         return fn
     return decorator

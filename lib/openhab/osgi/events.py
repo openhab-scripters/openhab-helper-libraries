@@ -36,14 +36,8 @@ class OsgiEventAdmin(object):
         def __init__(self):
             self.registration = bundle_context.registerService(
                 EventHandler, self, hashtable((EventConstants.EVENT_TOPIC, ["*"])))
-
-        def _log_event(self, event):
-            log.info("OSGI event: %s", event)
-            for name in event.propertyNames:
-                log.info("  '{}': {}".format(name, event.getProperty(name)))
             
         def handleEvent(self, event):
-            #self._log_event(event)
             for listener in OsgiEventAdmin._event_listeners:
                 try:
                     listener(event)
@@ -76,5 +70,14 @@ class OsgiEventTrigger(scope.Trigger):
         triggerName = uuid.uuid1().hex
         config = { }
         scope.Trigger.__init__(self, triggerName, "jsr223.OsgiEventTrigger", Configuration(config))
+        
+def log_event(event):
+    log.info("OSGI event: %s (%s)", event, type(event).__name__)
+    for name in event.propertyNames:
+        log.info("  '{}': {}".format(name, event.getProperty(name)))
+        
+def event_dict(event):
+    return { key: event.getProperty(key) for key in event.getPropertyNames() }
+
 
     

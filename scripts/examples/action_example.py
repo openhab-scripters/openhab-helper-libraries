@@ -24,7 +24,7 @@ def param(name, type, label, default=None, required=False):
     return ConfigDescriptionParameterBuilder.create(name, type)\
         .withLabel(label).withDefault(default).withRequired(required).build()
         
-HandlerRegistry.addActionType(ActionType(
+automationManager.addActionType(ActionType(
     "LogAction", 
     [
         param("logname", ConfigDescriptionParameter.Type.TEXT, "Logger Name", default="LogAction"),
@@ -34,4 +34,4 @@ HandlerRegistry.addActionType(ActionType(
     "Write a record to the log file.",
     set(),  Visibility.VISIBLE, [], []))
 
-HandlerRegistry.addActionHandler("LogAction", lambda module: LoggerAction(module))
+automationManager.addActionHandler("LogAction", lambda module: LoggerAction(module))

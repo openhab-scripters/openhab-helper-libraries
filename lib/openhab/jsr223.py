@@ -20,9 +20,6 @@ class Jsr223ModuleFinder(object):
             scope = self._get_jsr223_scope()
             if name == "scope":
                 return scope
-            elif name == "HandlerRegistry":
-                scope.get("ScriptExtension").importPreset("RuleSupport")
-                return scope.get("HandlerRegistry")
             return scope.get(name, None) or getattr(scope, name, None)
     
     def load_module(self, fullname):
