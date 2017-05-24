@@ -1,4 +1,5 @@
-* NOTE: This information is accurate after the latest JSR223 changes. *
+__NOTE: This information is not accurate after the latest JSR223 changes.__
+----
 
 # openHAB 2.x: JSR223 Jython Code
 
