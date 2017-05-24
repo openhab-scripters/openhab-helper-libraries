@@ -1,3 +1,5 @@
+* NOTE: This information is accurate after the latest JSR223 changes. *
+
 # openHAB 2.x: JSR223 Jython Code
 
 This is a repository of experimental Jython code that can be used with the SmartHome platform and openHAB 2.x (after the pending [PR](https://github.com/eclipse/smarthome/pull/1783) has been merged).
