@@ -1,6 +1,3 @@
-__NOTE: This information is not accurate after the latest JSR223 changes.__
-----
-
 # openHAB 2.x: JSR223 Jython Code
 
 This is a repository of experimental Jython code that can be used with the SmartHome platform and openHAB 2.x (after the pending [PR](https://github.com/eclipse/smarthome/pull/1783) has been merged).
@@ -22,20 +19,20 @@ The ESH rule engine structures rules as _modules_ (triggers, conditions, actions
 Using the raw ESH API, the simplest rule definition would look something like:
 
 ```python
-ScriptExtension.importPreset("RuleSupport")
-ScriptExtension.importPreset("RuleSimple")
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleSimple")
 
 class MyRule(SimpleRule):
     def __init__(self):
         self.triggers = [
-            Trigger("MyTrigger", "core.ItemStateUpdateTrigger", 
+             Trigger("MyTrigger", "core.ItemStateUpdateTrigger", 
                     Configuration({ "itemName": "TestString1"}))
         ]
         
     def execute(self, module, input):
         events.postUpdate("TestString2", "some data")
 
-HandlerRegistry.addRule(MyRule())
+ruleRegistry.add(MyRule())
 ```
 
 This can be simplified with some extra Jython code, which we'll see later. First, let's look at what's happening with the raw functionality.
@@ -45,15 +42,15 @@ When a Jython script is loaded it is provided with a _JSR223 scope_ that predefi
 For defining rules, additional symbols must be defined. Rather than using a Jython import (remember, JSR223 support is for other languages too), these additional symbols are imported using:
 
 ```python
-ScriptExtension.importPreset("RuleSupport")
-ScriptExtension.importPreset("RuleSimple")
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleSimple")
 ```
 
-`ScriptExtension` is one of the default scope types. The RuleSimple preset defines the `SimpleRule` base class.  This base class implements a rule with a single custom ESH Action associated with the `execute` function. The list of rule triggers are provided by the triggers attribute of the rule instance.
+The `scriptExtension` instance is provided as one of the default scope variables. The RuleSimple preset defines the `SimpleRule` base class.  This base class implements a rule with a single custom ESH Action associated with the `execute` function. The list of rule triggers are provided by the triggers attribute of the rule instance.
 
 The trigger in this example is an instance of the `Trigger` class. The constructor arguments define the trigger, the trigger type string and a configuration.
 
-The `events` variable is part of the default scope and supports access to the ESH event bus (posting updates and sending commands). Finally, to register the rule with the ESH rule engine it must be added to the `HandlerRegistry`. This will cause the triggers to be activated and the rule will fire when the TestString1 item is updated.
+The `events` variable is part of the default scope and supports access to the ESH event bus (posting updates and sending commands). Finally, to register the rule with the ESH rule engine it must be added to the `ruleRegistry`. This will cause the triggers to be activated and the rule will fire when the TestString1 item is updated.
 
 ### Rules: Using Jython extensions
 
