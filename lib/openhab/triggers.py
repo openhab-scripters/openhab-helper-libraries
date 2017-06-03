@@ -5,10 +5,8 @@ from org.eclipse.smarthome.automation.handler import TriggerHandler
 from org.eclipse.smarthome.automation.type import TriggerType
 from org.eclipse.smarthome.config.core import Configuration
 
-from openhab.jsr223 import scope
-scope.ScriptExtension.importPreset("RuleFactories")
-scope.ScriptExtension.importPreset("RuleSupport")
-scope.ScriptExtension.importPreset("RuleSimple")
+from openhab.jsr223 import scope, get_automation_manager
+scope.scriptExtension.importPreset("RuleSimple")
 
 class ItemStateUpdateTrigger(Trigger):
     def __init__(self, itemName, state=None, triggerName=None):
@@ -76,7 +74,7 @@ class _FunctionRule(scope.SimpleRule):
 def time_triggered(cron_expression):
     def decorator(fn):
         rule = _FunctionRule(fn, [CronTrigger(cron_expression)])
-        scope.ruleRegistry.add(rule)
+        get_automation_manager().addRule(rule)
         return fn
     return decorator
 
@@ -94,6 +92,6 @@ def item_triggered(item_name, event_types=None, result_item_name=None):
             if result_item_name:
                 scope.events.postUpdate(result_item_name, str(result_value))
         rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], extended=True)
-        scope.ruleRegistry.add(rule)
+        get_automation_manager().addRule(rule)
         return fn
     return decorator
