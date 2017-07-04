@@ -1,6 +1,6 @@
 # openHAB 2.x: JSR223 Jython Code
 
-This is a repository of experimental Jython code that can be used with the SmartHome platform and openHAB 2.x (after the pending [PR](https://github.com/eclipse/smarthome/pull/1783) has been merged).
+This is a repository of experimental Jython code that can be used with the SmartHome platform and openHAB 2.x.
 
 ## Applications
 
@@ -32,7 +32,7 @@ class MyRule(SimpleRule):
     def execute(self, module, input):
         events.postUpdate("TestString2", "some data")
 
-ruleRegistry.add(MyRule())
+automationManager.addRule(MyRule())
 ```
 
 This can be simplified with some extra Jython code, which we'll see later. First, let's look at what's happening with the raw functionality.
