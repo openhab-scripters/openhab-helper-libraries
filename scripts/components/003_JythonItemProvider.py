@@ -3,12 +3,13 @@ from org.eclipse.smarthome.core.items import ItemProvider
 import openhab
 
 class JythonItemProvider(ItemProvider):
-    def __init__(self, registry):
-        self.registry = registry
+    def __init__(self):
+        self.listeners = []
         self.items = []
         
     def _refresh(self):
-        self.registry.allItemsChanged(self, None)
+        for listener in self.listeners:
+            listener.allItemsChanges(self, None)
         
     def add(self, item):
         self.items.append(item)
@@ -26,16 +27,19 @@ class JythonItemProvider(ItemProvider):
     def getAll(self):
         return self.items
 
-item_registry = openhab.osgi.get_service("org.eclipse.smarthome.core.items.ItemRegistry")
-openhab.JythonItemProvider = JythonItemProvider(item_registry)
+    def addProviderChangeListener(self, listener):
+        self.listeners.append(listener)
 
+    def removeProviderChangeListener(self, listener):
+        self.listeners.remove(listener)
+        
 def scriptLoaded(id):
-    #openhab.osgi.register_service(
-    #    openhab.JythonItemProvider, 
-    #    ["org.eclipse.smarthome.core.items.ItemProvider"])
-    pass
+    openhab.JythonItemProvider = JythonItemProvider()
+    openhab.osgi.register_service(
+        openhab.JythonItemProvider, 
+        ["org.eclipse.smarthome.core.items.ItemProvider"])
 
 def scriptUnloaded():
-    #openhab.osgi.unregister_service(openhab.JythonItemProvider)
+    openhab.osgi.unregister_service(openhab.JythonItemProvider)
     delattr(openhab, 'JythonItemProvider')
 

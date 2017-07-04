@@ -1,5 +1,9 @@
 import platform
 
+import openhab.osgi
+reload(openhab.osgi)
+
+from openhab.log import logging
 from openhab.osgi import register_service, unregister_service
 from org.eclipse.smarthome.io.console.extensions import AbstractConsoleCommandExtension
 
@@ -25,6 +29,7 @@ def scriptLoaded(id):
     service = JythonCommand()
     interfaces = ["org.eclipse.smarthome.io.console.extensions.ConsoleCommandExtension"]
     registration = register_service(service, interfaces)
+    logging.info("Registered command extension")
 
 def scriptUnloaded():
     global service

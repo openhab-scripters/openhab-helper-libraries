@@ -1,0 +1,1 @@
+# Module for sharing variables between scripts

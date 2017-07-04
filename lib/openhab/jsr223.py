@@ -16,13 +16,26 @@ def get_scope():
 def _get_scope_value(scope, name):
     return scope.get(name, None) or getattr(scope, name, None)
 
+_presets = [
+    [[ "SimpleRule" ], "RuleSimple"],
+    [[ "automationManager" ], "RuleSupport"],
+]
+
 class _Jsr223ModuleFinder(object):
     class ScopeModule(types.ModuleType):        
         def __getattr__(self, name):
+            global _presets
             scope = get_scope()
             if name == "scope":
                 return scope
-            return _get_scope_value(scope, name)
+            value = _get_scope_value(scope, name)
+            if value is None:
+                for preset in _presets:
+                    if name in preset[0]:
+                        scriptExtension = _get_scope_value(scope, "scriptExtension")
+                        # print "auto-import preset ", name, preset, scriptExtension
+                        scriptExtension.importPreset(preset[1])
+            return value if value is not None else _get_scope_value(scope, name)
     
     def load_module(self, fullname):
         if fullname not in sys.modules:

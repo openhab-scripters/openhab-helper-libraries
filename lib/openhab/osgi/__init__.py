@@ -1,7 +1,7 @@
-from openhab.jsr223.scope import ScriptExtension
+from openhab.jsr223.scope import scriptExtension
 from org.osgi.framework import FrameworkUtil
 
-_bundle = FrameworkUtil.getBundle(type(ScriptExtension))
+_bundle = FrameworkUtil.getBundle(type(scriptExtension))
 bundle_context = _bundle.getBundleContext() if _bundle else None
 
 registered_services = {}

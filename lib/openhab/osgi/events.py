@@ -8,12 +8,14 @@ from org.osgi.service.cm import ManagedService
 from org.eclipse.smarthome.config.core import Configuration
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 
+from openhab import globals
 from openhab.jsr223 import scope
-scope.ScriptExtension.importPreset("RuleSupport")
+scope.scriptExtension.importPreset("RuleSupport")
 
 from openhab.osgi import bundle_context
 from openhab.log import logging
 
+import uuid
 import java.util
 
 log = logging.getLogger("OsgiEventAdmin")
@@ -32,8 +34,10 @@ class OsgiEventAdmin(object):
     _event_handler = None
     _event_listeners = []
     
+    # Singleton
     class OsgiEventHandler(EventHandler):
         def __init__(self):
+            log.info("Registering openHAB OSGI event listener service")
             self.registration = bundle_context.registerService(
                 EventHandler, self, hashtable((EventConstants.EVENT_TOPIC, ["*"])))
             
@@ -52,7 +56,6 @@ class OsgiEventAdmin(object):
         cls._event_listeners.append(listener)
         if len(cls._event_listeners) == 1:
             if cls._event_handler is None:
-                log.info("Registering OSGI event listener")
                 cls._event_handler = OsgiEventAdmin.OsgiEventHandler()
             
     @classmethod
@@ -61,20 +64,35 @@ class OsgiEventAdmin(object):
             cls._event_listeners.remove(listener)
         if len(cls._event_listeners) == 0:
             if cls._event_handler is not None:
-                log.info("Unregistering OSGI event listener")
+                log.info("Unregistering openHAB OSGI event listener service")
                 cls._event_handler.dispose()
                 cls._event_handler = None
 
+trigger_filters = {}
+
 class OsgiEventTrigger(scope.Trigger):
-    def __init__(self):
+    """Filter is a predicate taking an event argument and returning True (keep) or False (drop)"""
+    def __init__(self, event_filter=None):
         triggerName = uuid.uuid1().hex
-        config = { }
-        scope.Trigger.__init__(self, triggerName, "jsr223.OsgiEventTrigger", Configuration(config))
+        config = Configuration()
+        if event_filter is not None:
+            # openHAB/OSGI forces this side channel :-(
+            filter_id = str(uuid.uuid4())
+            global trigger_filters
+            trigger_filters[filter_id] = event_filter
+            config.put('filter_id', filter_id)
+        scope.Trigger.__init__(self, triggerName, globals.OSGI_TRIGGER_ID, config)
         
 def log_event(event):
     log.info("OSGI event: %s (%s)", event, type(event).__name__)
-    for name in event.propertyNames:
-        log.info("  '{}': {}".format(name, event.getProperty(name)))
+    if isinstance(event, dict):
+        for name in event:
+            value = event[name]
+            log.info("  '{}': {} ({})".format(name, value, type(value)))
+    else:
+        for name in event.propertyNames:
+            value = event.getProperty(name)
+            log.info("  '{}': {} ({})".format(name, value, type(value)))
         
 def event_dict(event):
     return { key: event.getProperty(key) for key in event.getPropertyNames() }

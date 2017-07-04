@@ -1,9 +1,9 @@
 from org.slf4j import Logger, LoggerFactory
 
-from org.eclipse.smarthome.automation.handler import ActionHandler
-from org.eclipse.smarthome.automation.type import ActionType
-from org.eclipse.smarthome.config.core import ConfigDescriptionParameter, ConfigDescriptionParameterBuilder
-from org.eclipse.smarthome.automation import Visibility
+#from org.eclipse.smarthome.automation.handler import ActionHandler
+#from org.eclipse.smarthome.automation.type import ActionType
+#from org.eclipse.smarthome.config.core import ConfigDescriptionParameter, ConfigDescriptionParameterBuilder
+#from org.eclipse.smarthome.automation import Visibility
 
 ScriptExtension.importPreset("RuleSupport")
 
@@ -24,7 +24,9 @@ def param(name, type, label, default=None, required=False):
     return ConfigDescriptionParameterBuilder.create(name, type)\
         .withLabel(label).withDefault(default).withRequired(required).build()
         
-HandlerRegistry.addActionType(ActionType(
+automationManager.addActionHandler("LogAction", lambda module: LoggerAction(module))
+
+automationManager.addActionType(ActionType(
     "LogAction", 
     [
         param("logname", ConfigDescriptionParameter.Type.TEXT, "Logger Name", default="LogAction"),
@@ -34,4 +36,3 @@ HandlerRegistry.addActionType(ActionType(
     "Write a record to the log file.",
     set(),  Visibility.VISIBLE, [], []))
 
-HandlerRegistry.addActionHandler("LogAction", lambda module: LoggerAction(module))
