@@ -5,8 +5,7 @@ from org.eclipse.smarthome.automation.handler import TriggerHandler
 from org.eclipse.smarthome.automation.type import TriggerType
 from org.eclipse.smarthome.config.core import Configuration
 
-import openhab.globals
-
+import openhab
 from openhab.jsr223 import scope, get_automation_manager
 scope.scriptExtension.importPreset("RuleSimple")
 
@@ -57,7 +56,7 @@ class ItemEventTrigger(Trigger):
 class StartupTrigger(Trigger):
     def __init__(self, triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
-        Trigger.__init__(self, triggerName, openhab.globals.STARTUP_MODULE_ID, Configuration())
+        Trigger.__init__(self, triggerName, openhab.STARTUP_MODULE_ID, Configuration())
     
         
 class _FunctionRule(scope.SimpleRule):

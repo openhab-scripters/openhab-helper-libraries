@@ -8,7 +8,7 @@ from org.osgi.service.cm import ManagedService
 from org.eclipse.smarthome.config.core import Configuration
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 
-from openhab import globals
+import openhab
 from openhab.jsr223 import scope
 scope.scriptExtension.importPreset("RuleSupport")
 
@@ -81,7 +81,7 @@ class OsgiEventTrigger(scope.Trigger):
             global trigger_filters
             trigger_filters[filter_id] = event_filter
             config.put('filter_id', filter_id)
-        scope.Trigger.__init__(self, triggerName, globals.OSGI_TRIGGER_ID, config)
+        scope.Trigger.__init__(self, triggerName, openhab.OSGI_TRIGGER_ID, config)
         
 def log_event(event):
     log.info("OSGI event: %s (%s)", event, type(event).__name__)

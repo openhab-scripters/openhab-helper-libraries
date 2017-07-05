@@ -1,7 +1,7 @@
 from org.eclipse.smarthome.automation import Visibility
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 
-from openhab import globals
+import openhab
 
 from openhab.jsr223 import scope
 scope.scriptExtension.importPreset("RuleSupport")
@@ -29,19 +29,19 @@ class _StartupTriggerHandlerFactory(scope.TriggerHandlerFactory):
         pass
     
 
-globals.STARTUP_MODULE_ID = "jsr223.StartupTrigger"
+openhab.STARTUP_MODULE_ID = "jsr223.StartupTrigger"
 
 def scriptLoaded(*args):
     scope.automationManager.addTriggerHandler(
-        globals.STARTUP_MODULE_ID, 
+        openhab.STARTUP_MODULE_ID, 
         _StartupTriggerHandlerFactory())
 
     scope.automationManager.addTriggerType(scope.TriggerType(
-        globals.STARTUP_MODULE_ID, [],
+        openhab.STARTUP_MODULE_ID, [],
         "the rule is activated", 
         "Triggers when a rule is activated the first time",
         set(), Visibility.VISIBLE, []))
     
 def scriptUnloaded():
-    scope.automationManager.removeHandler(globals.STARTUP_MODULE_ID)
-    scope.automationManager.removeModuleType(globals.STARTUP_MODULE_ID)
+    scope.automationManager.removeHandler(openhab.STARTUP_MODULE_ID)
+    scope.automationManager.removeModuleType(openhab.STARTUP_MODULE_ID)

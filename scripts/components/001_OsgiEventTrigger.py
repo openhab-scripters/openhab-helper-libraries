@@ -7,9 +7,11 @@ from org.eclipse.smarthome.config.core import Configuration
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 
 import openhab
-from openhab import globals
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")
+
+import openhab.osgi.events
+reload(openhab.osgi.events)
 
 from openhab.osgi.events import OsgiEventAdmin, event_dict, trigger_filters
 
@@ -64,16 +66,16 @@ class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
         self.handlers.remove(handler)
         OsgiEventAdmin.remove_listener(handler.on_event)
 
-globals.OSGI_TRIGGER_ID = "jsr223.OsgiEventTrigger"
+openhab.OSGI_TRIGGER_ID = "jsr223.OsgiEventTrigger"
 
 def scriptLoaded(*args):
-    automationManager.addTriggerHandler(globals.OSGI_TRIGGER_ID, OsgiEventTriggerHandlerFactory())    
-    automationManager.addTriggerType(TriggerType(globals.OSGI_TRIGGER_ID, [],
+    automationManager.addTriggerHandler(openhab.OSGI_TRIGGER_ID, OsgiEventTriggerHandlerFactory())    
+    automationManager.addTriggerType(TriggerType(openhab.OSGI_TRIGGER_ID, [],
         "an OSGI event is published", 
         "Triggers when an OSGI event is published",
         set(), Visibility.VISIBLE, []))
     
 def scriptUnloaded():
-    automationManager.removeHandler(globals.OSGI_TRIGGER_ID)
-    automationManager.removeModuleType(globals.OSGI_TRIGGER_ID)
+    automationManager.removeHandler(openhab.OSGI_TRIGGER_ID)
+    automationManager.removeModuleType(openhab.OSGI_TRIGGER_ID)
 
