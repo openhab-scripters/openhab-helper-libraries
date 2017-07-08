@@ -96,25 +96,25 @@ The `item_triggered` decorator creates a rule that will trigger on changes to Te
 
 These scripts are in the `scripts/components` subdirectory. They should be copied to the `automation/jsr223/components` directory of your openHAB 2 installation to use them. The files have a numeric prefix to cause them to be loaded before regular user scripts.
 
-### Script: `000_StartupTrigger.py`
+### Script: [`000_StartupTrigger.py'](scripts/components/000_StartupTrigger.py)
 
 Defines a rule trigger that triggers immediately when a rule is activated. This is similar to the same type of trigger in openHAB 1.x.
 
-### Script: `000_OsgiEventTrigger.py`
+### Script: [`000_OsgiEventTrigger.py'](scripts/components/000_OsgiEventTrigger.py)
 
 This rule trigger responds to events on the OSGI EventAdmin event bus.
 
-### Script `000_JythonTransform.py`
+### Script [`000_JythonTransform.py'](scripts/components/000_JythonTransform.py)
 
 This script defines a transformation service (identified by "JYTHON") that will process a value using a Jython script. This is similar to the Javascript transformer.
 
 
 ### Scripts: Jython-based Providers
 
-   * `000_JythonThingProvider.py`
-   * `000_JythonThingTypeProvider.py`
-   * `000_JythonBindingInfoProvider.py`
-   * `000_JythonItemProvider.py`
+   * [`000_JythonThingProvider.py'](scripts/components/000_JythonThingProvider.py)
+   * [`000_JythonThingTypeProvider.py'](scripts/components/000_JythonThingTypeProvider.py)
+   * [`000_JythonBindingInfoProvider.py'](scripts/components/000_JythonBindingInfoProvider.py)
+   * [`000_JythonItemProvider.py'](scripts/components/000_JythonItemProvider.py)
    
 These components are used to support Thing handler implementations.
 
@@ -122,36 +122,36 @@ These components are used to support Thing handler implementations.
 
 These scripts show example usage of the general-purpose components. Some of the examples are intended to provide services to user scripts so they have a numeric prefix to force them to load first (but after the general purpose components).
 
-### Script: `000_ExampleExtensionProvider.py
+### Script: [`000_ExampleExtensionProvider.py'](scripts/examples/000_ExampleExtensionProvider.py)
 
 This component implements the openHAB extension provider interfaces and can be used to provide symbols to a script
 namespace.
 
-### Script: `000_LogAction.py`
+### Script: [`000_LogAction.py'](scripts/examples/000_LogAction.py)
 
 This is a simple rule action that will log a message to the openHAB log file.
 
-### Script: `100_EchoThing.py`
+### Script: [`100_EchoThing.py'](scripts/examples/100_EchoThing.py)
 
 Experimental Thing binding and handler implemented in Jython. (At the time of this writing, it requires a small change to the ESH source code for it to work.) This simple Thing will write state updates on its input channel to items states linked to the output channel.
 
-### Script: `000_JythonConsoleCommand.py`
+### Script: [`000_JythonConsoleCommand.py'](scripts/examples/000_JythonConsoleCommand.py)
 
 This script defines an command extension to the OSGI console. The example command prints some Jython  platform details to the console output.
 
-### Script: `actors.py`
+### Script: [`actors.py'](scripts/examples/actors.py)
 
 Shows an example of using the Pykka actors library. The Pykka library must be in the Java classpath.
 
-### Script: `esper_example.py`
+### Script: [`esper_example.py'](scripts/examples/esper_example.py)
 
 Shows an example of using the Esper component. The 000_Esper.py component script must be installed.
 
-### Script: [`rule_decorators.py`](scripts\examples\rule_decorators.py)
+### Script: [`rule_decorators.py`](scripts/examples/rule_decorators.py)
 
 Provides examples of using the trigger-related rule decorators on functions as an alternative to explicit rule and trigger classes.
 
-### Script: [`testing_example.py`](scripts\examples\testing_example.py)
+### Script: [`testing_example.py`](scripts/examples/testing_example.py)
 
 Examples of unit testing.
 
@@ -161,7 +161,7 @@ One of the benefits of Jython over the openHAB Xtext scripts is that you can use
 
 There are example scripts in the `scripts/examples` subdirectory.
 
-### Module: `openhab.log`
+### Module: [`openhab.log`](lib/openhab/log.py)
 
 This module bridges the Python standard `logging` module with ESH logging. Example usage:
 
@@ -172,7 +172,7 @@ logging.info("Logging example from root logger")
 logging.getLogger("myscript").info("Logging example from root logger")  
 ```
 
-### Module: `openhab.triggers`
+### Module: [`openhab.triggers`](lib/openhab/triggers.py)
 
 This module includes trigger subclasses and function decorators to make simple rule definition very simple.
 
@@ -190,7 +190,7 @@ Trigger function decorators:
 * __time_triggered__ - run a function periodically
 * __item_triggered__ - run a function based on an item event
 
-### Module: `openhab.items`
+### Module: [`openhab.items`](lib/openhab/items.py)
 
 This module allows runtime creation and removal of items.
 
@@ -204,7 +204,7 @@ openhab.items.remove("_Test")
 
 ```
 
-### Module: `openhab.testing`
+### Module: [`openhab.testing`](lib/openhab/testing.py)
 
 One of the challenges of ESH/openHAB rule development is verifying that rules are behaving correctly and have broken as the code evolves. This module supports running automated tests within a runtime context. To run tests directly from scripts:
 
@@ -221,7 +221,7 @@ run_test(MyTest)
 
 The module also defines a rule class, `TestRunner` that will run a testcase when an switch item is turned on and store the test results in a string item.
 
-### Module: `openhab.osgi`
+### Module: [`openhab.osgi`](lib/openhab/osgi/__init__.py)
 
 Provides utility function for retrieving, registering and removing OSGI services.
 
@@ -231,7 +231,7 @@ import openhab.osgi
 item_registry = osgi.get_service("org.eclipse.smarthome.core.items.ItemRegistry")
 ```
 
-### Module: `openhab.osgi.events`
+### Module: [`openhab.osgi.events`](lib/openhab/osgi/events.py)
 
 Provides an OSGI EventAdmin event monitor and rule trigger. This can trigger off any OSGI event (including ESH events). _Rule manager events are filtered to avoid circular loops in the rule execution._
 
@@ -245,7 +245,7 @@ class ExampleRule(SimpleRule):
         # do something with event
 ```
 
-### Module: `openhab.jsr223`
+### Module: [`openhab.jsr223`](lib/openhab/jsr223.py)
 
 One of the challenges of JSR223 scripting with Jython is that Jython modules imported into scripts do not have direct access to the JSR223 scope types and objects. This module allows imported modules to access that data. Example usage:
 
@@ -257,9 +257,11 @@ def update_data(data):
 	events.postUpdate("TestString1", str(data))
 ```
 
-### Module: `openhab`
+### Module: [`openhab`](lib/openhab/__init__.py)
 
 This module (really a Python package) patches the default scope `items` object so that items can be accessed as if they were attributes (rather than a dictionary).
+
+It can also be used as a module for registring global variables that will outlive script reloads.
 
 ```python
 import openhab
