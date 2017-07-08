@@ -94,40 +94,66 @@ The `item_triggered` decorator creates a rule that will trigger on changes to Te
 
 ## Component Scripts
 
-These scripts are in the `scripts/components` subdirectory. They should be copied to the `automation/jsr223` directory of your openHAB 2 installation to use them.
+These scripts are in the `scripts/components` subdirectory. They should be copied to the `automation/jsr223/components` directory of your openHAB 2 installation to use them. The files have a numeric prefix to cause them to be loaded before regular user scripts.
 
-### Script: `StartupTrigger.py`
+### Script: `000_StartupTrigger.py`
 
 Defines a rule trigger that triggers immediately when a rule is activated. This is similar to the same type of trigger in openHAB 1.x.
 
-### Script: `OsgiEventTrigger.py`
+### Script: `000_OsgiEventTrigger.py`
 
 This rule trigger responds to events on the OSGI EventAdmin event bus.
 
-### Script: `LogAction.py`
-
-This is a simple rule action that will log a message to the openHAB log file.
-
-### Script `JythonTransform.py`
+### Script `000_JythonTransform.py`
 
 This script defines a transformation service (identified by "JYTHON") that will process a value using a Jython script. This is similar to the Javascript transformer.
 
-### Script: `JythonConsoleCommand.py`
-
-This script defines an command extension to the OSGI console. The example command prints some Jython  platform details to the console output.
 
 ### Scripts: Jython-based Providers
 
-   * `JythonThingProvider.py`
-   * `JythonThingTypeProvider.py`
-   * `JythonBindingInfoProvider.py`
-   * `JythonItemProvider.py`
+   * `000_JythonThingProvider.py`
+   * `000_JythonThingTypeProvider.py`
+   * `000_JythonBindingInfoProvider.py`
+   * `000_JythonItemProvider.py`
    
 These components are used to support Thing handler implementations.
 
-### Script: `EchoThing.py`
+## Component Usage Examples
+
+These scripts show example usage of the general-purpose components. Some of the examples are intended to provide services to user scripts so they have a numeric prefix to force them to load first (but after the general purpose components).
+
+### Script: `000_ExampleExtensionProvider.py
+
+This component implements the openHAB extension provider interfaces and can be used to provide symbols to a script
+namespace.
+
+### Script: `000_LogAction.py`
+
+This is a simple rule action that will log a message to the openHAB log file.
+
+### Script: `100_EchoThing.py`
 
 Experimental Thing binding and handler implemented in Jython. (At the time of this writing, it requires a small change to the ESH source code for it to work.) This simple Thing will write state updates on its input channel to items states linked to the output channel.
+
+### Script: `000_JythonConsoleCommand.py`
+
+This script defines an command extension to the OSGI console. The example command prints some Jython  platform details to the console output.
+
+### Script: `actors.py`
+
+Shows an example of using the Pykka actors library. The Pykka library must be in the Java classpath.
+
+### Script: `esper_example.py`
+
+Shows an example of using the Esper component. The 000_Esper.py component script must be installed.
+
+### Script: [`rule_decorators.py`](scripts\examples\rule_decorators.py)
+
+Provides examples of using the trigger-related rule decorators on functions as an alternative to explicit rule and trigger classes.
+
+### Script: [`testing_example.py`](scripts\examples\testing_example.py)
+
+Examples of unit testing.
 
 ## Jython Modules
 
