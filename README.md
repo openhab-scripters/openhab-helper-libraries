@@ -343,7 +343,7 @@ def update_data(data):
 This module (really a Python package) patches the default scope `items` object 
 so that items can be accessed as if they were attributes (rather than a dictionary).
 
-It can also be used as a module for registring global variables that will outlive script reloads.
+It can also be used as a module for registering global variables that will outlive script reloads.
 
 ```python
 import openhab
