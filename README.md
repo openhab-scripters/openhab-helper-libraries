@@ -1,19 +1,25 @@
-# openHAB 2.x: JSR223 Jython Code
+# Jython scripting for openHAB 2.x
 
-This is a repository of experimental Jython code that can be used with the SmartHome platform and openHAB 2.x.
+This is a repository of experimental Jython code that can be used 
+with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform 
+and [openHAB 2](http://docs.openhab.org/).
 
 _NOTE: To use Jython for defining rules, the experimental rule engine must be installed in openHAB 2._
 
 ## Applications
 
-The JSR223 scripting extensions can be used for general scripting purposes, 
+The [JSR223 scripting extensions](https://www.jcp.org/en/jsr/detail?id=223) can be used for general scripting purposes, 
 including defining rules and associated SmartHome rule "modules" (triggers, conditions, actions). 
 Some possible applications include integration testing of complex rule behaviors or prototyping new OH2/ESH functionality.
+
+(_JSR223_ refers to a Java specification request for adding scripting to the Java platform. 
+That term will not be used in Java versions 9 and above. 
+The previous JSR223 functionality will be provided by the Java `javax.script` package in the standard runtime libraries.)
 
 The scripting can be used for other purposes like automated integration testing 
 or to access the OSGI framework (using or creating services, for example).
 
-## JSR223 Scripts and Jython Modules
+## Jython Scripts and Modules
 
 It's important to understand the distinction between Jython _scripts_ and Jython _modules_. 
 In this repo, scripts are in the `scripts` directory and modules are in the `lib` directory.
