@@ -31,7 +31,7 @@ class ItemCommandTrigger(Trigger):
         config = { "itemName": itemName }
         if command is not None:
             config["command"] = command
-        Trigger.__init__(self, triggerName, "core.ItemStateChangeTrigger", Configuration(config))
+        Trigger.__init__(self, triggerName, "core.ItemCommandTrigger", Configuration(config))
 
 EVERY_SECOND = "0/1 * * * * ?"
 EVERY_MINUTE = "0 * * * * ?"
