@@ -4,9 +4,6 @@ import json
 import pykka
 import threading
 
-import openhab.osgi.events
-reload(openhab.osgi.events)
-
 from openhab.osgi.events import OsgiEventAdmin, log_event, event_dict
 from org.osgi.framework import Filter
 
