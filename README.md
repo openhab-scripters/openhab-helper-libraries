@@ -4,7 +4,7 @@ This is a repository of experimental Jython code that can be used
 with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://docs.openhab.org/) Jython scripting. 
 Also see the [openHAB 2 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
 
-_NOTE: To use Jython for defining rules, the experimental rule engine must be installed in openHAB 2._
+_NOTE: To use Jython for defining rules, the Experimental Rule Engine add-on must be installed in openHAB 2._
 
 ## Applications
 
