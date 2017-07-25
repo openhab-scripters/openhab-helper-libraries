@@ -240,6 +240,25 @@ The following are some initial experiments in that direction.
 
 There are example scripts in the `scripts/examples` subdirectory.
 
+### Module: [`openhab.actions`](lib/openhab/actions.py)
+
+This module discovers action services registered from OH1 or OH2 bundles or add-ons.
+The specific actions that are available will depend on which add-ons are installed.
+Each action class is exposed as an attribute of the `openhab.actions` Jython module.
+The action methods are static methods on those classes 
+(don't try to create instances of the action classes).
+
+```python
+from openhab.actions import Astro
+from openhab.log import logging
+from java.util import Date
+
+log = logging.getLogger("org.eclipse.smarthome.automation")
+
+# Use the Astro action class to get the sunset start time.
+log.info("Sunrise: %s", Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time)
+```
+
 ### Module: [`openhab.log`](lib/openhab/log.py)
 
 This module bridges the Python standard `logging` module with ESH logging. Example usage:
