@@ -1,8 +1,5 @@
 import platform
 
-import openhab.osgi
-reload(openhab.osgi)
-
 from openhab.log import logging
 from openhab.osgi import register_service, unregister_service
 from org.eclipse.smarthome.io.console.extensions import AbstractConsoleCommandExtension

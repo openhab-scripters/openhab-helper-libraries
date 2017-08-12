@@ -10,9 +10,6 @@ import openhab
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")
 
-import openhab.osgi.events
-reload(openhab.osgi.events)
-
 from openhab.osgi.events import OsgiEventAdmin, event_dict, trigger_filters
 
 class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
