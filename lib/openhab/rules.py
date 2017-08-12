@@ -13,18 +13,16 @@ def set_uid_prefix(rule, prefix=None):
     uid_field = type(SmarthomeRule).getClass(SmarthomeRule).getDeclaredField(SmarthomeRule, "uid")
     uid_field.setAccessible(True)
     uid_field.set(rule, "{}-{}".format(prefix, str(UUID.randomUUID())))
-    
+
 def rule(clazz):
-    def init(self):
-        SimpleRule.__init__(self)
-        clazz.__init__(self)
-        set_uid_prefix(self)
-        self.log = logging.getLogger("org.smarthome.automation.rules." + clazz.__name__)
-        if hasattr(self, "getEventTriggers"):
-            self.triggers = self.getEventTriggers()
-        elif hasattr(self, "getEventTrigger"):
-            self.triggers = self.getEventTrigger()
-    return type(clazz.__name__, (clazz, SimpleRule), dict(__init__=init))
+    def __init__(self, *args, **kwargs):
+      SimpleRule.__init__(self)
+      set_uid_prefix(self)
+      self.log = logging.getLogger("org.eclipse.smarthome.automation.rules." + type(self).__name__)
+      clazz.__init__(self, *args, **kwargs)
+      if hasattr(self, "getEventTriggers"):
+          self.triggers = self.getEventTriggers()
+      elif hasattr(self, "getEventTrigger"):
+          self.triggers = self.getEventTrigger()
 
-
-    
+    return type(clazz.__name__, (clazz, SimpleRule), dict(__init__=__init__))
