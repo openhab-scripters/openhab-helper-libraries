@@ -4,9 +4,9 @@ import unittest
 from openhab.log import logging
 from openhab.triggers import ItemStateUpdateTrigger
 
-from openhab.jsr223.scope import ScriptExtension, events, OnOffType
-ScriptExtension.importPreset("RuleSupport")
-ScriptExtension.importPreset("RuleSimple")
+from openhab.jsr223.scope import scriptExtension, events, OnOffType
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleSimple")
 
 from openhab.jsr223.scope import SimpleRule
 
