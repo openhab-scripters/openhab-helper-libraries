@@ -18,9 +18,9 @@ def set_uid_prefix(rule, prefix=None):
 def rule(clazz):
     def init(self, *args, **kwargs):
         SimpleRule.__init__(self)
-        clazz.__init__(self, *args, **kwargs)
         set_uid_prefix(self)
         self.log = logging.getLogger(LOG_PREFIX + "." + clazz.__name__)
+        clazz.__init__(self, *args, **kwargs)
         if hasattr(self, "getEventTriggers"):
             self.triggers = log_traceback(self.getEventTriggers)()
         elif hasattr(self, "getEventTrigger"):

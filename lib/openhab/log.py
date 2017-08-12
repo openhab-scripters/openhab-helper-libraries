@@ -4,7 +4,7 @@ import traceback
 
 from org.slf4j import Logger, LoggerFactory
 
-LOG_PREFIX = "org.smarthome.automation.rules"
+LOG_PREFIX = "org.eclipse.smarthome.automation.rules"
 
 def log_traceback(fn):
     """Decorator to provide better Jython stack traces"""
