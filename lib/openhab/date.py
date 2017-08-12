@@ -19,7 +19,8 @@ from org.joda.time import DateTime
 from java.util import Calendar, Date
 from java.text import SimpleDateFormat
 from java.time import LocalDateTime
-from org.openhab.core.library.types import DateTimeType
+from org.openhab.core.library.types import DateTimeType as LegacyDateTimeType
+from org.eclipse.smarthome.core.library.types import DateTimeType
 
 date_formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
@@ -45,7 +46,10 @@ def to_java_calendar(value):
     
     if isinstance(value, DateTime):
         return value.toGregorianCalendar()
-        
+       
+    if isinstance(value, LegacyDateTimeType):
+        return value.calendar
+ 
     if isinstance(value, DateTimeType):
         return value.calendar
 
