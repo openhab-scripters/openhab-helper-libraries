@@ -1,5 +1,23 @@
 import logging
+import functools
+import traceback
+
 from org.slf4j import Logger, LoggerFactory
+
+LOG_PREFIX = "org.smarthome.automation.rules"
+
+def log_traceback(fn):
+    """Decorator to provide better Jython stack traces"""
+    functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as ex:
+            if len(args) > 0 and hasattr(args[0], "log"):
+                args[0].log.error(traceback.format_exc())
+            else:
+                print traceback.format_exc()
+    return wrapper
 
 class Slf4jHandler(logging.Handler):
     def emit(self, record):
