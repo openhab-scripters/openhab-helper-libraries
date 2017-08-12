@@ -85,14 +85,35 @@ ITEM_COMMAND = "ItemCommandEvent"
 
 def item_triggered(item_name, event_types=None, result_item_name=None):
     event_types = event_types or [ITEM_CHANGE]
+    event_bus = scope.events
     if hasattr(event_types, '__iter__'):
         event_types = ",".join(event_types)
     def decorator(fn):
         def callback(module, inputs):
             result_value = fn()
             if result_item_name:
-                scope.events.postUpdate(result_item_name, str(result_value))
+                event_bus.postUpdate(result_item_name, unicode(result_value))
         rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], extended=True)
+        get_automation_manager().addRule(rule)
+        return fn
+    return decorator
+
+
+def item_group_triggered(group_name, event_types=None, result_item_name=None):
+    event_types = event_types or [ITEM_CHANGE]
+    event_bus = scope.events
+    if hasattr(event_types, '__iter__'):
+        event_types = ",".join(event_types)
+    def decorator(fn):
+        def callback(module, inputs):
+            result_value = fn()
+            if result_item_name:
+                event_bus.postUpdate(result_item_name, unicode(result_value))
+        group_triggers = []
+        group = scope.itemRegistry.getItem(group_name)
+        for i in group.getAllMembers():
+            group_triggers.append(ItemEventTrigger(i.name, event_types))
+        rule = _FunctionRule(callback, group_triggers, extended=True)
         get_automation_manager().addRule(rule)
         return fn
     return decorator
