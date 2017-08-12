@@ -25,7 +25,7 @@ def rule(clazz):
             self.triggers = log_traceback(self.getEventTriggers)()
         elif hasattr(self, "getEventTrigger"):
             # For OH1 compatibility
-            self.triggers = log_Traceback(self.getEventTrigger)()
+            self.triggers = log_traceback(self.getEventTrigger)()
     subclass = type(clazz.__name__, (clazz, SimpleRule), dict(__init__=init))
     subclass.execute = log_traceback(clazz.execute)
     return subclass
