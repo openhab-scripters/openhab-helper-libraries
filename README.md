@@ -144,9 +144,9 @@ To make rule creation _even simpler_, `openhab.triggers` defines function decora
 To define a function that will be triggered periodically, the entire script looks like:
 
 ```python
-from openhab.triggers import time_triggered, EACH_MINUTE
+from openhab.triggers import time_triggered, EVERY_MINUTE
 
-@time_triggered(EACH_MINUTE)
+@time_triggered(EVERY_MINUTE)
 def my_periodic_function():
  	events.postUpdate("TestString1", somefunction())
 ```
