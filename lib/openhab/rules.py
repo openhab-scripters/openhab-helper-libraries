@@ -2,11 +2,9 @@ from java.util import UUID
 from org.eclipse.smarthome.automation import Rule as SmarthomeRule
 
 from openhab.log import logging, log_traceback, LOG_PREFIX
-from openhab.jsr223.scope import scriptExtension
 
-scriptExtension.importPreset("RuleSimple")
-scriptExtension.importPreset("RuleSupport")
-from openhab.jsr223.scope import SimpleRule, automationManager
+from openhab.jsr223 import scope, get_automation_manager
+scope.scriptExtension.importPreset("RuleSimple")
 
 def set_uid_prefix(rule, prefix=None):
     if prefix is None:
@@ -17,7 +15,7 @@ def set_uid_prefix(rule, prefix=None):
     
 def rule(clazz):
     def init(self, *args, **kwargs):
-        SimpleRule.__init__(self)
+        scope.SimpleRule.__init__(self)
         set_uid_prefix(self)
         self.log = logging.getLogger(LOG_PREFIX + "." + clazz.__name__)
         clazz.__init__(self, *args, **kwargs)
@@ -26,6 +24,9 @@ def rule(clazz):
         elif hasattr(self, "getEventTrigger"):
             # For OH1 compatibility
             self.triggers = log_traceback(self.getEventTrigger)()
-    subclass = type(clazz.__name__, (clazz, SimpleRule), dict(__init__=init))
+    subclass = type(clazz.__name__, (clazz, scope.SimpleRule), dict(__init__=init))
     subclass.execute = log_traceback(clazz.execute)
     return subclass
+
+def addRule(rule):
+    get_automation_manager().addRule(rule)

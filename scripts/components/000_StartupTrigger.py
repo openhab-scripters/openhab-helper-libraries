@@ -14,7 +14,7 @@ class _StartupTriggerHandlerFactory(scope.TriggerHandlerFactory):
             self.trigger = trigger
             
         def setRuleEngineCallback(self, rule_engine_callback):
-            rule_engine_callback.triggered(self.trigger, {})
+            rule_engine_callback.triggered(self.trigger, {'startup': True})
             
         def dispose(self):
             pass
