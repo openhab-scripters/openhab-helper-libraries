@@ -254,7 +254,7 @@ The rules module contains some utility functions and a decorator for converting 
 The following example shows how the rule decorator is used:
 
 ```python
-from openhab.rules import rule, addRule
+from openhab.rules import rule, automationManager
 from openhab.triggers import StartupTrigger
 
 @rule
@@ -265,7 +265,7 @@ class ExampleRule(object):
     def execute(self, module, inputs):
         self.log.info("rule executed")
 
-addRule(MyRule())
+automationManager.addRule(MyRule())
 ```
 
 The decorator adds the SimpleRule base class and will call either `getEventTriggers` or `getEventTrigger` (the OH1 function) 
