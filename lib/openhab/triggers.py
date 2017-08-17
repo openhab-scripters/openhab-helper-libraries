@@ -4,6 +4,9 @@ from org.eclipse.smarthome.automation import Trigger
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 from org.eclipse.smarthome.automation.type import TriggerType
 from org.eclipse.smarthome.config.core import Configuration
+from openhab.jsr223 import scope
+from openhab.log import logging
+
 
 import openhab
 from openhab.jsr223 import scope, get_automation_manager
@@ -93,6 +96,28 @@ def item_triggered(item_name, event_types=None, result_item_name=None):
             if result_item_name:
                 scope.events.postUpdate(result_item_name, str(result_value))
         rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], extended=True)
+        get_automation_manager().addRule(rule)
+        return fn
+    return decorator
+
+
+def item_group_triggered(group_name, event_types=None, result_item_name=None):
+    event_types = event_types or [ITEM_CHANGE]
+    if hasattr(event_types, '__iter__'):
+        event_types = ",".join(event_types)
+    def decorator(fn):
+        dlog = logging.getLogger("RULES.oh2-jython.triggers.item_group_triggered")
+
+        def callback(module, inputs):
+            result_value = fn()
+            if result_item_name:
+                scope.events.postUpdate(result_item_name, str(result_value))
+        group_triggers = []
+        groupitems = scope.itemRegistry.getItem(group_name)
+        for i in groupitems.getAllMembers():
+            group_triggers.append(ItemEventTrigger(unicode(i.name), event_types))
+            dlog.debug("   added ItemStateUpdateTrigger for " + unicode(i.name))
+        rule = _FunctionRule(callback, group_triggers, extended=True)
         get_automation_manager().addRule(rule)
         return fn
     return decorator
