@@ -1,5 +1,8 @@
 import uuid
 import java.util
+
+import inspect
+
 from org.eclipse.smarthome.automation import Trigger
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 from org.eclipse.smarthome.automation.type import TriggerType
@@ -105,8 +108,13 @@ def item_group_triggered(group_name, event_types=None, result_item_name=None):
     if hasattr(event_types, '__iter__'):
         event_types = ",".join(event_types)
     def decorator(fn):
+        nargs = len(inspect.getargspec(fn).args)
         def callback(module, inputs):
-            result_value = fn()
+            fn_args = []
+            event = inputs.get('event')
+            if event and nargs == 1:
+                fn_args.append(event)
+            result_value = fn(*fn_args)
             if result_item_name:
                 event_bus.postUpdate(result_item_name, unicode(result_value))
         group_triggers = []
