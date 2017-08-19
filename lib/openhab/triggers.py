@@ -1,7 +1,9 @@
-import uuid
 import java.util
+from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
 
 import inspect
+import json
+import uuid
 
 from org.eclipse.smarthome.automation import Trigger
 from org.eclipse.smarthome.automation.handler import TriggerHandler
@@ -11,6 +13,8 @@ from org.eclipse.smarthome.config.core import Configuration
 import openhab
 from openhab.jsr223 import scope, get_automation_manager
 scope.scriptExtension.importPreset("RuleSimple")
+
+from openhab.osgi.events import OsgiEventTrigger
 
 class ItemStateUpdateTrigger(Trigger):
     def __init__(self, itemName, state=None, triggerName=None):
@@ -61,7 +65,45 @@ class StartupTrigger(Trigger):
         triggerName = triggerName or uuid.uuid1().hex
         Trigger.__init__(self, triggerName, openhab.STARTUP_MODULE_ID, Configuration())
     
+# Item Registry Triggers
+
+class ItemRegistryTrigger(OsgiEventTrigger):
+    def __init__(self, event_name):
+        OsgiEventTrigger.__init__(self)
+        self.event_name = event_name
         
+    def event_filter(self, event):
+        return event.get('type') == self.event_name
+    
+    def event_transformer(self, event):
+        return json.loads(event['payload'])
+
+class ItemAddedTrigger(ItemRegistryTrigger):
+    def __init__(self):
+        ItemRegistryTrigger.__init__(self, "ItemAddedEvent")
+        
+class ItemRemovedTrigger(ItemRegistryTrigger):
+     def __init__(self):
+        ItemRegistryTrigger.__init__(self, "ItemRemovedEvent")
+
+class ItemUpdatedTrigger(ItemRegistryTrigger):
+    def __init__(self):
+        ItemRegistryTrigger.__init__(self, "ItemUpdatedEvent")
+        
+# Directory watcher trigger
+
+class DirectoryEventTrigger(Trigger):
+    def __init__(self, path, event_kinds=[ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY], watch_subdirectories=False):
+        triggerId = type(self).__name__ + "-" + uuid.uuid1().hex
+        config = Configuration({
+            'path': path,
+            'event_kinds': str(event_kinds),
+            'watch_subdirectories': watch_subdirectories,
+        })
+        Trigger.__init__(self, triggerId, openhab.DIRECTORY_TRIGGER_MODULE_ID, config)
+
+# Function decorator trigger support
+
 class _FunctionRule(scope.SimpleRule):
     def __init__(self, callback, triggers, extended=False):
         self.triggers = triggers

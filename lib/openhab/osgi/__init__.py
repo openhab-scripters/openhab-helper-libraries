@@ -15,8 +15,6 @@ def get_service(class_or_name):
 def find_services(class_name, filter):
     if bundle_context:
         refs = bundle_context.getAllServiceReferences(class_name, filter)
-        #for ref in refs:
-        #    print ref, list(ref.getPropertyKeys())
         if refs:
             return [bundle_context.getService(ref) for ref in refs]
     

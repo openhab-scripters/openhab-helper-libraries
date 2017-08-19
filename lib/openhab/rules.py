@@ -19,6 +19,8 @@ def rule(clazz):
         set_uid_prefix(self)
         self.log = logging.getLogger(LOG_PREFIX + "." + clazz.__name__)
         clazz.__init__(self, *args, **kwargs)
+        if self.description is None and clazz.__doc__:
+            self.description = clazz.__doc__
         if hasattr(self, "getEventTriggers"):
             self.triggers = log_traceback(self.getEventTriggers)()
         elif hasattr(self, "getEventTrigger"):

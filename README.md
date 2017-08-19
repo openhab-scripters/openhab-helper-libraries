@@ -169,6 +169,20 @@ The function result will be posted to TestString2.
 The `items` object is from the default scope and allows access to item state. 
 If the function needs to send commands or access other items, it can be  done using the `events` scope object. 
 
+A decorator can also be used to trigger a function invocation from an item group 
+and provide the event related to the triggering item.
+
+```python
+@item_group_triggered("TestGroup", result_item_name="TestString1")
+def example(event):
+    return event.itemName + " triggered me!"
+```
+
+This decorated function will trigger from a change to any member of the TestGroup item.
+When the function is called it is provided the event instance that triggered it.
+The specific trigger data depends on the event type.
+For example, the `ItemStateChangedEvent` event type has `itemName`, `itemState`, and `oldItemState` attributes.
+
 ## Component Scripts
 
 These scripts are in the `scripts/components` subdirectory. 
@@ -184,6 +198,21 @@ This is similar to the same type of trigger in openHAB 1.x.
 
 This rule trigger responds to events on the OSGI EventAdmin event bus.
 
+### Script: [`000_DirectoryTrigger.py`](scripts/components/000_DirectoryTrigger.py)
+
+This trigger can respond to file system changes.
+For example, you could watch a directory for new files and then process them.
+
+```python
+@rule
+class DirectoryWatcherExampleRule(object):
+    def getEventTriggers(self):
+        return [ DirectoryEventTrigger("/tmp", event_kinds=[ENTRY_CREATE]) ]
+    
+    def execute(self, module, inputs):
+        logging.info("detected new file: %s", inputs['path'])
+```
+
 ### Script [`000_JythonTransform.py`](scripts/components/000_JythonTransform.py)
 
 This script defines a transformation service (identified by "JYTHON") that will process a value using a Jython script. 
@@ -198,9 +227,9 @@ This is similar to the Javascript transformer.
    
 These components are used to support Thing handler implementations.
 
-## Component Usage Examples
+## Scripting Examples
 
-These scripts show example usage of the general-purpose components. 
+These scripts show example usage of various scripting features. 
 Some of the examples are intended to provide services to user scripts so they have a numeric prefix to force them to load first 
 (but after the general purpose components).
 
@@ -240,6 +269,15 @@ Provides examples of using the trigger-related rule decorators on functions as a
 
 Examples of unit testing.
 
+### Script: [`dirwatcher_example.py`](scripts/examples/dirwatcher_example.py)
+
+Example of a rule that watches for files created in a specified directory.
+
+### Script: [`rule_registry.py`](scripts/examples/rule_registry.py)
+
+This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags,
+enable and disable rule instances dynamically, and manually fire rules with specified inputs.
+
 ## Jython Modules
 
 One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages 
@@ -259,6 +297,7 @@ from openhab.triggers import StartupTrigger
 
 @rule
 class ExampleRule(object):
+    """This doc comment will become the ESH Rule documentation value for Paper UI"""
     def getEventTriggers(self):
         return [ StartupTrigger() ]
 
@@ -272,14 +311,18 @@ The decorator adds the SimpleRule base class and will call either `getEventTrigg
 to get the triggers, if either function exists. 
 Otherwise you can define a constructor and set `self.triggers` to your list of triggers.
 
-The `addRule` function is similar to the `automationManager.addRule` function except that it can be safely used in Jython modules (versus scripts).
+The `addRule` function is similar to the `automationManager.addRule` function except 
+that it can be safely used in Jython modules (versus scripts).
 Since the `automationManager` is different for every script scope 
 the `openhab.rules.addRule` function looks up the automation manager for each call.
 
-The decorator also adds a log object based on the name of the rule (`self.log`, can be overridden in a constructor) and wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information if an exception is thrown.
+The decorator also adds a log object based on the name of the rule (`self.log`, can be overridden in a constructor) and 
+wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information if an exception 
+is thrown.
+
 ### Module: [`openhab.triggers`](lib/openhab/triggers.py)
 
-This module includes trigger subclasses and function decorators to make simple rule definition very simple.
+This module includes trigger subclasses and function decorators to simplify Jython rule definitions.
 
 Trigger classes:
 
@@ -289,11 +332,16 @@ Trigger classes:
 * __ItemEventTrigger__ (based on "core.GenericEventTrigger")
 * __CronTrigger__
 * __StartupTrigger__ - fires when rule is activated (implemented in Jython)
+* __DirectoryEventTrigger__ - fires when directory contents change (Jython, see related component for more info).
+* __ItemAddedTrigger__ - fires when rule is added to the RuleRegistry (implemented in Jython)
+* __ItemRemovedTrigger__ - fires when rule is removed from the RuleRegistry (implemented in Jython)
+* __ItemUpdatedTrigger__ - fires when rule is updated in the RuleRegistry (implemented in Jython, not a state update!)
 
 Trigger function decorators:
 
 * __time_triggered__ - run a function periodically
 * __item_triggered__ - run a function based on an item event
+* __item_group_triggered__ - run a function based on an item group event
 
 ### Module: [`openhab.actions`](lib/openhab/actions.py)
 
