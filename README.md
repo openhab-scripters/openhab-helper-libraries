@@ -92,6 +92,8 @@ class MyRule(SimpleRule):
 automationManager.addRule(MyRule())
 ```
 
+    Note: trigger names must be unique within the scope of a rule instance. 
+
 This can be simplified with some extra Jython code, which we'll see later. 
 First, let's look at what's happening with the raw functionality.
 
