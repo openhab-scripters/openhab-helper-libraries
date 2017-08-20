@@ -1,19 +1,17 @@
 from org.eclipse.smarthome.core.items import ItemProvider
 
 import openhab
+import openhab.osgi
 
 class JythonItemProvider(ItemProvider):
     def __init__(self):
         self.listeners = []
         self.items = []
         
-    def _refresh(self):
-        for listener in self.listeners:
-            listener.allItemsChanges(self, None)
-        
     def add(self, item):
         self.items.append(item)
-        self._refresh()
+        for listener in self.listeners:
+            listener.added(self, item)
         
     def remove(self, item):
         if isinstance(item, str):
@@ -22,7 +20,8 @@ class JythonItemProvider(ItemProvider):
                     self.remove(i)
         else:
             self.items.remove(item)
-        self._refresh()
+            for listener in self.listeners:
+                listener.removed(self, item)
         
     def getAll(self):
         return self.items
@@ -42,4 +41,3 @@ def scriptLoaded(id):
 def scriptUnloaded():
     openhab.osgi.unregister_service(openhab.JythonItemProvider)
     delattr(openhab, 'JythonItemProvider')
-
