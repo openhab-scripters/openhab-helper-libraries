@@ -134,8 +134,13 @@ def item_triggered(item_name, event_types=None, result_item_name=None):
     if hasattr(event_types, '__iter__'):
         event_types = ",".join(event_types)
     def decorator(fn):
+        nargs = len(inspect.getargspec(fn).args)
         def callback(module, inputs):
-            result_value = fn()
+            fn_args = []
+            event = inputs.get('event')
+            if event and nargs == 1:
+                fn_args.append(event)
+            result_value = fn(*fn_args)
             if result_item_name:
                 event_bus.postUpdate(result_item_name, unicode(result_value))
         rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], extended=True)
@@ -166,4 +171,4 @@ def item_group_triggered(group_name, event_types=None, result_item_name=None):
         rule = _FunctionRule(callback, group_triggers, extended=True)
         get_automation_manager().addRule(rule)
         return fn
-    return decorator
+    return decorator 
