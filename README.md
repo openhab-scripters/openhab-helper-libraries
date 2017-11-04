@@ -338,6 +338,7 @@ Trigger classes:
 * __ItemAddedTrigger__ - fires when rule is added to the RuleRegistry (implemented in Jython)
 * __ItemRemovedTrigger__ - fires when rule is removed from the RuleRegistry (implemented in Jython)
 * __ItemUpdatedTrigger__ - fires when rule is updated in the RuleRegistry (implemented in Jython, not a state update!)
+* __ChannelEventTrigger__ - fires when a Channel gets an event e.g. from the Astro Binding
 
 Trigger function decorators:
 
