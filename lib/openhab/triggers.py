@@ -171,4 +171,13 @@ def item_group_triggered(group_name, event_types=None, result_item_name=None):
         rule = _FunctionRule(callback, group_triggers, extended=True)
         get_automation_manager().addRule(rule)
         return fn
-    return decorator 
+    return decorator
+
+class ChannelEventTrigger(Trigger):
+    def __init__(self, channelUID, event, triggerName=None):
+        triggerName = triggerName or uuid.uuid1().hex
+        #self.log.debug("Trigger: " + triggerName + "; channel: " + channelUID)
+        config = { "channelUID": channelUID }
+        config["event"] = event
+        Trigger.__init__(self, triggerName, "core.ChannelEventTrigger", Configuration(config))
+        self.setLabel(triggerName)
