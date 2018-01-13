@@ -2,7 +2,7 @@ import logging
 import functools
 import traceback
 
-from org.slf4j import Logger, LoggerFactory
+from org.apache.logging.log4j import Logger, LogManager
 
 LOG_PREFIX = "org.eclipse.smarthome.automation.rules"
 
@@ -16,16 +16,19 @@ def log_traceback(fn):
             if len(args) > 0 and hasattr(args[0], "log"):
                 args[0].log.error(traceback.format_exc())
             else:
-                print traceback.format_exc()
+                logger = LogManager.getLogger("jython.scripting")
+                logger.error(traceback.format_exc())
+            raise # Re-raise the exception (allowing a caller to see and handle the exception as well)
     return wrapper
 
-class Slf4jHandler(logging.Handler):
+class Log4j2Handler(logging.Handler):
     def emit(self, record):
         message = self.format(record)
         logger_name = record.name
         if record.name == "root":
-            logger_name = Logger.ROOT_LOGGER_NAME
-        logger = LoggerFactory.getLogger(logger_name)
+            logger = LogManager.getLogger("jython.scripting")
+        else:
+            logger = LogManager.getLogger(logger_name)
         level = record.levelno
         if level == logging.DEBUG:
             logger.debug(message)
@@ -33,10 +36,9 @@ class Slf4jHandler(logging.Handler):
             logger.info(message)
         elif level == logging.WARN:
             logger.warn(message)
-        elif level in [logging.ERROR, logging.CRITICAL] :
+        elif level in [logging.ERROR, logging.CRITICAL]:
             logger.error(message)
-            
-handler = Slf4jHandler()
+
+handler = Log4j2Handler()
 logging.root.setLevel(logging.DEBUG)
 logging.root.handlers = [handler]
-
