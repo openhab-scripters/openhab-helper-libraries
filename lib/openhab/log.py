@@ -4,7 +4,7 @@ import traceback
 
 from org.apache.logging.log4j import Logger, LogManager
 
-LOG_PREFIX = "org.eclipse.smarthome.automation.rules"
+LOG_PREFIX = "sboh2j"
 
 def log_traceback(fn):
     """Decorator to provide better Jython stack traces"""
@@ -16,7 +16,7 @@ def log_traceback(fn):
             if len(args) > 0 and hasattr(args[0], "log"):
                 args[0].log.error(traceback.format_exc())
             else:
-                logger = LogManager.getLogger("jython.scripting")
+                logger = LogManager.getLogger(LOG_PREFIX)
                 logger.error(traceback.format_exc())
             raise # Re-raise the exception (allowing a caller to see and handle the exception as well)
     return wrapper
@@ -26,7 +26,7 @@ class Log4j2Handler(logging.Handler):
         message = self.format(record)
         logger_name = record.name
         if record.name == "root":
-            logger = LogManager.getLogger("jython.scripting")
+            logger = LogManager.getLogger(LOG_PREFIX)
         else:
             logger = LogManager.getLogger(logger_name)
         level = record.levelno
