@@ -1,3 +1,14 @@
+```diff
+-                     *************** IMPORTANT NOTE ***************                            
+-                                                                                               
+- This repository has been retired. I'm migrating away from openHAB to custom automation        
+- solutions. It requires significant effort to maintain a development environment for openHAB   
+- and I won't have the time to or casually research features or experiment.                     
+-                                                                                               
+- If you'd like to become the primary maintain of this library, let me know and I'll add a link 
+- to your repository.                                                                           
+```
+
 # Jython scripting for openHAB 2.x
 
 This is a repository of experimental Jython code that can be used 
