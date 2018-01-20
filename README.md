@@ -1,3 +1,14 @@
+```diff
+-                     *************** IMPORTANT NOTE ***************                            
+-                                                                                               
+- This repository has been retired. I'm migrating away from openHAB to custom automation        
+- solutions. It requires significant effort to maintain a development environment for openHAB   
+- and I won't have the time to or casually research features or experiment.                     
+-                                                                                               
+- If you'd like to become the primary maintain of this library, let me know and I'll add a link 
+- to your repository.                                                                           
+```
+
 # Jython scripting for openHAB 2.x
 
 This is a repository of experimental Jython code that can be used 
@@ -91,6 +102,8 @@ class MyRule(SimpleRule):
 
 automationManager.addRule(MyRule())
 ```
+
+    Note: trigger names must be unique within the scope of a rule instance. 
 
 This can be simplified with some extra Jython code, which we'll see later. 
 First, let's look at what's happening with the raw functionality.
@@ -336,6 +349,7 @@ Trigger classes:
 * __ItemAddedTrigger__ - fires when rule is added to the RuleRegistry (implemented in Jython)
 * __ItemRemovedTrigger__ - fires when rule is removed from the RuleRegistry (implemented in Jython)
 * __ItemUpdatedTrigger__ - fires when rule is updated in the RuleRegistry (implemented in Jython, not a state update!)
+* __ChannelEventTrigger__ - fires when a Channel gets an event e.g. from the Astro Binding
 
 Trigger function decorators:
 

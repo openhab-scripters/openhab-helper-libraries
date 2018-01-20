@@ -53,11 +53,11 @@ class CronTrigger(Trigger):
                 }))
 
 class ItemEventTrigger(Trigger):
-    def __init__(self, eventSource, eventTypes, eventTopic="smarthome/*", triggerName=None):
+    def __init__(self, eventSource, eventTypes, eventTopic="smarthome/items/*", triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
         Trigger.__init__(self, triggerName, "core.GenericEventTrigger", Configuration({
                 "eventTopic": eventTopic,
-                "eventSource": eventSource,
+                "eventSource": "smarthome/items/{}/".format(eventSource),
                 "eventTypes": eventTypes
                 }))
 
@@ -138,8 +138,13 @@ def item_triggered(item_name, event_types=None, result_item_name=None, trigger_n
     if hasattr(event_types, '__iter__'):
         event_types = ",".join(event_types)
     def decorator(fn):
+        nargs = len(inspect.getargspec(fn).args)
         def callback(module, inputs):
-            result_value = fn()
+            fn_args = []
+            event = inputs.get('event')
+            if event and nargs == 1:
+                fn_args.append(event)
+            result_value = fn(*fn_args)
             if result_item_name:
                 event_bus.postUpdate(result_item_name, unicode(result_value))
         rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], 
@@ -172,3 +177,12 @@ def item_group_triggered(group_name, event_types=None, result_item_name=None, tr
         get_automation_manager().addRule(rule)
         return fn
     return decorator
+
+class ChannelEventTrigger(Trigger):
+    def __init__(self, channelUID, event, triggerName=None):
+        triggerName = triggerName or uuid.uuid1().hex
+        #self.log.debug("Trigger: " + triggerName + "; channel: " + channelUID)
+        config = { "channelUID": channelUID }
+        config["event"] = event
+        Trigger.__init__(self, triggerName, "core.ChannelEventTrigger", Configuration(config))
+        self.setLabel(triggerName)
