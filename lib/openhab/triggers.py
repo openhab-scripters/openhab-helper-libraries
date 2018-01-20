@@ -15,6 +15,7 @@ from openhab.jsr223 import scope, get_automation_manager
 scope.scriptExtension.importPreset("RuleSimple")
 
 from openhab.osgi.events import OsgiEventTrigger
+from openhab.log import logging, LOG_PREFIX
 
 class ItemStateUpdateTrigger(Trigger):
     def __init__(self, itemName, state=None, triggerName=None):
@@ -105,22 +106,24 @@ class DirectoryEventTrigger(Trigger):
 # Function decorator trigger support
 
 class _FunctionRule(scope.SimpleRule):
-    def __init__(self, callback, triggers, extended=False):
+    def __init__(self, callback, triggers, extended=False, name=None):
         self.triggers = triggers
         self.callback = callback
         self.extended = extended
+        if name is None and hasattr(callback, '__name__'):
+            name = callback.__name__
+        self.log = logging.getLogger(LOG_PREFIX + ("" if name is None else ("." + name)))
         
     def execute(self, module, inputs):
         try:
             self.callback(module, inputs) if self.extended else self.callback()
         except:
             import traceback
-            from openhab.log import logging, LOG_PREFIX
-            logging.getLogger(LOG_PREFIX).error(traceback.format_exc())
+            self.log.error(traceback.format_exc())
 
-def time_triggered(cron_expression):
+def time_triggered(cron_expression, trigger_name=None):
     def decorator(fn):
-        rule = _FunctionRule(fn, [CronTrigger(cron_expression)])
+        rule = _FunctionRule(fn, [CronTrigger(cron_expression)], name=trigger_name)
         get_automation_manager().addRule(rule)
         return fn
     return decorator
@@ -129,7 +132,7 @@ ITEM_CHANGE = "ItemStateChangedEvent"
 ITEM_UPDATE = "ItemStateEvent"
 ITEM_COMMAND = "ItemCommandEvent"
 
-def item_triggered(item_name, event_types=None, result_item_name=None):
+def item_triggered(item_name, event_types=None, result_item_name=None, trigger_name=None):
     event_types = event_types or [ITEM_CHANGE]
     event_bus = scope.events
     if hasattr(event_types, '__iter__'):
@@ -139,13 +142,14 @@ def item_triggered(item_name, event_types=None, result_item_name=None):
             result_value = fn()
             if result_item_name:
                 event_bus.postUpdate(result_item_name, unicode(result_value))
-        rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], extended=True)
+        rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], 
+                             extended=True, name=trigger_name)
         get_automation_manager().addRule(rule)
         return fn
     return decorator
 
 
-def item_group_triggered(group_name, event_types=None, result_item_name=None):
+def item_group_triggered(group_name, event_types=None, result_item_name=None, trigger_name=None):
     event_types = event_types or [ITEM_CHANGE]
     event_bus = scope.events
     if hasattr(event_types, '__iter__'):
@@ -164,7 +168,7 @@ def item_group_triggered(group_name, event_types=None, result_item_name=None):
         group = scope.itemRegistry.getItem(group_name)
         for i in group.getAllMembers():
             group_triggers.append(ItemEventTrigger(i.name, event_types))
-        rule = _FunctionRule(callback, group_triggers, extended=True)
+        rule = _FunctionRule(callback, group_triggers, extended=True, name=trigger_name)
         get_automation_manager().addRule(rule)
         return fn
     return decorator
