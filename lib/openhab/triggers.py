@@ -115,7 +115,8 @@ class _FunctionRule(scope.SimpleRule):
             self.callback(module, inputs) if self.extended else self.callback()
         except:
             import traceback
-            print traceback.format_exc()
+            from openhab.log import logging, LOG_PREFIX
+            logging.getLogger(LOG_PREFIX).error(traceback.format_exc())
 
 def time_triggered(cron_expression):
     def decorator(fn):
