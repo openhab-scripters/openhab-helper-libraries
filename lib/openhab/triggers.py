@@ -41,6 +41,7 @@ class ItemCommandTrigger(Trigger):
         Trigger.__init__(self, triggerName, "core.ItemCommandTrigger", Configuration(config))
 
 EVERY_SECOND = "0/1 * * * * ?"
+EVERY_10_SECONDS = "0/10 * * * * ?"
 EVERY_MINUTE = "0 * * * * ?"
 EVERY_HOUR = "0 0 * * * ?"
 
@@ -81,7 +82,7 @@ class ItemRegistryTrigger(OsgiEventTrigger):
 class ItemAddedTrigger(ItemRegistryTrigger):
     def __init__(self):
         ItemRegistryTrigger.__init__(self, "ItemAddedEvent")
-        
+
 class ItemRemovedTrigger(ItemRegistryTrigger):
      def __init__(self):
         ItemRegistryTrigger.__init__(self, "ItemRemovedEvent")
@@ -89,7 +90,7 @@ class ItemRemovedTrigger(ItemRegistryTrigger):
 class ItemUpdatedTrigger(ItemRegistryTrigger):
     def __init__(self):
         ItemRegistryTrigger.__init__(self, "ItemUpdatedEvent")
-        
+
 # Directory watcher trigger
 
 class DirectoryEventTrigger(Trigger):
@@ -109,13 +110,15 @@ class _FunctionRule(scope.SimpleRule):
         self.triggers = triggers
         self.callback = callback
         self.extended = extended
-        
+
     def execute(self, module, inputs):
         try:
             self.callback(module, inputs) if self.extended else self.callback()
         except:
             import traceback
-            print traceback.format_exc()
+            from openhab.log import logging
+            logging.error(traceback.format_exc())
+            raise # Re-raise the exception (allowing a caller to see and handle the exception as well)
 
 def time_triggered(cron_expression):
     def decorator(fn):
