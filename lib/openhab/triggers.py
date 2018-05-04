@@ -26,11 +26,13 @@ class ItemStateUpdateTrigger(Trigger):
         Trigger.__init__(self, triggerName, "core.ItemStateUpdateTrigger", Configuration(config))
 
 class ItemStateChangeTrigger(Trigger):
-    def __init__(self, itemName, state=None, triggerName=None):
+    def __init__(self, itemName, state=None, triggerName=None, previousState=None):):
         triggerName = triggerName or uuid.uuid1().hex
         config = { "itemName": itemName }
         if state is not None:
             config["state"] = state
+        if previousState is not None:
+            config["previousState"] = previousState
         Trigger.__init__(self, triggerName, "core.ItemStateChangeTrigger", Configuration(config))
 
 class ItemCommandTrigger(Trigger):
@@ -40,6 +42,15 @@ class ItemCommandTrigger(Trigger):
         if command is not None:
             config["command"] = command
         Trigger.__init__(self, triggerName, "core.ItemCommandTrigger", Configuration(config))
+
+class ChannelEventTrigger(Trigger):
+    def __init__(self, channelUID, event, triggerName=None):
+        triggerName = triggerName or uuid.uuid1().hex
+        #self.log.debug("Trigger: " + triggerName + "; channel: " + channelUID)
+        config = { "channelUID": channelUID }
+        config["event"] = event
+        Trigger.__init__(self, triggerName, "core.ChannelEventTrigger", Configuration(config))
+        self.setLabel(triggerName)
 
 EVERY_SECOND = "0/1 * * * * ?"
 EVERY_MINUTE = "0 * * * * ?"
@@ -177,12 +188,3 @@ def item_group_triggered(group_name, event_types=None, result_item_name=None, tr
         get_automation_manager().addRule(rule)
         return fn
     return decorator
-
-class ChannelEventTrigger(Trigger):
-    def __init__(self, channelUID, event, triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
-        #self.log.debug("Trigger: " + triggerName + "; channel: " + channelUID)
-        config = { "channelUID": channelUID }
-        config["event"] = event
-        Trigger.__init__(self, triggerName, "core.ChannelEventTrigger", Configuration(config))
-        self.setLabel(triggerName)
