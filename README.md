@@ -94,6 +94,30 @@ automationManager.addRule(MyRule())
 
     Note: trigger names must be unique within the scope of a rule instance. 
 
+Post OH 2.4.0 snapshot build 1319, the rule definition would look like:
+
+```python    
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleSimple")
+
+class myRule(SimpleRule):
+    def execute(self, module, inputs):
+        print "This is a 'hello world!' from Jython rule."
+
+sRule = myRule()
+sRule.setTriggers([
+    TriggerBuilder.create()
+        .withId("aTimerTrigger")
+        .withTypeUID("timer.GenericCronTrigger")
+        .withConfiguration(
+            Configuration({
+                "cronExpression": "0 * * * * ?"
+            })).build()
+    ])
+
+automationManager.addRule(sRule)
+```
+
 This can be simplified with some extra Jython code, which we'll see later. 
 First, let's look at what's happening with the raw functionality.
 
