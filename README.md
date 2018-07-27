@@ -96,7 +96,10 @@ automationManager.addRule(MyRule())
 
 Post OH 2.4.0 snapshot build 1319, the rule definition would look like:
 
-```python    
+```python
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleSimple")
+
 class MyRule(SimpleRule):
     def __init__(self):
         self.triggers = [
