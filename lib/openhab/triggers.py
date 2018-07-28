@@ -5,7 +5,6 @@ import inspect
 import json
 import uuid
 
-from org.eclipse.smarthome.automation.core.util import TriggerBuilder
 from org.eclipse.smarthome.automation import Trigger
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 from org.eclipse.smarthome.automation.type import TriggerType
@@ -24,7 +23,7 @@ class ItemStateUpdateTrigger(Trigger):
         config = { "itemName": itemName }
         if state is not None:
             config["state"] = state
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateUpdateTrigger").withConfiguration(Configuration(config)).build()
+        Trigger.__init__(self, triggerName, "core.ItemStateUpdateTrigger", Configuration(config))
 
 class ItemStateChangeTrigger(Trigger):
     def __init__(self, itemName, state=None, triggerName=None, previousState=None):
@@ -34,7 +33,7 @@ class ItemStateChangeTrigger(Trigger):
             config["state"] = state
         if previousState is not None:
             config["previousState"] = previousState
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateChangeTrigger").withConfiguration(Configuration(config)).build()
+        Trigger.__init__(self, triggerName, "core.ItemStateChangeTrigger", Configuration(config))
 
 class ItemCommandTrigger(Trigger):
     def __init__(self, itemName, command=None, triggerName=None):
@@ -42,7 +41,7 @@ class ItemCommandTrigger(Trigger):
         config = { "itemName": itemName }
         if command is not None:
             config["command"] = command
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemCommandTrigger").withConfiguration(Configuration(config)).build()
+        Trigger.__init__(self, triggerName, "core.ItemCommandTrigger", Configuration(config))
 
 class ChannelEventTrigger(Trigger):
     def __init__(self, channelUID, event, triggerName=None):
@@ -50,7 +49,7 @@ class ChannelEventTrigger(Trigger):
         #self.log.debug("Trigger: " + triggerName + "; channel: " + channelUID)
         config = { "channelUID": channelUID }
         config["event"] = event
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ChannelEventTrigger").withConfiguration(Configuration(config)).build()
+        Trigger.__init__(self, triggerName, "core.ChannelEventTrigger", Configuration(config))
         self.setLabel(triggerName)
 
 EVERY_SECOND = "0/1 * * * * ?"
@@ -60,21 +59,23 @@ EVERY_HOUR = "0 0 * * * ?"
 class CronTrigger(Trigger):
     def __init__(self, cronExpression, triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("timer.GenericCronTrigger").withConfiguration(Configuration({"cronExpression": cronExpression})).build()
+        Trigger.__init__(self, triggerName, "timer.GenericCronTrigger", Configuration({
+                "cronExpression": cronExpression
+                }))
 
 class ItemEventTrigger(Trigger):
     def __init__(self, eventSource, eventTypes, eventTopic="smarthome/items/*", triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
-            "eventTopic": eventTopic,
-            "eventSource": "smarthome/items/{}/".format(eventSource),
-            "eventTypes": eventTypes
-            })).build()
+        Trigger.__init__(self, triggerName, "core.GenericEventTrigger", Configuration({
+                "eventTopic": eventTopic,
+                "eventSource": "smarthome/items/{}/".format(eventSource),
+                "eventTypes": eventTypes
+                }))
 
 class StartupTrigger(Trigger):
     def __init__(self, triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("openhab.STARTUP_MODULE_ID").withConfiguration(Configuration()).build()
+        Trigger.__init__(self, triggerName, openhab.STARTUP_MODULE_ID, Configuration())
     
 # Item Registry Triggers
 
@@ -106,12 +107,12 @@ class ItemUpdatedTrigger(ItemRegistryTrigger):
 class DirectoryEventTrigger(Trigger):
     def __init__(self, path, event_kinds=[ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY], watch_subdirectories=False):
         triggerId = type(self).__name__ + "-" + uuid.uuid1().hex
-        config = {
+        config = Configuration({
             'path': path,
             'event_kinds': str(event_kinds),
             'watch_subdirectories': watch_subdirectories,
-        }
-        self.trigger = TriggerBuilder.create().withId(triggerId).withTypeUID("openhab.DIRECTORY_TRIGGER_MODULE_ID").withConfiguration(Configuration(config)).build()
+        })
+        Trigger.__init__(self, triggerId, openhab.DIRECTORY_TRIGGER_MODULE_ID, config)
 
 # Function decorator trigger support
 
@@ -133,7 +134,7 @@ class _FunctionRule(scope.SimpleRule):
 
 def time_triggered(cron_expression, trigger_name=None):
     def decorator(fn):
-        rule = _FunctionRule(fn, [CronTrigger(cron_expression).trigger], name=trigger_name)
+        rule = _FunctionRule(fn, [CronTrigger(cron_expression)], name=trigger_name)
         get_automation_manager().addRule(rule)
         return fn
     return decorator
@@ -162,9 +163,9 @@ def item_triggered(item_name, groupAsItem=False, allMembers=True, event_types=No
         triggers = []
         if not groupAsItem and item.type == "Group":
             for i in (item.getAllMembers() if allMembers else item.getMembers()):
-                triggers.append(ItemEventTrigger(i.name, event_types).trigger)
+                triggers.append(ItemEventTrigger(i.name, event_types))
         else:
-            triggers.append(ItemEventTrigger(item_name, event_types).trigger)
+            triggers.append(ItemEventTrigger(item_name, event_types))
         rule = _FunctionRule(callback, triggers, extended=True, name=trigger_name)
         get_automation_manager().addRule(rule)
         return fn
