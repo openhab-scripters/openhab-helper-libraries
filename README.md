@@ -94,20 +94,20 @@ These scripts are located in the `automation/jsr223/scripts/components` subdirec
 They should be copied to the `automation/jsr223/components` directory of your openHAB 2 installation to use them. 
 The files have a numeric prefix to cause them to be loaded before regular user scripts.
 
-#### Script: [`000_StartupTrigger.py`](automation/jsr223/scripts/components/000_StartupTrigger.py)
+#### Script: [`000_StartupTrigger.py`](automation/jsr223/components/000_StartupTrigger.py)
 <ul>
 
 Defines a rule trigger that triggers immediately when a rule is activated. 
 This is similar to the same type of trigger in openHAB 1.x.
 </ul>
 
-#### Script: [`000_OsgiEventTrigger.py`](automation/jsr223/scripts/components/000_OsgiEventTrigger.py)
+#### Script: [`000_OsgiEventTrigger.py`](automation/jsr223/components/000_OsgiEventTrigger.py)
 <ul>
 
 This rule trigger responds to events on the OSGI EventAdmin event bus.
 </ul>
 
-#### Script: [`000_DirectoryTrigger.py`](automation/jsr223/scripts/components/000_DirectoryTrigger.py)
+#### Script: [`000_DirectoryTrigger.py`](automation/jsr223/components/000_DirectoryTrigger.py)
 <ul>
 
 This trigger can respond to file system changes.
@@ -124,7 +124,7 @@ class DirectoryWatcherExampleRule(object):
 ```
 </ul>
 
-#### Script [`000_JythonTransform.py`](automation/jsr223/scripts/components/000_JythonTransform.py)
+#### Script [`000_JythonTransform.py`](automation/jsr223/components/000_JythonTransform.py)
 <ul>
 
 This script defines a transformation service (identified by "JYTHON") that will process a value using a Jython script. 
@@ -135,10 +135,10 @@ This is similar to the Javascript transformer.
 <ul>
 
 These components are used to support Thing handler implementations:
-* [`000_JythonThingProvider.py`](automation/jsr223/scripts/components/000_JythonThingProvider.py)
-* [`000_JythonThingTypeProvider.py`](automation/jsr223/scripts/components/000_JythonThingTypeProvider.py)
-* [`000_JythonBindingInfoProvider.py`](automation/jsr223/scripts/components/000_JythonBindingInfoProvider.py)
-* [`000_JythonItemProvider.py`](automation/jsr223/scripts/components/000_JythonItemProvider.py)
+* [`000_JythonThingProvider.py`](automation/jsr223/components/000_JythonThingProvider.py)
+* [`000_JythonThingTypeProvider.py`](automation/jsr223/components/000_JythonThingTypeProvider.py)
+* [`000_JythonBindingInfoProvider.py`](automation/jsr223/components/000_JythonBindingInfoProvider.py)
+* [`000_JythonItemProvider.py`](automation/jsr223/scripts/000_JythonItemProvider.py)
 
 </ul>
 </ul>
@@ -151,7 +151,7 @@ Some of the examples are intended to provide services to user scripts so they ha
 (but after the general purpose components). In order to use them, these scripts will need to be moved to a subdirectory of `/conf/automation/jsr223/`. 
 These scripts utilize the modules located in the `/automation/lib/python/openhab/` subdirectory.
 
-#### Script: [`000_ExampleExtensionProvider.py`](Script%20Examples/000_ExampleExtensionProvider.py)
+#### Script: [`000_ExampleExtensionProvider.py`](Script%20Examples/100_ExampleExtensionProvider.py)
 <ul>
 
 This component implements the openHAB extension provider interfaces and can be used to provide symbols to a script
