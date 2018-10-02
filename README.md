@@ -17,7 +17,7 @@ _NOTE: To use Jython for defining rules, the Experimental Rule Engine add-on mus
     - [Raw ESH Automation API](#raw-esh-automation-api)
     - [Using Jython Extensions](#using-jython-extensions)
         - [Rule Trigger Decorators](#rule-trigger-decorators)
-- [But how do I...?](#but-how-do-i...?)
+- [But how do I...?](#but-how-do-i)
 
 ## Getting Started
 
