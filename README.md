@@ -151,20 +151,20 @@ Some of the examples are intended to provide services to user scripts so they ha
 (but after the general purpose components). In order to use them, these scripts will need to be moved to a subdirectory of `/conf/automation/jsr223/`. 
 These scripts utilize the modules located in the `/automation/lib/python/openhab/` subdirectory.
 
-#### Script: [`000_ExampleExtensionProvider.py`](Script Examples/000_ExampleExtensionProvider.py)
+#### Script: [`000_ExampleExtensionProvider.py`](Script%20Examples/000_ExampleExtensionProvider.py)
 <ul>
 
 This component implements the openHAB extension provider interfaces and can be used to provide symbols to a script
 namespace.
 </ul>
 
-#### Script: [`000_LogAction.py`](Script Examples/000_LogAction.py)
+#### Script: [`000_LogAction.py`](Script%20Examples/000_LogAction.py)
 <ul>
 
 This is a simple rule action that will log a message to the openHAB log file.
 </ul>
 
-#### Script: [`100_EchoThing.py`](Script Examples/100_EchoThing.py)
+#### Script: [`100_EchoThing.py`](Script%20Examples/100_EchoThing.py)
 <ul>
 
 Experimental Thing binding and handler implemented in Jython. (At the time of this writing, 
@@ -172,44 +172,44 @@ it requires a small change to the ESH source code for it to work.)
 This simple Thing will write state updates on its input channel to items states linked to the output channel.
 </ul>
 
-#### Script: [`000_JythonConsoleCommand.py`](Script Examples/000_JythonConsoleCommand.py)
+#### Script: [`000_JythonConsoleCommand.py`](Script%20Examples/000_JythonConsoleCommand.py)
 <ul>
 
 This script defines an command extension to the OSGI console. 
 The example command prints some Jython  platform details to the console output.
 </ul>
 
-#### Script: [`actors.py`](Script Examples/actors.py)
+#### Script: [`actors.py`](Script%20Examples/actors.py)
 <ul>
 
 Shows an example of using the Pykka actors library. The Pykka library must be in the Java classpath.
 </ul>
 
-#### Script: [`esper_example.py`](Script Examples/esper_example.py)
+#### Script: [`esper_example.py`](Script%20Examples/esper_example.py)
 <ul>
 
 Shows an example of using the Esper component. The 000_Esper.py component script must be installed.
 </ul>
 
-#### Script: [`rule_decorators.py`](Script Examples/rule_decorators.py)
+#### Script: [`rule_decorators.py`](Script%20Examples/rule_decorators.py)
 <ul>
 
 Provides examples of using the trigger-related rule decorators on functions as an alternative to explicit rule and trigger classes.
 </ul>
 
-#### Script: [`testing_example.py`](script-examples/testing_example.py)
+#### Script: [`testing_example.py`](Script%20Examples/testing_example.py)
 <ul>
 
 Examples of unit testing.
 </ul>
 
-#### Script: [`dirwatcher_example.py`](Script Examples/dirwatcher_example.py)
+#### Script: [`dirwatcher_example.py`](Script%20Examples/dirwatcher_example.py)
 <ul>
 
 Example of a rule that watches for files created in a specified directory.
 </ul>
 
-#### Script: [`rule_registry.py`](Script Examples/rule_registry.py)
+#### Script: [`rule_registry.py`](Script%20Examples/rule_registry.py)
 <ul>
 
 This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags,
@@ -226,7 +226,7 @@ The following are some initial experiments in that direction.
 
 There are example scripts in the `/Script Examples` directory.
 
-#### Module: [`openhab.rules`](lib/openhab/rules.py)
+#### Module: [`openhab.rules`](automation/lib/python/openhab/rules.py)
 <ul>
 
 The rules module contains some utility functions and a decorator for converting a Jython class into a `SimpleRule`.
