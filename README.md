@@ -461,6 +461,30 @@ automationManager.addRule(MyRule())
 
 Note: trigger names must be unique within the scope of a rule instance. 
 
+Post OH 2.4.0 snapshot build 1319, the rule definition would look like:
+
+```python
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleSimple")
+
+class MyRule(SimpleRule):
+    def __init__(self):
+        self.triggers = [
+            TriggerBuilder.create()
+                    .withId("MyTrigger")
+                    .withTypeUID("core.ItemStateUpdateTrigger")
+                    .withConfiguration(
+                        Configuration({
+                            "itemName": "TestString1"
+                        })).build()
+        ]
+        
+    def execute(self, module, input):
+        events.postUpdate("TestString2", "some data")
+
+automationManager.addRule(MyRule())
+```
+
 This can be simplified with some extra Jython code, which we'll see later. 
 First, let's look at what's happening with the raw functionality.
 
