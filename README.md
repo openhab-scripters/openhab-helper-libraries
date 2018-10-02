@@ -215,6 +215,12 @@ Example of a rule that watches for files created in a specified directory.
 This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags,
 enable and disable rule instances dynamically, and manually fire rules with specified inputs.
 </ul>
+
+#### Script: [`timer_example.py`](Script%20Examples/timer_example.py)
+<ul>
+
+Example of a rule that shows how to create and cancel a global timer.
+</ul>
 </ul>
 
 ## Jython Modules
@@ -535,46 +541,35 @@ class MyRule(SimpleRule):
 This removes the need to know the internal ESH trigger type strings, 
 define trigger names and to know configuration dictionary requirements.
 
-#### Rule Trigger Decorators
+#### Rule Trigger Decorator
 <ul>
 
-To make rule creation _even simpler_, `openhab.triggers` defines function decorators. 
-To define a function that will be triggered periodically, the entire script looks like:
+To make rule creation _even simpler_, `openhab.triggers` defines a function decorator that can be 
+used to create a rule with triggers defined similarly to how it is done in the Rules DSL. 
 
 ```python
-from openhab.triggers import time_triggered, EVERY_MINUTE
+from openhab.triggers import when, rule
 
-@time_triggered(EVERY_MINUTE)
-def my_periodic_function():
-    events.postUpdate("TestString1", somefunction())
+@rule("This is the name of a test rule",
+    when("Item Test_Switch_1 received command OFF"),
+    when("Item Test_Switch_2 received update ON"),
+    when("Member of gMotion_Sensors changed to OFF"),
+    when("Descendent of gContact_Sensors changed to ON"),
+    when("Thing kodi:kodi:familyroom changed"),# Thing statuses cannot currently be used in triggers
+    when("Channel astro:sun:local:eclipse#event triggered START"),
+    when("System started"),# 'System shuts down' cannot currently be used as a trigger
+    when("55 55 5 * * ?")
+)
+def testFunction(event):
+    if items["Test_Switch_3"] == OnOffType.ON:
+        events.postUpdate("TestString1", "The test rule has been executed!")
 ```
 
 Notice there is no explicit preset import and the generated rule is registered automatically with the `HandlerRegistry`. 
-Another example...
+Note: 'Descendent of' is similar to 'Member of', but will trigger on any sibling non-group Item (think group_item.allMembers()).
 
-```python
-from openhab.triggers import item_triggered
-
-@item_triggered("TestString1", result_item_name="TestString2")
-def my_item_function():
-    if len(items['TestString1']) > 100:
-        return "TOO BIG!"
-```
-The `item_triggered` decorator creates a rule that will trigger on changes to TestString1. 
-The function result will be posted to TestString2. 
 The `items` object is from the default scope and allows access to item state. 
-If the function needs to send commands or access other items, it can be  done using the `events` scope object. 
-
-A decorator can also be used to trigger a function invocation from an item group 
-and provide the event related to the triggering item.
-
-```python
-@item_group_triggered("TestGroup", result_item_name="TestString1")
-def example(event):
-    return event.itemName + " triggered me!"
-```
-
-This decorated function will trigger from a change to any member of the TestGroup item.
+If the function needs to send commands or access other items, it can be done using the `events` scope object. 
 When the function is called it is provided the event instance that triggered it.
 The specific trigger data depends on the event type.
 For example, the `ItemStateChangedEvent` event type has `itemName`, `itemState`, and `oldItemState` attributes.
@@ -611,34 +606,42 @@ ir.getItem("My_Item")
 ```python
 ir.getItem("My_Item").state
 ```
+<ul>
+
 or...
+</ul>
+
 ```python
 items["My_Item")
 ```
-or (uses the openhab.py module)...
+<ul>
+
+or (uses the `openhab.py` module)...
+</ul>
+
 ```python
 import openhab
 items.My_Item
 ```
 
-#### Get the equivalent of Rules DSL triggeringItem.name:
+#### Get the equivalent of Rules DSL `triggeringItem.name`:
 ```python
 event.itemName
 ```
 
-#### Get the equivalent of Rules DSL triggeringItem.state:
+#### Get the equivalent of Rules DSL `triggeringItem.state`:
 ```python
 event.itemState
-```
-
-#### Get the received command:
-```python
-event.itemCommand
 ```
 
 #### Get the previous state:
 ```python
 event.oldItemState
+```
+
+#### Get the received command:
+```python
+event.itemCommand
 ```
 
 #### Send a command to an item:
@@ -670,7 +673,7 @@ PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTim
 #### executeCommandLine (similar for using other script Actions):
 ```python
 from org.eclipse.smarthome.model.script.actions.Exec import executeCommandLine
-executeCommandLine("...",5000)
+executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
 ```
 
 #### Logging (the logger can be modified to wherever you want the log to go):
@@ -694,3 +697,13 @@ items["Some_Item"] != UnDefType.NULL
 int(str(items["Number_Item1"])) + int(str(items["Number_Item2"])) > 5
 float(str(items["Number_Item"])) + 5.5555 > 55.555
 ```
+
+#### Pause a thread:
+```python
+from time import sleep
+sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
+```
+
+#### Use a timer:
+
+see the [`timer_example.py](#script-timer_examplepy) in the example scripts
