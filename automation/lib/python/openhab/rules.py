@@ -16,7 +16,7 @@ def set_uid_prefix(rule, prefix=None):
 def rule(clazz):
     def init(self, *args, **kwargs):
         scope.SimpleRule.__init__(self)
-        set_uid_prefix(self)
+        #set_uid_prefix(self)
         self.log = logging.getLogger(LOG_PREFIX + "." + clazz.__name__)
         clazz.__init__(self, *args, **kwargs)
         if self.description is None and clazz.__doc__:
