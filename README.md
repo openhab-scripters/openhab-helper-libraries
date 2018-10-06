@@ -1,10 +1,7 @@
 # Jython scripting for openHAB 2.x
 
 This is a repository of experimental Jython code that can be used 
-with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://docs.openhab.org/) Jython scripting. 
-Also see the [openHAB 2 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
-
-_NOTE: To use Jython for defining rules, the Experimental Rule Engine add-on must be installed in openHAB 2._
+with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://docs.openhab.org/). 
 
 - [Getting Started](#getting-started)
     - [Applications](#applications)
@@ -22,6 +19,30 @@ _NOTE: To use Jython for defining rules, the Experimental Rule Engine add-on mus
 ## Getting Started
 
 <ul>
+
+### Quick Start Guide
+<ul>
+
+- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB.
+- Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
+- Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html) documentation.
+    - Add/modify EXTRA_JAVA_OPTS. One way to do ths is to add the following to your `start.sh` script, directly below the `DIRNAME` variable definition. This assumes that you will be using the standalone Jython 2.7.0 jar.
+        ```
+        export EXTRA_JAVA_OPTS="-Xbootclasspath/a:${DIRNAME}/conf/automation/jython/jython-standalone-2.7.0.jar \
+        -Dpython.home=${DIRNAME}/conf/automation/jython \
+        -Dpython.path=${DIRNAME}/conf/automation/lib/python"
+        ```
+    - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used.
+
+- Download the contents of this repository, and copy the `automation` directory into `/etc/openhab2/` (apt OH install) or `/opt/openhab2/conf` (default manual OH install).
+- Restart OH.
+- Add a test script to `/automation/jsr223/` to test if everything is working.
+- Review the general [openHAB2 JSR223 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
+- Review the rest of this documentation
+- To view detailed logs, turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation`)
+- Ask questions on the [openHAB forum](https://community.openhab.org/tags/jsr223) and tag posts with `jsr223`. Report issues [here](https://github.com/OH-Jython-Scripters/openhab2-jython/issues).
+
+</ul>
 
 ### Applications
 <ul>
@@ -62,10 +83,10 @@ In a Linux apt installation, this would be `/etc/openhab2/automation/jsr223/`. F
 
 Some scripts should be loaded before others because of dependencies between the scripts. 
 Scripts that implement OH2 components (like trigger types, item providers, etc.) are one example.
-I recommend putting these scripts into a subdirectory called `000_Components`. 
+It is recommended to put these scripts into a subdirectory called `000_Components`. 
 The name prefix will cause the scripts in the directory to be loaded first.
-I also recommend naming the component files with a "000_" prefix 
-because there are currently bugs in the file loading behavior of OH2.
+It is also recommended to name the component files with a `000_` prefix, 
+because there are currently bugs in the file loading behavior of OH2 (ref? likely resolved).
 
 Example:
 
@@ -76,38 +97,38 @@ Example:
     myotherscript.py
 ```
 
-Jython modules can be placed anywhere but the Python path must be configured to find them.
+Jython modules can be placed anywhere, but the Python path must be configured to find them.
 There are several ways to do this. 
 You can add a `-Dpython.path=mypath1:mypath2` to the JVM command line by modifying the OH2 startup scripts.
 You can also modify the `sys.path` list in a Jython script that loads early (like a component script).
 
-I put my Jython modules in `/etc/openhab2/lib/python` (Linux apt installation).
+I put my Jython modules in `/etc/openhab2/automation/lib/python` (Linux apt installation).
 Another option is to checkout the GitHub repo in some location and use a directory soft link (Linux) 
-from `/etc/openhab2/lib/python/openhab` to the GitHub workspace `lib\openhab` directory.
+from `/etc/openhab2/automation/lib/python/openhab` to the GitHub workspace `automation/lib/python/openhab` directory.
 </ul>
 </ul>
 
 ## Component Scripts
 <ul>
 
-These scripts are located in the `automation/jsr223/scripts/components` subdirectory. 
-They should be copied to the `automation/jsr223/components` directory of your openHAB 2 installation to use them. 
+These scripts are located in the `automation/jsr223/000_components` subdirectory. 
+They should be copied to the same directory structure inside your openHAB 2 installation to use them. 
 The files have a numeric prefix to cause them to be loaded before regular user scripts.
 
-#### Script: [`000_StartupTrigger.py`](automation/jsr223/components/000_StartupTrigger.py)
+#### Script: [`000_StartupTrigger.py`](automation/jsr223/000_components/000_StartupTrigger.py)
 <ul>
 
 Defines a rule trigger that triggers immediately when a rule is activated. 
 This is similar to the same type of trigger in openHAB 1.x.
 </ul>
 
-#### Script: [`000_OsgiEventTrigger.py`](automation/jsr223/components/000_OsgiEventTrigger.py)
+#### Script: [`000_OsgiEventTrigger.py`](automation/jsr223/000_components/000_OsgiEventTrigger.py)
 <ul>
 
 This rule trigger responds to events on the OSGI EventAdmin event bus.
 </ul>
 
-#### Script: [`000_DirectoryTrigger.py`](automation/jsr223/components/000_DirectoryTrigger.py)
+#### Script: [`000_DirectoryTrigger.py`](automation/jsr223/000_components/000_DirectoryTrigger.py)
 <ul>
 
 This trigger can respond to file system changes.
@@ -124,20 +145,27 @@ class DirectoryWatcherExampleRule(object):
 ```
 </ul>
 
-#### Script [`000_JythonTransform.py`](automation/jsr223/components/000_JythonTransform.py)
+#### Script [`000_JythonTransform.py`](automation/jsr223/000_components/000_JythonTransform.py)
 <ul>
 
 This script defines a transformation service (identified by "JYTHON") that will process a value using a Jython script. 
 This is similar to the Javascript transformer.
 </ul>
 
+#### Script: [`000_ExampleExtensionProvider.py`](automation/jsr223/000_components/100_ExampleExtensionProvider.py)
+<ul>
+
+This component implements the openHAB extension provider interfaces and can be used to provide symbols to a script
+namespace.
+</ul>
+
 #### Scripts: Jython-based Providers
 <ul>
 
 These components are used to support Thing handler implementations:
-* [`000_JythonThingProvider.py`](automation/jsr223/components/000_JythonThingProvider.py)
-* [`000_JythonThingTypeProvider.py`](automation/jsr223/components/000_JythonThingTypeProvider.py)
-* [`000_JythonBindingInfoProvider.py`](automation/jsr223/components/000_JythonBindingInfoProvider.py)
+* [`000_JythonThingProvider.py`](automation/jsr223/000_components/000_JythonThingProvider.py)
+* [`000_JythonThingTypeProvider.py`](automation/jsr223/000_components/000_JythonThingTypeProvider.py)
+* [`000_JythonBindingInfoProvider.py`](automation/jsr223/000_components/000_JythonBindingInfoProvider.py)
 * [`000_JythonItemProvider.py`](automation/jsr223/scripts/000_JythonItemProvider.py)
 
 </ul>
@@ -151,11 +179,10 @@ Some of the examples are intended to provide services to user scripts so they ha
 (but after the general purpose components). In order to use them, these scripts will need to be moved to a subdirectory of `/conf/automation/jsr223/`. 
 These scripts utilize the modules located in the `/automation/lib/python/openhab/` subdirectory.
 
-#### Script: [`000_ExampleExtensionProvider.py`](Script%20Examples/100_ExampleExtensionProvider.py)
+#### Script: [`000_HelloWorld.py`](Script%20Examples/HelloWorld.py)
 <ul>
 
-This component implements the openHAB extension provider interfaces and can be used to provide symbols to a script
-namespace.
+This script has several examples for how to define Jython rules, just uncomment the ones you'd like to test. By default, it uses a decorator cron rule that will generate logs every 10s. This can be used to test your initial setup.
 </ul>
 
 #### Script: [`000_LogAction.py`](Script%20Examples/000_LogAction.py)
@@ -176,7 +203,7 @@ This simple Thing will write state updates on its input channel to items states 
 <ul>
 
 This script defines an command extension to the OSGI console. 
-The example command prints some Jython  platform details to the console output.
+The example command prints some Jython platform details to the console output.
 </ul>
 
 #### Script: [`actors.py`](Script%20Examples/actors.py)
@@ -544,25 +571,25 @@ define trigger names and to know configuration dictionary requirements.
 #### Rule Trigger Decorator
 <ul>
 
-To make rule creation _even simpler_, `openhab.triggers` defines a function decorator that can be 
-used to create a rule with triggers defined similarly to how it is done in the Rules DSL. 
+To make rule creation _even simpler_, `openhab.rules` defines a decorator that can be 
+used to create a rule, which can be fed triggers from a decorator in `openhab.triggers`. These triggers can be defined similarly to how it is done in the Rules DSL. 
 
 ```python
-from openhab.triggers import when, rule
+from openhab.rules import rule
+from openhab.triggers import when
 
-@rule("This is the name of a test rule",
-    when("Item Test_Switch_1 received command OFF"),
-    when("Item Test_Switch_2 received update ON"),
-    when("Member of gMotion_Sensors changed to OFF"),
-    when("Descendent of gContact_Sensors changed to ON"),
-    when("Thing kodi:kodi:familyroom changed"),# Thing statuses cannot currently be used in triggers
-    when("Channel astro:sun:local:eclipse#event triggered START"),
-    when("System started"),# 'System shuts down' cannot currently be used as a trigger
-    when("55 55 5 * * ?")
-)
+@rule("This is the name of a test rule")
+@when("Item Test_Switch_1 received command OFF")
+@when("Item Test_Switch_2 received update ON")
+@when("Member of gMotion_Sensors changed to OFF")
+@when("Descendent of gContact_Sensors changed to ON")
+@when("Thing kodi:kodi:familyroom changed")# Thing statuses cannot currently be used in triggers
+@when("Channel astro:sun:local:eclipse#event triggered START")
+@when("System started")# 'System shuts down' cannot currently be used as a trigger, and 'System started' needs to be updated to work with Automation API updates
+@when("55 55 5 * * ?")
 def testFunction(event):
-    if items["Test_Switch_3"] == OnOffType.ON:
-        events.postUpdate("TestString1", "The test rule has been executed!")
+    if items["Test_Switch_1"] == OnOffType.ON:
+        events.postUpdate("Test_String_1", "The test rule has been executed!")
 ```
 
 Notice there is no explicit preset import and the generated rule is registered automatically with the `HandlerRegistry`. 
@@ -660,13 +687,18 @@ for lightItem in ir.getItem("Group_of_lights").getMembers():
     # do stuff
 ```
 
+#### Use org.joda.time.DateTime:
+```python
+from org.joda.time import DateTime
+start = DateTime.now()
+```
+
 #### Persistence extensions:
 ```python
 from org.eclipse.smarthome.model.persistence.extensions import PersistenceExtensions
 PersistenceExtensions.previousState(ir.getItem("Weather_SolarRadiation"), True).state
 
-import org.joda.time
-PersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1))
+from org.joda.time import DateTimePersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1))
 PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
 ```
 

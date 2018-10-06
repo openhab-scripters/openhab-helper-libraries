@@ -1,7 +1,6 @@
 import inspect
 import json
 import uuid
-from functools import wraps
 
 import java.util
 from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
@@ -17,7 +16,7 @@ from org.eclipse.smarthome.core.types import TypeParser
 #from org.eclipse.smarthome.core.thing import ThingStatus
 
 import openhab
-from openhab.jsr223 import scope, get_automation_manager
+from openhab.jsr223 import scope
 from openhab.osgi.events import OsgiEventTrigger
 from openhab.log import logging, LOG_PREFIX
 
@@ -57,6 +56,30 @@ class ItemCommandTrigger(Trigger):
             config["command"] = command
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemCommandTrigger").withConfiguration(Configuration(config)).build()
 
+class ChannelEventTrigger(Trigger):
+    def __init__(self, channelUID, event=None, triggerName=None):
+        triggerName = triggerName or uuid.uuid1().hex
+        config = { "channelUID": channelUID }
+        if event is not None:
+            config["event"] = event
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ChannelEventTrigger").withConfiguration(Configuration(config)).build()
+
+class GenericEventTrigger(Trigger):
+    def __init__(self, eventSource, eventTypes, eventTopic="smarthome/*", triggerName=None):
+        triggerName = triggerName or uuid.uuid1().hex
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
+            "eventTopic": eventTopic,
+            "eventSource": "smarthome/{}/".format(eventSource),
+            "eventTypes": eventTypes
+        })).build()
+
+'''
+Item event types:
+ITEM_UPDATE = "ItemStateEvent"
+ITEM_COMMAND = "ItemCommandEvent"
+ITEM_CHANGE = "ItemStateChangedEvent"
+GROUP_CHANGE = "GroupItemStateChangedEvent"
+'''
 class ItemEventTrigger(Trigger):
     def __init__(self, eventSource, eventTypes, eventTopic="smarthome/items/*", triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
@@ -66,15 +89,8 @@ class ItemEventTrigger(Trigger):
             "eventTypes": eventTypes
         })).build()
 
-class ChannelEventTrigger(Trigger):
-    def __init__(self, channelUID, event=None, triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
-        config = { "channelUID": channelUID }
-        if event is not None:
-            config["event"] = event
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ChannelEventTrigger").withConfiguration(Configuration(config)).build()
-
 '''
+Thing event types:
 "ThingAddedEvent"
 "ThingRemovedEvent"
 "ThingStatusInfoChangedEvent"
@@ -104,13 +120,10 @@ class StartupTrigger(Trigger):
         triggerName = triggerName or uuid.uuid1().hex
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("openhab.STARTUP_MODULE_ID").withConfiguration(Configuration()).build()
 
-'''
-# ShutdownTrigger is not ready yet
 class ShutdownTrigger(Trigger):
     def __init__(self, triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("openhab.SHUTDOWN_MODULE_ID").withConfiguration(Configuration()).build()
-'''
 
 # Item Registry Triggers
 
@@ -151,169 +164,134 @@ class DirectoryEventTrigger(Trigger):
 
 # Function decorator trigger support
 
-class _FunctionRule(scope.SimpleRule):
-    def __init__(self, callback, triggers, name=None):#extended=False):
-        self.triggers = triggers
-        self.callback = callback
-        #self.extended = extended
-        if name is None and hasattr(callback, '__name__'):
-            name = callback.__name__
-        self.name = name
-        #log.debug("_FunctionRule: test: rule name=[{}]".format(name))
-        #log.debug("_FunctionRule: test: callback.__name__=[{}]".format(callback.__name__))
-        self.log = logging.getLogger(LOG_PREFIX + ("" if name is None else ("." + name)))
-        
-    def execute(self, module, inputs):
-        try:
-            #log.error("rule: execute [{}]: extended=[{}]".format(self.name, self.extended))
-            #self.callback(module, inputs) if self.extended else self.callback()
-            self.callback(inputs.get('event'))
-        except:
-            import traceback
-            self.log.error(traceback.format_exc())
-
-def rule(name, *triggers):
+def when(target, target_type=None, trigger_type=None, old_state=None, new_state=None, event_types=None):
     try:
-        def rule_decorator(function):
-            all_triggers = [ trigger for sublist in list(triggers) for trigger in sublist ]
-            newRule = _FunctionRule(function, all_triggers, name=name)
-            get_automation_manager().addRule(newRule)
-            return function
-        return rule_decorator
-    except Exception as e:
-        import traceback
-        log.error("rule: Exception [{}]: [{}]".format(e, traceback.format_exc()))
-
-def when(target, trigger_type=None, member_of=False, descendent_of=False, old_state=None, new_state=None, changed=False, received_update=False, received_command=False, event_types=None):#, result_item_name=None):
-    try:
-        triggers = []
-        def item_trigger():
-            def create_event_trigger(item_name):
-                if received_update:
-                    triggers.append(ItemEventTrigger(item_name, "ItemStateEvent", triggerName=trigger_name).trigger)
-                elif received_command:
-                    triggers.append(ItemEventTrigger(item_name, "ItemCommandEvent", triggerName=trigger_name).trigger)
-                else:
-                    triggers.append(ItemEventTrigger(item_name, "GroupItemStateChangedEvent", triggerName=trigger_name).trigger)
-            def create_composite_trigger(item_name):
-                if received_update:
-                    triggers.append(ItemStateUpdateTrigger(item_name, state=new_state, triggerName=trigger_name).trigger)
-                elif received_command:
-                    triggers.append(ItemCommandTrigger(item_name, command=new_state, triggerName=trigger_name).trigger)
-                else:
-                    triggers.append(ItemStateChangeTrigger(item_name, previousState=old_state, state=new_state, triggerName=trigger_name).trigger)
-
-            group_members = []
+        def item_trigger(function):
+            if not hasattr(function, 'triggers'):
+                function.triggers = []
             item = scope.itemRegistry.getItem(target)
-            if item.type == "Group" and (member_of or descendent_of):
-                if descendent_of:
-                    group_members = item.getAllMembers()
-                else:
-                    group_members = item.getMembers()
+            group_members = []
+            if target_type == "Member of":
+                group_members = item.getMembers()
+            elif target_type == "Decendent of":
+                group_members = item.getAllMembers()
             else:
                 group_members = [ item ]
             for member in group_members:
-                trigger_name = "{}-{}{}{}".format(member.name,"received-update" if received_update else ("received-command" if received_command else "changed"), "-from-{}".format(old_state) if old_state else "", "-to-{}".format(new_state) if new_state else "")
-                if member.type == "Group":
-                    create_event_trigger(member.name)
+                trigger_name = "Item-{}-{}{}{}".format(member.name, trigger_type.replace(" ","-"), "-from-{}".format(old_state) if old_state else "", "-to-{}".format(new_state) if new_state else "")
+                if trigger_type == "received update":
+                    function.triggers.append(ItemStateUpdateTrigger(member.name, state=new_state, triggerName=trigger_name).trigger)
+                elif trigger_type == "received command":
+                    function.triggers.append(ItemCommandTrigger(member.name, command=new_state, triggerName=trigger_name).trigger)
                 else:
-                    create_composite_trigger(member.name)
+                    function.triggers.append(ItemStateChangeTrigger(member.name, previousState=old_state, state=new_state, triggerName=trigger_name).trigger)
                 log.debug("Created item_trigger: [{}]".format(trigger_name))
-            return triggers
+            return function
 
-        def cron_trigger():
-            #trigger_name = "Cron-{}-{}".format(function.__name__, uuid.uuid1().hex)
-            #trigger_name = "Cron-{}-{}".format(__name__, uuid.uuid1().hex)
-            trigger_name = "Cron-{}".format(uuid.uuid1().hex)
-            triggers.append(CronTrigger(target, triggerName=trigger_name).trigger)
+        def cron_trigger(function):
+            if not hasattr(function, 'triggers'):
+                function.triggers = []
+            trigger_name = "Cron-{}-{}".format(function.__name__, uuid.uuid1().hex)
+            function.triggers.append(CronTrigger(target, triggerName=trigger_name).trigger)
             log.debug("Created cron_trigger: [{}]".format(trigger_name))
-            return triggers
+            return function
 
-        def system_trigger():
-            trigger_name = "System-{}".format(target.replace(" ","-"))
-            if target == "started":
-                triggers.append(StartupTrigger(triggerName=trigger_name).trigger)
-            '''
-            # ShutdownTrigger is not ready yet
+        def system_trigger(function):
+            if not hasattr(function, 'triggers'):
+                function.triggers = []
+            if trigger_type == "started":
+                function.triggers.append(StartupTrigger(triggerName=trigger_name).trigger)
             else:
-                triggers.append(ShutdownTrigger(triggerName=trigger_name).trigger)
-            '''
+                function.triggers.append(ShutdownTrigger(triggerName=trigger_name).trigger)
             log.debug("Created system_trigger: [{}]".format(trigger_name))
-            return triggers
+            return function
 
-        def channel_trigger():
-            trigger_name = "Channel-{}-was-triggered{}".format(target.replace(":","_").replace("#","_"),"-with-event-{}".format(new_state) if new_state is not None else "")
-            triggers.append(ChannelEventTrigger(target, event=new_state, triggerName=trigger_name).trigger)
+        def channel_trigger(function):
+            if not hasattr(function, 'triggers'):
+                function.triggers = []
+            function.triggers.append(ChannelEventTrigger(target, event=new_state, triggerName=trigger_name).trigger)
             log.debug("Created channel_trigger: [{}]".format(trigger_name))
-            return triggers
+            return function
 
-        def thing_trigger():
-            trigger_name = "{}-{}".format(target.replace(":","_"),"received-update" if received_update else "changed")
-            event_types = "ThingStatusInfoChangedEvent" if changed else "ThingStatusInfoEvent"
-            triggers.append(ThingEventTrigger(target, event_types, triggerName=trigger_name).trigger)
+        def thing_trigger(function):
+            if not hasattr(function, 'triggers'):
+                function.triggers = []
+            event_types = "ThingStatusInfoChangedEvent" if (trigger_type == "changed") else "ThingStatusInfoEvent"
+            function.triggers.append(ThingEventTrigger(target, event_types, triggerName=trigger_name).trigger)
             log.debug("Created thing_trigger: [{}]".format(trigger_name))
-            return triggers
-
+            return function
+        
+        original_target = target
         if isValidExpression(target):
-            trigger_type = "Cron"
-        else: 
+            target_type = "Time"
+            trigger_type = "cron"
+        else:
+            trigger_name = target.replace(":","_").replace("#","_").replace(" ","-")
             inputList = target.split(" ")
             if len(inputList) > 1:
                 while len(inputList) > 0:
-                    if trigger_type is None:
+                    if target_type is None:
                         if inputList[0] in ["Item", "Thing", "Channel"]:
-                            trigger_type = inputList.pop(0)
+                            target_type = inputList.pop(0)
                             target = inputList.pop(0)
                         elif " ".join(inputList[0:2]) == "Member of":
                             inputList = inputList[2:]
-                            trigger_type = "Item"
-                            member_of = True
+                            target_type = "Member of"
                             target = inputList.pop(0)
                         elif " ".join(inputList[0:2]) == "Descendent of":
                             inputList = inputList[2:]
-                            trigger_type = "Item"
-                            descendent_of = True
+                            target_type = "Descendent of"
                             target = inputList.pop(0)
                         elif inputList[0] == "System":
-                            trigger_type = inputList.pop(0)
+                            target_type = inputList.pop(0)
                             if inputList[0] == "started":
-                                target = inputList.pop(0)
-                            '''
-                            # ShutdownTrigger is not ready yet
+                                trigger_type = inputList.pop(0)
                             elif " ".join(inputList[0:2]) == "shuts down":
-                                inputList = inputList[2:]
-                                target = "shuts down"
-                            '''
+                                del inputList[:]
+                                trigger_type = "shuts down"
+                            else:
+                                raise ValueError("when: \"{}\" could not be parsed. trigger_type \"{}\" is invalid for target_type \"System\". Valid trigger_type values are \"started\" and \"shuts down\"".format(original_target, inputList[0]))
+                        elif inputList[0] == "Time":
+                            target_type = inputList.pop(0)
+                            if inputList[0] == "cron":
+                                trigger_type = inputList.pop(0)
+                                if isValidExpression(" ".join(inputList)):
+                                    target = " ".join(inputList)
+                                    del inputList[:]
+                                else:
+                                    raise ValueError("when: \"{}\" could not be parsed. \"{}\" is not a valid cron expression. See http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/tutorial-lesson-06".format(original_target, " ".join(inputList)))
+                            else:
+                                raise ValueError("when: \"{}\" could not be parsed. trigger_type \"{}\" is invalid. The only valid trigger_type value is \"cron\" (i.e, \"Time cron 0 55 5 * * ?\")".format(original_target, inputList[0]))
                         else:
-                            raise ValueError("when: \"{}\" could not be parsed. trigger_type \"{}\" is invalid. Valid trigger_type values are: Cron, Member of, Descendent of, Item, Thing, Channel, System.".format(target, inputList[0]))
+                            raise ValueError("when: \"{}\" could not be parsed. target_type \"{}\" is invalid. Valid target_type values are: Item, Member of, Descendent of, Thing, Channel, System, and Time.".format(target, inputList[0]))
                     else:
                         if " ".join(inputList[0:2]) == "received update":
-                            if trigger_type in ["Item", "Thing"]:
+                            if target_type in ["Item", "Thing", "Member of", "Descendent of"]:
                                 inputList = inputList[2:]
-                                received_update = True
+                                trigger_type = "received update"
                             else:
-                                raise ValueError("when: \"{}\" could not be parsed. \"received update\" is invalid for trigger_type \"{}\"".format(target, trigger_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"received update\" is invalid for target_type \"{}\"".format(target, target_type))
                         elif " ".join(inputList[0:2]) == "received command":
-                            if trigger_type == "Item":
+                            if target_type in ["Item", "Member of", "Descendent of"]:
                                 inputList = inputList[2:]
-                                received_command = True
+                                trigger_type = "received command"
                             else:
-                                raise ValueError("when: \"{}\" could not be parsed. \"received command\" is invalid for trigger_type \"{}\"".format(target, trigger_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"received command\" is invalid for target_type \"{}\"".format(target, target_type))
                         elif inputList[0] == "changed":
-                            if trigger_type in ["Item", "Thing"]:
+                            if target_type in ["Item", "Thing", "Member of", "Descendent of"]:
                                 inputList.pop(0)
-                                changed = True
+                                trigger_type = "changed"
                             else:
-                                raise ValueError("when: \"{}\" could not be parsed. \"changed\" is invalid for trigger_type \"{}\"".format(target, trigger_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"changed\" is invalid for target_type \"{}\"".format(target, target_type))
                         elif inputList[0] == "triggered":
-                            if trigger_type == "Channel":
-                                inputList.pop(0)
+                            if target_type == "Channel":
+                                trigger_type = inputList.pop(0)
                                 if len(inputList) > 0:
                                     new_state = inputList.pop(0)
                             else:
-                                raise ValueError("when: \"{}\" could not be parsed. \"triggered\" is invalid for trigger_type \"{}\"".format(target, trigger_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"triggered\" is invalid for target_type \"{}\"".format(target, target_type))
                         else:#if len(inputList) > 0:
-                            if changed and inputList[0] == "from":
+                            if trigger_type == "changed" and inputList[0] == "from":
                                 inputList.pop(0)
                                 old_state = inputList.pop(0)
                                 if inputList[0] == "to":
@@ -321,113 +299,58 @@ def when(target, trigger_type=None, member_of=False, descendent_of=False, old_st
                                     new_state = inputList.pop(0)
                                 else:
                                     raise ValueError("when: \"{}\" could not be parsed. old_state specified, but new_state is missing.".format(target))
-                            elif changed and inputList[0] == "to":
+                            elif trigger_type == "changed" and inputList[0] == "to":
                                 inputList.pop(0)
                                 new_state = inputList.pop(0)
-                            elif received_update or received_command:
+                            elif trigger_type == "received update" or trigger_type == "received command":
                                 new_state = inputList.pop(0)
                             if len(inputList) > 0:
-                                raise ValueError("when: \"{}\" could not be parsed. \"{}\" is invalid for trigger_type \"{}\"".format(target, inputList[0], trigger_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"{}\" is invalid for target_type \"{}\"".format(target, inputList[0], target_type))
             else:# add default values for simple item targets (Item XXXXX changed)
+                if target_type is None:
+                    target_type = "Item"
                 if trigger_type is None:
-                    trigger_type = "Item"
-                if not received_update and not received_command and not changed:
-                    changed = True
+                    trigger_type == "changed"
 
         # validate the inputs, and if anything isn't populated correctly throw an exception
-        if trigger_type == "Item" and not scope.itemRegistry.getItem(target):# throws ItemNotFoundException if item does not exist
-            raise ValueError("when: Item \"{}\" is not in the itemRegistry".format(target))
-        elif trigger_type == "Item" and old_state and changed and not TypeParser.parseState(scope.itemRegistry.getItem(target).acceptedDataTypes, old_state):
-            raise ValueError("when: \"{}\" not a valid state for \"{}\"".format(old_state, target))
-        elif trigger_type == "Item" and new_state and (changed or received_update) and not TypeParser.parseState(scope.itemRegistry.getItem(target).acceptedDataTypes, new_state):
-            raise ValueError("when: \"{}\" not a valid state for \"{}\"".format(new_state, target))
-        elif trigger_type == "Item" and received_command and new_state and not TypeParser.parseState(scope.itemRegistry.getItem(target).acceptedCommandTypes, new_state):
-            raise ValueError("when: \"{}\" not a valid command for \"{}\"".format(new_state, target))
-        elif (member_of or descendent_of) and scope.itemRegistry.getItem(target).type != "Group":
-            raise ValueError("when: \"{}\" specified, but \"{}\" is not a group".format("Member of" if member_of else "Descendent of", target))
-        elif trigger_type == "Channel" and not scope.things.getChannel(ChannelUID(target)):# returns null if Channel does not exist
-            raise ValueError("when: Channel \"{}\" does not exist".format(target))
-        elif trigger_type == "Thing" and not scope.things.get(ThingUID(target)):# returns null if Thing does not exist
-            raise ValueError("when: Thing \"{}\" is not in the thingRegistry".format(target))
-        elif trigger_type == "Thing" and (old_state or new_state):# There is only an event trigger for Things, so old_state and new_state can't be used yet
-            raise ValueError("when: Rule triggers do not currently support checking the status for Thing \"{}\"".format(target))
-        #elif trigger_type == "Thing" and old_state and not hasattr(ThingStatus, old_state):# There is only an event trigger for Things, so this can't be used yet
+        if trigger_type is None:
+            raise ValueError("when: \"{}\" could not be parsed because the trigger_type is missing".format(original_target))
+        elif target_type in ["Item", "Member of", "Descendent of"] and not scope.itemRegistry.getItem(target):# throws ItemNotFoundException if item does not exist
+            raise ValueError("when: \"{}\" could not be parsed because Item \"{}\" is not in the itemRegistry".format(original_target, target))
+        elif target_type == "Item" and old_state and trigger_type == "changed" and not TypeParser.parseState(scope.itemRegistry.getItem(target).acceptedDataTypes, old_state):
+            raise ValueError("when: \"{}\" could not be parsed because \"{}\" not a valid state for \"{}\"".format(original_target, old_state, target))
+        elif target_type == "Item" and new_state and (trigger_type == "changed" or trigger_type == "received update") and not TypeParser.parseState(scope.itemRegistry.getItem(target).acceptedDataTypes, new_state):
+            raise ValueError("when: \"{}\" could not be parsed because \"{}\" not a valid state for \"{}\"".format(original_target, new_state, target))
+        elif target_type == "Item" and trigger_type == "received command" and new_state and not TypeParser.parseState(scope.itemRegistry.getItem(target).acceptedCommandTypes, new_state):
+            raise ValueError("when: \"{}\" could not be parsed because \"{}\" not a valid command for \"{}\"".format(original_target, new_state, target))
+        elif target_type in ["Member of", "Descendent of"] and scope.itemRegistry.getItem(target).type != "Group":
+            raise ValueError("when: \"{}\" could not be parsed because \"{}\" was specified, but \"{}\" is not a group".format(original_target, target_type, target))
+        elif target_type == "Channel" and not scope.things.getChannel(ChannelUID(target)):# returns null if Channel does not exist
+            raise ValueError("when: \"{}\" could not be parsed because Channel \"{}\" does not exist".format(original_target, target))
+        elif target_type == "Thing" and not scope.things.get(ThingUID(target)):# returns null if Thing does not exist
+            raise ValueError("when: \"{}\" could not be parsed because Thing \"{}\" is not in the thingRegistry".format(original_target, target))
+        elif target_type == "Thing" and (old_state or new_state):# There is only an event trigger for Things, so old_state and new_state can't be used yet
+            raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support checking the status for Things".format(original_target))
+        elif target_type == "System":
+            raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support target_type \"System\"".format(original_target))
+        #elif target_type == "Thing" and old_state and not hasattr(ThingStatus, old_state):# There is only an event trigger for Things, so this can't be used yet
         #    raise ValueError("when: \"{}\" is not a valid Thing status".format(old_state))
-        #elif trigger_type == "Thing" and new_state and not hasattr(ThingStatus, new_state):# There is only an event trigger for Things, so this can't be used yet
+        #elif target_type == "Thing" and new_state and not hasattr(ThingStatus, new_state):# There is only an event trigger for Things, so this can't be used yet
         #    raise ValueError("when: \"{}\" is not a valid Thing status".format(new_state))            
-
-        log.info("when: trigger_type={}, target={}, member_of={}, descendent_of={}, changed={}, received_update={}, received_command={}, old_state={}, new_state={}".format(trigger_type, target, member_of, descendent_of, changed, received_update, received_command, old_state, new_state))
-
-        if trigger_type == "Item":
-            return item_trigger()
-        elif trigger_type == "Thing":
-            return thing_trigger()
-        elif trigger_type == "Channel":
-            return channel_trigger()
-        elif trigger_type == "System":
-            return system_trigger()
-        elif trigger_type == "Cron":
-            return cron_trigger()
+        
+        log.debug("when: original_target=[{}], target_type={}, target={}, trigger_type={}, old_state={}, new_state={}".format(original_target, target_type, target, trigger_type, old_state, new_state))
+        
+        if target_type in ["Item", "Member of", "Descendent of"]:
+            return item_trigger
+        elif target_type == "Thing":
+            return thing_trigger
+        elif target_type == "Channel":
+            return channel_trigger
+        elif target_type == "System":
+            return system_trigger
+        elif target_type == "Time":
+            return cron_trigger
 
     except Exception as e:
         import traceback
         log.error("when: Exception [{}]: [{}]".format(e, traceback.format_exc()))
-
-def time_triggered(cron_expression, trigger_name=None):
-    def decorator(fn):
-        rule = _FunctionRule(fn, [CronTrigger(cron_expression)], name=trigger_name)
-        get_automation_manager().addRule(rule)
-        return fn
-    return decorator
-
-GROUP_CHANGE = "GroupItemStateChangedEvent"
-ITEM_CHANGE = "ItemStateChangedEvent"
-ITEM_UPDATE = "ItemStateEvent"
-ITEM_COMMAND = "ItemCommandEvent"
-
-# this decorator has been deprecated
-def item_triggered(item_name, event_types=None, result_item_name=None, trigger_name=None):
-    event_types = event_types or [ITEM_CHANGE]
-    event_bus = scope.events
-    if hasattr(event_types, '__iter__'):
-        event_types = ",".join(event_types)
-    def decorator(fn):
-        nargs = len(inspect.getargspec(fn).args)
-        def callback(module, inputs):
-            fn_args = []
-            event = inputs.get('event')
-            if event and nargs == 1:
-                fn_args.append(event)
-            result_value = fn(*fn_args)
-            if result_item_name:
-                event_bus.postUpdate(result_item_name, unicode(result_value))
-        rule = _FunctionRule(callback, [ItemEventTrigger(item_name, event_types)], 
-                             extended=True, name=trigger_name)
-        get_automation_manager().addRule(rule)
-        return fn
-    return decorator
-
-# this decorator has been deprecated
-def item_group_triggered(group_name, event_types=None, result_item_name=None, trigger_name=None):
-    event_types = event_types or [ITEM_CHANGE]
-    event_bus = scope.events
-    if hasattr(event_types, '__iter__'):
-        event_types = ",".join(event_types)
-    def decorator(fn):
-        nargs = len(inspect.getargspec(fn).args)
-        def callback(module, inputs):
-            fn_args = []
-            event = inputs.get('event')
-            if event and nargs == 1:
-                fn_args.append(event)
-            result_value = fn(*fn_args)
-            if result_item_name:
-                event_bus.postUpdate(result_item_name, unicode(result_value))
-        group_triggers = []
-        group = scope.itemRegistry.getItem(group_name)
-        for i in group.getAllMembers():
-            group_triggers.append(ItemEventTrigger(i.name, event_types))
-        rule = _FunctionRule(callback, group_triggers, extended=True, name=trigger_name)
-        get_automation_manager().addRule(rule)
-        return fn
-    return decorator
