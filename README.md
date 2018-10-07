@@ -4,6 +4,7 @@ This is a repository of experimental Jython code that can be used
 with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://docs.openhab.org/). 
 
 - [Getting Started](#getting-started)
+    - [Quick Start Guide](#quick-start-guide)
     - [Applications](#applications)
     - [Jython Scripts and Modules](#jython-scripts-and-modules)
     - [File Locations](#file-locations)
@@ -38,8 +39,9 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 - Restart OH.
 - Add a test script to `/automation/jsr223/` to test if everything is working.
 - Review the general [openHAB2 JSR223 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
-- Review the rest of this documentation
-- To view detailed logs, turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation`)
+- Review the rest of this documentation.
+- Create rules using [rule and trigger decorators](#rule-and-trigger-decorators).
+- To view detailed logs, turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation`).
 - Ask questions on the [openHAB forum](https://community.openhab.org/tags/jsr223) and tag posts with `jsr223`. Report issues [here](https://github.com/OH-Jython-Scripters/openhab2-jython/issues).
 
 </ul>
@@ -108,356 +110,32 @@ from `/etc/openhab2/automation/lib/python/openhab` to the GitHub workspace `auto
 </ul>
 </ul>
 
-## Component Scripts
+## [Component Scripts](/automation/jsr223/000_components/README.md)
 <ul>
 
 These scripts are located in the `automation/jsr223/000_components` subdirectory. 
 They should be copied to the same directory structure inside your openHAB 2 installation to use them. 
 The files have a numeric prefix to cause them to be loaded before regular user scripts.
 
-#### Script: [`000_StartupTrigger.py`](automation/jsr223/000_components/000_StartupTrigger.py)
-<ul>
-
-Defines a rule trigger that triggers immediately when a rule is activated. 
-This is similar to the same type of trigger in openHAB 1.x.
 </ul>
 
-#### Script: [`000_OsgiEventTrigger.py`](automation/jsr223/000_components/000_OsgiEventTrigger.py)
-<ul>
-
-This rule trigger responds to events on the OSGI EventAdmin event bus.
-</ul>
-
-#### Script: [`000_DirectoryTrigger.py`](automation/jsr223/000_components/000_DirectoryTrigger.py)
-<ul>
-
-This trigger can respond to file system changes.
-For example, you could watch a directory for new files and then process them.
-
-```python
-@rule
-class DirectoryWatcherExampleRule(object):
-    def getEventTriggers(self):
-        return [ DirectoryEventTrigger("/tmp", event_kinds=[ENTRY_CREATE]) ]
-    
-    def execute(self, module, inputs):
-        logging.info("detected new file: %s", inputs['path'])
-```
-</ul>
-
-#### Script [`000_JythonTransform.py`](automation/jsr223/000_components/000_JythonTransform.py)
-<ul>
-
-This script defines a transformation service (identified by "JYTHON") that will process a value using a Jython script. 
-This is similar to the Javascript transformer.
-</ul>
-
-#### Script: [`000_ExampleExtensionProvider.py`](automation/jsr223/000_components/100_ExampleExtensionProvider.py)
-<ul>
-
-This component implements the openHAB extension provider interfaces and can be used to provide symbols to a script
-namespace.
-</ul>
-
-#### Scripts: Jython-based Providers
-<ul>
-
-These components are used to support Thing handler implementations:
-* [`000_JythonThingProvider.py`](automation/jsr223/000_components/000_JythonThingProvider.py)
-* [`000_JythonThingTypeProvider.py`](automation/jsr223/000_components/000_JythonThingTypeProvider.py)
-* [`000_JythonBindingInfoProvider.py`](automation/jsr223/000_components/000_JythonBindingInfoProvider.py)
-* [`000_JythonItemProvider.py`](automation/jsr223/scripts/000_JythonItemProvider.py)
-
-</ul>
-</ul>
-
-## Example Scripts
+## [Example Scripts](/Examples%20Scripts/README.md)
 <ul>
 
 These scripts show example usage of various scripting features. 
 Some of the examples are intended to provide services to user scripts so they have a numeric prefix to force them to load first 
-(but after the general purpose components). In order to use them, these scripts will need to be moved to a subdirectory of `/conf/automation/jsr223/`. 
-These scripts utilize the modules located in the `/automation/lib/python/openhab/` subdirectory.
+(but after the general purpose components). In order to use them, these scripts will need to be copied to a subdirectory of `/automation/jsr223/`, and they utilize the modules in the next section.
 
-#### Script: [`000_HelloWorld.py`](Script%20Examples/HelloWorld.py)
-<ul>
-
-This script has several examples for how to define Jython rules, just uncomment the ones you'd like to test. By default, it uses a decorator cron rule that will generate logs every 10s. This can be used to test your initial setup.
 </ul>
 
-#### Script: [`000_LogAction.py`](Script%20Examples/000_LogAction.py)
-<ul>
-
-This is a simple rule action that will log a message to the openHAB log file.
-</ul>
-
-#### Script: [`100_EchoThing.py`](Script%20Examples/100_EchoThing.py)
-<ul>
-
-Experimental Thing binding and handler implemented in Jython. (At the time of this writing, 
-it requires a small change to the ESH source code for it to work.) 
-This simple Thing will write state updates on its input channel to items states linked to the output channel.
-</ul>
-
-#### Script: [`000_JythonConsoleCommand.py`](Script%20Examples/000_JythonConsoleCommand.py)
-<ul>
-
-This script defines an command extension to the OSGI console. 
-The example command prints some Jython platform details to the console output.
-</ul>
-
-#### Script: [`actors.py`](Script%20Examples/actors.py)
-<ul>
-
-Shows an example of using the Pykka actors library. The Pykka library must be in the Java classpath.
-</ul>
-
-#### Script: [`esper_example.py`](Script%20Examples/esper_example.py)
-<ul>
-
-Shows an example of using the Esper component. The 000_Esper.py component script must be installed.
-</ul>
-
-#### Script: [`rule_decorators.py`](Script%20Examples/rule_decorators.py)
-<ul>
-
-Provides examples of using the trigger-related rule decorators on functions as an alternative to explicit rule and trigger classes.
-</ul>
-
-#### Script: [`testing_example.py`](Script%20Examples/testing_example.py)
-<ul>
-
-Examples of unit testing.
-</ul>
-
-#### Script: [`dirwatcher_example.py`](Script%20Examples/dirwatcher_example.py)
-<ul>
-
-Example of a rule that watches for files created in a specified directory.
-</ul>
-
-#### Script: [`rule_registry.py`](Script%20Examples/rule_registry.py)
-<ul>
-
-This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags,
-enable and disable rule instances dynamically, and manually fire rules with specified inputs.
-</ul>
-
-#### Script: [`timer_example.py`](Script%20Examples/timer_example.py)
-<ul>
-
-Example of a rule that shows how to create and cancel a global timer.
-</ul>
-</ul>
-
-## Jython Modules
+## [Jython Modules](/automation/lib/python/openhab/README.md)
 <ul>
 
 One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages 
 and modules to structure your code into reusable components. 
 The following are some initial experiments in that direction.
+In order to use them, these modules will need to be copied to a subdirectory of `/automation/lib/python/`.
 
-There are example scripts in the `/Script Examples` directory.
-
-#### Module: [`openhab.rules`](automation/lib/python/openhab/rules.py)
-<ul>
-
-The rules module contains some utility functions and a decorator for converting a Jython class into a `SimpleRule`.
-The following example shows how the rule decorator is used:
-
-```python
-from openhab.rules import rule, addRule
-from openhab.triggers import StartupTrigger
-
-@rule
-class ExampleRule(object):
-    """This doc comment will become the ESH Rule documentation value for Paper UI"""
-    def getEventTriggers(self):
-        return [ StartupTrigger() ]
-
-    def execute(self, module, inputs):
-        self.log.info("rule executed")
-
-addRule(MyRule())
-```
-
-The decorator adds the SimpleRule base class and will call either `getEventTriggers` or `getEventTrigger` (the OH1 function) 
-to get the triggers, if either function exists. 
-Otherwise you can define a constructor and set `self.triggers` to your list of triggers.
-
-The `addRule` function is similar to the `automationManager.addRule` function except 
-that it can be safely used in Jython modules (versus scripts).
-Since the `automationManager` is different for every script scope 
-the `openhab.rules.addRule` function looks up the automation manager for each call.
-
-The decorator also adds a log object based on the name of the rule (`self.log`, can be overridden in a constructor) and 
-wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information if an exception 
-is thrown.
-</ul>
-
-#### Module: [`openhab.triggers`](automation/lib/python/openhab/triggers.py)
-<ul>
-
-This module includes trigger subclasses and function decorators to simplify Jython rule definitions.
-
-Trigger classes:
-
-* __ItemStateChangeTrigger__
-* __ItemStateUpdateTrigger__
-* __ItemCommandStrigger__
-* __ItemEventTrigger__ (based on "core.GenericEventTrigger")
-* __CronTrigger__
-* __StartupTrigger__ - fires when rule is activated (implemented in Jython)
-* __DirectoryEventTrigger__ - fires when directory contents change (Jython, see related component for more info).
-* __ItemAddedTrigger__ - fires when rule is added to the RuleRegistry (implemented in Jython)
-* __ItemRemovedTrigger__ - fires when rule is removed from the RuleRegistry (implemented in Jython)
-* __ItemUpdatedTrigger__ - fires when rule is updated in the RuleRegistry (implemented in Jython, not a state update!)
-* __ChannelEventTrigger__ - fires when a Channel gets an event e.g. from the Astro Binding
-
-&nbsp;
-
-Trigger function decorators:
-
-* __time_triggered__ - run a function periodically
-* __item_triggered__ - run a function based on an item event
-* __item_group_triggered__ - run a function based on an item group event
-</ul>
-
-#### Module: [`openhab.actions`](automation/lib/python/openhab/actions.py)
-<ul>
-
-This module discovers action services registered from OH1 or OH2 bundles or add-ons.
-The specific actions that are available will depend on which add-ons are installed.
-Each action class is exposed as an attribute of the `openhab.actions` Jython module.
-The action methods are static methods on those classes 
-(don't try to create instances of the action classes).
-
-```python
-from openhab.actions import Astro
-from openhab.log import logging
-from java.util import Date
-
-log = logging.getLogger("org.eclipse.smarthome.automation")
-
-# Use the Astro action class to get the sunset start time.
-log.info("Sunrise: %s", Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time)
-```
-</ul>
-
-#### Module: [`openhab.log`](automation/lib/python/openhab/log.py)
-<ul>
-
-This module bridges the Python standard `logging` module with ESH logging. Example usage:
-
-```python
-from openhab.log import logging
-
-logging.info("Logging example from root logger")
-logging.getLogger("myscript").info("Logging example from root logger")  
-```
-</ul>
-
-#### Module: [`openhab.items`](automation/lib/python/openhab/items.py)
-<ul>
-
-This module allows runtime creation and removal of items.
-
-```python
-import openhab.items
-
-openhab.items.add("_Test", "String")
-
-# later...
-openhab.items.remove("_Test")
-
-```
-</ul>
-
-#### Module: [`openhab.testing`](automation/lib/python/openhab/testing.py)
-<ul>
-
-One of the challenges of ESH/openHAB rule development is verifying that rules are behaving 
-correctly and have broken as the code evolves. T
-his module supports running automated tests within a runtime context. 
-To run tests directly from scripts:
-
-```python
-import unittest # standard Python library
-from openhab.testing import run_test
-
-class MyTest(unittest.TestCase):
-    def test_something(self):
-        "Some test code..."
-
-run_test(MyTest) 
-```
-
-The module also defines a rule class, `TestRunner` that will run a testcase 
-when an switch item is turned on and store the test results in a string item.
-</ul>
-
-#### Module: [`openhab.osgi`](automation/lib/python/openhab/osgi/__init__.py)
-<ul>
-
-Provides utility function for retrieving, registering and removing OSGI services.
-
-```python
-import openhab.osgi
-
-item_registry = osgi.get_service("org.eclipse.smarthome.core.items.ItemRegistry")
-```
-</ul>
-
-#### Module: [`openhab.osgi.events`](automation/lib/python/openhab/osgi/events.py)
-<ul>
-
-Provides an OSGI EventAdmin event monitor and rule trigger. 
-This can trigger off any OSGI event (including ESH events). 
-_Rule manager events are filtered to avoid circular loops in the rule execution._
-
-```python
-class ExampleRule(SimpleRule):
-    def __init__(self):
-        self.triggers = [ openhab.osgi.events.OsgiEventTrigger() ]
-            
-    def execute(self, module, inputs):
-        event = inputs['event']
-        # do something with event
-```
-</ul>
-
-#### Module: [`openhab.jsr223`](automation/lib/python/openhab/jsr223.py)
-<ul>
-
-One of the challenges of JSR223 scripting with Jython is that Jython modules imported 
-into scripts do not have direct access to the JSR223 scope types and objects. 
-This module allows imported modules to access that data. Example usage:
-
-```python
-# In Jython module, not script...
-from openhab.jsr223.scope import events
-
-def update_data(data):
-    events.postUpdate("TestString1", str(data))
-```
-</ul>
-
-#### Module: [`openhab`](automation/lib/python/openhab/__init__.py)
-<ul>
-
-This module (really a Python package) patches the default scope `items` object 
-so that items can be accessed as if they were attributes (rather than a dictionary).
-
-It can also be used as a module for registering global variables that will outlive script reloads.
-
-```python
-import openhab
-
-print items.TestString1
-```
-
-Note that this patch will be applied when any module in the `openhab` package is loaded.
-</ul>
 </ul>
 
 ## Defining Rules
@@ -468,7 +146,7 @@ for the [Eclipse SmartHome (ESH) rule engine](http://www.eclipse.org/smarthome/d
 
 The ESH rule engine structures rules as _Modules_ (Triggers, Conditions, Actions). 
 Jython rules can use rule Modules that are already present in ESH, and can define new Modules that can be used outside of JSR223 scripting. 
-Take care not to confuse ESH Modules with Jython modules.
+Take care not to confuse ESH Modules with Jython modules. In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-Jython-extensions), and [rule and trigger decorators](#rule-and-trigger-decorators). The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
 
 ### Raw ESH Automation API
 <ul>
@@ -568,7 +246,7 @@ class MyRule(SimpleRule):
 This removes the need to know the internal ESH trigger type strings, 
 define trigger names and to know configuration dictionary requirements.
 
-#### Rule Trigger Decorator
+#### Rule and Trigger Decorators
 <ul>
 
 To make rule creation _even simpler_, `openhab.rules` defines a decorator that can be 
@@ -738,4 +416,4 @@ sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
 
 #### Use a timer:
 
-see the [`timer_example.py](#script-timer_examplepy) in the example scripts
+see the [`timer_example.py`](#script-timer_examplepy) in the example scripts
