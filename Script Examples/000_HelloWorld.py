@@ -46,7 +46,7 @@ automationManager.addRule(RawAPIStateUpdate())
 # requires CronTrigger import
 class ExtensionCron(SimpleRule):
     def __init__(self):
-        self.triggers = [ CronTrigger("0/10 * * * * ?") ]
+        self.triggers = [ CronTrigger("0/10 * * * * ?").trigger ]
     
     def execute(self, module, inputs):
         log.debug("JSR223: This is a 'hello world!' from a Jython rule (extension): Cron")
