@@ -1,7 +1,7 @@
 # Jython scripting for openHAB 2.x
 
 This is a repository of experimental Jython code that can be used 
-with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://docs.openhab.org/). 
+with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://openhab.org/) (post OH snapshot build 1318).
 
 - [Getting Started](#getting-started)
     - [Quick Start Guide](#quick-start-guide)
@@ -14,7 +14,7 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 - [Defining Rules](#defining-rules)
     - [Raw ESH Automation API](#raw-esh-automation-api)
     - [Using Jython Extensions](#using-jython-extensions)
-        - [Rule Trigger Decorators](#rule-trigger-decorators)
+        - [Rule and Trigger Decorators](#rule-and-trigger-decorators)
 - [But how do I...?](#but-how-do-i)
 
 ## Getting Started
@@ -24,7 +24,7 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 ### Quick Start Guide
 <ul>
 
-- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB.
+- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. There is an older version of this repo [here](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)).
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html) documentation.
     - Add/modify EXTRA_JAVA_OPTS. One way to do ths is to add the following to your `start.sh` script, directly below the `DIRNAME` variable definition. This assumes that you will be using the standalone Jython 2.7.0 jar.
@@ -119,7 +119,7 @@ The files have a numeric prefix to cause them to be loaded before regular user s
 
 </ul>
 
-## [Example Scripts](/Examples%20Scripts/README.md)
+## [Example Scripts](/Script%20Examples/README.md)
 <ul>
 
 These scripts show example usage of various scripting features. 
@@ -146,33 +146,12 @@ for the [Eclipse SmartHome (ESH) rule engine](http://www.eclipse.org/smarthome/d
 
 The ESH rule engine structures rules as _Modules_ (Triggers, Conditions, Actions). 
 Jython rules can use rule Modules that are already present in ESH, and can define new Modules that can be used outside of JSR223 scripting. 
-Take care not to confuse ESH Modules with Jython modules. In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-Jython-extensions), and [rule and trigger decorators](#rule-and-trigger-decorators). The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
+Take care not to confuse ESH Modules with Jython modules. In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-jython-extensions), and [rule and trigger decorators](#rule-and-trigger-decorators). The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
 
 ### Raw ESH Automation API
 <ul>
 
-Using the raw ESH API, the simplest rule definition would look something like:
-
-```python
-scriptExtension.importPreset("RuleSupport")
-scriptExtension.importPreset("RuleSimple")
-
-class MyRule(SimpleRule):
-def __init__(self):
-    self.triggers = [
-            Trigger("MyTrigger", "core.ItemStateUpdateTrigger", 
-                Configuration({ "itemName": "TestString1"}))
-    ]
-    
-def execute(self, module, input):
-    events.postUpdate("TestString2", "some data")
-
-automationManager.addRule(MyRule())
-```
-
-Note: trigger names must be unique within the scope of a rule instance. 
-
-Post OH 2.4.0 snapshot build 1319, the rule definition would look like:
+The simplest raw API rule definition would look something like:
 
 ```python
 scriptExtension.importPreset("RuleSupport")
@@ -195,6 +174,7 @@ class MyRule(SimpleRule):
 
 automationManager.addRule(MyRule())
 ```
+Note: trigger names must be unique within the scope of a rule instance, and can contain alphanumeric characters, hythens, and underscores.
 
 This can be simplified with some extra Jython code, which we'll see later. 
 First, let's look at what's happening with the raw functionality.
@@ -416,4 +396,4 @@ sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
 
 #### Use a timer:
 
-see the [`timer_example.py`](#script-timer_examplepy) in the example scripts
+see the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples
