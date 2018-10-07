@@ -50,7 +50,7 @@ def rule(name=None):
                     self.triggers = log_traceback(self.getEventTrigger)()
             subclass = type(clazz.__name__, (clazz, scope.SimpleRule), dict(__init__=init))
             subclass.execute = log_traceback(clazz.execute)
-            return addRule(subclass)
+            return addRule(subclass())
         else:
             function = object
             newRule = _FunctionRule(function, function.triggers, name=name)
