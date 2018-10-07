@@ -1,40 +1,5 @@
 These modules need to be copied to a subdirectory of `/automation/lib/python/`.
 
-#### Module: [`openhab.rules`](rules.py)
-<ul>
-
-The rules module contains some utility functions and a decorator for converting a Jython class into a `SimpleRule`.
-The following example shows how the rule decorator is used:
-
-```python
-from openhab.rules import rule, addRule
-from openhab.triggers import StartupTrigger
-
-@rule("My example rule")
-class ExampleRule(object):
-    """This doc comment will become the ESH Rule documentation value for Paper UI"""
-    def getEventTriggers(self):
-        return [ StartupTrigger() ]
-
-    def execute(self, module, inputs):
-        self.log.info("rule executed")
-
-```
-
-The decorator adds the SimpleRule base class and will call either `getEventTriggers` or `getEventTrigger` (the OH1 function) 
-to get the triggers, if either function exists. 
-Otherwise you can define a constructor and set `self.triggers` to your list of triggers.
-
-The `addRule` function is similar to the `automationManager.addRule` function except 
-that it can be safely used in Jython modules (versus scripts).
-Since the `automationManager` is different for every script scope 
-the `openhab.rules.addRule` function looks up the automation manager for each call.
-
-The decorator also adds a log object based on the name of the rule (`self.log`, can be overridden in a constructor) and 
-wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information if an exception 
-is thrown.
-</ul>
-
 #### Module: [`openhab.triggers`](triggers.py)
 <ul>
 
@@ -56,11 +21,63 @@ Trigger classes:
 
 &nbsp;
 
-Trigger function decorators:
+Trigger function decorator (see openhab.rules module for the [rule decorator](#module-openhabrules) that is used in conjunction with the trigger decorator):
 
-* __time_triggered__ - run a function periodically
-* __item_triggered__ - run a function based on an item event
-* __item_group_triggered__ - run a function based on an item group event
+* __@when("Item Test_Switch_1 received command OFF")__
+* __@when("Item Test_Switch_2 received update ON")__
+* __@when("Member of gMotion_Sensors changed to OFF")__
+* __@when("Descendent of gContact_Sensors changed to ON")__
+* __@when("Thing kodi:kodi:familyroom changed")__# Thing statuses cannot currently be used in triggers
+* __@when("Channel astro:sun:local:eclipse#event triggered START")__
+* __@when("System started")__# 'System shuts down' cannot currently be used as a trigger, and 'System started' needs to be updated to work with Automation API updates
+* __@when("55 55 5 * * ?")__
+
+</ul>
+
+#### Module: [`openhab.rules`](rules.py)
+<ul>
+
+The rules module contains some utility functions and a decorator that can 1) convert a Jython class into a `SimpleRule`, 2) decorate the trigger decorator (@when) to create a `SimpleRule`.
+The following example shows how the rule decorator is used to decorate a class:
+
+```python
+from openhab.rules import rule
+from openhab.triggers import StartupTrigger
+
+@rule("My example rule")
+class ExampleRule(object):
+    """This doc comment will become the ESH Rule documentation value for Paper UI"""
+    def getEventTriggers(self):
+        return [ StartupTrigger().trigger ]
+
+    def execute(self, module, inputs):
+        self.log.info("rule executed")
+```
+The decorator adds the SimpleRule base class and will call either `getEventTriggers` or `getEventTrigger` (the OH1 function) 
+to get the triggers, if either function exists. 
+Otherwise you can define a constructor and set `self.triggers` to your list of triggers.
+
+The `addRule` function is similar to the `automationManager.addRule` function except 
+that it can be safely used in Jython modules (versus scripts).
+Since the `automationManager` is different for every script scope 
+the `openhab.rules.addRule` function looks up the automation manager for each call.
+
+The decorator also adds a log object based on the name of the rule (`self.log`, can be overridden in a constructor) and 
+wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information if an exception 
+is thrown.
+
+The following example shows how the rule decorator is used to decorate the trigger decorator:
+
+```python
+from openhab.rules import rule
+from openhab.triggers import when
+
+@rule("My example rule")
+@when("Time cron 0/10 * * * * ?")
+def exampleDecoratedCronRule(event):
+    # do stuff
+```
+
 </ul>
 
 #### Module: [`openhab.actions`](actions.py)
