@@ -20,10 +20,10 @@ This trigger can respond to file system changes.
 For example, you could watch a directory for new files and then process them.
 
 ```python
-@rule
+@rule("Directory watcher example")
 class DirectoryWatcherExampleRule(object):
     def getEventTriggers(self):
-        return [ DirectoryEventTrigger("/tmp", event_kinds=[ENTRY_CREATE]) ]
+        return [ DirectoryEventTrigger("/tmp", event_kinds=[ENTRY_CREATE]).trigger ]
     
     def execute(self, module, inputs):
         logging.info("detected new file: %s", inputs['path'])
