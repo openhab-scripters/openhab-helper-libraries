@@ -360,10 +360,21 @@ from org.joda.time import DateTimePersistenceExtensions.changedSince(ir.getItem(
 PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
 ```
 
-#### executeCommandLine (similar for using other script Actions):
+#### executeCommandLine:
 ```python
 from org.eclipse.smarthome.model.script.actions.Exec import executeCommandLine
 executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
+```
+
+#### Play a sound:
+```python
+from org.eclipse.smarthome.model.script.actions.Audio import playSound
+playSound("doorbell.mp3")
+playSound("my:audio:sink", "doorbell.mp3")
+
+from org.eclipse.smarthome.model.script.actions.Audio import playStream
+playStream("http://myAudioServer/myAudioFile.mp3")
+playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")
 ```
 
 #### Logging (the logger can be modified to wherever you want the log to go):
@@ -396,4 +407,4 @@ sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
 
 #### Use a timer:
 
-see the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples
+See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples. The OH `createTimer` action can also be used (untested).
