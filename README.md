@@ -369,12 +369,12 @@ executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time
 #### Play a sound:
 ```python
 from org.eclipse.smarthome.model.script.actions.Audio import playSound
-playSound("doorbell.mp3")
-playSound("my:audio:sink", "doorbell.mp3")
+playSound("doorbell.mp3")# using the default audiosink
+playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
 
 from org.eclipse.smarthome.model.script.actions.Audio import playStream
-playStream("http://myAudioServer/myAudioFile.mp3")
-playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")
+playStream("http://myAudioServer/myAudioFile.mp3")# using the default audiosink
+playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")# specifying an audiosink
 ```
 
 #### Logging (the logger can be modified to wherever you want the log to go):
