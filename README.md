@@ -24,7 +24,7 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 ### Quick Start Guide
 <ul>
 
-- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. There is an older version of this repo [here](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)).
+- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules. [ There is a [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)) holding an older version of this repo with reduced functionality. ]
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html) documentation.
     - Add/modify EXTRA_JAVA_OPTS. One way to do ths is to add the following to your `start.sh` script, directly below the `DIRNAME` variable definition. This assumes that you will be using the standalone Jython 2.7.0 jar.
