@@ -27,11 +27,11 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 - Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules. [There is a [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)) holding an older version of this repo with reduced functionality. ]
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html) documentation.
-    - Add/modify EXTRA_JAVA_OPTS. One way to do this is to add the following to your `start.sh` script, directly below the `DIRNAME` variable definition. This assumes that you will be using the standalone Jython 2.7.0 jar.
+    - Add/modify EXTRA_JAVA_OPTS. One way to do this is to add the following to your `start.sh` script, directly below the `DIRNAME` variable definition. This assumes that you will be using the standalone Jython 2.7.0 jar. For manual OH installations, add `/conf` after each of the `${DIRNAME}`s.
         ```
-        export EXTRA_JAVA_OPTS="-Xbootclasspath/a:${DIRNAME}/conf/automation/jython/jython-standalone-2.7.0.jar \
-        -Dpython.home=${DIRNAME}/conf/automation/jython \
-        -Dpython.path=${DIRNAME}/conf/automation/lib/python"
+        export EXTRA_JAVA_OPTS="-Xbootclasspath/a:${DIRNAME}/automation/jython/jython-standalone-2.7.0.jar \
+        -Dpython.home=${DIRNAME}/automation/jython \
+        -Dpython.path=${DIRNAME}/automation/lib/python"
         ```
     - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used.
 
@@ -104,7 +104,6 @@ There are several ways to do this.
 You can add a `-Dpython.path=mypath1:mypath2` to the JVM command line by modifying the OH2 startup scripts.
 You can also modify the `sys.path` list in a Jython script that loads early (like a component script).
 
-I put my Jython modules in `/etc/openhab2/automation/lib/python` (Linux apt installation).
 Another option is to checkout the GitHub repo in some location and use a directory soft link (Linux) 
 from `/etc/openhab2/automation/lib/python/openhab` to the GitHub workspace `automation/lib/python/openhab` directory.
 </ul>
@@ -113,7 +112,7 @@ from `/etc/openhab2/automation/lib/python/openhab` to the GitHub workspace `auto
 ## [Component Scripts](/automation/jsr223/000_components/README.md)
 <ul>
 
-These scripts are located in the `automation/jsr223/000_components` subdirectory. 
+These scripts are located in the `/automation/jsr223/000_components` subdirectory. 
 They should be copied to the same directory structure inside your openHAB 2 installation to use them. 
 The files have a numeric prefix to cause them to be loaded before regular user scripts.
 
