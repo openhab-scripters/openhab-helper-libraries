@@ -29,11 +29,15 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
 - Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
 - Download the contents of this repository and copy the `automation` directory into `/etc/openhab2/` (apt OH install) or `/opt/openhab2/conf` (default manual OH install).
-- Add/modify EXTRA_JAVA_OPTS. One way to do this is to add the following to your `start.sh` script, directly below the `DIRNAME` variable definition. This assumes that you will be using the standalone Jython 2.7.0 jar. For manual OH installations, add `/conf` after all three of the `${DIRNAME}`.
+- Add/modify your EXTRA_JAVA_OPTS. These examples assume that you will be using the standalone Jython 2.7.0 jar. 
+
+    **Using `/etc/defaults/openhab2`, with an apt OH installation:**
     ```
-    export EXTRA_JAVA_OPTS="-Xbootclasspath/a:${DIRNAME}/automation/jython/jython-standalone-2.7.0.jar \
-    -Dpython.home=${DIRNAME}/automation/jython \
-    -Dpython.path=${DIRNAME}/automation/lib/python"
+    EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
+    ```
+    **Using `start.sh` with a manual OH installation:**
+    ```
+    export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
     ```
 - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used, but the paths above will need to be modified.
 - Restart OH and watch the logs for errors.
