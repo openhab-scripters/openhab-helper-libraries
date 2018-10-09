@@ -31,7 +31,7 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 - Download the contents of this repository and copy the `automation` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf` (default manual OH install).
 - Add/modify your EXTRA_JAVA_OPTS. These examples assume that you will be using the standalone Jython 2.7.0 jar. 
 
-    **Using a `/etc/defaults/openhab2` file, with a package repository OH installation (includes openHABian):**
+    **Using a `/etc/defaults/openhab2` file with a package repository OH installation (includes openHABian):**
     ```
     EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
     ```
