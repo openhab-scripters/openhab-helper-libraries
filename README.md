@@ -34,7 +34,7 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
     -Dpython.path=${DIRNAME}/automation/lib/python"
     ```
 - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used.
-- Download the contents of this repository, and copy the `automation` directory into `/etc/openhab2/` (apt OH install) or `/opt/openhab2/conf` (default manual OH install).
+- Download the contents of this repository and copy the `automation` directory into `/etc/openhab2/` (apt OH install) or `/opt/openhab2/conf` (default manual OH install).
 - Restart OH.
 - Add a test script to `/automation/jsr223/` to test if everything is working.
 - Review the general [openHAB2 JSR223 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
