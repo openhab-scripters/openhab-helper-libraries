@@ -24,7 +24,7 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 ### Quick Start Guide
 <ul>
 
-- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules. [There is a [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)) holding an older version of this repo with reduced functionality. ]
+- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules. __Note: There is a [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)) holding an older version of this repo with reduced functionality.__
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
 - Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
@@ -41,7 +41,7 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
     ```
 - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used, but the paths above will need to be modified.
 - Restart OH and watch the logs for errors.
-- Copy the HelloWorld.py example script to `/automation/jsr223/` to test if everything is working. This script will make a log entry every 10s.
+- Copy the `[hello_world.py](/Script%20Examples/hello_world.py)` example script to `/automation/jsr223/` to test if everything is working. This script will make a log entry every 10s.
 - Review the general [openHAB2 JSR223 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
 - Review the rest of this documentation.
 - Create rules using [rule and trigger decorators](#rule-and-trigger-decorators).
