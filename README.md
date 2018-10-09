@@ -27,20 +27,20 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 - Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules. [There is a [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)) holding an older version of this repo with reduced functionality. ]
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
- - Add/modify EXTRA_JAVA_OPTS. One way to do this is to add the following to your `start.sh` script, directly below the `DIRNAME` variable definition. This assumes that you will be using the standalone Jython 2.7.0 jar. For manual OH installations, add `/conf` after all three of the `${DIRNAME}`.
+- Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
+- Download the contents of this repository and copy the `automation` directory into `/etc/openhab2/` (apt OH install) or `/opt/openhab2/conf` (default manual OH install).
+- Add/modify EXTRA_JAVA_OPTS. One way to do this is to add the following to your `start.sh` script, directly below the `DIRNAME` variable definition. This assumes that you will be using the standalone Jython 2.7.0 jar. For manual OH installations, add `/conf` after all three of the `${DIRNAME}`.
     ```
     export EXTRA_JAVA_OPTS="-Xbootclasspath/a:${DIRNAME}/automation/jython/jython-standalone-2.7.0.jar \
     -Dpython.home=${DIRNAME}/automation/jython \
     -Dpython.path=${DIRNAME}/automation/lib/python"
     ```
-- Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used.
-- Download the contents of this repository and copy the `automation` directory into `/etc/openhab2/` (apt OH install) or `/opt/openhab2/conf` (default manual OH install).
-- Restart OH.
-- Add a test script to `/automation/jsr223/` to test if everything is working.
+- Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used, but the paths above will need to be modified.
+- Restart OH and watch the logs for errors.
+- Copy the HelloWorld.py example script to `/automation/jsr223/` to test if everything is working. This script will make a log entry every 10s.
 - Review the general [openHAB2 JSR223 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
 - Review the rest of this documentation.
 - Create rules using [rule and trigger decorators](#rule-and-trigger-decorators).
-- To view detailed logs, turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation`).
 - Ask questions on the [openHAB forum](https://community.openhab.org/tags/jsr223) and tag posts with `jsr223`. Report issues [here](https://github.com/OH-Jython-Scripters/openhab2-jython/issues).
 
 </ul>
