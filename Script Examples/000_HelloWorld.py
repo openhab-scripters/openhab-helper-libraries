@@ -19,7 +19,7 @@ class RawAPICron(SimpleRule):
         ]
 
     def execute(self, module, inputs):
-        log.debug("JSR223: This is a 'hello world!' from a Jython rule (raw API): Cron")
+        log.info("JSR223: This is a 'hello world!' from a Jython rule (raw API): Cron")
 
 automationManager.addRule(RawAPICron())
 
@@ -36,10 +36,9 @@ class RawAPIStateUpdate(SimpleRule):
                     }))
                 .build()
         ]
-        log.debug("JSR223: self.triggers=[{}]".format(self.triggers))
 
     def execute(self, module, input):
-        log.debug("JSR223: This is a 'hello world!' from a Jython rule (raw API): ItemStateUpdateTrigger")
+        log.info("JSR223: This is a 'hello world!' from a Jython rule (raw API): ItemStateUpdateTrigger")
 
 automationManager.addRule(RawAPIStateUpdate())
 
@@ -49,7 +48,7 @@ class ExtensionCron(SimpleRule):
         self.triggers = [ CronTrigger("0/10 * * * * ?").trigger ]
     
     def execute(self, module, inputs):
-        log.debug("JSR223: This is a 'hello world!' from a Jython rule (extension): Cron")
+        log.info("JSR223: This is a 'hello world!' from a Jython rule (extension): Cron")
 
 automationManager.addRule(ExtensionCron())
 '''
@@ -57,4 +56,4 @@ automationManager.addRule(ExtensionCron())
 @rule("Hello World timer rule")
 @when("Time cron 0/10 * * * * ?")
 def hellowWorldDecorator(event):
-    log.debug("JSR223: This is a 'hello world!' from a Jython rule (decorator): Cron")
+    log.info("JSR223: This is a 'hello world!' from a Jython rule (decorator): Cron")
