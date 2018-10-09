@@ -28,10 +28,10 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
 - Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
-- Download the contents of this repository and copy the `automation` directory into `/etc/openhab2/` (apt OH install) or `/opt/openhab2/conf` (default manual OH install).
+- Download the contents of this repository and copy the `automation` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf` (default manual OH install).
 - Add/modify your EXTRA_JAVA_OPTS. These examples assume that you will be using the standalone Jython 2.7.0 jar. 
 
-    **Using a `/etc/defaults/openhab2` file, with an apt OH installation:**
+    **Using a `/etc/defaults/openhab2` file, with a package repository OH installation (includes openHABian):**
     ```
     EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
     ```
@@ -84,7 +84,7 @@ This means the module is loaded once and is not reloaded when the module source 
 <ul>
 
 Scripts should be put into the `/automation/jsr223/` subdirectory hierarchy of your OH2 configuration directory.
-In a Linux apt installation, this would be `/etc/openhab2/automation/jsr223/`. For a Linux manual installation, this would default to `/opt/openhab2/conf/automation/jsr223/`.
+In a Linux package repository installation, like openHABian, this would be `/etc/openhab2/automation/jsr223/`. For a Linux manual installation, this would default to `/opt/openhab2/conf/automation/jsr223/`.
 
 Some scripts should be loaded before others because of dependencies between the scripts. 
 Scripts that implement OH2 components (like trigger types, item providers, etc.) are one example.
