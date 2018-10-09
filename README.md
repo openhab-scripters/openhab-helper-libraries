@@ -24,7 +24,7 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 ### Quick Start Guide
 <ul>
 
-- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules. *Note: There is a [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)) holding an older version of this repo with reduced functionality.*
+- Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules. *(Note: there is a [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)) holding an older version of this repo with reduced functionality.)*
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
 - Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
