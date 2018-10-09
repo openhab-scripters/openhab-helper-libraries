@@ -1,6 +1,6 @@
 These scripts must be copied to a subdirectory of `/automation/jsr223/`.
 
-#### Script: [`000_HelloWorld.py`](000_HelloWorld.py)
+#### Script: [`hello_world.py`](hello_world.py)
 <ul>
 
 This script has several examples for how to define Jython rules, just uncomment the ones you'd like to test. By default, it uses a decorator cron rule that will generate logs every 10s. This can be used to test your initial setup.
