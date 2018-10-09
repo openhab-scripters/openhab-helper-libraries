@@ -8,9 +8,9 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
     - [Applications](#applications)
     - [Jython Scripts and Modules](#jython-scripts-and-modules)
     - [File Locations](#file-locations)
+- [Jython Modules](#jython-modules)
 - [Component Scripts](#component-scripts)
 - [Example Jython Scripts](#example-scripts)
-- [Jython Modules](#jython-modules)
 - [Defining Rules](#defining-rules)
     - [Raw ESH Automation API](#raw-esh-automation-api)
     - [Using Jython Extensions](#using-jython-extensions)
@@ -112,6 +112,16 @@ from `/etc/openhab2/automation/lib/python/openhab` to the GitHub workspace `auto
 </ul>
 </ul>
 
+## [Jython Modules](/automation/lib/python/openhab/README.md)
+<ul>
+
+One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages 
+and modules to structure your code into reusable components. 
+The following are some initial experiments in that direction.
+In order to use them, these modules will need to be copied to a subdirectory of `/automation/lib/python/`.
+
+</ul>
+
 ## [Component Scripts](/automation/jsr223/000_components/README.md)
 <ul>
 
@@ -126,17 +136,8 @@ The files have a numeric prefix to cause them to be loaded before regular user s
 
 These scripts show example usage of various scripting features. 
 Some of the examples are intended to provide services to user scripts so they have a numeric prefix to force them to load first 
-(but after the general purpose components). In order to use them, these scripts will need to be copied to a subdirectory of `/automation/jsr223/`, and they utilize the modules in the next section.
-
-</ul>
-
-## [Jython Modules](/automation/lib/python/openhab/README.md)
-<ul>
-
-One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages 
-and modules to structure your code into reusable components. 
-The following are some initial experiments in that direction.
-In order to use them, these modules will need to be copied to a subdirectory of `/automation/lib/python/`.
+(but after the general purpose components). In order to use them, these scripts can be copied to a subdirectory of `/automation/jsr223/` to test them.
+These scripts will import certain modules, so they will also need to be instaled.
 
 </ul>
 
@@ -207,7 +208,7 @@ Finally, to register the rule with the ESH rule engine it must be added to the `
 This will cause the triggers to be activated and the rule will fire when the TestString1 item is updated.
 </ul>
 
-### Using Jython extensions
+### Using Jython extensions (requires the modules)
 <ul>
 
 To simplify rule creation even further, Jython can be used to wrap the raw ESH API. 
