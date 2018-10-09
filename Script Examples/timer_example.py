@@ -20,7 +20,7 @@ def batteryChargingMonitor(event):
         if not chargerTimerAttached or str(chargerTimerAttached.getState()) == "TERMINATED":
             chargerTimerAttached = Timer(600, lambda: events.sendCommand("Outlet9","OFF"))
             chargerTimerAttached.start()
-            log.debug("JSR223: Power: Battery charging monitor: Started battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]".format(event.itemState,event.oldItemState))
+            log.info("JSR223: Power: Battery charging monitor: Started battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]".format(event.itemState,event.oldItemState))
     elif chargerTimerAttached and str(chargerTimerAttached.getState()) == "TIMED_WAITING":
         chargerTimerAttached.stop()
-        log.debug("JSR223: Power: Battery charging monitor: Cancelled battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]".format(event.itemState,event.oldItemState))
+        log.info("JSR223: Power: Battery charging monitor: Cancelled battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]".format(event.itemState,event.oldItemState))
