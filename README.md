@@ -457,7 +457,7 @@ map(lambda lowBattery: "{}: {}".format(lowBattery.label, str(lowBattery.state) +
 reduce(lambda sum, x: sum.add(x), map(lambda rain: rain.state, ir.getItem("gRainWeeklyForecast").members))
 ```
 
-#### Example using several functions using Group members:
+#### Example with several functions using Group members:
 ```
 lowBatteryMessage = "Warning! Low battery alert:\n\n{}".format(",\n".join(map(lambda lowBattery: "{}: {}".format(lowBattery.label,str(lowBattery.state) + "%"), sorted(battery for battery in ir.getItem("gBattery").getMembers() if battery.state < DecimalType(5), key = lambda battery: battery.state))))
 ```
