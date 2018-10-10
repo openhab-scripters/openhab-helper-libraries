@@ -426,7 +426,7 @@ for item in ir.getItem("gTest").members:
     #do stuff
 ```
 
-#### Filter members of a group (returns a list of Items, not a Group):
+#### Filter members of a group (returns a list of Items, not a GroupItem):
 ```
 listOfMembers = filter(lambda item: item.state == OnOffType.ON, ir.getItem("gTest").members)
 ```
