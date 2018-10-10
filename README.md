@@ -413,3 +413,51 @@ sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
 #### Use a timer:
 
 See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples. The OH `createTimer` action can also be used (untested).
+
+#### Get the members of a Group:
+```
+ir.getItem("gTest").members
+ir.getItem("gTest").allMembers
+```
+
+#### Iterate over members of a Group:
+```
+for item in ir.getItem("gTest").members:
+    #do stuff
+```
+
+#### Filter members of a group (returns a list of Items, not a Group):
+```
+listOfMembers = filter(lambda item: item.state == OnOffType.ON, ir.getItem("gTest").members)
+```
+
+#### Get the first element of a filtered list of Group members (returns an Item):
+```
+filter(lambda item: item.state == OnOffType.ON, ir.getItem("gTest").members)[0]
+```
+
+#### Get a list containing the first 5 elements from a filtered list of Group members (returns a list):
+```
+filter(lambda item: item.state == OnOffType.OFF, ir.getItem("gTest").members)[0:5]
+```
+
+#### Get a sorted list of Group members matching a condition (returns a list of Items):
+```
+sortedBatteryLevel = sorted(battery for battery in ir.getItem("gBattery").getMembers() if battery.state < DecimalType(5), key = lambda battery: battery.state)
+```
+
+#### Get a list of values mapped from the members of a Group (returns a list):
+```
+map(lambda lowBattery: "{}: {}".format(lowBattery.label, str(lowBattery.state) + "%"), ir.getItem("gBattery").members)
+```
+
+#### Perform an arithmetic reduction of values from members of a Group (returns a value):
+```
+# the state.add(state) is a method of QuantityType
+reduce(lambda sum, x: sum.add(x), map(lambda rain: rain.state, ir.getItem("gRainWeeklyForecast").members))
+```
+
+#### Example using several functions using Group members:
+```
+lowBatteryMessage = "Warning! Low battery alert:\n\n{}".format(",\n".join(map(lambda lowBattery: "{}: {}".format(lowBattery.label,str(lowBattery.state) + "%"), sorted(battery for battery in ir.getItem("gBattery").getMembers() if battery.state < DecimalType(5), key = lambda battery: battery.state))))
+```
