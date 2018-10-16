@@ -465,5 +465,5 @@ reduce(lambda sum, x: sum.add(x), map(lambda rain: rain.state, ir.getItem("gRain
 lowBatteryMessage = "Warning! Low battery alert:\n\n{}".format(",\n".join(map(lambda lowBattery: "{}: {}".format(lowBattery.label,str(lowBattery.state) + "%"), sorted(battery for battery in ir.getItem("gBattery").getMembers() if battery.state < DecimalType(5), key = lambda battery: battery.state))))
 ```
 
-#### Access Item metadata:
+#### Read/Add/Remove Item metadata:
 https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
