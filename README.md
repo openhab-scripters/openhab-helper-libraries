@@ -49,6 +49,8 @@ More importantly, there are breaking changes in the API, so at least OH snapshot
 - Create rules using [rule and trigger decorators](#rule-and-trigger-decorators).
 - Ask questions on the [openHAB forum](https://community.openhab.org/tags/jsr223) and tag posts with `jsr223`. Report issues [here](https://github.com/OH-Jython-Scripters/openhab2-jython/issues).
 
+Some directions specifically for Docker are available at [Docker.md](Docker.md)
+
 </ul>
 
 ### Applications
