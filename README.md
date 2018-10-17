@@ -2,7 +2,7 @@
 
 This is a repository of experimental Jython code that can be used 
 with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://openhab.org/) (post OH snapshot build 1318). 
-A previous version with reduced functionality and compatible with OH 2.3 has been archived in this [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)).
+A previous version with reduced functionality but compatible with OH 2.3 has been archived in this [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)).
 
 - [Getting Started](#getting-started)
     - [Quick Start Guide](#quick-start-guide)
