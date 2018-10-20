@@ -1,4 +1,4 @@
-These modules need to be copied to a subdirectory of `/automation/lib/python/`.
+When using the settings from the [Quick Start Guide](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/README.md#quick-start-guide), these modules need to be copied to a subdirectory of `/automation/lib/python/`.
 
 #### Module: [`openhab.triggers`](triggers.py)
 <ul>
