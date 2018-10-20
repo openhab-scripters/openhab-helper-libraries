@@ -369,14 +369,11 @@ from org.joda.time import DateTimePersistenceExtensions.changedSince(ir.getItem(
 PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
 ```
 
-#### executeCommandLine:
+#### Use [Core & Cloud Actions](https://www.openhab.org/docs/configuration/actions.html#core-actions):
 ```python
 from org.eclipse.smarthome.model.script.actions.Exec import executeCommandLine
 executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
-```
 
-#### Play a sound:
-```python
 from org.eclipse.smarthome.model.script.actions.Audio import playSound
 playSound("doorbell.mp3")# using the default audiosink
 playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
@@ -384,6 +381,28 @@ playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
 from org.eclipse.smarthome.model.script.actions.Audio import playStream
 playStream("http://myAudioServer/myAudioFile.mp3")# using the default audiosink
 playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")# specifying an audiosink
+
+from org.eclipse.smarthome.model.script.actions.HTTP import sendHttpPutRequest
+sendHttpPutRequest("someURL.com, "application/json", '{"this": "that"}')
+
+from org.openhab.io.openhabcloud import NotificationAction
+NotificationAction.sendNotification("someone@someDomain.com","This is the message")
+```
+
+#### Use a timer:
+See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples for examples of using both Jython and the [`createTimer`](https://www.openhab.org/docs/configuration/actions.html#timers) Action.
+
+#### Use an Addon/Bundle Action (binding must be installed):
+[Telegram](https://www.openhab.org/addons/actions/telegram/#telegram-actions)
+```pthon
+from openhab.actions import Telegram
+Telegram.sendTelegram("MyBot", "Test")
+```
+
+[Mail](https://www.openhab.org/addons/actions/mail/#mail-actions)
+```python
+from openhab.actions import Mail
+Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the message")
 ```
 
 #### Logging (the logger can be modified to wherever you want the log to go):
@@ -413,10 +432,6 @@ float(str(items["Number_Item"])) + 5.5555 > 55.555
 from time import sleep
 sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
 ```
-
-#### Use a timer:
-
-See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples. The OH `createTimer` action can also be used (untested).
 
 #### Get the members or all members of a Group:
 ```python
