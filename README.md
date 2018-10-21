@@ -483,5 +483,19 @@ reduce(lambda sum, x: sum.add(x), map(lambda rain: rain.state, ir.getItem("gRain
 lowBatteryMessage = "Warning! Low battery alert:\n\n{}".format(",\n".join(map(lambda lowBattery: "{}: {}".format(lowBattery.label,str(lowBattery.state) + "%"), sorted(battery for battery in ir.getItem("gBattery").getMembers() if battery.state < DecimalType(5), key = lambda battery: battery.state))))
 ```
 
+#### Custom modules
+
+To include a custom module that you want to import, include it at `conf/automation/lib/python/`. This will then get imported on first use. Please note that these will not automatically be reloaded, so during development, if you need to make changes to the module, include something such as the following in the function that's using it:
+```
+reload(mymodule)
+```
+
+If you need to access the itemRegistry, you can include the scope in your module and access it with the following:
+```
+from openhab.jsr223 import scope
+scope.itemRegistry.getItem("MyItem")
+```
+
+
 #### Read/Add/Remove Item metadata:
 https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
