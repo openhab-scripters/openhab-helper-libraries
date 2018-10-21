@@ -1,7 +1,8 @@
 # Jython scripting for openHAB 2.x
 
 This is a repository of experimental Jython code that can be used 
-with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://openhab.org/) (post OH snapshot build 1318).
+with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [openHAB 2](http://openhab.org/) (post OH snapshot build 1318). 
+A previous version with reduced functionality but compatible with OH 2.3 has been archived in this [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)).
 
 - [Getting Started](#getting-started)
     - [Quick Start Guide](#quick-start-guide)
@@ -26,7 +27,6 @@ with the [Eclipse SmartHome](https://www.eclipse.org/smarthome/) platform and [o
 
 - Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. 
 More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules.
-*(Note: there is a [branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)) holding an older version of this repo compatible with OH 2.3, but with reduced functionality.)*
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
 - Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
@@ -43,7 +43,7 @@ More importantly, there are breaking changes in the API, so at least OH snapshot
     ```
 - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used, but the paths above will need to be modified.
 - Restart OH and watch the logs for errors.
-- Copy the `[hello_world.py](/Script%20Examples/hello_world.py)` example script to `/automation/jsr223/` to test if everything is working. This script will make a log entry every 10s.
+- Copy the [`hello_world.py`](/Script%20Examples/hello_world.py) example script to `/automation/jsr223/` to test if everything is working. This script will make a log entry every 10s.
 - Review the general [openHAB2 JSR223 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
 - Review the rest of this documentation.
 - Create rules using [rule and trigger decorators](#rule-and-trigger-decorators).
@@ -369,14 +369,11 @@ from org.joda.time import DateTimePersistenceExtensions.changedSince(ir.getItem(
 PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
 ```
 
-#### executeCommandLine:
+#### Use [Core & Cloud Actions](https://www.openhab.org/docs/configuration/actions.html#core-actions):
 ```python
 from org.eclipse.smarthome.model.script.actions.Exec import executeCommandLine
 executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
-```
 
-#### Play a sound:
-```python
 from org.eclipse.smarthome.model.script.actions.Audio import playSound
 playSound("doorbell.mp3")# using the default audiosink
 playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
@@ -384,6 +381,28 @@ playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
 from org.eclipse.smarthome.model.script.actions.Audio import playStream
 playStream("http://myAudioServer/myAudioFile.mp3")# using the default audiosink
 playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")# specifying an audiosink
+
+from org.eclipse.smarthome.model.script.actions.HTTP import sendHttpPutRequest
+sendHttpPutRequest("someURL.com, "application/json", '{"this": "that"}')
+
+from org.openhab.io.openhabcloud import NotificationAction
+NotificationAction.sendNotification("someone@someDomain.com","This is the message")
+```
+
+#### Use a timer:
+See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples for examples of using both Jython and the [`createTimer`](https://www.openhab.org/docs/configuration/actions.html#timers) Action.
+
+#### Use an Addon/Bundle Action (binding must be installed):
+[Telegram](https://www.openhab.org/addons/actions/telegram/#telegram-actions)
+```pthon
+from openhab.actions import Telegram
+Telegram.sendTelegram("MyBot", "Test")
+```
+
+[Mail](https://www.openhab.org/addons/actions/mail/#mail-actions)
+```python
+from openhab.actions import Mail
+Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the message")
 ```
 
 #### Logging (the logger can be modified to wherever you want the log to go):
@@ -413,10 +432,6 @@ float(str(items["Number_Item"])) + 5.5555 > 55.555
 from time import sleep
 sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
 ```
-
-#### Use a timer:
-
-See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples. The OH `createTimer` action can also be used (untested).
 
 #### Get the members or all members of a Group:
 ```python
