@@ -304,7 +304,7 @@ or...
 </ul>
 
 ```python
-items["My_Item")
+items["My_Item"]
 ```
 <ul>
 
@@ -365,8 +365,9 @@ start = DateTime.now()
 from org.eclipse.smarthome.model.persistence.extensions import PersistenceExtensions
 PersistenceExtensions.previousState(ir.getItem("Weather_SolarRadiation"), True).state
 
-from org.joda.time import DateTimePersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1))
-PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
+from org.joda.time import DateTime
+PersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1))
+PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).doubleValue()
 ```
 
 #### Use [Core & Cloud Actions](https://www.openhab.org/docs/configuration/actions.html#core-actions):
