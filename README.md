@@ -106,7 +106,7 @@ Example:
             |_ jsr223
                 |_ 000_Components
                     |_ 000_StartupTrigger.py
-                |_ myotherscript.py
+                |_ my_rule_script.py
 ```
 
 Jython modules can be placed anywhere, but the Python path must be configured to find them.
