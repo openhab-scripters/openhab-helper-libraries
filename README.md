@@ -283,9 +283,10 @@ from openhab.triggers import when
 @rule("This is the name of a test rule")
 @when("Item Test_Switch_1 received command OFF")
 @when("Item Test_Switch_2 received update ON")
+@when("Item gMotion_Sensors changed to ON")
 @when("Member of gMotion_Sensors changed to OFF")
 @when("Descendent of gContact_Sensors changed to ON")
-@when("Thing kodi:kodi:familyroom changed")# Thing statuses cannot currently be used in triggers
+@when("Thing kodi:kodi:familyroom changed")# ThingStatusInfo cannot currently be used in triggers
 @when("Channel astro:sun:local:eclipse#event triggered START")
 @when("System started")# 'System shuts down' cannot currently be used as a trigger, and 'System started' needs to be updated to work with Automation API updates
 @when("55 55 5 * * ?")
