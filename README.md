@@ -436,7 +436,7 @@ See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jyt
 
 #### Use an Addon/Bundle Action (binding must be installed):
 [Telegram](https://www.openhab.org/addons/actions/telegram/#telegram-actions)
-```pthon
+```python
 from openhab.actions import Telegram
 Telegram.sendTelegram("MyBot", "Test")
 ```
