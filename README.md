@@ -126,6 +126,22 @@ In order to use them, these modules will need to be copied to a subdirectory of 
 
 </ul>
 
+## Custom Modules
+<ul>
+
+To include a custom module that you want to import, also include it at `/automation/lib/python/`. This will then get imported on first use. Please note that these will not automatically be reloaded, so during development, if you need to make changes to the module, include something such as the following in the function that's using it:
+```
+reload(mymodule)
+```
+
+If you need to access the itemRegistry, you can include the scope in your module and access it with the following:
+```
+from openhab.jsr223 import scope
+scope.itemRegistry.getItem("MyItem")
+```
+
+</ul>
+
 ## [Component Scripts](/automation/jsr223/000_components/README.md)
 <ul>
 
@@ -304,7 +320,7 @@ or...
 </ul>
 
 ```python
-items["My_Item")
+items["My_Item"]
 ```
 <ul>
 
@@ -365,8 +381,9 @@ start = DateTime.now()
 from org.eclipse.smarthome.model.persistence.extensions import PersistenceExtensions
 PersistenceExtensions.previousState(ir.getItem("Weather_SolarRadiation"), True).state
 
-from org.joda.time import DateTimePersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1))
-PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
+from org.joda.time import DateTime
+PersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1))
+PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).doubleValue()
 ```
 
 #### Use [Core & Cloud Actions](https://www.openhab.org/docs/configuration/actions.html#core-actions):
