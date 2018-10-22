@@ -301,9 +301,7 @@ The `items` object is from the default scope and allows access to item state.
 If the function needs to send commands or access other items, it can be done using the `events` scope object. 
 When the function is called it is provided the event instance that triggered it.
 The specific trigger data depends on the event type.
-For example, the `ItemStateChangedEvent` event type has `itemName`, `itemState`, and `oldItemState` attributes.
-
-To view the attributes available in a particular `events` object, you can look into the [code](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java), or you can add a log entry inside the function, and then trigger the rule:
+For example, the [`ItemStateChangedEvent`](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java) event type has `itemName`, `itemState`, and `oldItemState` attributes. Rather than digging through the code to look up the attributes available in a particular `events` object, you can add a log entry inside the function, and then trigger the rule:
 ```
 log.info("JSR223: dir(events)=[{}]".format(dir(events)))
 ```
