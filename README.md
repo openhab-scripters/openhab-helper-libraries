@@ -303,7 +303,7 @@ When the function is called it is provided the event instance that triggered it.
 The specific trigger data depends on the event type.
 For example, the `ItemStateChangedEvent` event type has `itemName`, `itemState`, and `oldItemState` attributes.
 
-To view the attributes of `events`, you can look into the code, or you can add a log entry inside the function, and then trigger the rule:
+To view the attributes available in a particular `events` object, you can look into the [code](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java), or you can add a log entry inside the function, and then trigger the rule:
 ```
 log.info("JSR223: dir(events)=[{}]".format(dir(events)))
 ```
