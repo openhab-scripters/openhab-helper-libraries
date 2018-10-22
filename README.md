@@ -100,10 +100,10 @@ because there are currently bugs in the file loading behavior of OH2 (ref? likel
 Example:
 
 ```text
-/etc/openhab2/automation/jsr223
-    /000_Components
-        000_StartupTrigger.py
-    myotherscript.py
+|_/etc/openhab2/automation/jsr223
+    |_/000_Components
+        |_000_StartupTrigger.py
+    |_myotherscript.py
 ```
 
 Jython modules can be placed anywhere, but the Python path must be configured to find them.
