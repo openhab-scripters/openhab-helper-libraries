@@ -123,25 +123,33 @@ One of the benefits of Jython over the openHAB Xtext scripts is that you can use
 and modules to structure your code into reusable components. 
 The following are some initial experiments in that direction.
 In order to use them, these modules will need to be copied to a subdirectory of `/automation/lib/python/`.
-Note that changes to a module will not take effect until all other modules and scripts that have imported it have also been reloaded. Restarting OH will remedy this, but another option is to use the reload() function:
+Note that changes to a module will not take effect until all other modules and scripts that have imported it have been reloaded. 
+Restarting OH will remedy this, but another option is to use the reload() function:
 
+```
+import myModule
+reload(myModule)
+import myModule
+```
+If using imports like `from openhab.triggers import when`, or if the module is in a package, you will need to use:
 ```
 import sys
-from openhab.configuration import *
-reload(sys.modules['openhab.configuration'])
-from openhab.configuration import *
+from openhab.triggers import when
+reload(sys.modules['openhab.triggers'])
+from openhab.triggers import when
 ```
-
-If no other module or script is using the module, you may be able to just use:
-
+... or import the whole module to reload it...
 ```
-reload(myModule)
+from openhab.triggers import when
+import openhab.triggers
+reload(openhab.triggers)
+from openhab.triggers import when
 ```
 
 #### Custom Modules
 <ul>
 
-Custom modules and packages can also be added into `/automation/lib/python/`, and they will be loaded on first use. If you need to access the itemRegistry, you can include the scope in your module and access it with the following:
+Custom modules and packages can also be added into `/automation/lib/python/`. Modules do not have the same scope as scripts, but this can be remedied by importing `scope` from the `jsr223` module. This will allow for things like accessing the itemRegistry:
 ```
 from openhab.jsr223 import scope
 scope.itemRegistry.getItem("MyItem")
