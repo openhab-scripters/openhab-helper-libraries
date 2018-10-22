@@ -302,6 +302,12 @@ If the function needs to send commands or access other items, it can be done usi
 When the function is called it is provided the event instance that triggered it.
 The specific trigger data depends on the event type.
 For example, the `ItemStateChangedEvent` event type has `itemName`, `itemState`, and `oldItemState` attributes.
+
+To view the attributes of `events`, you can look into the code, or you can add a log entry inside the function, and then trigger the rule:
+```
+log.info("JSR223: dir(events)=[{}]".format(dir(events)))
+```
+
 </ul>
 </ul>
 
