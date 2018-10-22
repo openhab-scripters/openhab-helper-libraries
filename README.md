@@ -123,7 +123,10 @@ One of the benefits of Jython over the openHAB Xtext scripts is that you can use
 and modules to structure your code into reusable components. 
 The following are some initial experiments in that direction.
 In order to use them, these modules will need to be copied to a subdirectory of `/automation/lib/python/`.
-Note that changes to a module will not take effect until all other modules and scripts that have imported it have been reloaded. 
+
+#### Modifying Modules
+<ul>
+Changes to a module will not take effect until all other modules and scripts that have imported it have been reloaded. 
 Restarting OH will remedy this, but another option is to use the reload() function:
 
 ```
@@ -147,7 +150,6 @@ from openhab.triggers import when
 ```
 
 #### Custom Modules
-<ul>
 
 Custom modules and packages can also be added into `/automation/lib/python/`. Modules do not have the same scope as scripts, but this can be remedied by importing `scope` from the `jsr223` module. This will allow for things like accessing the itemRegistry:
 ```
