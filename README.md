@@ -123,23 +123,31 @@ One of the benefits of Jython over the openHAB Xtext scripts is that you can use
 and modules to structure your code into reusable components. 
 The following are some initial experiments in that direction.
 In order to use them, these modules will need to be copied to a subdirectory of `/automation/lib/python/`.
+Note that changes to a module will not take effect until all other modules and scripts that have imported it have also been reloaded. Restarting OH will remedy this, but another option is to use the reload() function:
 
-</ul>
+```
+import sys
+from openhab.configuration import *
+reload(sys.modules['openhab.configuration'])
+from openhab.configuration import *
+```
 
-## Custom Modules
+If no other module or script is using the module, you may be able to just use:
+
+```
+reload(myModule)
+```
+
+#### Custom Modules
 <ul>
 
-To include a custom module that you want to import, also include it at `/automation/lib/python/`. This will then get imported on first use. Please note that these will not automatically be reloaded, so during development, if you need to make changes to the module, include something such as the following in the function that's using it:
-```
-reload(mymodule)
-```
-
-If you need to access the itemRegistry, you can include the scope in your module and access it with the following:
+Custom modules and packages can also be added into `/automation/lib/python/`, and they will be loaded on first use. If you need to access the itemRegistry, you can include the scope in your module and access it with the following:
 ```
 from openhab.jsr223 import scope
 scope.itemRegistry.getItem("MyItem")
 ```
 
+</ul>
 </ul>
 
 ## [Component Scripts](/automation/jsr223/000_components/README.md)
