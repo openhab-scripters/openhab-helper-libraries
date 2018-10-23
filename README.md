@@ -305,6 +305,7 @@ Note: 'Descendent of' is similar to 'Member of', but will trigger on any sibling
 
 </ul>
 </ul>
+</ul>
 
 ## Writing Rules
 <ul>
