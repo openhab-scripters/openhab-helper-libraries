@@ -492,7 +492,10 @@ Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the mess
 ```python
 from org.slf4j import Logger, LoggerFactory
 log = LoggerFactory.getLogger("org.eclipse.smarthome.model.script.Rules")
-log.debug("JSR223: Test log")
+log.debug("JSR223: Test debug log")
+log.info("JSR223: Test info log")
+log.warn("JSR223: Test warn log")
+log.error("JSR223: Test error log")
 ```
 
 #### Convert a value to a state for comparison:
