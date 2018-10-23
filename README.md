@@ -16,7 +16,9 @@ A previous version with reduced functionality but compatible with OH 2.3 has bee
     - [Raw ESH Automation API](#raw-esh-automation-api)
     - [Using Jython Extensions](#using-jython-extensions)
         - [Rule and Trigger Decorators](#rule-and-trigger-decorators)
-- [But how do I...?](#but-how-do-i)
+- [Writing Rules](#writing-rules)
+    - [Event object attributes](#event-object-attributes)
+    - [But how do I...?](#but-how-do-i)
 
 ## Getting Started
 
@@ -301,6 +303,11 @@ def testFunction(event):
 Notice there is no explicit preset import and the generated rule is registered automatically with the `HandlerRegistry`. 
 Note: 'Descendent of' is similar to 'Member of', but will trigger on any sibling non-group Item (think group_item.allMembers()).
 
+</ul>
+
+## Writing Rules
+<ul>
+
 The `items` object is from the default scope and allows access to item state. 
 If the function needs to send commands or access other items, it can be done using the `events` scope object. 
 When a rule is triggered, the function is provided the event instance that triggered it.
@@ -309,31 +316,35 @@ For example, the [`ItemStateChangedEvent`](https://github.com/eclipse/smarthome/
 ```
 log.info("JSR223: dir(event)=[{}]".format(dir(event)))
 ```
-Here is a table to compare the Rules DSL implicit variables with the attributes available in event objects:
 
-| Rules DSL | JSR223 | Trigger(s) | Description
+### Event object attributes
+<ul>
+
+Here is a table of the attributes available in `event` objects (or `inputs.get('event')` if using Raw ESH), including a comparison to the Rules DSL implicit variables:
+
+| Rules DSL | JSR223 | @when Trigger(s) | Event(s) | Description
 | --- | --- | --- | --- |
-triggeringItem.name | event.itemName | [ItemStateEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateEvent.java), [ItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java), [ItemCommandEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemCommandEvent.java), [ItemStatePredictedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java), [GroupItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java) | Name of Item that triggered event (String)
-triggeringItem.state | event.itemState | [ItemStateEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateEvent.java), [ItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java) | State of item that triggered event (State)
-previousState | event.oldItemState | [ItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java), [GroupItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java) | Previous state of Item or Group that triggered event (State)
-receivedCommand | event.itemCommand | [ItemCommandEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemCommandEvent.java) | Command that triggered event (Command)
-N/A | event.predictedState | [ItemStatePredictedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java) | State that the Item triggering the event will have (State)
-N/A | event.isConfirmation | [ItemStatePredictedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java) | If `true`, then it basically only confirms the previous item state because a received command will not be successfully executed and therefore presumably will not result in a state change (e.g. because no handler currently is capable of delivering such an event to its device) (Boolean)
-N/A | event.newItemState | [GroupItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java) | State of Group that triggered event (State)
-N/A | event.item |  [ItemAddedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemAddedEvent.java), [ItemRemovedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemRemovedEvent.java) | Item that triggered event (Item)
-N/A | event.oldItem | [ItemUpdatedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemUpdatedEvent.java) | Item DTO prior to the Item being updated (Item)
-N/A | event.channel | [ChannelTriggeredEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ChannelTriggeredEvent.java) | Channel associated with Event that triggered event (Channel)
-N/A | event.event | [ChannelTriggeredEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ChannelTriggeredEvent.java) | Event that triggered event (Event)
-N/A | event.thing | [ThingAddedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingAddedEvent.java), [ThingRemovedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingRemovedEvent.java) | Thing that triggered event (Thing)
-N/A | event.oldThing | [ThingUpdatedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingUpdatedEvent.java) | Thing DTO prior to the Thing being updated
-N/A | event.thingUID | [ThingStatusInfoEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java), [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | ThingUID of Thing that triggered event (ThingUID)
-N/A | event.statusInfo | [ThingStatusInfoEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java), [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | ThingStatusInfo of Thing that triggered event (ThingStatusInfo)
-N/A | event.oldStatusInfo | [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | Previous ThingStatusInfo of Thing that triggered event (ThingStatusInfo)
+triggeringItem.name | event.itemName | "received update", "changed", "received command" | [ItemStateEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateEvent.java), [ItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java), [ItemCommandEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemCommandEvent.java), [ItemStatePredictedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java), [GroupItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java) | Name of Item that triggered event (String)
+triggeringItem.state | event.itemState | "received update", "changed" | [ItemStateEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateEvent.java), [ItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java) | State of item that triggered event (State)
+previousState | event.oldItemState | "changed" | [ItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java), [GroupItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java) | Previous state of Item or Group that triggered event (State)
+receivedCommand | event.itemCommand | "received command" | [ItemCommandEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemCommandEvent.java) | Command that triggered event (Command)
+N/A | event.predictedState | Not currently supported | [ItemStatePredictedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java) | State that the Item triggering the event is predicted to have (State)
+N/A | event.isConfirmation | Not currently supported | [ItemStatePredictedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java) | If `true`, then it basically only confirms the previous item state because a received command will not be successfully executed and therefore presumably will not result in a state change (e.g. because no handler currently is capable of delivering such an event to its device) (Boolean)
+N/A | event.newItemState | Not currently supported | [GroupItemStateChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java) | State of Group that triggered event (State)
+N/A | event.item | | [ItemAddedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemAddedEvent.java), [ItemRemovedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemRemovedEvent.java) | Item that triggered event (Item)
+N/A | event.oldItem | Not currently supported | [ItemUpdatedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemUpdatedEvent.java) | Item DTO prior to the Item being updated (Item)
+N/A | event.channel | "triggered" | [ChannelTriggeredEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ChannelTriggeredEvent.java) | Channel associated with Event that triggered event (Channel)
+N/A | event.event | "triggered" | [ChannelTriggeredEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ChannelTriggeredEvent.java) | Event that triggered event (Event)
+N/A | event.thing | Not currently supported | [ThingAddedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingAddedEvent.java), [ThingRemovedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingRemovedEvent.java) | Thing that triggered event (Thing)
+N/A | event.oldThing | Not currently supported | [ThingUpdatedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingUpdatedEvent.java) | Thing DTO prior to the Thing being updated
+N/A | event.thingUID | "changed" | [ThingStatusInfoEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java), [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | ThingUID of Thing that triggered event (ThingUID)
+N/A | event.statusInfo | "changed" | [ThingStatusInfoEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java), [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | ThingStatusInfo of Thing that triggered event (ThingStatusInfo)
+N/A | event.oldStatusInfo | "changed" | [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | Previous ThingStatusInfo of Thing that triggered event (ThingStatusInfo)
 triggeringItem | ir.getItem(event.itemName) | N/A |Item that triggered event (Item)
-</ul>
+
 </ul>
 
-## But how do I...?
+### But how do I...?
 <ul>
 
 #### Single line comment:
@@ -550,3 +561,6 @@ lowBatteryMessage = "Warning! Low battery alert:\n\n{}".format(",\n".join(map(la
 
 #### Read/Add/Remove Item metadata:
 https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
+
+</ul>
+</ul>
