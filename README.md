@@ -340,7 +340,6 @@ N/A | event.oldThing | Not currently supported | [ThingUpdatedEvent](https://git
 N/A | event.thingUID | "changed" | [ThingStatusInfoEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java), [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | ThingUID of Thing that triggered event (ThingUID)
 N/A | event.statusInfo | "changed" | [ThingStatusInfoEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java), [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | ThingStatusInfo of Thing that triggered event (ThingStatusInfo)
 N/A | event.oldStatusInfo | "changed" | [ThingStatusInfoChangedEvent](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java) | Previous ThingStatusInfo of Thing that triggered event (ThingStatusInfo)
-triggeringItem | ir.getItem(event.itemName) | N/A |Item that triggered event (Item)
 
 </ul>
 
@@ -390,6 +389,11 @@ or (uses the `openhab.py` module)...
 ```python
 import openhab
 items.My_Item
+```
+
+#### Get the equivalent of Rules DSL `triggeringItem`:
+```python
+ir.getItem(event.itemName)
 ```
 
 #### Get the equivalent of Rules DSL `triggeringItem.name`:
