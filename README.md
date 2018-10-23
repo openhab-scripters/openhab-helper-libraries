@@ -11,7 +11,7 @@ A previous version with reduced functionality but compatible with OH 2.3 has bee
     - [File Locations](#file-locations)
 - [Jython Modules](#jython-modules)
 - [Component Scripts](#component-scripts)
-- [Example Jython Scripts](#example-scripts)
+- [Example Jython Scripts](#example-jython-scripts)
 - [Defining Rules](#defining-rules)
     - [Raw ESH Automation API](#raw-esh-automation-api)
     - [Using Jython Extensions](#using-jython-extensions)
@@ -177,7 +177,7 @@ The files have a numeric prefix to cause them to be loaded before regular user s
 
 </ul>
 
-## [Example Scripts](/Script%20Examples/README.md)
+## [Example Jython Scripts](/Script%20Examples/README.md)
 <ul>
 
 These scripts show example usage of various scripting features. 
