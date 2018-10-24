@@ -505,12 +505,17 @@ items["Switch_Item"] == OnOffType.ON
 items["Number_Item"] > DecimalType(5)
 items["Contact_Item"] == OpenClosedType.OPEN
 items["Some_Item"] != UnDefType.NULL
+event.itemState <= DecimalType(event.oldItemState.intValue() + 60)
+event.itemState <= DecimalType(event.oldItemState.doubleValue() + 60)
+event.itemState <= DecimalType(event.oldItemState.floatValue() + 60)
 ```
     
 #### Convert DecimalType to an integer or float for arithmetic:
 ```python
 int(str(items["Number_Item1"])) + int(str(items["Number_Item2"])) > 5
+items["Number_Item1"].intValue() + items["Number_Item2"].intValue() > 5
 float(str(items["Number_Item"])) + 5.5555 > 55.555
+items["Number_Item"].floatValue() + 5.5555 > 55.555
 ```
 
 #### Pause a thread:
@@ -570,6 +575,13 @@ lowBatteryMessage = "Warning! Low battery alert:\n\n{}".format(",\n".join(map(la
 
 #### Read/Add/Remove Item metadata:
 https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
+
+#### Find the attributes and methods of an object:
+```python
+from org.slf4j import Logger, LoggerFactory
+log = LoggerFactory.getLogger("org.eclipse.smarthome.model.script.Rules")
+log.debug("JSR223: Test dir(object)=[{}]".format(dir(object)))
+```
 
 </ul>
 </ul>
