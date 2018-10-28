@@ -51,6 +51,6 @@ These components are used to support Thing handler implementations:
 * [`000_JythonThingProvider.py`](000_JythonThingProvider.py)
 * [`000_JythonThingTypeProvider.py`](000_JythonThingTypeProvider.py)
 * [`000_JythonBindingInfoProvider.py`](000_JythonBindingInfoProvider.py)
-* [`000_JythonItemProvider.py`](automation/jsr223/scripts/000_JythonItemProvider.py)
+* [`000_JythonItemProvider.py`](000_JythonItemProvider.py)
 
 </ul>
