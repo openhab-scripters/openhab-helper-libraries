@@ -23,10 +23,11 @@ class _FunctionRule(scope.SimpleRule):
             name = callback.__name__
         self.name = name
         self.log = logging.getLogger(LOG_PREFIX + ("" if name is None else ("." + name)))
+        self.logger = logging.getLogger("org.eclipse.smarthome.model.script." + name)
         
     def execute(self, module, inputs):
         try:
-            self.callback(inputs.get('event'))
+            self.callback(inputs.get('event'), self.logger)
         except:
             import traceback
             self.log.error(traceback.format_exc())
