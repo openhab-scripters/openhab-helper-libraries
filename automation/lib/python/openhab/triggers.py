@@ -173,7 +173,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             group_members = []
             if target_type == "Member of":
                 group_members = item.getMembers()
-            elif target_type == "Decendent of":
+            elif target_type == "Descendent of":
                 group_members = item.getAllMembers()
             else:
                 group_members = [ item ]
