@@ -35,4 +35,3 @@ def add(item, item_type=None, category=None, groups=None, label=None, gi_base_ty
 
 def remove(item):
     JythonItemProvider.remove(item)
-
