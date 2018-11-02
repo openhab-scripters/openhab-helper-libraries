@@ -14,7 +14,7 @@ from org.eclipse.smarthome.core.thing import ChannelUID
 from org.eclipse.smarthome.core.thing import ThingUID
 from org.eclipse.smarthome.core.thing.type import ChannelKind
 from org.eclipse.smarthome.core.types import TypeParser
-#from org.eclipse.smarthome.core.thing import ThingStatus
+from org.eclipse.smarthome.core.thing import ThingStatus
 
 import openhab
 from openhab.jsr223 import scope
@@ -29,7 +29,7 @@ scope.scriptExtension.importPreset("RuleSimple")
 scope.scriptExtension.importPreset("RuleSupport")
 scope.scriptExtension.importPreset("RuleFactories")
 
-log = LoggerFactory.getLogger("org.eclipse.smarthome.automation.module.exception")
+log = LoggerFactory.getLogger("org.eclipse.smarthome.automation.core.internal.RuleEngineImpl")
 
 class ItemStateUpdateTrigger(Trigger):
     def __init__(self, itemName, state=None, triggerName=None):
@@ -305,16 +305,16 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         # validate the inputs, and if anything isn't populated correctly throw an exception
         if target_type is None or target_type not in ["Item", "Member of", "Descendent of", "Thing", "Channel", "System", "Time"]:
             raise ValueError("@when: \"{}\" could not be parsed. target_type is missing or invalid. Valid target_type values are: Item, Member of, Descendent of, Thing, Channel, System, and Time.".format(target))
-        elif target_type == "Item" and old_state is not None and trigger_type == "changed" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, old_state):
-            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" not a valid state for \"{}\"".format(target, old_state, trigger_target))
-        elif target_type == "Item" and new_state is not None and (trigger_type == "changed" or trigger_type == "received update") and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, new_state):
-            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" not a valid state for \"{}\"".format(target, new_state, trigger_target))
-        elif target_type == "Item" and new_state is not None and trigger_type == "received command" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedCommandTypes, new_state):
-            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" not a valid command for \"{}\"".format(target, new_state, trigger_target))
         elif target_type in ["Item", "Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target) is None:# throws ItemNotFoundException if item does not exist
             raise ValueError("@when: \"{}\" could not be parsed because Item \"{}\" is not in the itemRegistry".format(target, trigger_target))
         elif target_type in ["Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target).type != "Group":
             raise ValueError("@when: \"{}\" could not be parsed because \"{}\" was specified, but \"{}\" is not a group".format(target, target_type, trigger_target))
+        elif target_type == "Item" and old_state is not None and trigger_type == "changed" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, old_state):
+            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" is not a valid state for \"{}\"".format(target, old_state, trigger_target))
+        elif target_type == "Item" and new_state is not None and (trigger_type == "changed" or trigger_type == "received update") and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, new_state):
+            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" is not a valid state for \"{}\"".format(target, new_state, trigger_target))
+        elif target_type == "Item" and new_state is not None and trigger_type == "received command" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedCommandTypes, new_state):
+            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" is not a valid command for \"{}\"".format(target, new_state, trigger_target))
         elif target_type == "Channel" and scope.things.getChannel(ChannelUID(trigger_target)) is None:# returns null if Channel does not exist
             raise ValueError("@when: \"{}\" could not be parsed because Channel \"{}\" does not exist".format(target, trigger_target))
         elif target_type == "Channel" and scope.things.getChannel(ChannelUID(trigger_target)).kind != ChannelKind.TRIGGER:
