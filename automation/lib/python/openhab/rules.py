@@ -7,8 +7,6 @@ from openhab.log import logging, log_traceback, LOG_PREFIX
 from openhab.jsr223 import scope, get_automation_manager
 scope.scriptExtension.importPreset("RuleSimple")
 
-RULE_LOG_PREFIX = "org.eclipse.smarthome.model.script"
-
 # this needs some attention in order to work with Automation API changes in 2.4.0 snapshots since build 1319
 def set_uid_prefix(rule, prefix=None):
     if prefix is None:
@@ -25,11 +23,10 @@ class _FunctionRule(scope.SimpleRule):
             name = callback.__name__
         self.name = name
         self.log = logging.getLogger(LOG_PREFIX + ("" if name is None else ("." + name)))
-        self.rule_logger = logging.getLogger(RULE_LOG_PREFIX + ("" if name is None else ("." + name)))
         
     def execute(self, module, inputs):
         try:
-            self.callback(inputs.get('event'), self.rule_logger)
+            self.callback(inputs.get('event'), self.log)
         except:
             import traceback
             self.log.error(traceback.format_exc())
@@ -42,7 +39,7 @@ def rule(name=None):
                 scope.SimpleRule.__init__(self)
                 self.name = name or clazz.__name__
                 #set_uid_prefix(self)
-                self.log = logging.getLogger(LOG_PREFIX + "." + clazz.__name__)
+                self.log = logging.getLogger(LOG_PREFIX + ("." + clazz.__name__ if name is None else ("." + name)))
                 clazz.__init__(self, *args, **kwargs)
                 if self.description is None and clazz.__doc__:
                     self.description = clazz.__doc__
