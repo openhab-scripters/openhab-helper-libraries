@@ -224,7 +224,8 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         original_target = target
         if isValidExpression(target):
             target_type = "Time"
-            trigger_type = "cron"
+            trigger_target = "cron"
+            trigger_type = target
         else:
             trigger_name = target.replace(":","_").replace("#","_").replace(" ","-")
             inputList = target.split(" ")
@@ -309,8 +310,10 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             else:# add default values for simple item targets (Item XXXXX changed)
                 if target_type is None:
                     target_type = "Item"
+                if trigger_target is None:
+                    trigger_target = target
                 if trigger_type is None:
-                    trigger_type == "changed"
+                    trigger_type = "changed"
 
         # validate the inputs, and if anything isn't populated correctly throw an exception
         if trigger_type is None:
