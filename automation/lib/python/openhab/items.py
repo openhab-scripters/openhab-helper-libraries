@@ -12,7 +12,7 @@ logger = LoggerFactory.getLogger("org.eclipse.smarthome.model.script.Rules.jsr23
 
 def add(item, item_type=None, category=None, groups=None, label=None, gi_base_type=None, group_function=None):
     try:
-        if isinstance(item, str):
+        if isinstance(item, basestring):
             if item_type is None:
                 raise Exception("Must provide item_type when creating an item by name")
 
@@ -27,11 +27,13 @@ def add(item, item_type=None, category=None, groups=None, label=None, gi_base_ty
                                      .withBaseItem(baseItem)           \
                                      .withGroupFunction(group_function)\
                                      .build()
-
         JythonItemProvider.add(item)
     except:
         import traceback
         logger.error(traceback.format_exc())
+        return None
+    else:
+        return item
 
 def remove(item):
     JythonItemProvider.remove(item)
