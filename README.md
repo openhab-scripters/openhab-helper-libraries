@@ -577,11 +577,25 @@ lowBatteryMessage = "Warning! Low battery alert:\n\n{}".format(",\n".join(map(la
 #### Read/Add/Remove Item metadata:
 https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
 
-#### Find the attributes and methods of an object:
+#### View all names in namespace:
 ```python
 from org.slf4j import Logger, LoggerFactory
 log = LoggerFactory.getLogger("org.eclipse.smarthome.model.script.Rules")
 log.debug("JSR223: Test dir(object)=[{}]".format(dir(object)))
+```
+
+#### Get the UID of a rule by name:
+```python
+scriptExtension.importPreset("RuleSupport")
+ruleUID = filter(lambda rule: rule.name == "This is the name of my rule", rules.getAll())[0].UID
+```
+
+#### Enable or disable a rule by UID:
+```python
+from openhab import osgi
+ruleEngine = osgi.get_service("org.eclipse.smarthome.automation.RuleManager")
+ruleEngine.setEnabled(ruleUID, True)# enable rule
+ruleEngine.setEnabled(ruleUID, False)# disable rule
 ```
 
 </ul>
