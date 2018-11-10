@@ -3,7 +3,6 @@ from java.util import UUID
 from org.eclipse.smarthome.automation import Rule as SmarthomeRule
 
 from openhab.log import logging, log_traceback, LOG_PREFIX
-
 from openhab.jsr223 import scope, get_automation_manager
 scope.scriptExtension.importPreset("RuleSimple")
 
@@ -16,13 +15,15 @@ def set_uid_prefix(rule, prefix=None):
     uid_field.set(rule, "{}-{}".format(prefix, str(UUID.randomUUID())))
 
 class _FunctionRule(scope.SimpleRule):
-    def __init__(self, callback, triggers, name=None):
+    def __init__(self, callback, triggers, name=None, tags=None):
         self.triggers = triggers
         self.callback = callback
         if name is None and hasattr(callback, '__name__'):
             name = callback.__name__
         self.name = name
         self.log = logging.getLogger(LOG_PREFIX + ("" if name is None else ("." + name)))
+        if tags is not None:
+            self.tags = set(tags)
         
     def execute(self, module, inputs):
         try:
@@ -31,7 +32,7 @@ class _FunctionRule(scope.SimpleRule):
             import traceback
             self.log.error(traceback.format_exc())
 
-def rule(name=None):    
+def rule(name=None, tags=None):
     def rule_decorator(object):
         if isclass(object):
             clazz = object
@@ -43,21 +44,19 @@ def rule(name=None):
                 clazz.__init__(self, *args, **kwargs)
                 if self.description is None and clazz.__doc__:
                     self.description = clazz.__doc__
-                if hasattr(self, "getEventTriggers"):
-                    self.triggers = log_traceback(self.getEventTriggers)()
-                elif hasattr(self, "getEventTrigger"):
-                    # For OH1 compatibility
-                    self.triggers = log_traceback(self.getEventTrigger)()
+                self.triggers = log_traceback(self.getEventTriggers)()
+                if tags is not None:
+                    self.tags = set(tags)
             subclass = type(clazz.__name__, (clazz, scope.SimpleRule), dict(__init__=init))
             subclass.execute = log_traceback(clazz.execute)
             return addRule(subclass())
         else:
             function = object
-            newRule = _FunctionRule(function, function.triggers, name=name)
+            newRule = _FunctionRule(function, function.triggers, name=name, tags=tags)
             get_automation_manager().addRule(newRule)
             function.triggers = None
             return function
-    return rule_decorator    
+    return rule_decorator
 
 def addRule(rule):
     get_automation_manager().addRule(rule)
