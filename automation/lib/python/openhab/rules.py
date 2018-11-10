@@ -58,12 +58,12 @@ def rule(name=None, tags=None):
                 subclass.execute = log_traceback(clazz.execute)
                 return addRule(subclass())
             else:
-                function = object
-                simpleRule = _FunctionRule(function, function.triggers, name=name, tags=tags)
+                callable_obj = object
+                simpleRule = _FunctionRule(callable_obj, callable_obj.triggers, name=name, tags=tags)
                 newRule = get_automation_manager().addRule(simpleRule)
-                function.UID = newRule.UID
-                function.triggers = None
-                return function
+                callable_obj.UID = newRule.UID
+                callable_obj.triggers = None
+                return callable_obj
         return rule_decorator
     except Exception as e:
         import traceback
