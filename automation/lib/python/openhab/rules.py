@@ -6,6 +6,10 @@ from openhab.log import logging, log_traceback, LOG_PREFIX
 from openhab.jsr223 import scope, get_automation_manager
 scope.scriptExtension.importPreset("RuleSimple")
 
+from org.slf4j import Logger, LoggerFactory
+
+log = LoggerFactory.getLogger("org.eclipse.smarthome.automation.core.internal.RuleEngineImpl")
+
 # this needs some attention in order to work with Automation API changes in 2.4.0 snapshots since build 1319
 def set_uid_prefix(rule, prefix=None):
     if prefix is None:
@@ -33,31 +37,37 @@ class _FunctionRule(scope.SimpleRule):
             self.log.error(traceback.format_exc())
 
 def rule(name=None, tags=None):
-    def rule_decorator(object):
-        if isclass(object):
-            clazz = object
-            def init(self, *args, **kwargs):
-                scope.SimpleRule.__init__(self)
-                self.name = name or clazz.__name__
-                #set_uid_prefix(self)
-                self.log = logging.getLogger(LOG_PREFIX + "." + clazz.__name__)
-                clazz.__init__(self, *args, **kwargs)
-                if self.description is None and clazz.__doc__:
-                    self.description = clazz.__doc__
-                self.triggers = log_traceback(self.getEventTriggers)()
-                if tags is not None:
-                    self.tags = set(tags)
-            subclass = type(clazz.__name__, (clazz, scope.SimpleRule), dict(__init__=init))
-            subclass.execute = log_traceback(clazz.execute)
-            return addRule(subclass())
-        else:
-            function = object
-            simpleRule = _FunctionRule(function, function.triggers, name=name, tags=tags)
-            newRule = get_automation_manager().addRule(simpleRule)
-            function.UID = newRule.UID
-            function.triggers = None
-            return function
-    return rule_decorator
+    try:
+        if any(filter(lambda rule: rule.name == name, scope.rules.getAll())):
+            raise ValueError("@rule: A rule already exists with the name \"{}\"".format(name))
+        def rule_decorator(object):
+            if isclass(object):
+                clazz = object
+                def init(self, *args, **kwargs):
+                    scope.SimpleRule.__init__(self)
+                    self.name = name or clazz.__name__
+                    #set_uid_prefix(self)
+                    self.log = logging.getLogger(LOG_PREFIX + "." + clazz.__name__)
+                    clazz.__init__(self, *args, **kwargs)
+                    if self.description is None and clazz.__doc__:
+                        self.description = clazz.__doc__
+                    self.triggers = log_traceback(self.getEventTriggers)()
+                    if tags is not None:
+                        self.tags = set(tags)
+                subclass = type(clazz.__name__, (clazz, scope.SimpleRule), dict(__init__=init))
+                subclass.execute = log_traceback(clazz.execute)
+                return addRule(subclass())
+            else:
+                function = object
+                simpleRule = _FunctionRule(function, function.triggers, name=name, tags=tags)
+                newRule = get_automation_manager().addRule(simpleRule)
+                function.UID = newRule.UID
+                function.triggers = None
+                return function
+        return rule_decorator
+    except Exception as e:
+        import traceback
+        log.error("@rule: Exception [{}]: [{}]".format(e, traceback.format_exc()))
 
 def addRule(rule):
     get_automation_manager().addRule(rule)
