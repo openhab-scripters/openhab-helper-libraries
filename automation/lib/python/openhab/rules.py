@@ -52,8 +52,9 @@ def rule(name=None, tags=None):
             return addRule(subclass())
         else:
             function = object
-            newRule = _FunctionRule(function, function.triggers, name=name, tags=tags)
-            get_automation_manager().addRule(newRule)
+            simpleRule = _FunctionRule(function, function.triggers, name=name, tags=tags)
+            newRule = get_automation_manager().addRule(simpleRule)
+            function.UID = newRule.UID
             function.triggers = None
             return function
     return rule_decorator
