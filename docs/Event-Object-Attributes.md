@@ -1,4 +1,4 @@
-[[Home]](README.MD)
+[[Home]](README.md)
 
 ## Event Object Attributes
 
