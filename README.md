@@ -296,7 +296,7 @@ from openhab.triggers import when
 @when("Item Test_Switch_2 received update ON")
 @when("Item gMotion_Sensors changed to ON")
 @when("Member of gMotion_Sensors changed to OFF")
-@when("Descendent of gContact_Sensors changed to ON")
+@when("Descendent of gContact_Sensors changed to ON")# Similar to 'Member of', but will create a trigger for each non-group sibling Item (think group_item.allMembers())
 @when("Thing kodi:kodi:familyroom changed")# ThingStatusInfo (from <status> to <status>) cannot currently be used in triggers
 @when("Channel astro:sun:local:eclipse#event triggered START")
 @when("System started")# 'System shuts down' cannot currently be used as a trigger, and 'System started' needs to be updated to work with Automation API updates
@@ -307,7 +307,6 @@ def testFunction(event):
 ```
 
 Notice there is no explicit preset import, and the generated rule is registered automatically with the `HandlerRegistry`. 
-Note: 'Descendent of' is similar to 'Member of', but will create a trigger for each sibling non-group Item (think group_item.allMembers()).
 
 </ul>
 </ul>
