@@ -1,3 +1,7 @@
+[[Home]](README.MD)
+
+## Example-Jython-Scripts
+
 These scripts show example usage of various scripting features. 
 Some of the examples are intended to provide services to user scripts so they have a numeric prefix to force them to load first 
 (but after the general purpose components). In order to use them, these scripts can be copied to a subdirectory of `/automation/jsr223/` to test them.

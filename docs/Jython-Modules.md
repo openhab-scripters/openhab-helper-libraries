@@ -1,3 +1,7 @@
+[[Home]](README.MD)
+
+## Jython Modules
+
 One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages 
 and modules to structure your code into reusable components. 
 The following are some initial experiments in that direction.

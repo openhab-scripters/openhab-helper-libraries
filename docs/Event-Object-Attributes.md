@@ -1,3 +1,7 @@
+[[Home]](README.MD)
+
+## Event Object Attributes
+
 When a rule is triggered, the function is provided the event instance that triggered it.
 The specific data depends on the event type.
 For example, the [`ItemStateChangedEvent`](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java) event type has `itemName`, `itemState`, and `oldItemState` attributes. Rather than digging through the code to look up the attributes available in a particular `event` object, you can add a log entry inside the function, and then trigger the rule:

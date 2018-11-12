@@ -1,3 +1,7 @@
+[[Home]](README.MD)
+
+## Defining Rules
+
 One of the primary use cases for JSR223 scripting in OH is to define rules for the [Eclipse SmartHome (ESH) rule engine](http://www.eclipse.org/smarthome/documentation/features/rules.html) using the [Java/Automation API](http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api).
 The ESH rule engine structures rules as _Modules_ (Triggers, Conditions, Actions). 
 Jython rules can use rule Modules that are already present in ESH, and can define new Modules that can be used outside of JSR223 scripting. Take care not to confuse ESH Modules with Jython modules. 

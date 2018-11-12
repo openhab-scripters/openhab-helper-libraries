@@ -1,9 +1,12 @@
-# Running Jython in an openHAB Docker image
+[[Home]](README.MD)
+
+## Running Jython in an openHAB Docker image
+
 This guide is written for openHAB v2.4, at the time of writing, it was Build #1390. To get this build, run `docker pull openhab/openhab:2.4.0-snapshot-amd64-debian`
 
 Once you have openHAB installed and running, *with at least one item*, you can install Jython as follows (these are the steps I figured out after some trial and error).
 
-## Installation
+### Installation
 
 Install the "Rule Engine (Experimental)" add on. (In Paper UI, go to Add-ons > Misc, find the Rule Engine (Experimental), and click "INSTALL".
 
@@ -30,7 +33,7 @@ Finally, copy over the `hello_world.py` script so we can see things happening in
 cp openhab2-jython-master/Script\ Examples/hello_world.py conf/automation/jsr223/
 ```
 
-## Docker Environment
+### Docker Environment
 
 Then, when starting the docker container, include the environment variable as follows:
 ```

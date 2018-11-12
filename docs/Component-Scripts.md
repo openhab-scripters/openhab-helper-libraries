@@ -1,3 +1,7 @@
+[[Home]](README.MD)
+
+## Component Scripts
+
 These scripts are located in the `/automation/jsr223/000_components` subdirectory. 
 They should be copied to the same directory structure inside your openHAB 2 installation to use them. 
 The files have a numeric prefix to cause them to be loaded before regular user scripts.
