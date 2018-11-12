@@ -195,10 +195,14 @@ Jython rules can use rule Modules that are already present in ESH, and can defin
 In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-jython-extensions), and [rule and trigger decorators](#rule-and-trigger-decorators). 
 The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
 
+Take care in your choice of object names used in your rules, so as not to use one that is already included in the [default scope](https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required). 
+For example, the `items` object is from the default scope, and allows access to [each Item's state](#get-the-state-of-an-item). 
+Another important object from the default scope is the `events` object, which can be used to [send a command](#send-a-command-to-an-item) or [change the state](#send-an-update-to-an-item) of an Item.
+
 ### Raw ESH Automation API
 <ul>
 
-The simplest raw API rule definition would look something like:
+The simplest raw API rule definition would look something like this:
 
 ```python
 scriptExtension.importPreset("RuleSupport")
@@ -221,12 +225,12 @@ class MyRule(SimpleRule):
 
 automationManager.addRule(MyRule())
 ```
-Note: trigger names must be unique within the scope of a rule instance, and can contain alphanumeric characters, hythens, and underscores.
+Note: trigger names must be unique within the scope of a rule instance, and can only contain alphanumeric characters, hythens, and underscores (no spaces).
 
 This can be simplified with some extra Jython code, which we'll see later. 
 First, let's look at what's happening with the raw functionality.
 
-When a Jython script is loaded it is provided with a _JSR223 scope_ that predefines a number of variables. 
+When a Jython script is loaded it is provided with a _JSR223 scope_ that [predefines a number of variables](https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required). 
 These include the most commonly used core types and values from ESH (e.g., State, Command, OnOffType, etc.). 
 This means you don't need a Jython import statement to load them.
 
@@ -252,22 +256,26 @@ Finally, to register the rule with the ESH rule engine it must be added to the `
 This will cause the triggers to be activated and the rule will fire when the TestString1 item is updated.
 </ul>
 
-### Using Jython extensions (requires the modules)
+### Using Jython extensions
 <ul>
 
-To simplify rule creation even further, Jython can be used to wrap the raw ESH API. 
-The current experimental wrappers include trigger-related classes so the previous example becomes:
+To simplify rule creation even further, Jython can be used to wrap the raw Automation API. 
+The current experimental wrappers include trigger-related classes, so the previous example becomes:
 
 ```python
-# ... preset calls
+scriptExtension.importPreset("RuleSimple")
+scriptExtension.importPreset("RuleSupport")
 
 from openhab.triggers import ItemStateUpdateTrigger
 
-class MyRule(SimpleRule):
+class exampleExtensionRule(SimpleRule):
     def __init__(self):
-        self.triggers = [ ItemStateUpdateTrigger("TestString1") ]
-        
-    # rest of rule ...
+        self.triggers = [ ItemStateChangeTrigger("TestString1").trigger ]
+
+    def execute(self, module, input):
+        events.postUpdate("TestString2", "some data")
+
+automationManager.addRule(exampleExtensionRule())
 ```
 
 This removes the need to know the internal ESH trigger type strings, 
@@ -307,17 +315,14 @@ Note: 'Descendent of' is similar to 'Member of', but will create a trigger for e
 ### Event object attributes
 <ul>
 
-Take care in your choice of object names, so as not to use one that is already included in the [default scope](https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required). 
-The `items` object is from the default scope and allows access to item state. 
-If the function needs to send commands or access other items, it can be done using the `events` scope object. 
 When a rule is triggered, the function is provided the event instance that triggered it.
-The specific trigger data depends on the event type.
+The specific data depends on the event type.
 For example, the [`ItemStateChangedEvent`](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java) event type has `itemName`, `itemState`, and `oldItemState` attributes. Rather than digging through the code to look up the attributes available in a particular `event` object, you can add a log entry inside the function, and then trigger the rule:
 ```
 log.info("JSR223: dir(event)=[{}]".format(dir(event)))
 ```
 
-Here is a table of the attributes available in `event` objects (or `inputs.get('event')` if using Raw ESH), including a comparison to the Rules DSL implicit variables:
+Here is a table of the attributes available in `event` objects (or `inputs.get('event')` if using Raw ESH or extensions), including a comparison to the Rules DSL implicit variables:
 
 | Rules DSL | JSR223 | @when Trigger(s) | Raw ESH Event(s) | Description
 | --- | --- | --- | --- | --- |
