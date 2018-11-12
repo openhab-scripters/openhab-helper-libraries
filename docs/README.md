@@ -7,10 +7,10 @@ A previous version with reduced functionality, but compatible with OH 2.3, has b
 These works are based on the original contributions of Steve Bate, for which we are very thankful!  :vulcan_salute: 
 
 - [Getting Started](Getting-Started.md)
-    - [Quick Start Guide](Getting-Started#quick-start-guide)
-    - [Applications](Getting-Started#applications)
-    - [Jython Scripts and Modules](Getting-Started#jython-scripts-and-modules)
-    - [File Locations](Getting-Started#file-locations)
+    - [Quick Start Guide](Getting-Started.md#quick-start-guide)
+    - [Applications](Getting-Started.md#applications)
+    - [Jython Scripts and Modules](Getting-Started.md#jython-scripts-and-modules)
+    - [File Locations](Getting-Started.md#file-locations)
 - [Jython Modules](Jython-Modules.md)
 - [Component Scripts](Component-Scripts.md)
 - [Example Jython Scripts](Example-Jython-Scripts.md)
@@ -18,5 +18,5 @@ These works are based on the original contributions of Steve Bate, for which we 
     - [Raw ESH Automation API](Defining-Rules.md#raw-esh-automation-api)
     - [Using Jython Extensions](Defining-Rules.md#using-jython-extensions)
         - [Rule and Trigger Decorators](Defining-Rules.md#rule-and-trigger-decorators)
-    - [Event object attributes](Event-Object-Attributes)
-- [But how do I...?](But-How-Do-I...-?)
+    - [Event object attributes](Event-Object-Attributes.md)
+- [But how do I...?](But-How-Do-I...-?.md)
