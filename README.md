@@ -16,7 +16,6 @@ A previous version with reduced functionality but compatible with OH 2.3 has bee
     - [Raw ESH Automation API](#raw-esh-automation-api)
     - [Using Jython Extensions](#using-jython-extensions)
         - [Rule and Trigger Decorators](#rule-and-trigger-decorators)
-- [Writing Rules](#writing-rules)
     - [Event object attributes](#event-object-attributes)
     - [But how do I...?](#but-how-do-i)
 
@@ -190,12 +189,11 @@ These scripts will import certain modules, so they will also need to be instaled
 ## Defining Rules
 <ul>
 
-One of the primary use cases for the JSR223 scripting is to define rules 
-for the [Eclipse SmartHome (ESH) rule engine](http://www.eclipse.org/smarthome/documentation/features/rules.html).
-
+One of the primary use cases for JSR223 scripting in OH is to define rules for the [Eclipse SmartHome (ESH) rule engine](http://www.eclipse.org/smarthome/documentation/features/rules.html) using the [Java/Automation API](http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api).
 The ESH rule engine structures rules as _Modules_ (Triggers, Conditions, Actions). 
-Jython rules can use rule Modules that are already present in ESH, and can define new Modules that can be used outside of JSR223 scripting. 
-Take care not to confuse ESH Modules with Jython modules. In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-jython-extensions), and [rule and trigger decorators](#rule-and-trigger-decorators). The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
+Jython rules can use rule Modules that are already present in ESH, and can define new Modules that can be used outside of JSR223 scripting. Take care not to confuse ESH Modules with Jython modules. 
+In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-jython-extensions), and [rule and trigger decorators](#rule-and-trigger-decorators). 
+The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
 
 ### Raw ESH Automation API
 <ul>
@@ -291,25 +289,25 @@ from openhab.triggers import when
 @when("Item gMotion_Sensors changed to ON")
 @when("Member of gMotion_Sensors changed to OFF")
 @when("Descendent of gContact_Sensors changed to ON")
-@when("Thing kodi:kodi:familyroom changed")# ThingStatusInfo cannot currently be used in triggers
+@when("Thing kodi:kodi:familyroom changed")# ThingStatusInfo (from <status> to <status>) cannot currently be used in triggers
 @when("Channel astro:sun:local:eclipse#event triggered START")
 @when("System started")# 'System shuts down' cannot currently be used as a trigger, and 'System started' needs to be updated to work with Automation API updates
-@when("55 55 5 * * ?")
+@when("Time cron 55 55 5 * * ?")
 def testFunction(event):
     if items["Test_Switch_1"] == OnOffType.ON:
         events.postUpdate("Test_String_1", "The test rule has been executed!")
 ```
 
-Notice there is no explicit preset import and the generated rule is registered automatically with the `HandlerRegistry`. 
-Note: 'Descendent of' is similar to 'Member of', but will trigger on any sibling non-group Item (think group_item.allMembers()).
+Notice there is no explicit preset import, and the generated rule is registered automatically with the `HandlerRegistry`. 
+Note: 'Descendent of' is similar to 'Member of', but will create a trigger for each sibling non-group Item (think group_item.allMembers()).
 
 </ul>
 </ul>
-</ul>
 
-## Writing Rules
+### Event object attributes
 <ul>
 
+Take care in your choice of object names, so as not to use one that is already included in the [default scope](https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required). 
 The `items` object is from the default scope and allows access to item state. 
 If the function needs to send commands or access other items, it can be done using the `events` scope object. 
 When a rule is triggered, the function is provided the event instance that triggered it.
@@ -318,9 +316,6 @@ For example, the [`ItemStateChangedEvent`](https://github.com/eclipse/smarthome/
 ```
 log.info("JSR223: dir(event)=[{}]".format(dir(event)))
 ```
-
-### Event object attributes
-<ul>
 
 Here is a table of the attributes available in `event` objects (or `inputs.get('event')` if using Raw ESH), including a comparison to the Rules DSL implicit variables:
 
