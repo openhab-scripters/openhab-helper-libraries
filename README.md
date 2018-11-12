@@ -29,7 +29,7 @@ A previous version with reduced functionality but compatible with OH 2.3 has bee
 - Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. 
 More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules.
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
-- Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
+- Review the [JSR223 Jython scripting documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
 - Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
 - Download the contents of this repository and copy the `automation` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf` (default manual OH install).
 - Add/modify your EXTRA_JAVA_OPTS. These examples assume that you will be using the standalone Jython 2.7.0 jar. 
