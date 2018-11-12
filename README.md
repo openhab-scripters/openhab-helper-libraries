@@ -17,7 +17,7 @@ A previous version with reduced functionality but compatible with OH 2.3 has bee
     - [Using Jython Extensions](#using-jython-extensions)
         - [Rule and Trigger Decorators](#rule-and-trigger-decorators)
     - [Event object attributes](#event-object-attributes)
-    - [But how do I...?](#but-how-do-i)
+- [But how do I...?](#but-how-do-i)
 
 ## Getting Started
 
