@@ -279,7 +279,7 @@ automationManager.addRule(exampleExtensionRule())
 ```
 
 This removes the need to know the internal ESH trigger type strings, 
-define trigger names and to know configuration dictionary requirements.
+define trigger names, and to know configuration dictionary requirements.
 
 #### Rule and Trigger Decorators
 <ul>
