@@ -45,10 +45,10 @@ More importantly, there are breaking changes in the API, so at least OH snapshot
 - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used, but the paths above will need to be modified.
 - Restart OH and watch the logs for errors.
 - Copy the [`hello_world.py`](/Script%20Examples/hello_world.py) example script to `/automation/jsr223/` to test if everything is working. This script will make a log entry every 10s.
-- Review the general [openHAB2 JSR223 scripting documentation](http://docs.openhab.org/configuration/jsr223.html).
+- Review the general [JSR223 scripting](http://docs.openhab.org/configuration/jsr223.html) documentation.
 - Review the rest of this documentation.
 - Create rules using [rule and trigger decorators](#rule-and-trigger-decorators).
-- Ask questions on the [openHAB forum](https://community.openhab.org/tags/jsr223) and tag posts with `jsr223`. Report issues [here](https://github.com/OH-Jython-Scripters/openhab2-jython/issues).
+- Ask questions on the [openHAB forum](https://community.openhab.org/tags/jsr223), and tag posts with `jsr223`. Report issues for the modules and scripts in this repository [here](https://github.com/OH-Jython-Scripters/openhab2-jython/issues).
 
 Some directions specifically for Docker are available at [Docker.md](Docker.md)
 
