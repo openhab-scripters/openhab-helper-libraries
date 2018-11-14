@@ -1,5 +1,5 @@
-from openhab.triggers import ChannelEventTrigger
-from openhab.rules import rule, addRule
+from core.triggers import ChannelEventTrigger
+from core.rules import rule, addRule
 
 @rule
 class channelEventExample(object):

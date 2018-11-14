@@ -1,5 +1,5 @@
-from openhab.actions import Astro
-from openhab.log import logging
+from core.actions import Astro
+from core.log import logging
 from java.util import Date
 
 logging.getLogger("org.eclipse.smarthome.automation").info(

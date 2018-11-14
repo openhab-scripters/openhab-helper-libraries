@@ -1,6 +1,6 @@
 from org.slf4j import Logger, LoggerFactory
-from openhab.rules import rule
-from openhab.triggers import when
+from core.rules import rule
+from core.triggers import when
 log = LoggerFactory.getLogger("org.eclipse.smarthome.model.script.Rules")
 
 # Example timer rule using Jython

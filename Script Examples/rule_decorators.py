@@ -1,16 +1,18 @@
 """
-This example demonstrates the logging bridge and trigger function decorators. It
-also indirectly uses the openhab.jsr223 module.
+This example demonstrates the logging bridge, trigger and rule function decorators. It
+also indirectly uses the core.jsr223 module.
 
-Note that TestSwitch2 must be defined in an items file.
+Note that Test_Switch_1 must be defined in an items file.
 """
 
-from openhab.log import logging
-from openhab.triggers import time_triggered, EVERY_SECOND, item_triggered
+from core.log import logging
+from core.triggers import when, EVERY_SECOND
+from core.rules import rule
 
 count = 0
 
-@time_triggered(EVERY_SECOND)
+@rule("Example cron triggered rule", tags=["Test tag"])
+@when(EVERY_SECOND)
 def my_periodic_function():
     global count
     logging.info("running periodic function: %d", count)
@@ -18,8 +20,9 @@ def my_periodic_function():
     if count % 5 == 0:
         events.postUpdate("TestSwitch2", "ON")
 
-@item_triggered("TestSwitch2")
+@rule("Example Item changed rule", tags=["Test tag"])
+@when("Item Test_Switch_1 changed to ON")
 def my_item_function():
-    if items.TestSwitch2 == ON:
+    if items.Test_Switch_1 == ON:
         logging.info("**** Switch ON ****")
-        events.postUpdate("TestSwitch2", "OFF")
+        events.postUpdate("Test_Switch_1", "OFF")

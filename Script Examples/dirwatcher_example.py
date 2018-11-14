@@ -1,9 +1,9 @@
 
 # Requires 000_DirectoryTrigger.py component
 
-from openhab.log import logging
-from openhab.triggers import DirectoryEventTrigger, ENTRY_CREATE     
-from openhab.rules import rule
+from core.log import logging
+from core.triggers import DirectoryEventTrigger, ENTRY_CREATE     
+from core.rules import rule
 
 scriptExtension.importPreset("RuleSupport")
     

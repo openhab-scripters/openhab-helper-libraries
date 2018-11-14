@@ -1,15 +1,18 @@
+# This example will require a rule with an "a" tag
+
 import time
 
-from openhab.osgi import get_service
-from openhab.log import logging
+from core.osgi import get_service
+from core.log import logging
 log = logging.getLogger("registry_example")
 
 rule_registry = get_service("org.eclipse.smarthome.automation.RuleRegistry")
 
 # Get rules by tags
-# Tags can be set in rule constructors
+# Tags can be set in rule constructors, or in the rule decorator
 # Example: self.tags = ["tag1", "tag2"]
-rules = rule_registry.getByTag("a")
+
+rules = rule_registry.getByTag("Test tag")
 
 for rule in rules:
     rule_status = rule_registry.getStatusInfo(rule.UID)
@@ -19,7 +22,7 @@ for rule in rules:
     rule_registry.setEnabled(rule.UID, False)
     
     # later...
-    time.sleep(1)
+    time.sleep(5)
     
     # reenable the rule
     rule_registry.setEnabled(rule.UID, True)

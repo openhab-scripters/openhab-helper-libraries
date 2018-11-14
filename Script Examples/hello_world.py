@@ -1,6 +1,6 @@
 from org.slf4j import Logger, LoggerFactory
-from openhab.rules import rule
-from openhab.triggers import when, CronTrigger
+from core.rules import rule
+from core.triggers import when, CronTrigger
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleSimple")
 

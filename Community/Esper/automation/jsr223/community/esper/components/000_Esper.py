@@ -2,9 +2,9 @@ import json
 
 import community.esper.java
 
-import openhab
-from openhab.log import logging
-from openhab.osgi.events import OsgiEventAdmin
+import core
+from core.log import logging
+from core.osgi.events import OsgiEventAdmin
 
 from java.lang import String, Double, Object
 from java.util import Date
@@ -88,16 +88,16 @@ def scriptLoaded(*args):
     configuration.addEventType("ItemStateChangedEvent", item_state_schema)
     configuration.addEventType("ItemCommandEvent", item_command_schema)
     configuration.addEventType("ChannelEvent", channel_event_schema)
-    openhab.esper = EPServiceProviderManager.getProvider("engine", configuration)
-    runtime = openhab.esper.getEPRuntime()
+    core.esper = EPServiceProviderManager.getProvider("engine", configuration)
+    runtime = core.esper.getEPRuntime()
     log.info("Created Esper provider")
     OsgiEventAdmin.add_listener(esper_bridge)
     log.info("Esper event bridge registered")
 
 def scriptUnloaded():
-    if hasattr(openhab, "esper") and openhab.esper:
-        openhab.esper.destroy()
-        openhab.esper = None
+    if hasattr(core, "esper") and core.esper:
+        core.esper.destroy()
+        core.esper = None
         log.info("Destroyed Esper provider")
         OsgiEventAdmin.remove_listener(esper_bridge)
         log.info("Esper event bridge removed")

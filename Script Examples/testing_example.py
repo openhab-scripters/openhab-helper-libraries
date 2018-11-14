@@ -8,10 +8,10 @@ Required Items:
 
 import unittest
 import time
-from openhab.log import logging
-from openhab.testing import run_test
-from openhab.triggers import item_triggered, ITEM_UPDATE
-import openhab.items
+from core.log import logging
+from core.testing import run_test
+from core.triggers import item_triggered, ITEM_UPDATE
+import core.items
 
 @item_triggered("TestNumber1", ITEM_UPDATE)
 def double_the_value():
@@ -19,12 +19,12 @@ def double_the_value():
     
 class MyUnitTest(unittest.TestCase):
     def setUp(self):
-        openhab.items.add("TestNumber1", "Number")
-        openhab.items.add("TestNumber2", "Number")
+        core.items.add("TestNumber1", "Number")
+        core.items.add("TestNumber2", "Number")
         
     def tearDown(self):
-        openhab.items.remove("TestNumber1")
-        openhab.items.remove("TestNumber2")
+        core.items.remove("TestNumber1")
+        core.items.remove("TestNumber2")
         
     def test_item(self):
         events.postUpdate("TestNumber1", str(5))

@@ -4,10 +4,10 @@ import json
 import pykka
 import threading
 
-from openhab.osgi.events import OsgiEventAdmin, log_event, event_dict
+from core.osgi.events import OsgiEventAdmin, log_event, event_dict
 from org.osgi.framework import Filter
 
-from openhab.log import logging
+from core.log import logging
 openhab_log = logging.getLogger("ActorExample")
 
 from org.python.modules.sre import PatternObject
