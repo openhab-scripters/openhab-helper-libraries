@@ -10,7 +10,8 @@ More importantly, there are breaking changes in the API, so at least OH snapshot
 - Download the contents of this repository and copy the contents of the `/Core/` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf` (default manual OH install). This will create a directory structure as described in [File Locations](#file-locations), and include all of the Core modules and a startup delay script (insures OH is started completely before loading other scripts).
 - Add/modify your EXTRA_JAVA_OPTS. These examples assume that you will be using the standalone Jython 2.7.0 jar. 
 
-    **Using a `/etc/default/openhab2` file with a package repository OH installation (includes openHABian):**
+    **Using an `/etc/default/openhab2` file with a package repository OH installation (includes openHABian):**
+    If creating a new file, remember to setup the permissions so that the OH account can access it.
     ```
     EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
     ```
