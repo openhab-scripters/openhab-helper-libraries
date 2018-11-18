@@ -2,16 +2,21 @@
 
 ### Quick Start Guide
 
+Directions specifically for installation in a Docker container are available [here](Docker.md).
+
 - Since JSR223 is still under development, it is best to use a current testing or snapshot release of openHAB. 
-More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 are required to use these modules.
+More importantly, there are breaking changes in the API, so at least OH snapshot 1319 or milestone M3 is required to use these modules.
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
 - Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
-- Download the contents of this repository and copy the contents of the `/Core/` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf` (default manual OH install). This will create a directory structure as described in [File Locations](#file-locations), and include all of the Core modules and a startup delay script (insures OH is started completely before loading other scripts).
-- Add/modify your EXTRA_JAVA_OPTS. These examples assume that you will be using the standalone Jython 2.7.0 jar. 
+- Shut down openHAB.
+- Download the contents of this repository and, using the openHAB account, copy the contents of the `/Core/` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf/` (default manual OH install). 
+This will create a directory structure as described in [File Locations](#file-locations), and will include all of the Core files, including a startup delay script that insures OH is started completely before loading other scripts.
+- Add/modify your EXTRA_JAVA_OPTS. 
+These examples assume that you will be using the standalone Jython 2.7.0 jar. 
 
     **Using an `/etc/default/openhab2` file with a package repository OH installation (includes openHABian):**
-    If creating a new file, remember to setup the permissions so that the OH account can access it.
+    If creating a new file, remember to set the permissions so that the OH account has read access.
     ```
     EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
     ```
@@ -19,15 +24,15 @@ More importantly, there are breaking changes in the API, so at least OH snapshot
     ```
     export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
     ```
-- Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. A full install of Jython can also be used, but the paths above will need to be modified.
-- Restart OH and watch the logs for errors.
-- Copy the [`hello_world.py`](/Script%20Examples/hello_world.py) example script to `/automation/jsr223/` to test if everything is working. This script will make a log entry every 10s.
+- Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. 
+A full install of Jython can also be used, but the paths above will need to be modified. 
+- Copy the [`hello_world.py`](/Script%20Examples/hello_world.py) example script to `/automation/jsr223/` to test if everything is working. 
+This script will make a log entry every 10s, and should be deleted after installation has been verified.
+- Start openHAB and watch the logs for errors and the entries from the `hello_world` script.
 - Review the general [openHAB JSR223 scripting documentation](https://www.openhab.org/docs/configuration/jsr223.html).
 - Review the rest of this documentation.
 - Create rules using [rule and trigger decorators](#rule-and-trigger-decorators).
 - Ask questions on the [openHAB forum](https://community.openhab.org/tags/jsr223) and tag posts with `jsr223`. Report issues [here](https://github.com/OH-Jython-Scripters/openhab2-jython/issues).
-
-Some directions specifically for Docker are available at [Docker.md](Docker.md)
 
 ### Applications
 <ul>
