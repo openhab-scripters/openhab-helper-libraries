@@ -54,3 +54,13 @@ Then, after a minute or two, this should appear in the logs every 10 seconds or 
 ```
 2018-10-17 02:24:40.077 [INFO ] [eclipse.smarthome.model.script.Rules] - JSR223: This is a 'hello world!' from a Jython rule (decorator): Cron
 ```
+
+## Building image from Dockerfile
+In root directory of project there is an example Dockerfile which will add Jython support to given container version. It includes a script to enable experimental rule engine in addons.cfg and adds necessary entries to `EXTRA_JAVA_OPTS` (including `/openhab/conf/automation/lib/python` in python.path). As a user, you only need to add python's scripts and rules to your `conf/automation/jsr223` volume.
+
+To build a container with jython, simply run:
+```
+docker build --build-arg OPENHAB_VERSION=2.4.0.M6-amd64-debian .
+```
+
+Jython will be installed in `/opt/jython`, installation directory as well as jython version, can be set with build args (see Dockerfile).
