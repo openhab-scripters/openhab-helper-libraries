@@ -1,4 +1,4 @@
-from community import esper
+from core import esper
 
 from datetime import datetime
 from random import random
