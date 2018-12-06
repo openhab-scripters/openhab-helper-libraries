@@ -96,14 +96,14 @@ from org.joda.time import DateTime
 start = DateTime.now()
 ```
 
-#### Persistence extensions:
+#### [Persistence extensions](https://www.openhab.org/docs/configuration/persistence.html#persistence-extensions-in-scripts-and-rules) (others not listed are similar):
 ```python
 from org.eclipse.smarthome.model.persistence.extensions import PersistenceExtensions
 PersistenceExtensions.previousState(ir.getItem("Weather_SolarRadiation"), True).state
 
 from org.joda.time import DateTime
 PersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1))
-PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).doubleValue()
+PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
 ```
 
 #### Use [Core & Cloud Actions](https://www.openhab.org/docs/configuration/actions.html#core-actions):
