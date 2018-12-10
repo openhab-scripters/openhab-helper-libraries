@@ -49,15 +49,16 @@ This means you don't need a Jython import statement to load them.
 
 For defining rules, additional symbols must be defined. 
 Rather than using a Jython import (remember, JSR223 support is for other languages too), 
-these additional symbols are imported using:
+these additional symbols ([presets](https://www.openhab.org/docs/configuration/jsr223.html#predefined-script-variables-all-jsr223-languages)) are imported using:
 
 ```python
-scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleSimple")
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleFactories")
 ```
 
 The `scriptExtension` instance is provided as one of the default scope variables. 
-The RuleSimple preset defines the `SimpleRule` base class.  
+The `RuleSimple` preset defines the `SimpleRule` base class.  
 This base class implements a rule with a single custom ESH Action associated with the `execute` function. 
 The list of rule triggers are provided by the triggers attribute of the rule instance.
 
