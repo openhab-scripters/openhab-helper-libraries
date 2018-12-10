@@ -67,7 +67,7 @@ Trigger function decorator (see the `core.rules` module for the [rule decorator]
 * __@when("Descendent of gContact_Sensors changed to ON")__
 * __@when("Thing kodi:kodi:familyroom changed")__# Thing statuses cannot currently be used in triggers
 * __@when("Channel astro:sun:local:eclipse#event triggered START")__
-* __@when("System started")__# 'System shuts down' cannot currently be used as a trigger, and 'System started' needs to be updated to work with Automation API updates
+* __@when("System started")__# `System started` and 'System shuts down' cannot currently be used as a trigger
 * __@when("55 55 5 * * ?")__
 
 </ul>
