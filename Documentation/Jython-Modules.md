@@ -43,7 +43,7 @@ scope.itemRegistry.getItem("MyItem")
 
 This module includes trigger subclasses and function decorators to simplify Jython rule definitions.
 
-Trigger classes fr wrapping Automation API (see [Using Jython extensions](Defining-Rules.md#using-jython-extensions)):
+Trigger classes for wrapping Automation API (see [Using Jython extensions](Defining-Rules.md#using-jython-extensions)):
 
 * __ItemStateChangeTrigger__
 * __ItemStateUpdateTrigger__
