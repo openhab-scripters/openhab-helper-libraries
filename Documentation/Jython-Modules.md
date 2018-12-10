@@ -3,7 +3,7 @@
 ## Jython Modules
 
 One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages and modules to structure your code into reusable components. 
-When using the instructions in the [Quick Start Guide](Getting-Started.md#quick-start-guide), these modules should be located in `/automation/lib/python/core/`
+When using the instructions in the [Quick Start Guide](Getting-Started.md#quick-start-guide), these modules should be located in `/automation/lib/python/`
 
 #### Modifying Modules
 
