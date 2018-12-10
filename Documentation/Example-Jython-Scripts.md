@@ -24,7 +24,7 @@ This component implements the openHAB extension provider interfaces, and can be 
 #### Script: [`300_JythonConsoleCommand.py`](/Script%20Examples/300_JythonConsoleCommand.py)
 <ul>
 
-This script defines an command extension to the OSGI console. 
+This script defines a command extension to the OSGI console. 
 The example command prints some Jython platform details to the console output.
 </ul>
 
