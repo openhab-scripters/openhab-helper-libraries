@@ -9,7 +9,7 @@ In decreasing order of complexity, rules can be created using the [raw Automatio
 The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
 
 Take care in your choice of object names used in your rules, so as not to use one that is already included in the [default scope](https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required). 
-For example, the `items` object is from the default scope, and allows access to [each Item's state](../But-How-Do-I...-%3F.md#get-the-state-of-an-item). 
+For example, the `items` object is from the default scope, and allows access to [each Item's state](/But-How-Do-I...-%3F.md#get-the-state-of-an-item). 
 Another important object from the default scope is the `events` object, which can be used to [send a command](#send-a-command-to-an-item) or [change the state](#send-an-update-to-an-item) of an Item.
 
 ### Raw ESH Automation API
