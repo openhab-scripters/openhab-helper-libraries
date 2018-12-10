@@ -99,13 +99,15 @@ define trigger names, and to know configuration dictionary requirements.
 <ul>
 
 To make rule creation _even simpler_, `core.rules` defines a decorator that can be 
-used to create a rule, which can be fed triggers from a decorator in `core.triggers`. These triggers can be defined similarly to how it is done in the Rules DSL. 
+used to create a rule, which can be fed triggers from a decorator in `core.triggers`. 
+These triggers can be defined similarly to how it is done in the Rules DSL. 
+The `tags` parameter is optional. The rule's UID will also be supplied as an attribute of the rule's function (`testFunction.UID`).
 
 ```python
 from core.rules import rule
 from core.triggers import when
 
-@rule("This is the name of a test rule")
+@rule("This is the name of a test rule", tags=["Tag 1", "Tag 2"])
 @when("Item Test_Switch_1 received command OFF")
 @when("Item Test_Switch_2 received update ON")
 @when("Item gMotion_Sensors changed to ON")
