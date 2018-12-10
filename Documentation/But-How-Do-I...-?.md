@@ -72,12 +72,12 @@ event.oldItemState
 event.itemCommand
 ```
 
-#### Send a command to an item:
+#### Send a command to an item ([more options](https://www.openhab.org/docs/configuration/jsr223.html#events-operations)):
 ```python
 events.sendCommand("Test_SwitchItem", "ON")
 ```
 
-#### Send an update to an item:
+#### Send an update to an item ([more options](https://www.openhab.org/docs/configuration/jsr223.html#events-operations)):
 ```python
 events.postUpdate("Test_SwitchItem", "ON")
 ```
@@ -230,7 +230,7 @@ lowBatteryMessage = "Warning! Low battery alert:\n\n{}".format(",\n".join(map(la
 #### Read/Add/Remove Item metadata:
 https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
 
-#### View all names in namespace:
+#### View all names in an obejct's namespace:
 ```python
 from org.slf4j import Logger, LoggerFactory
 log = LoggerFactory.getLogger("org.eclipse.smarthome.model.script.Rules")
