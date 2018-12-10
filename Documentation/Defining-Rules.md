@@ -5,7 +5,7 @@
 One of the primary use cases for JSR223 scripting in OH is to define rules for the [Eclipse SmartHome (ESH) rule engine](http://www.eclipse.org/smarthome/documentation/features/rules.html) using the [Java/Automation API](http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api).
 The ESH rule engine structures rules as _Modules_ (Triggers, Conditions, Actions). 
 Jython rules can use rule Modules that are already present in ESH, and can define new Modules that can be used outside of JSR223 scripting. Take care not to confuse ESH Modules with Jython modules. 
-In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-jython-extensions), and [rule and trigger decorators](#rule-and-trigger-decorators). 
+In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-jython-extensions), and the [rule and trigger decorators](#rule-and-trigger-decorators). 
 The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
 
 Take care in your choice of object names used in your rules, so as not to use one that is already included in the [default scope](https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required). 
