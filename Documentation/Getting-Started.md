@@ -54,7 +54,6 @@ or to access the OSGI framework (using or creating services, for example).
 <ul>
 
 It's important to understand the distinction between Jython _scripts_ and Jython _modules_. 
-In this repo, scripts are in are found in `/automation/jsr223/` directories and modules are in the `/automation/lib/python/` directories.
 
 A Jython script is loaded by the `javax.script` script engine manager (JSR223) integrated into ESH (openHAB 2). 
 Each time the file is loaded, OH2 creates a execution context for that script.
@@ -69,16 +68,6 @@ This means the module is normally loaded only once, and is not reloaded when the
 ### File Locations
 <ul>
 
-Scripts should be located into the `/automation/jsr223/` subdirectory hierarchy of your OH2 configuration directory.
-In a Linux package repository installation, like openHABian, this would be `/etc/openhab2/automation/jsr223/`. For a Linux manual installation, this would default to `/opt/openhab2/conf/automation/jsr223/`.
-
-Some scripts should be loaded before others because of dependencies between the scripts. 
-Scripts that implement OH2 components (like trigger types, item providers, etc.) are one example.
-It is recommended to put these scripts into a subdirectory called `000_components`. 
-The name prefix will cause the scripts in the directory to be loaded first.
-It is also recommended to name the component files with a `000_` prefix, 
-because there are currently bugs in the file loading behavior of OH2 (ref? likely resolved).
-
 Example Directory Structure:
 
 ```text
@@ -87,8 +76,8 @@ Example Directory Structure:
         |_ automation
             |_ jsr223
                 |_ community
-                    |_ somethingFromTheCommunity
-                        |_ someCommunityScript.py
+                    |_ something_from_the_community
+                        |_ some_community_script.py
                 |_ core
                     |_ components
                     |_ 000_startup_delay.py
@@ -101,12 +90,19 @@ Example Directory Structure:
                     |_ personal
                     |_ configuration.py
 ```
+ESH requires scripts to be located in the `/automation/jsr223/` subdirectory hierarchy of your OH2 configuration directory. 
+In a Linux package repository installation, like openHABian, this would be `/etc/openhab2/automation/jsr223/`. 
+For a Linux manual installation, this would default to `/opt/openhab2/conf/automation/jsr223/`. 
 
-Jython modules can be placed anywhere, but the Python path must be configured to find them.
+The modules are located in the `/automation/lib/python/` directories. 
+They can be moved anywhere, but the Python path must be configured to find them.
 There are several ways to do this. 
 You can add a `-Dpython.path=mypath1:mypath2` to the JVM command line by modifying the OH2 startup scripts.
 You can also modify the `sys.path` list in a Jython script that loads early (like a component script).
-
 Another option is to checkout the GitHub repo in some location and use a directory soft link (Linux) 
 from `/etc/openhab2/automation/lib/python/core` to the GitHub workspace directory `/Core/automation/jsr223/lib/python/core`.
+
+Some scripts should be loaded before others because of dependencies between the scripts. 
+Scripts that implement OH2 components (like trigger types, item providers, etc.) are one example.
+To prioritze the loading of scripts, a numeric prefix can be added to the name of the script. 
 </ul>
