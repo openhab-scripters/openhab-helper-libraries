@@ -31,7 +31,8 @@ This script will make a log entry every 10s, and should be deleted after install
 - Start openHAB and watch the logs for errors and the entries from the `hello_world.py` script.
 - Review the general [openHAB JSR223 scripting documentation](https://www.openhab.org/docs/configuration/jsr223.html).
 - Review the rest of this documentation.
-- Create rules using [rule and trigger decorators](Defining-Rules.md#rule-and-trigger-decorators).
+- Create rules using [rule and trigger decorators](Defining-Rules.md#rule-and-trigger-decorators). 
+There is documentation on how to create rules directly with the ESH API, but the decorators are by far the simplest.
 - Ask questions on the [openHAB forum](https://community.openhab.org/tags/jsr223) and tag posts with `jsr223`. Report issues [here](https://github.com/OH-Jython-Scripters/openhab2-jython/issues), but please don't hesitate to update the documentation and code. 
 Just like OH, this repository is community driven!
 
