@@ -43,7 +43,6 @@ or (using the `core` package)...
 </ul>
 
 ```python
-import core
 items.My_Item
 ```
 
@@ -98,7 +97,7 @@ start = DateTime.now()
 
 #### [Persistence extensions](https://www.openhab.org/docs/configuration/persistence.html#persistence-extensions-in-scripts-and-rules) (others not listed are similar):
 ```python
-from org.eclipse.smarthome.model.persistence.extensions import PersistenceExtensions
+from core.actions import PersistenceExtensions
 PersistenceExtensions.previousState(ir.getItem("Weather_SolarRadiation"), True).state
 
 from org.joda.time import DateTime
@@ -106,24 +105,36 @@ PersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTim
 PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
 ```
 
-#### Use [Core & Cloud Actions](https://www.openhab.org/docs/configuration/actions.html#core-actions):
+#### Use other [Core & Cloud Actions](https://www.openhab.org/docs/configuration/actions.html#core-actions):
 ```python
 from org.eclipse.smarthome.model.script.actions.Exec import executeCommandLine
 executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
 
-from org.eclipse.smarthome.model.script.actions.Audio import playSound
-playSound("doorbell.mp3")# using the default audiosink
-playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
-
-from org.eclipse.smarthome.model.script.actions.Audio import playStream
-playStream("http://myAudioServer/myAudioFile.mp3")# using the default audiosink
-playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")# specifying an audiosink
-
 from org.eclipse.smarthome.model.script.actions.HTTP import sendHttpPutRequest
 sendHttpPutRequest("someURL.com, "application/json", '{"this": "that"}')
 
-from org.openhab.io.openhabcloud import NotificationAction
+from core.actions import Audio
+Audio.playSound("doorbell.mp3")# using the default audiosink
+Audi.playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
+Audio.playStream("http://myAudioServer/myAudioFile.mp3")# using the default audiosink
+Audio.playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")# specifying an audiosink
+
+from core.actions import NotificationAction
 NotificationAction.sendNotification("someone@someDomain.com","This is the message")
+NotificationAction.sendBroadcastNotification("This is the message")
+NotificationAction.sendLogNotification("This is the message")
+
+from core.actions import Mail
+Mail.sendMail("someone@someDomain.com","This is the message")
+
+from core.actions import Transformation
+Transformation.transform("JSONPATH", "$.test", test)
+
+from core.actions import Voice
+Voice.say("This will be said")
+
+from core.actions import ThingAction
+ThingAction.getThingStatusInfo("zwave:device:c5155aa4:node5")
 ```
 
 #### Use a timer:
@@ -146,10 +157,16 @@ Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the mess
 ```python
 from org.slf4j import Logger, LoggerFactory
 log = LoggerFactory.getLogger("org.eclipse.smarthome.model.script.Rules")
-log.debug("JSR223: Test debug log")
-log.info("JSR223: Test info log")
-log.warn("JSR223: Test warn log")
-log.error("JSR223: Test error log")
+log.debug("Test debug log")
+log.info("Test info log")
+log.warn("Test warn log")
+log.error("Test error log")
+
+or using the log module, which logs to org.eclipse.smarthome.automation.jsr223.jython...
+
+from core.log import logging, LOG_PREFIX
+log = logging.getLogger(LOG_PREFIX + ".TEST")
+log.debug("This is a test log")
 ```
 
 #### Convert a value to a state for comparison:
