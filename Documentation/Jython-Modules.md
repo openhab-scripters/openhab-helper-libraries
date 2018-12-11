@@ -124,32 +124,38 @@ def exampleDecoratedCronRule(event):
 This module discovers action services registered from OH1 or OH2 bundles or add-ons.
 The specific actions that are available will depend on which add-ons are installed.
 Each action class is exposed as an attribute of the `core.actions` Jython module.
-The action methods are static methods on those classes 
-(don't try to create instances of the action classes).
+The action methods are static methods on those classes (don't try to create instances of the action classes).
 
 ```python
 from core.actions import Astro
-from core.log import logging
+from core.log import logging, LOG_PREFIX
 from java.util import Date
 
-log = logging.getLogger("org.eclipse.smarthome.automation")
+log = logging.getLogger(LOG_PREFIX + ".astro_test")
 
 # Use the Astro action class to get the sunset start time.
-log.info("Sunrise: %s", Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time)
+log.info("Sunrise: {}".format(Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time))
 ```
 </ul>
 
 #### Module: [`core.log`](../Core/automation/lib/python/core/log.py)
 <ul>
 
-This module bridges the Python standard `logging` module with ESH logging. Example usage:
+This module bridges the Python standard `logging` module with ESH logging. 
+The `configuration` module also provides a `LOG_PREFIX` variable, which is used throughout the core modules and scripts including the `log` module.
+LOG_PREFIX can be modified based on personal preference, which will change the default logger. 
+Example usage:
 
 ```python
-from core.log import logging
+from core.log import logging, LOG_PREFIX
+log = logging.getLogger(LOG_PREFIX + ".myscript")
 
 logging.info("Logging example from root logger")
-logging.getLogger("myscript").info("Logging example from root logger")  
+logging.getLogger("myscript").info("Logging example from logger")
+log.info("Logging example from logger using LOG_PREFIX")
+log.info("Logging example from logger using text appended to LOG_PREFIX")
 ```
+
 </ul>
 
 #### Module: [`core.items`](../Core/automation/lib/python/core/items.py)
