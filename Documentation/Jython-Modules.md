@@ -85,22 +85,21 @@ from core.triggers import StartupTrigger
 @rule("My example rule")
 class ExampleRule(object):
     """This doc comment will become the ESH Rule documentation value for Paper UI"""
+    #def __init__(self):
+    #    self.triggers = [ StartupTrigger().trigger ]
+    
     def getEventTriggers(self):
         return [ StartupTrigger().trigger ]
 
     def execute(self, module, inputs):
         self.log.info("rule executed")
 ```
-The decorator adds the SimpleRule base class and will call either `getEventTriggers` or `getEventTrigger` (the OH1 function) 
-to get the triggers, if either function exists. 
-Otherwise you can define a constructor and set `self.triggers` to your list of triggers.
+The `rule` decorator adds the SimpleRule base class and will call `getEventTriggers` to get the triggers, or you can define a constructor and set `self.triggers` to your list of triggers (commented out in the example).
 
-The `addRule` function is similar to the `automationManager.addRule` function except 
-that it can be safely used in Jython modules (versus scripts).
-Since the `automationManager` is different for every script scope 
-the `core.rules.addRule` function looks up the automation manager for each call.
+The `addRule` function is similar to the `automationManager.addRule` function except that it can be safely used in Jython modules (versus scripts).
+Since the `automationManager` is different for every script scope, the `core.rules.addRule` function looks up the automation manager for each call.
 
-The decorator also adds a log object based on the name of the rule (`self.log`, can be overridden in a constructor) and 
+The decorator also adds a log object based on the name of the rule (`self.log` can be overridden in a constructor) and 
 wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information if an exception 
 is thrown.
 
