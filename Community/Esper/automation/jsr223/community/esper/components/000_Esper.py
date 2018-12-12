@@ -3,15 +3,15 @@ import json
 import community.esper.java
 
 import core
-from core.log import logging
 from core.osgi.events import OsgiEventAdmin
+from core.log import logging, LOG_PREFIX
+
+log = logging.getLogger(LOG_PREFIX + ".esper")
 
 from java.lang import String, Double, Object
 from java.util import Date
 
 from com.espertech.esper.client import EPServiceProviderManager, Configuration
-
-log = logging.getLogger("com.eclipse.smarthome.automation.Esper")
 
 item_state_schema = {
     "type": String,

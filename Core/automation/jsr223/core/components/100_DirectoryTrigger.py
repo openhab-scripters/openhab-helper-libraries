@@ -1,16 +1,19 @@
 from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
 
+from org.eclipse.smarthome.automation import Visibility
 from org.eclipse.smarthome.automation.handler import TriggerHandler
-from org.eclipse.smarthome.automation.type import TriggerType
-from org.eclipse.smarthome.config.core import Configuration
 from org.eclipse.smarthome.core.service import AbstractWatchService
 
 import core
-from core.log import log_traceback
-from core.jsr223 import scope
-scope.scriptExtension.importPreset("RuleFactories")
+from core.log import logging, log_traceback, LOG_PREFIX
+
+log = logging.getLogger(LOG_PREFIX + ".DirectoryEventTrigger")
+
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleFactories")
 
 class JythonDirectoryWatcher(AbstractWatchService):
+
     def __init__(self, path, event_kinds=[ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY], watch_subdirectories=False):
         AbstractWatchService.__init__(self, path)
         self.event_kinds = event_kinds
@@ -27,14 +30,13 @@ class JythonDirectoryWatcher(AbstractWatchService):
     def processWatchEvent(self, event, kind, path):
         if self.callback is not None:
             self.callback(event, kind, path)
-    
 
-class _DirectoryEventTriggerHandlerFactory(scope.TriggerHandlerFactory):
+class _DirectoryEventTriggerHandlerFactory(TriggerHandlerFactory):
         
     class Handler(TriggerHandler):
         @log_traceback
         def __init__(self, trigger):
-            scope.TriggerHandler.__init__(self)
+            TriggerHandler.__init__(self)
             self.rule_engine_callback = None
             self.trigger = trigger
             config = trigger.configuration
@@ -62,20 +64,25 @@ class _DirectoryEventTriggerHandlerFactory(scope.TriggerHandlerFactory):
     def get(self, trigger):
         return _DirectoryEventTriggerHandlerFactory.Handler(trigger)
     
-
 core.DIRECTORY_TRIGGER_MODULE_ID = "jsr223.DirectoryTrigger"
 
 def scriptLoaded(*args):
-    scope.automationManager.addTriggerHandler(
+    automationManager.addTriggerHandler(
         core.DIRECTORY_TRIGGER_MODULE_ID, 
         _DirectoryEventTriggerHandlerFactory())
+    log.info("TriggerHandler added".format(core.DIRECTORY_TRIGGER_MODULE_ID))
 
-    scope.automationManager.addTriggerType(TriggerType(
-        core.DIRECTORY_TRIGGER_MODULE_ID, [],
+    automationManager.addTriggerType(TriggerType(
+        core.DIRECTORY_TRIGGER_MODULE_ID,
+        [],
         "a directory change event is detected.", 
         "Triggers when a directory change event is detected.",
-        set(), Visibility.VISIBLE, []))
-    
+        set(),
+        Visibility.VISIBLE,
+        []))
+    log.info("TriggerType added".format(core.DIRECTORY_TRIGGER_MODULE_ID))
+
 def scriptUnloaded():
-    scope.automationManager.removeHandler(core.DIRECTORY_TRIGGER_MODULE_ID)
-    scope.automationManager.removeModuleType(core.DIRECTORY_TRIGGER_MODULE_ID)
+    automationManager.removeHandler(core.DIRECTORY_TRIGGER_MODULE_ID)
+    automationManager.removeModuleType(core.DIRECTORY_TRIGGER_MODULE_ID)
+    log.info("TriggerType and TriggerHandler removed".format(core.DIRECTORY_TRIGGER_MODULE_ID))

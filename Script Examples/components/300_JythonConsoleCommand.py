@@ -1,8 +1,10 @@
 import platform
 
-from core.log import logging
 from core.osgi import register_service, unregister_service
 from org.eclipse.smarthome.io.console.extensions import AbstractConsoleCommandExtension
+from core.log import logging, LOG_PREFIX
+
+log = logging.getLogger(LOG_PREFIX + ".jythonConsoleCommand")
 
 class JythonCommand(AbstractConsoleCommandExtension):
     def __init__(self):
@@ -26,7 +28,7 @@ def scriptLoaded(id):
     service = JythonCommand()
     interfaces = ["org.eclipse.smarthome.io.console.extensions.ConsoleCommandExtension"]
     registration = register_service(service, interfaces)
-    logging.info("Registered command extension")
+    log.info("Registered command extension")
 
 def scriptUnloaded():
     global service

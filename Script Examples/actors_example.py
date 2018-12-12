@@ -7,8 +7,8 @@ import threading
 from core.osgi.events import OsgiEventAdmin, log_event, event_dict
 from org.osgi.framework import Filter
 
-from core.log import logging
-openhab_log = logging.getLogger("ActorExample")
+from core.log import logging, LOG_PREFIX
+openhab_log = logging.getLogger(LOG_PREFIX + ".ActorExample")
 
 from org.python.modules.sre import PatternObject
 
@@ -42,13 +42,13 @@ class OpenhabDispatcher(pykka.ThreadingActor):
                 subs.remove(subscriber)
         
     def on_receive(self, message):
-        log('on_receive {}', message)
+        log('on_receive {}'.format(message))
         if message.get('message_type') == 'osgi_event':
             for filter in self._subscriptions:
-                log('  filter {}', filter)
+                log('  filter {}'.format(filter))
                 if filter.matchCase(message):
                     for s in self._subscriptions[filter]:
-                        log('  dispatch to {}', s)
+                        log('  dispatch to {}'.format(s))
                         s.tell(message)
 
 dispatcher_ref = OpenhabDispatcher.start()
@@ -61,12 +61,12 @@ class DictFilter(Filter):
     def matchCase(self, d):
         for key, value in self._properties.iteritems():
             other_value = d.get(key)
-            log('     match {} {} {} {}', key, value, other_value, bool(value == other_value))
+            log('     match {} {} {} {}'.format(key, value, other_value, bool(value == other_value)))
             if isinstance(value, PatternObject):
                 if not value.match(other_value):
                     return False
             elif value != other_value:
-                return False;
+                return False
         return True
        
     def __repr__(self):
@@ -99,7 +99,7 @@ class EchoActor(pykka.ThreadingActor):
         OpenhabDispatcher.INSTANCE.subscribe(self.actor_ref, filter)
         
     def on_receive(self, message):
-        log("EchoActor {} {}", id(self), message)
+        log("EchoActor {} {}".foirmat(id(self), message))
         payload = json.loads(message.get('payload'))
         value = payload.get('value')
         events.postUpdate(self.output_item_name, value)
@@ -126,5 +126,3 @@ def scriptLoaded(*args):
  
 def scriptUnloaded():
     OsgiEventAdmin.remove_listener(handle_event)
-
-

@@ -7,6 +7,43 @@ Some of the examples are intended to provide services to user scripts, so they h
 When using the instructions in the [Quick Start Guide](Getting-Started.md#quick-start-guide), these modules should be located in `/automation/jsr223/personal/`.
 These scripts will import certain modules in the `core` package, so they will also need to be installed.
 
+#### Script: [`hello_world.py`](../Script Examples/hello_world.py)
+<ul>
+
+This script has several examples for how to define Jython rules, just uncomment the ones you'd like to test. By default, it uses a decorated cron rule that will generate logs every 10s. This can be used to test your initial setup.
+</ul>
+
+#### Script: [`channel_event_example.py`](../Script Examples/channel_event_example.py)
+<ul>
+
+This script has several examples for rules triggered by Channel events.
+</ul>
+
+#### Script: [`dirwatcher_example.py`](../Script Examples/dirwatcher_example.py)
+<ul>
+
+Example of a rule that watches for files created in a specified directory.
+</ul>
+
+#### Script: [`rule_registry.py`](../Script Examples/rule_registry.py)
+<ul>
+
+This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags,
+enable and disable rule instances dynamically, and manually fire rules with specified inputs.
+</ul>
+
+#### Script: [`testing_example.py`](../Script Examples/testing_example.py)
+<ul>
+
+Examples of unit testing.
+</ul>
+
+#### Script: [`timer_example.py`](../Script Examples/timer_example.py)
+<ul>
+
+Example of a rule that shows how to create and cancel a global timer.
+</ul>
+
 #### Script: [`300_EchoThing.py`](../Script Examples/300_EchoThing.py)
 <ul>
 
@@ -44,47 +81,4 @@ Shows an example of using the `core.actions` module to access an Action.
 <ul>
 
 Shows an example of using the Pykka actors library. The Pykka library must be in the Java classpath.
-</ul>
-
-#### Script: [`channel_event_example.py`](../Script Examples/channel_event_example.py)
-<ul>
-
-Shows an example of a ChannelEventTrigger extension rule.
-</ul>
-
-#### Script: [`dirwatcher_example.py`](../Script Examples/dirwatcher_example.py)
-<ul>
-
-Example of a rule that watches for files created in a specified directory.
-</ul>
-
-#### Script: [`hello_world.py`](../Script Examples/hello_world.py)
-<ul>
-
-This script has several examples for how to define Jython rules, just uncomment the ones you'd like to test. By default, it uses a decorator cron rule that will generate logs every 10s. This can be used to test your initial setup.
-</ul>
-
-#### Script: [`rule_decorators.py`](../Script Examples/rule_decorators.py)
-<ul>
-
-Provides examples of using the trigger-related rule decorators on functions as an alternative to explicit rule and trigger classes.
-</ul>
-
-#### Script: [`rule_registry.py`](../Script Examples/rule_registry.py)
-<ul>
-
-This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags,
-enable and disable rule instances dynamically, and manually fire rules with specified inputs.
-</ul>
-
-#### Script: [`testing_example.py`](../Script Examples/testing_example.py)
-<ul>
-
-Examples of unit testing.
-</ul>
-
-#### Script: [`timer_example.py`](../Script Examples/timer_example.py)
-<ul>
-
-Example of a rule that shows how to create and cancel a global timer.
 </ul>

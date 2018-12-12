@@ -1,8 +1,8 @@
 import collections
 
 import core
-from core.log import logging
-log = logging.getLogger("org.eclipse.smarthome.automation.JythonExtensionProvider")
+from core.log import logging, LOG_PREFIX
+log = logging.getLogger(LOG_PREFIX + ".JythonExtensionProvider")
 
 def scriptLoaded(*args):    
     try:

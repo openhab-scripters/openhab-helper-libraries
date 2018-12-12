@@ -30,4 +30,3 @@ automationManager.addActionType(ActionType(
     "write a log record",
     "Write a record to the log file.",
     set(),  Visibility.VISIBLE, [], []))
-

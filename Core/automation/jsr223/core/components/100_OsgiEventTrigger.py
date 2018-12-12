@@ -1,20 +1,18 @@
 import java.util
 import traceback
 import uuid
-import traceback
 
 from org.eclipse.smarthome.automation import Visibility
-from org.eclipse.smarthome.config.core import Configuration
 from org.eclipse.smarthome.automation.handler import TriggerHandler
 
 import core
+from core.osgi.events import OsgiEventAdmin, event_dict, osgi_triggers
+from core.log import logging, LOG_PREFIX
+
+log = logging.getLogger(LOG_PREFIX + ".OsgiEventTrigger")
+
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")
-
-from core.log import logging
-log = logging.getLogger("jython.core.triggers.OsgiEventTrigger")
-
-from core.osgi.events import OsgiEventAdmin, event_dict, osgi_triggers
 
 class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
     def __init__(self):
@@ -28,8 +26,7 @@ class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
                 self.trigger = osgi_triggers.get(runtime_trigger.id, runtime_trigger)
                 self.filter = getattr(self.trigger, "event_filter", None)
                 self.transformer = getattr(self.trigger, "event_transformer", None)
-                log.debug("creating trigger handler for %s(%s), filter=%s, transformer=%s", 
-                          type(self.trigger).__name__, self.trigger.id, self.filter, self.transformer)
+                log.debug("Creating trigger handler for {} ({}), filter={}, transformer={}".format(type(self.trigger).__name__, self.trigger.id, self.filter, self.transformer))
             except:
                 log.error(traceback.format_exc())
             
@@ -37,7 +34,7 @@ class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
             self.rule_engine_callback = rule_engine_callback
             
         def dispose(self):
-            log.debug("disposing %s (module %s)", self, self.trigger.id)
+            log.debug("Disposing {} (module {})".format(self, self.trigger.id))
             self.factory.handlers.remove(self)             
             OsgiEventAdmin.remove_listener(self.on_event)
             if self.trigger.id in osgi_triggers:
@@ -55,7 +52,7 @@ class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
                  log.error(traceback.format_exc())
             
     def get(self, trigger):
-        handler = OsgiEventTriggerHandlerFactory.Handler(self, trigger)
+        handler = OsgiEventTriggerHandlerFactory.Handler(trigger)
         self.handlers.append(handler)
         OsgiEventAdmin.add_listener(handler.on_event)       
         return handler
@@ -63,14 +60,20 @@ class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
 core.OSGI_TRIGGER_ID = "jsr223.OsgiEventTrigger"
 
 def scriptLoaded(*args):
-    automationManager.addTriggerHandler(core.OSGI_TRIGGER_ID, OsgiEventTriggerHandlerFactory())    
-    automationManager.addTriggerType(TriggerType(core.OSGI_TRIGGER_ID, [],
-        "an OSGI event is published", 
+    automationManager.addTriggerHandler(core.OSGI_TRIGGER_ID, OsgiEventTriggerHandlerFactory())  
+    log.info("TriggerHandler added".format(core.OSGI_TRIGGER_ID))
+  
+    automationManager.addTriggerType(TriggerType(
+        core.OSGI_TRIGGER_ID,
+        [],
+        "an OSGI event is published",
         "Triggers when an OSGI event is published",
-        set(), Visibility.VISIBLE, []))
-    log.info("%s trigger type and handler defined", core.OSGI_TRIGGER_ID)
+        set(),
+        Visibility.VISIBLE,
+        []))
+    log.info("TriggerType added".format(core.OSGI_TRIGGER_ID))
     
 def scriptUnloaded():
     automationManager.removeHandler(core.OSGI_TRIGGER_ID)
     automationManager.removeModuleType(core.OSGI_TRIGGER_ID)
-    log.info("trigger handler removed")
+    log.info("TriggerType and TriggerHandler removed".format(core.OSGI_TRIGGER_ID))

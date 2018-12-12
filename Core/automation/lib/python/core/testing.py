@@ -3,12 +3,10 @@ from __future__ import absolute_import
 import unittest
 from core.log import logging
 from core.triggers import ItemStateUpdateTrigger
+from core.jsr223.scope import SimpleRule, scriptExtension, events, OnOffType
 
-from core.jsr223.scope import scriptExtension, events, OnOffType
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleSimple")
-
-from core.jsr223.scope import SimpleRule
 
 _result_template = """{{
   "run": {run},
@@ -31,7 +29,7 @@ def _run_test(test_case):
     return (not (result.errors or result.failures), json_result)      
 
 def run_test(test_case, logger=logging.root):
-    logger.info("Running tests: %s", test_case.__name__)
+    logger.info("Running tests: [{}]".format(test_case.__name__))
     status, result = _run_test(test_case)
     if status:
         logger.info(result)

@@ -7,29 +7,19 @@ from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, EN
 
 from org.eclipse.smarthome.automation.core.util import TriggerBuilder
 from org.eclipse.smarthome.automation import Trigger
-from org.eclipse.smarthome.automation.handler import TriggerHandler
-from org.eclipse.smarthome.automation.type import TriggerType
 from org.eclipse.smarthome.config.core import Configuration
-from org.eclipse.smarthome.core.thing import ChannelUID
-from org.eclipse.smarthome.core.thing import ThingUID
+from org.eclipse.smarthome.core.thing import ChannelUID, ThingUID, ThingStatus
 from org.eclipse.smarthome.core.thing.type import ChannelKind
 from org.eclipse.smarthome.core.types import TypeParser
-from org.eclipse.smarthome.core.thing import ThingStatus
 
 import core
 from core.jsr223 import scope
 from core.osgi.events import OsgiEventTrigger
 from core.log import logging, LOG_PREFIX
 
-from org.slf4j import Logger, LoggerFactory
-
 from org.quartz.CronExpression import isValidExpression
 
-scope.scriptExtension.importPreset("RuleSimple")
-scope.scriptExtension.importPreset("RuleSupport")
-scope.scriptExtension.importPreset("RuleFactories")
-
-log = LoggerFactory.getLogger("org.eclipse.smarthome.automation.core.internal.RuleEngineImpl")
+log = logging.getLogger(LOG_PREFIX + ".triggers")
 
 class ItemStateUpdateTrigger(Trigger):
     def __init__(self, itemName, state=None, triggerName=None):
@@ -186,7 +176,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                     function.triggers.append(ItemCommandTrigger(member.name, command=new_state, triggerName=trigger_name).trigger)
                 else:
                     function.triggers.append(ItemStateChangeTrigger(member.name, previousState=old_state, state=new_state, triggerName=trigger_name).trigger)
-                log.debug("@when: Created item_trigger: [{}]".format(trigger_name))
+                log.debug("when: Created item_trigger: [{}]".format(trigger_name))
             return function
 
         def cron_trigger(function):
@@ -194,7 +184,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                 function.triggers = []
             trigger_name = "Cron-{}-{}".format(function.__name__, uuid.uuid1().hex)
             function.triggers.append(CronTrigger(trigger_type, triggerName=trigger_name).trigger)
-            log.debug("@when: Created cron_trigger: [{}]".format(trigger_name))
+            log.debug("when: Created cron_trigger: [{}]".format(trigger_name))
             return function
 
         def system_trigger(function):
@@ -204,14 +194,14 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                 function.triggers.append(StartupTrigger(triggerName=trigger_name).trigger)
             else:
                 function.triggers.append(ShutdownTrigger(triggerName=trigger_name).trigger)
-            log.debug("@when: Created system_trigger: [{}]".format(trigger_name))
+            log.debug("when: Created system_trigger: [{}]".format(trigger_name))
             return function
 
         def channel_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
             function.triggers.append(ChannelEventTrigger(trigger_target, event=new_state, triggerName=trigger_name).trigger)
-            log.debug("@when: Created channel_trigger: [{}]".format(trigger_name))
+            log.debug("when: Created channel_trigger: [{}]".format(trigger_name))
             return function
 
         def thing_trigger(function):
@@ -219,7 +209,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                 function.triggers = []
             event_types = "ThingStatusInfoChangedEvent" if (trigger_type == "changed") else "ThingStatusInfoEvent"
             function.triggers.append(ThingEventTrigger(trigger_target, event_types, triggerName=trigger_name).trigger)
-            log.debug("@when: Created thing_trigger: [{}]".format(trigger_name))
+            log.debug("when: Created thing_trigger: [{}]".format(trigger_name))
             return function
         
         trigger_target = None
@@ -251,35 +241,35 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                                 inputList = inputList[2:]
                                 trigger_type = "received update"
                             else:
-                                raise ValueError("@when: \"{}\" could not be parsed. \"received update\" is invalid for target_type \"{}\"".format(target, target_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"received update\" is invalid for target_type \"{}\"".format(target, target_type))
                         elif " ".join(inputList[0:2]) == "received command":
                             if target_type in ["Item", "Member of", "Descendent of"]:
                                 inputList = inputList[2:]
                                 trigger_type = "received command"
                             else:
-                                raise ValueError("@when: \"{}\" could not be parsed. \"received command\" is invalid for target_type \"{}\"".format(target, target_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"received command\" is invalid for target_type \"{}\"".format(target, target_type))
                         elif inputList[0] == "changed":
                             if target_type in ["Item", "Thing", "Member of", "Descendent of"]:
                                 inputList.pop(0)
                                 trigger_type = "changed"
                             else:
-                                raise ValueError("@when: \"{}\" could not be parsed. \"changed\" is invalid for target_type \"{}\"".format(target, target_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"changed\" is invalid for target_type \"{}\"".format(target, target_type))
                         elif inputList[0] == "triggered":
                             if target_type == "Channel":
                                 trigger_type = inputList.pop(0)
                             else:
-                                raise ValueError("@when: \"{}\" could not be parsed. \"triggered\" is invalid for target_type \"{}\"".format(target, target_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"triggered\" is invalid for target_type \"{}\"".format(target, target_type))
                         elif trigger_target == "cron":
                             if target_type == "Time":
                                 if isValidExpression(" ".join(inputList)):
                                     trigger_type = " ".join(inputList)
                                     del inputList[:]
                                 else:
-                                    raise ValueError("@when: \"{}\" could not be parsed. \"{}\" is not a valid cron expression. See http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/tutorial-lesson-06".format(target, " ".join(inputList)))
+                                    raise ValueError("when: \"{}\" could not be parsed. \"{}\" is not a valid cron expression. See http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/tutorial-lesson-06".format(target, " ".join(inputList)))
                             else:
-                                raise ValueError("@when: \"{}\" could not be parsed. \"cron\" is invalid for target_type \"{}\"".format(target, target_type))
+                                raise ValueError("when: \"{}\" could not be parsed. \"cron\" is invalid for target_type \"{}\"".format(target, target_type))
                         else:
-                            raise ValueError("@when: \"{}\" could not be parsed because the trigger_type {}".format(target, "is missing" if inputList[0] is None else "\"{}\" is invalid".format(inputList[0])))
+                            raise ValueError("when: \"{}\" could not be parsed because the trigger_type {}".format(target, "is missing" if inputList[0] is None else "\"{}\" is invalid".format(inputList[0])))
                     else:
                         if old_state is None and trigger_type == "changed" and inputList[0] == "from":
                             inputList.pop(0)
@@ -292,7 +282,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                         elif new_state is None and target_type == "Channel":
                             new_state = inputList.pop(0)
                         elif len(inputList) > 0:# there are no more possible combinations, but there is more data
-                            raise ValueError("@when: \"{}\" could not be parsed. \"{}\" is invalid for \"{} {} {}\"".format(target, inputList, target_type, trigger_target, trigger_type))
+                            raise ValueError("when: \"{}\" could not be parsed. \"{}\" is invalid for \"{} {} {}\"".format(target, inputList, target_type, trigger_target, trigger_type))
 
             else:# a simple Item target was used, so add default target_type and trigger_type (Item XXXXX changed)
                 if target_type is None:
@@ -304,35 +294,35 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
 
         # validate the inputs, and if anything isn't populated correctly throw an exception
         if target_type is None or target_type not in ["Item", "Member of", "Descendent of", "Thing", "Channel", "System", "Time"]:
-            raise ValueError("@when: \"{}\" could not be parsed. target_type is missing or invalid. Valid target_type values are: Item, Member of, Descendent of, Thing, Channel, System, and Time.".format(target))
+            raise ValueError("when: \"{}\" could not be parsed. target_type is missing or invalid. Valid target_type values are: Item, Member of, Descendent of, Thing, Channel, System, and Time.".format(target))
         elif target_type in ["Item", "Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target) is None:# throws ItemNotFoundException if item does not exist
-            raise ValueError("@when: \"{}\" could not be parsed because Item \"{}\" is not in the itemRegistry".format(target, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because Item \"{}\" is not in the itemRegistry".format(target, trigger_target))
         elif target_type in ["Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target).type != "Group":
-            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" was specified, but \"{}\" is not a group".format(target, target_type, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because \"{}\" was specified, but \"{}\" is not a group".format(target, target_type, trigger_target))
         elif target_type == "Item" and old_state is not None and trigger_type == "changed" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, old_state):
-            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" is not a valid state for \"{}\"".format(target, old_state, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because \"{}\" is not a valid state for \"{}\"".format(target, old_state, trigger_target))
         elif target_type == "Item" and new_state is not None and (trigger_type == "changed" or trigger_type == "received update") and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, new_state):
-            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" is not a valid state for \"{}\"".format(target, new_state, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because \"{}\" is not a valid state for \"{}\"".format(target, new_state, trigger_target))
         elif target_type == "Item" and new_state is not None and trigger_type == "received command" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedCommandTypes, new_state):
-            raise ValueError("@when: \"{}\" could not be parsed because \"{}\" is not a valid command for \"{}\"".format(target, new_state, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because \"{}\" is not a valid command for \"{}\"".format(target, new_state, trigger_target))
         elif target_type == "Channel" and scope.things.getChannel(ChannelUID(trigger_target)) is None:# returns null if Channel does not exist
-            raise ValueError("@when: \"{}\" could not be parsed because Channel \"{}\" does not exist".format(target, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because Channel \"{}\" does not exist".format(target, trigger_target))
         elif target_type == "Channel" and scope.things.getChannel(ChannelUID(trigger_target)).kind != ChannelKind.TRIGGER:
-            raise ValueError("@when: \"{}\" could not be parsed because Channel \"{}\" is not a trigger".format(target, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because Channel \"{}\" is not a trigger".format(target, trigger_target))
         elif target_type == "Thing" and scope.things.get(ThingUID(trigger_target)) is None:# returns null if Thing does not exist
-            raise ValueError("@when: \"{}\" could not be parsed because Thing \"{}\" is not in the thingRegistry".format(target, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because Thing \"{}\" is not in the thingRegistry".format(target, trigger_target))
         elif target_type == "Thing" and old_state and not hasattr(ThingStatus, old_state):
-            raise ValueError("@when: \"{}\" is not a valid Thing status".format(old_state))
+            raise ValueError("when: \"{}\" is not a valid Thing status".format(old_state))
         elif target_type == "Thing" and new_state and not hasattr(ThingStatus, new_state):
-            raise ValueError("@when: \"{}\" is not a valid Thing status".format(new_state))   
+            raise ValueError("when: \"{}\" is not a valid Thing status".format(new_state))   
         elif target_type == "Thing" and (old_state is not None or new_state is not None):# there is only an event trigger for Things, so old_state and new_state can't be used yet *****TO BE REMOVED*****
-            raise ValueError("@when: \"{}\" could not be parsed because rule triggers do not currently support checking the from/to status for Things".format(target))
+            raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support checking the from/to status for Things".format(target))
         elif target_type == "System" and trigger_target != "started" and trigger_target != "shuts down":
-            raise ValueError("@when: \"{}\" could not be parsed. trigger_target \"{}\" is invalid for target_type \"System\". Valid trigger_type values are \"started\" and \"shuts down\"".format(target, target_type))
-        elif target_type == "System":# 'System shuts down' is not currently supported, and the 'System started' trigger needs to be reworked for the update API *****TO BE REMOVED*****
-            raise ValueError("@when: \"{}\" could not be parsed because rule triggers do not currently support target_type \"System\"".format(target))
+            raise ValueError("when: \"{}\" could not be parsed. trigger_target \"{}\" is invalid for target_type \"System\". Valid trigger_type values are \"started\" and \"shuts down\"".format(target, target_type))
+        #elif target_type == "System":# 'System shuts down' is not currently supported, and the 'System started' trigger needs to be reworked for the update API *****TO BE REMOVED*****
+        #    raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support target_type \"System\"".format(target))
 
-        log.debug("@when: target=[{}], target_type={}, trigger_target={}, trigger_type={}, old_state={}, new_state={}".format(target, target_type, trigger_target, trigger_type, old_state, new_state))
+        log.debug("when: target=[{}], target_type={}, trigger_target={}, trigger_type={}, old_state={}, new_state={}".format(target, target_type, trigger_target, trigger_type, old_state, new_state))
 
         if target_type in ["Item", "Member of", "Descendent of"]:
             return item_trigger
@@ -347,4 +337,4 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
 
     except Exception as e:
         import traceback
-        log.error("@when: Exception [{}]: [{}]".format(e, traceback.format_exc()))
+        log.error("when: Exception [{}]: [{}]".format(e, traceback.format_exc()))

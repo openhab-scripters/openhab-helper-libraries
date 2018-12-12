@@ -56,5 +56,3 @@ def get_automation_manager():
     _get_scope_value(scope, "scriptExtension").importPreset("RuleSupport")
     automation_manager = _get_scope_value(scope, "automationManager")
     return automation_manager
-
-

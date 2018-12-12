@@ -1,14 +1,12 @@
 # NOTE: Requires JythonItemProvider component
 
-from org.slf4j import Logger, LoggerFactory
-
 from core import osgi, jsr223, JythonItemProvider
 from core.jsr223 import scope
+from core.log import logging, LOG_PREFIX
+
+log = logging.getLogger(LOG_PREFIX + ".items")
 
 __all__ = ["add", "remove"]
-
-
-logger = LoggerFactory.getLogger("org.eclipse.smarthome.model.script.Rules.jsr232.openhab")
 
 def add(item, item_type=None, category=None, groups=None, label=None, gi_base_type=None, group_function=None):
     try:
@@ -30,7 +28,7 @@ def add(item, item_type=None, category=None, groups=None, label=None, gi_base_ty
         JythonItemProvider.add(item)
     except:
         import traceback
-        logger.error(traceback.format_exc())
+        log.error(traceback.format_exc())
         return None
     else:
         return item

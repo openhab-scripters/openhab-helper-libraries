@@ -142,12 +142,17 @@ log.info("Sunrise: %s", Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, 
 #### Module: [`core.log`](../Core/automation/lib/python/core/log.py)
 <ul>
 
-This module bridges the Python standard `logging` module with ESH logging. Example usage:
+This module bridges the [Python standard `logging` module](https://docs.python.org/2/library/logging.html) with ESH logging. Example usage:
 
 ```python
 from core.log import logging
 
-logging.info("Logging example from root logger")
+logging.critical("Logging example from root logger [TRACE]")
+logging.debug("Logging example from root logger [DEBUG]")
+logging.info("Logging example from root logger [INFO]")
+logging.warning("Logging example from root logger [WARN]")
+logging.error("Logging example from root logger [ERROR]")
+
 logging.getLogger("myscript").info("Logging example from root logger")  
 ```
 </ul>

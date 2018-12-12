@@ -1,6 +1,5 @@
 from org.eclipse.smarthome.core.transform import TransformationService
 
-from core.log import logging
 from core.osgi import register_service, unregister_service
 
 class JythonTransformationService(TransformationService):
