@@ -1,5 +1,5 @@
 """
-This example demonstrates logging, item trigger decorator and the test runner.
+This example demonstrates logging, rue and trigger decorator, and the test runner.
 
 Required Items:
     Number TestNumber1
@@ -8,29 +8,29 @@ Required Items:
 
 import unittest
 import time
-from openhab.log import logging
-from openhab.testing import run_test
-from openhab.triggers import item_triggered, ITEM_UPDATE
-import openhab.items
+from core.log import logging
+from core.testing import run_test
+from core.triggers import when
+import core.items
 
-@item_triggered("TestNumber1", ITEM_UPDATE)
+@rule("Example testing rule")
+@when("Item TestNumber1 received update")
 def double_the_value():
     events.postUpdate("TestNumber2", str(2 * items.TestNumber1.floatValue()))
     
 class MyUnitTest(unittest.TestCase):
     def setUp(self):
-        openhab.items.add("TestNumber1", "Number")
-        openhab.items.add("TestNumber2", "Number")
+        core.items.add("TestNumber1", "Number")
+        core.items.add("TestNumber2", "Number")
         
     def tearDown(self):
-        openhab.items.remove("TestNumber1")
-        openhab.items.remove("TestNumber2")
+        core.items.remove("TestNumber1")
+        core.items.remove("TestNumber2")
         
     def test_item(self):
         events.postUpdate("TestNumber1", str(5))
         time.sleep(1)
         self.assertEqual(items.TestNumber2.floatValue(), 10)
-
 
 # results are also logged to openHAB log file
 # status can be used to take actions like sending notifications
