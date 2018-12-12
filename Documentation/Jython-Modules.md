@@ -3,7 +3,7 @@
 ## Jython Modules
 
 One of the benefits of Jython over the openHAB Xtext scripts is that you can use the full power of Python packages and modules to structure your code into reusable components. 
-When using the instructions in the [Quick Start Guide](Getting-Started.md#quick-start-guide), these modules should be located in `/automation/lib/python/core/`
+When using the instructions in the [Quick Start Guide](Getting-Started.md#quick-start-guide), these modules should be located in `/automation/lib/python/`
 
 #### Modifying Modules
 
@@ -43,7 +43,7 @@ scope.itemRegistry.getItem("MyItem")
 
 This module includes trigger subclasses and function decorators to simplify Jython rule definitions.
 
-Trigger classes fr wrapping Automation API (see [Using Jython extensions](Defining-Rules.md#using-jython-extensions)):
+Trigger classes for wrapping Automation API (see [Using Jython extensions](Defining-Rules.md#using-jython-extensions)):
 
 * __ItemStateChangeTrigger__
 * __ItemStateUpdateTrigger__
@@ -67,7 +67,7 @@ Trigger function decorator (see the `core.rules` module for the [rule decorator]
 * __@when("Descendent of gContact_Sensors changed to ON")__
 * __@when("Thing kodi:kodi:familyroom changed")__# Thing statuses cannot currently be used in triggers
 * __@when("Channel astro:sun:local:eclipse#event triggered START")__
-* __@when("System started")__# 'System shuts down' cannot currently be used as a trigger, and 'System started' needs to be updated to work with Automation API updates
+* __@when("System started")__# `System started` and 'System shuts down' cannot currently be used as a trigger
 * __@when("55 55 5 * * ?")__
 
 </ul>
@@ -85,22 +85,21 @@ from core.triggers import StartupTrigger
 @rule("My example rule")
 class ExampleRule(object):
     """This doc comment will become the ESH Rule documentation value for Paper UI"""
+    #def __init__(self):
+    #    self.triggers = [ StartupTrigger().trigger ]
+    
     def getEventTriggers(self):
         return [ StartupTrigger().trigger ]
 
     def execute(self, module, inputs):
         self.log.info("rule executed")
 ```
-The decorator adds the SimpleRule base class and will call either `getEventTriggers` or `getEventTrigger` (the OH1 function) 
-to get the triggers, if either function exists. 
-Otherwise you can define a constructor and set `self.triggers` to your list of triggers.
+The `rule` decorator adds the SimpleRule base class and will call `getEventTriggers` to get the triggers, or you can define a constructor and set `self.triggers` to your list of triggers (commented out in the example).
 
-The `addRule` function is similar to the `automationManager.addRule` function except 
-that it can be safely used in Jython modules (versus scripts).
-Since the `automationManager` is different for every script scope 
-the `core.rules.addRule` function looks up the automation manager for each call.
+The `addRule` function is similar to the `automationManager.addRule` function except that it can be safely used in Jython modules (versus scripts).
+Since the `automationManager` is different for every script scope, the `core.rules.addRule` function looks up the automation manager for each call.
 
-The decorator also adds a log object based on the name of the rule (`self.log`, can be overridden in a constructor) and 
+The decorator also adds a log object based on the name of the rule (`self.log` can be overridden in a constructor) and 
 wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information if an exception 
 is thrown.
 
@@ -124,28 +123,31 @@ def exampleDecoratedCronRule(event):
 This module discovers action services registered from OH1 or OH2 bundles or add-ons.
 The specific actions that are available will depend on which add-ons are installed.
 Each action class is exposed as an attribute of the `core.actions` Jython module.
-The action methods are static methods on those classes 
-(don't try to create instances of the action classes).
+The action methods are static methods on those classes (don't try to create instances of the action classes).
 
 ```python
 from core.actions import Astro
-from core.log import logging
+from core.log import logging, LOG_PREFIX
 from java.util import Date
 
-log = logging.getLogger("org.eclipse.smarthome.automation")
+log = logging.getLogger(LOG_PREFIX + ".astro_test")
 
 # Use the Astro action class to get the sunset start time.
-log.info("Sunrise: %s", Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time)
+log.info("Sunrise: {}".format(Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time))
 ```
 </ul>
 
 #### Module: [`core.log`](../Core/automation/lib/python/core/log.py)
 <ul>
 
-This module bridges the [Python standard `logging` module](https://docs.python.org/2/library/logging.html) with ESH logging. Example usage:
+This module bridges the [Python standard `logging` module](https://docs.python.org/2/library/logging.html) with ESH logging. 
+The `configuration` module also provides a `LOG_PREFIX` variable, which is used throughout the core modules and scripts including the `log` module. 
+LOG_PREFIX can be modified based on personal preference, which will change the default logger. 
+Example usage:
 
 ```python
-from core.log import logging
+from core.log import logging, LOG_PREFIX
+log = logging.getLogger(LOG_PREFIX + ".test_logging_script")
 
 logging.critical("Logging example from root logger [TRACE]")
 logging.debug("Logging example from root logger [DEBUG]")
@@ -153,8 +155,10 @@ logging.info("Logging example from root logger [INFO]")
 logging.warning("Logging example from root logger [WARN]")
 logging.error("Logging example from root logger [ERROR]")
 
-logging.getLogger("myscript").info("Logging example from root logger")  
+logging.getLogger("test_logging_script").info("Logging example from logger")
+log.info("Logging example from logger, using text appended to LOG_PREFIX")
 ```
+
 </ul>
 
 #### Module: [`core.items`](../Core/automation/lib/python/core/items.py)

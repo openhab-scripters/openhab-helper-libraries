@@ -5,12 +5,12 @@
 One of the primary use cases for JSR223 scripting in OH is to define rules for the [Eclipse SmartHome (ESH) rule engine](http://www.eclipse.org/smarthome/documentation/features/rules.html) using the [Java/Automation API](http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api).
 The ESH rule engine structures rules as _Modules_ (Triggers, Conditions, Actions). 
 Jython rules can use rule Modules that are already present in ESH, and can define new Modules that can be used outside of JSR223 scripting. Take care not to confuse ESH Modules with Jython modules. 
-In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-jython-extensions), and [rule and trigger decorators](#rule-and-trigger-decorators). 
+In decreasing order of complexity, rules can be created using the [raw Automation API](#raw-esh-automation-api), [extensions](#using-jython-extensions), and the [rule and trigger decorators](#rule-and-trigger-decorators). 
 The detais for all of these methods are included here for reference, but the section on [decorators](#rule-and-trigger-decorators) should be all that is needed for creating your rules.
 
 Take care in your choice of object names used in your rules, so as not to use one that is already included in the [default scope](https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required). 
-For example, the `items` object is from the default scope, and allows access to [each Item's state](#get-the-state-of-an-item). 
-Another important object from the default scope is the `events` object, which can be used to [send a command](#send-a-command-to-an-item) or [change the state](#send-an-update-to-an-item) of an Item.
+For example, the `items` object is from the default scope, and allows access to [each Item's state](/Documentation/But-How-Do-I...-%3F.md#get-the-state-of-an-item). 
+Another important object from the default scope is the `events` object, which can be used to [send a command](/Documentation/But-How-Do-I...-%3F.md#send-a-command-to-an-item) or [change the state](/Documentation/But-How-Do-I...-%3F.md#send-an-update-to-an-item) of an Item.
 
 ### Raw ESH Automation API
 <ul>
@@ -49,15 +49,16 @@ This means you don't need a Jython import statement to load them.
 
 For defining rules, additional symbols must be defined. 
 Rather than using a Jython import (remember, JSR223 support is for other languages too), 
-these additional symbols are imported using:
+these additional symbols ([presets](https://www.openhab.org/docs/configuration/jsr223.html#predefined-script-variables-all-jsr223-languages)) are imported using:
 
 ```python
-scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleSimple")
+scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleFactories")
 ```
 
 The `scriptExtension` instance is provided as one of the default scope variables. 
-The RuleSimple preset defines the `SimpleRule` base class.  
+The `RuleSimple` preset defines the `SimpleRule` base class.  
 This base class implements a rule with a single custom ESH Action associated with the `execute` function. 
 The list of rule triggers are provided by the triggers attribute of the rule instance.
 
@@ -98,13 +99,15 @@ define trigger names, and to know configuration dictionary requirements.
 <ul>
 
 To make rule creation _even simpler_, `core.rules` defines a decorator that can be 
-used to create a rule, which can be fed triggers from a decorator in `core.triggers`. These triggers can be defined similarly to how it is done in the Rules DSL. 
+used to create a rule, which can be fed triggers from a decorator in `core.triggers`. 
+These triggers can be defined similarly to how it is done in the Rules DSL. 
+The `tags` parameter is optional. The rule's UID will also be supplied as an attribute of the rule's function (`testFunction.UID`).
 
 ```python
 from core.rules import rule
 from core.triggers import when
 
-@rule("This is the name of a test rule")
+@rule("This is the name of a test rule", tags=["Tag 1", "Tag 2"])
 @when("Item Test_Switch_1 received command OFF")
 @when("Item Test_Switch_2 received update ON")
 @when("Item gMotion_Sensors changed to ON")
