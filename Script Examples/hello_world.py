@@ -2,7 +2,7 @@ from core.rules import rule
 from core.triggers import when, CronTrigger
 from core.log import logging, LOG_PREFIX
 
-log = LoggerFactory.getLogger(LOG_PREFIX + ".hello_world")
+log = logging.getLogger(LOG_PREFIX + ".hello_world")
 
 '''
 scriptExtension.importPreset("RuleSupport")
