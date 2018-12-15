@@ -1,8 +1,8 @@
 from time import sleep
 
-from core.log import logging, LOG_PREFIX, log_traceback
+from org.slf4j import Logger, LoggerFactory
 
-log = logging.getLogger(LOG_PREFIX + ".startup_delay")
+log = LoggerFactory.getLogger("org.eclipse.smarthome.automation.jsr223.jython.startup_delay")
 
 log.info("Checking for initialized context")
 
