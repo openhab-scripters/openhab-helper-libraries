@@ -14,11 +14,12 @@ def add(item, item_type=None, category=None, groups=None, label=None, gi_base_ty
             if item_type is None:
                 raise Exception("Must provide item_type when creating an item by name")
 
-            baseItem = None if item_type != "Group" or gi_base_type is None else scope.itemRegistry.newItemBuilder( gi_base_type       \
+            itemBuilderFactory = osgi.get_service("org.eclipse.smarthome.core.items.ItemBuilderFactory")
+            baseItem = None if item_type != "Group" or gi_base_type is None else itemBuilderFactory.newItemBuilder( gi_base_type       \
                                                                                                                   , item + "_baseItem")\
                                                                                                    .build()
             group_function = None if item_type != "Group" else group_function
-            item = scope.itemRegistry.newItemBuilder(item_type, item)  \
+            item = itemBuilderFactory.newItemBuilder(item_type, item)  \
                                      .withCategory(category)           \
                                      .withGroups(groups)               \
                                      .withLabel(label)                 \
