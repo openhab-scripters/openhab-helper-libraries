@@ -295,6 +295,8 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         # validate the inputs, and if anything isn't populated correctly throw an exception
         if target_type is None or target_type not in ["Item", "Member of", "Descendent of", "Thing", "Channel", "System", "Time"]:
             raise ValueError("when: \"{}\" could not be parsed. target_type is missing or invalid. Valid target_type values are: Item, Member of, Descendent of, Thing, Channel, System, and Time.".format(target))
+        elif trigger_type is None:
+            raise ValueError("when: \"{}\" could not be parsed because trigger_type cannot be None".format(target)) 
         elif target_type in ["Item", "Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target) is None:# throws ItemNotFoundException if item does not exist
             raise ValueError("when: \"{}\" could not be parsed because Item \"{}\" is not in the itemRegistry".format(target, trigger_target))
         elif target_type in ["Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target).type != "Group":
