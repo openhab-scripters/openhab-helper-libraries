@@ -9,7 +9,7 @@ MISC_LINE=$(grep '^[[:space:]]\?misc' ${APPDIR}/conf/services/addons.cfg)
 if [ $? -eq 0 ]; then
   ## ensure we have ruleengine enabled
   if [[ ${MISC_LINE} == *"ruleengine"* ]]; then
-    echo "New rule engine already scheduled to installation"
+    echo "New rule engine is already included in the addons.cfg"
   else 
     sed -i 's/misc\s\?=\s\?/misc = ruleengine,/' ${APPDIR}/conf/services/addons.cfg
   fi
