@@ -124,23 +124,17 @@ NotificationAction.sendNotification("someone@someDomain.com","This is the messag
 NotificationAction.sendBroadcastNotification("This is the message")
 NotificationAction.sendLogNotification("This is the message")
 
-from core.actions import Mail
-Mail.sendMail("someone@someDomain.com","This is the message")
-
 from core.actions import Transformation
 Transformation.transform("JSONPATH", "$.test", test)
 
 from core.actions import Voice
 Voice.say("This will be said")
 
-from core.actions import ThingAction
-ThingAction.getThingStatusInfo("zwave:device:c5155aa4:node5")
+from core.actions import Things
+Things.getThingStatusInfo("zwave:device:c5155aa4:node5")
 ```
 
-#### Use a timer:
-See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples for examples of using both Jython and the [`createTimer`](https://www.openhab.org/docs/configuration/actions.html#timers) Action.
-
-#### Use an Addon/Bundle Action (binding must be installed):
+#### Use an Addon/Bundle Action (binding or Action must be installed):
 [Telegram](https://www.openhab.org/addons/actions/telegram/#telegram-actions)
 ```python
 from core.actions import Telegram
@@ -152,6 +146,9 @@ Telegram.sendTelegram("MyBot", "Test")
 from core.actions import Mail
 Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the message")
 ```
+
+#### Use a timer:
+See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples for examples of using both Jython and the [`createTimer`](https://www.openhab.org/docs/configuration/actions.html#timers) Action.
 
 #### Logging (the logger can be modified to wherever you want the log to go):
 ```python
