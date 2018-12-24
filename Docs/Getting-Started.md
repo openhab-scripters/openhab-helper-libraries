@@ -87,7 +87,7 @@ Example Directory Structure:
             |_ lib
                 |_ python
                     |_ community
-                    |_ openhab
+                    |_ core
                     |_ personal
                     |_ configuration.py
 ```
