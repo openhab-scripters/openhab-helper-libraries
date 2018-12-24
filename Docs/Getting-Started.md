@@ -84,6 +84,8 @@ Example Directory Structure:
                     |_ 000_startup_delay.py
                 |_ personal
                     |_ my_rule_script.py
+            |_ jython
+                |_ jython-standalone-2.7.0.jar
             |_ lib
                 |_ python
                     |_ community
