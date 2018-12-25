@@ -2,7 +2,7 @@
 PURPOSE:
 This script will parse all Alexa voice commands, and if they match the text in the rule, it will send a command to an Item
 linked to that Alexa device's TTS Channel. For example, I can ask Alexa "Are the doors locked?", and the device that I asked
-will respond with "all doors are locked" or a list of the unlocked doors.
+will respond with "all doors are locked" or a list of the unlocked doors. Additional phrases can be added.
 
 REQUIRES:
     org.openhab.binding.amazonalexacontrol
@@ -27,5 +27,7 @@ def getLockStates():
 @when("Member of gAlexa_LastVoiceCommand received update")
 def lastVoiceCommandAlert(event):
     lastVoiceCommandAlert.log.debug("LastVoiceCommand received [{}]".format(event.itemState))
-    if str(event.itemState).replace("echo ", "") == "are the doors locked":
+    if event.itemState.toString() == "are the doors locked":
         events.sendCommand(event.itemName.replace("LastVoiceCommand", "TTS"), getLockStates())
+    #elif event.itemState.toString() == "are the windows closed":
+        # do stuff here
