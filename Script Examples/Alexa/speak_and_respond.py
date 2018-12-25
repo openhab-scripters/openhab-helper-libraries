@@ -11,9 +11,9 @@ REQUIRES:
     Items:
     Group    gAlexa_LastVoiceCommand    "Last Voice Command"
     String    DiningRoom_Dot_LastVoiceCommand    "Dining Room: Last Voice Command [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand"}
-    String    DiningRoom_Dot_LastVoiceCommand    "Dining Room: TTS [%s]"    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
+    String    DiningRoom_Dot_TTS    "Dining Room: TTS [%s]"    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
     String    FamilyRoom_Dot_LastVoiceCommand    "Famiy Room: Last Voice Command [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand"}
-    String    FamilyRoom_Dot_LastVoiceCommand    "Family Room: TTS [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
+    String    FamilyRoom_Dot_TTS    "Family Room: TTS [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
 
 The getLockStates function can be removed or replaced. It uses a group (gSecurity) that contains all of my outer doors. 
 '''
