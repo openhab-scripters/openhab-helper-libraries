@@ -1,0 +1,4 @@
+autoremote_configuration = {
+    'password': 'secret',
+    'key': 'very-long-key-goes-here',
+}
