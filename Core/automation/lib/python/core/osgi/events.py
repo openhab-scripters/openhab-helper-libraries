@@ -28,7 +28,7 @@ def hashtable(*key_values):
     return ht
 
 class OsgiEventAdmin(object):
-    log = logging.getLogger(LOG_PREFIX + ".osgi.events.OsgiEventAdmin")
+    log = logging.getLogger(LOG_PREFIX + ".core.osgi.events.OsgiEventAdmin")
     
     _event_handler = None
     _event_listeners = []

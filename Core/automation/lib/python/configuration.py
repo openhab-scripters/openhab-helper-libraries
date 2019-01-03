@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 openhabHost = "localhost"
 openhabPort = "8080"
 
