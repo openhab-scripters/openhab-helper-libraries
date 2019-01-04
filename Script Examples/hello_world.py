@@ -1,6 +1,5 @@
 from core.rules import rule
 from core.triggers import when, CronTrigger
-from core.log import logging, LOG_PREFIX
 
 '''
 scriptExtension.importPreset("RuleSupport")
