@@ -3,8 +3,8 @@ from java.util import UUID
 from org.eclipse.smarthome.automation import Rule as SmarthomeRule
 
 from core.log import logging, LOG_PREFIX, log_traceback
-from core.jsr223 import scope, get_automation_manager
 
+from core.jsr223 import scope, get_automation_manager
 scope.scriptExtension.importPreset("RuleSimple")
 
 # this needs some attention in order to work with Automation API changes in 2.4.0 snapshots since build 1319
@@ -18,14 +18,14 @@ def set_uid_prefix(rule, prefix=None):
 class _FunctionRule(scope.SimpleRule):
     def __init__(self, callback, triggers, name=None, description=None, tags=None):
         self.triggers = triggers
-        self.callback = callback
+        self.callback = log_traceback(callback)
         if name is None:
             if hasattr(callback, '__name__'):
                 name = callback.__name__
             else:
                 name = "JSR223-Jython"
-        self.name = name or callback.__name__
-        self.log = logging.getLogger(LOG_PREFIX + ("" if name is None else ("." + name)))
+        self.name = name
+        callback.log = logging.getLogger(LOG_PREFIX + "." + name)
         if description is not None:
             self.description = description
         if tags is not None:
@@ -52,7 +52,7 @@ def rule(name=None, description=None, tags=None):
                 else:
                     self.name = name
                 #set_uid_prefix(self)
-                self.log = logging.getLogger(LOG_PREFIX + "." + clazz.__name__)
+                self.log = logging.getLogger(LOG_PREFIX + "." + self.name)
                 clazz.__init__(self, *args, **kwargs)
                 if description is not None:
                     self.description = description
