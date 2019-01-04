@@ -19,7 +19,7 @@ from core.log import logging, LOG_PREFIX
 
 from org.quartz.CronExpression import isValidExpression
 
-log = logging.getLogger(LOG_PREFIX + ".triggers")
+log = logging.getLogger(LOG_PREFIX + ".core.triggers")
 
 class ItemStateUpdateTrigger(Trigger):
     def __init__(self, itemName, state=None, triggerName=None):
@@ -295,7 +295,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         # validate the inputs, and if anything isn't populated correctly throw an exception
         if target_type is None or target_type not in ["Item", "Member of", "Descendent of", "Thing", "Channel", "System", "Time"]:
             raise ValueError("when: \"{}\" could not be parsed. target_type is missing or invalid. Valid target_type values are: Item, Member of, Descendent of, Thing, Channel, System, and Time.".format(target))
-        elif trigger_type is None:
+        elif target_type != "System" and trigger_type is None:
             raise ValueError("when: \"{}\" could not be parsed because trigger_type cannot be None".format(target)) 
         elif target_type in ["Item", "Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target) is None:# throws ItemNotFoundException if item does not exist
             raise ValueError("when: \"{}\" could not be parsed because Item \"{}\" is not in the itemRegistry".format(target, trigger_target))
@@ -321,8 +321,8 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support checking the from/to status for Things".format(target))
         elif target_type == "System" and trigger_target != "started" and trigger_target != "shuts down":
             raise ValueError("when: \"{}\" could not be parsed. trigger_target \"{}\" is invalid for target_type \"System\". Valid trigger_type values are \"started\" and \"shuts down\"".format(target, target_type))
-        #elif target_type == "System":# 'System shuts down' is not currently supported, and the 'System started' trigger needs to be reworked for the update API *****TO BE REMOVED*****
-        #    raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support target_type \"System\"".format(target))
+        elif target_type == "System":# 'System shuts down' is not currently supported, and the 'System started' trigger needs to be reworked for the update API *****TO BE REMOVED*****
+            raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support target_type \"System\"".format(target))
 
         log.debug("when: target=[{}], target_type={}, trigger_target={}, trigger_type={}, old_state={}, new_state={}".format(target, target_type, trigger_target, trigger_type, old_state, new_state))
 

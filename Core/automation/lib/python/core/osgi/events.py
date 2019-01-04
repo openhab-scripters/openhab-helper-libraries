@@ -13,7 +13,7 @@ from core.jsr223 import scope
 from core.osgi import bundle_context
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".osgi.events")
+log = logging.getLogger(LOG_PREFIX + ".core.osgi.events")
 
 scope.scriptExtension.importPreset("RuleSupport")
 

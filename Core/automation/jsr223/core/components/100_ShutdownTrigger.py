@@ -5,7 +5,7 @@ import core
 from core.jsr223 import scope
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".ShutdownTrigger")
+log = logging.getLogger(LOG_PREFIX + ".core.ShutdownTrigger")
 
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")

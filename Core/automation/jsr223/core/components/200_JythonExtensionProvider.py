@@ -2,7 +2,7 @@ import collections
 
 import core
 from core.log import logging, LOG_PREFIX
-log = logging.getLogger(LOG_PREFIX + ".JythonExtensionProvider")
+log = logging.getLogger(LOG_PREFIX + ".core.JythonExtensionProvider")
 
 def scriptLoaded(*args):    
     try:
@@ -10,7 +10,7 @@ def scriptLoaded(*args):
         name = "org.eclipse.smarthome.automation.module.script.ScriptExtensionProvider"
         ScriptExtensionProvider = Class.forName(name, True, scriptExtension.getClass().getClassLoader())
         
-        class JythonExtensionProvider (ScriptExtensionProvider):            
+        class JythonExtensionProvider(ScriptExtensionProvider):            
             def __init__(self):
                 self._defaultPresets = set()
                 self._presets = set()

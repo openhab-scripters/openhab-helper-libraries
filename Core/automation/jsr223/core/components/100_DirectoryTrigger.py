@@ -7,7 +7,7 @@ from org.eclipse.smarthome.core.service import AbstractWatchService
 import core
 from core.log import logging, log_traceback, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".DirectoryEventTrigger")
+log = logging.getLogger(LOG_PREFIX + ".core.DirectoryEventTrigger")
 
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")

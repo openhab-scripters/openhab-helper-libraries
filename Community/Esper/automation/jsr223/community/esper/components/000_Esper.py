@@ -6,7 +6,7 @@ import core
 from core.osgi.events import OsgiEventAdmin
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".esper")
+log = logging.getLogger(LOG_PREFIX + ".community.esper")
 
 from java.lang import String, Double, Object
 from java.util import Date

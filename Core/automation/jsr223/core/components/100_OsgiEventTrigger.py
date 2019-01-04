@@ -9,7 +9,7 @@ import core
 from core.osgi.events import OsgiEventAdmin, event_dict, osgi_triggers
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".OsgiEventTrigger")
+log = logging.getLogger(LOG_PREFIX + ".core.OsgiEventTrigger")
 
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")
