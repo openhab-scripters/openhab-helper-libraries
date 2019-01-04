@@ -2,8 +2,6 @@ from core.rules import rule
 from core.triggers import when, CronTrigger
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".hello_world")
-
 '''
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleSimple")
@@ -24,7 +22,7 @@ class RawAPICron(SimpleRule):
         self.tags = [ "Test tag" ]
 
     def execute(self, module, inputs):
-        log.info("This is a 'hello world!' from a Jython rule (raw API): Cron")
+        self.log.info("This is a 'hello world!' from a Jython rule (raw API): Cron")
 
 automationManager.addRule(RawAPICron())
 '''
@@ -49,7 +47,7 @@ class RawAPIStateUpdate(SimpleRule):
         self.name = "Hello world item state update rule (raw API)"
 
     def execute(self, module, input):
-        log.info("This is a 'hello world!' from a Jython rule (raw API): ItemStateUpdateTrigger")
+        self.log.info("This is a 'hello world!' from a Jython rule (raw API): ItemStateUpdateTrigger")
 
 automationManager.addRule(RawAPIStateUpdate())
 '''
@@ -67,7 +65,7 @@ class ExtensionCron(SimpleRule):
         self.name = "Hello world cron rule (extension)"
     
     def execute(self, module, inputs):
-        log.info("This is a 'hello world!' from a Jython rule (extension): CronTrigger")
+        self.log.info("This is a 'hello world!' from a Jython rule (extension): CronTrigger")
 
 automationManager.addRule(ExtensionCron())
 '''
@@ -84,7 +82,7 @@ class ExtensionItemUpdate(SimpleRule):
         self.name = "Hello world item state update rule (extension)"
     
     def execute(self, module, inputs):
-        log.info("This is a 'hello world!' from a Jython rule (extension): ItemStateUpdateTrigger")
+        self.log.info("This is a 'hello world!' from a Jython rule (extension): ItemStateUpdateTrigger")
 
 automationManager.addRule(ExtensionItemUpdate())
 '''
@@ -100,7 +98,7 @@ class ExtensionCronWithRule(object):
         self.name = "Hello world cron rule (extension with rule decorator)"
     
     def execute(self, module, inputs):
-        log.info("This is a 'hello world!' from a Jython rule (extension): CronTrigger")
+        self.log.info("This is a 'hello world!' from a Jython rule (extension): CronTrigger")
 '''
 
 '''
@@ -114,7 +112,7 @@ class ExtensionItemUpdateWithRule(object):
         self.name = "Hello world item update rule (extension with rule decorator)"
     
     def execute(self, module, inputs):
-        log.info("This is a 'hello world!' from a Jython rule (extension with rule): ItemUpdateTrigger")
+        self.log.info("This is a 'hello world!' from a Jython rule (extension with rule): ItemUpdateTrigger")
 '''
 
 from core.rules import rule
@@ -123,7 +121,7 @@ from core.triggers import when
 @rule("Hello World cron rule (decorator)", description="This is an example rule that demonstrates using a cron rule with decorators", tags=["Test tag", "Hello World"])# [description and tags are optional]
 @when("Time cron 0/10 * * * * ?")
 def hellowWorldDecoratorCron(event):
-    log.info("This is a 'hello world!' from a Jython rule (decorator): Cron")
+    hellowWorldDecoratorCron.log.info("This is a 'hello world!' from a Jython rule (decorator): Cron")
 
 '''
 from core.rules import rule
@@ -132,5 +130,5 @@ from core.triggers import when
 @rule("Hello World item update rule (decorator)")
 @when("Item Test_Switch_1 received update")
 def hellowWorldDecoratorItemUpdate(event):
-    log.info("This is a 'hello world!' from a Jython rule (decorator): Item update")
+    hellowWorldDecoratorItemUpdate.log.info("This is a 'hello world!' from a Jython rule (decorator): Item update")
 '''
