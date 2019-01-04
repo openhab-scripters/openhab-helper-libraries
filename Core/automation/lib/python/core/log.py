@@ -1,3 +1,9 @@
+'''
+If openHAB Cloud Connector is installed, exceptions will be sent as a
+notification. If the configuration.adminEmail variable is populated, the
+notification will be sent to that person. Otherwise, a broadcast notification
+will be sent.
+'''
 import logging
 import functools
 import traceback
@@ -5,19 +11,6 @@ import traceback
 from org.slf4j import Logger, LoggerFactory
 
 from configuration import LOG_PREFIX
-
-def log_traceback(fn):
-    """Decorator to provide better Jython stack traces"""
-    functools.wraps(fn)
-    def wrapper(*args, **kwargs):
-        try:
-            return fn(*args, **kwargs)
-        except Exception as ex:
-            if len(args) > 0 and hasattr(args[0], "log"):
-                args[0].log.error(traceback.format_exc())
-            else:
-                print traceback.format_exc()
-    return wrapper
 
 class Slf4jHandler(logging.Handler):
     def emit(self, record):
@@ -41,3 +34,28 @@ class Slf4jHandler(logging.Handler):
 handler = Slf4jHandler()
 logging.root.setLevel(logging.DEBUG)
 logging.root.handlers = [handler]
+
+def log_traceback(fn):
+    """Decorator to provide better Jython stack traces"""
+    functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as ex:
+            rule_name = None
+            if hasattr(fn, 'log'):
+                fn.log.error(traceback.format_exc())
+                rule_name = fn.name
+            elif len(args) > 0 and hasattr(args[0], 'log'):
+                args[0].log.error(traceback.format_exc())
+                rule_name = args[0].name
+            else:
+                logging.getLogger(LOG_PREFIX).error(traceback.format_exc())
+            import core.actions
+            if hasattr(core.actions, 'NotificationAction'):
+                import configuration
+                if hasattr(configuration, 'adminEmail') and configuration.adminEmail != "admin_email@some_domain.com":
+                    core.actions.NotificationAction.sendNotification(configuration.adminEmail, "Exception: {}:".format(rule_name, traceback.format_exc()))
+                else:
+                    core.actions.NotificationAction.sendBroadcastNotification("Exception: {}:".format(rule_name, traceback.format_exc()))
+    return wrapper
