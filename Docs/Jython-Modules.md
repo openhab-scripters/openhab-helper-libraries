@@ -112,7 +112,7 @@ from core.triggers import when
 @rule("My example rule")
 @when("Time cron 0/10 * * * * ?")
 def exampleDecoratedCronRule(event):
-    # do stuff
+    exampleDecoratedCronRule.log("Log from example ru;e")
 ```
 
 </ul>
