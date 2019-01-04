@@ -52,11 +52,8 @@ class channelEventExampleExtensionWithRuleDecorator(object):
 # Example Channel event rule (decorators) [description and tags are optional]
 from core.triggers import when
 from core.rules import rule
-from core.log import logging, LOG_PREFIX
-
-log = logging.getLogger(LOG_PREFIX + ".example_Channel_event_rule")
 
 @rule("Example Channel event rule (decorators)", description="This is an example rule that is triggered by the sun setting", tags=["Example", "Astro"])
 @when("Channel astro:sun:local:set#event triggered START")
 def channelEventExampleDecorators(event):
-    log.info("Sunset triggered")
+    channelEventExampleDecorators.log.info("Sunset triggered")
