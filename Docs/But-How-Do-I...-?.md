@@ -273,3 +273,17 @@ considerConditions = False# consider the rule's Conditions
 ruleEngine.runNow(ruleFunction.UID)# without inputs
 ruleEngine.runNow(ruleFunction.UID, considerConditions, {'name': 'EXAMPLE'})# with inputs
 ```
+#### Enable/disable a Thing
+```python
+from core.log import logging, LOG_PREFIX
+log = logging.getLogger(LOG_PREFIX + ".TEST")
+from org.eclipse.smarthome.core.thing import ThingUID
+from core import osgi
+
+ThingManager = osgi.get_service("org.eclipse.smarthome.core.thing.ThingManager")
+kodiThing = things.get(ThingUID("kodi:kodi:familyroom"))
+ThingManager.setEnabled(ThingUID("kodi:kodi:familyroom"), False)# disable Thing
+log.debug("Disabled: isEnabled [{}], statusInfo [{}]".format(kodiThing.isEnabled(), kodiThing.statusInfo))
+ThingManager.setEnabled(ThingUID("kodi:kodi:familyroom"), True)# enable Thing
+log.debug("Enabled: isEnabled [{}], statusInfo [{}]".format(kodiThing.isEnabled(), kodiThing.statusInfo))
+```
