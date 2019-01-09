@@ -88,6 +88,7 @@ def addOWMItemsToGroups(event):
 
         from core.items import add
         from core import osgi
+        from org.joda.time import DateTime
 
         ItemChannelLinkRegistry = osgi.get_service("org.eclipse.smarthome.core.thing.link.ItemChannelLinkRegistry")
 
