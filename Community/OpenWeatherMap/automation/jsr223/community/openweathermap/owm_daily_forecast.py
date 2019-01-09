@@ -63,6 +63,8 @@ from core.triggers import when
 @rule("Add OpenWeatherMap Items to daily forecast groups")
 @when("Time cron 20 0 0/3 * * ?")
 def addOWMItemsToGroups(event):
+    from org.joda.time import DateTime
+
     if not ir.getItems("gOpenWeatherMap"):
         # install Scale transformation service, if not already
         import json
@@ -88,7 +90,6 @@ def addOWMItemsToGroups(event):
 
         from core.items import add
         from core import osgi
-        from org.joda.time import DateTime
 
         ItemChannelLinkRegistry = osgi.get_service("org.eclipse.smarthome.core.thing.link.ItemChannelLinkRegistry")
 
