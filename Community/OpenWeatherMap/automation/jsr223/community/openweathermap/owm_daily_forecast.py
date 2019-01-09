@@ -30,7 +30,8 @@ REQUIRES:
     All OWM Items should be removed before using rule
 
 There are several groups and Items commented out, but these can be removed
-based on personal preference.
+based on personal preference. The rule will also run when the script file is
+saved, or OH is restarted, so that you don't have to wait for the trigger.
 
 KNOWN ISSUES:
 ArithmethicGroupFunction.Avg does not properly average angles. An ESH issue has
