@@ -65,6 +65,7 @@ from core.triggers import when
 @when("Time cron 20 0 0/3 * * ?")
 def addOWMItemsToGroups(event):
     from org.joda.time import DateTime
+    import math
 
     if not ir.getItems("gOpenWeatherMap"):
         # install Scale transformation service, if not already
