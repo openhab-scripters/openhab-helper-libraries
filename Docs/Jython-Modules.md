@@ -165,14 +165,34 @@ log.info("Logging example from logger, using text appended to LOG_PREFIX")
 <ul>
 
 This module allows runtime creation and removal of items.
+It will also remove any links from an Item before it is removed.
+Requires the JythonItemProvder and JythonItemChannelLinkProvider component scripts.
 
 ```python
 import core.items
 
-core.items.add("_Test", "String")
+core.items.add_item("Test_String", item_type="String", label="Test String")
 
 # later...
-core.items.remove("_Test")
+core.items.remove_item("Test_String")
+
+```
+</ul>
+
+#### Module: [`core.links`](../Core/automation/lib/python/core/links.py)
+<ul>
+
+This module allows runtime creation and removal of links.
+Requires the JythonItemChannelLinkProvider component script.
+Take a look at the [Community OWM script](../Community/OpenWeatherMap/automation/jsr223/community/openweathermap/owm_daily_forecast.py) for an example usage.
+
+```python
+import core.links
+
+core.links.add_link("Kodi_Control", channel_uid="kodi:kodi:familyroom:control")
+
+# later...
+core.link.remove_link("Kodi_Control")
 
 ```
 </ul>
