@@ -31,7 +31,7 @@ This rule trigger responds to events on the OSGI EventAdmin event bus.
 #### Script: [`100_StartupTrigger.py`](../Core/automation/jsr223/core/components/100_StartupTrigger.py)
 <ul>
 
-Defines a rule trigger that triggers immediately when a rule is activated. [not functional after an API change]
+Defines a rule trigger that triggers immediately when a rule is activated. [not functional yet]
 </ul>
 
 #### Script: [`100_ShutdownTrigger.py`](../Core/automation/jsr223/core/components/100_ShutdownTrigger.py)
@@ -54,13 +54,28 @@ This script defines a transformation service (identified by "JYTHON") that will 
 This is similar to the Javascript transformer.
 </ul>
 
-#### Scripts: Jython-based Providers
+#### Script [`200_JythonItemProvider.py`](../Core/automation/jsr223/core/components/200_JythonItemProvider.py)
 <ul>
 
-These components are used to support Thing handler implementations:
+This script adds an ItemProvider, so that Items can be added and removed at runtime.
+</ul>
+
+#### Script [`200_JythonItemChannelLinkProvider.py`](../Core/automation/jsr223/core/components/200_JythonItemChannelLinkProvider.py)
+<ul>
+
+This script adds an ItemChannelLinkProvider, so that Links can be added and removed at runtime.
+</ul>
+
+#### Script [`200_JythonBindingInfoProvider.py`](../Core/automation/jsr223/core/components/200_JythonBindingInfoProvider.py)
+<ul>
+
+This script adds a BindingInfoProvider.
+</ul>
+
+#### Scripts: Jython-based Thing Providers
+<ul>
+
+These components are used to support Thing Handler implementations:
 * [`200_JythonThingProvider.py`](../Core/automation/jsr223/core/components/200_JythonThingProvider.py)
 * [`200_JythonThingTypeProvider.py`](../Core/automation/jsr223/core/components/200_JythonThingTypeProvider.py)
-* [`200_JythonBindingInfoProvider.py`](../Core/automation/jsr223/core/components/200_JythonBindingInfoProvider.py)
-* [`200_JythonItemProvider.py`](../Core/automation/jsr223/core/components/200_JythonItemProvider.py)
-
 </ul>
