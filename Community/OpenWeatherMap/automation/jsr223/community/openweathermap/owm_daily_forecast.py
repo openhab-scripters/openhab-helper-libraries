@@ -99,55 +99,55 @@ def addOWMItemsToGroups(event):
         from core.items import add_item
         from core.links import add_link
 
-        owmThingID = None
+        owmThingUID = None
         for thing in things.getAll():
             if thing.getThingTypeUID() == ThingTypeUID("openweathermap:weather-and-forecast"):
-                owmThingID = thing.getUID().getId()
+                owmThingUID = str(thing.getUID())
                 break
-        #addOWMItemsToGroups.log.debug("owmThingID set to [{}]".format(owmThingID))
+        addOWMItemsToGroups.log.debug("owmThingUID set to [{}]".format(owmThingUID))
 
         add_item("gOpenWeatherMap", item_type="Group", groups=["gWeather"], label="OpenWeatherMap", tags=["OpenWeatherMap"])
 
         # create Current Items
         if not ir.getItems("Current_Timestamp"):
             add_item("Current_Timestamp", item_type="DateTime", groups=["gOpenWeatherMap"], label="Current: Timestamp [%1$tY-%1$tm-%1$tdT%1$tH:%1$tM:%1$tS]", tags=["OpenWeatherMap"])
-            add_link("Current_Timestamp", ChannelUID("openweathermap:weather-and-forecast:" + str(owmThingID) + ":current#time-stamp"))
+            add_link("Current_Timestamp", ChannelUID(owmThingUID + ":current#time-stamp"))
         if not ir.getItems("Current_Condition"):
             add_item("Current_Condition", item_type="String", groups=["gOpenWeatherMap"], label="Current: Condition [%s]", tags=["OpenWeatherMap"])
-            add_link("Current_Condition", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#condition"))
+            add_link("Current_Condition", ChannelUID(owmThingUID + ":current#condition"))
         #if not ir.getItems("Current_ConditionID"):
         #    add_item("Current_ConditionID", item_type="String", groups=["gOpenWeatherMap"], label="Current: Condition ID [%s]", tags=["OpenWeatherMap"])
-        #    add_link("Current_ConditionID", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#condition-id"))
+        #    add_link("Current_ConditionID", ChannelUID(owmThingUID + ":current#condition-id"))
         #if not ir.getItems("Current_Icon"):
         #    add_item("Current_Icon", item_type="Image", groups=["gOpenWeatherMap"], label="Current: Icon", tags=["OpenWeatherMap"])
-        #    add_link("Current_Icon", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#icon"))
+        #    add_link("Current_Icon", ChannelUID(owmThingUID + ":current#icon"))
         if not ir.getItems("Current_Temperature"):
             add_item("Current_Temperature", item_type="Number:Temperature", groups=["gOpenWeatherMap"], label="Current: Temperature [%.0f %unit%]", tags=["OpenWeatherMap"])
-            add_link("Current_Temperature", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#temperature"))
+            add_link("Current_Temperature", ChannelUID(owmThingUID + ":current#temperature"))
         if not ir.getItems("Current_Pressure"):
             add_item("Current_Pressure", item_type="Number:Pressure", groups=["gOpenWeatherMap"], label="Current: Pressure [%.1f %unit%]", tags=["OpenWeatherMap"])
-            add_link("Current_Pressure", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#pressure"))
+            add_link("Current_Pressure", ChannelUID(owmThingUID + ":current#pressure"))
         if not ir.getItems("Current_Humidity"):
             add_item("Current_Humidity", item_type="Number:Dimensionless", groups=["gOpenWeatherMap"], label="Current: Humidity [%d %unit%]", tags=["OpenWeatherMap"])
-            add_link("Current_Humidity", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#humidity"))
+            add_link("Current_Humidity", ChannelUID(owmThingUID + ":current#humidity"))
         if not ir.getItems("Current_WindSpeed"):
             add_item("Current_WindSpeed", item_type="Number:Speed", groups=["gOpenWeatherMap"], label="Current: Wind speed [%.0f %unit%]", tags=["OpenWeatherMap"])
-            add_link("Current_WindSpeed", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#wind-speed"))
+            add_link("Current_WindSpeed", ChannelUID(owmThingUID + ":current#wind-speed"))
         #if not ir.getItems("Current_GustSpeed"):
         #    add_item("Current_GustSpeed", item_type="Number:Speed", groups=["gOpenWeatherMap"], label="Current: Gust speed [%.0f %unit%]", tags=["OpenWeatherMap"])
-        #    add_link("Current_GustSpeed", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#gust-speed"))
+        #    add_link("Current_GustSpeed", ChannelUID(owmThingUID + ":current#gust-speed"))
         if not ir.getItems("Current_WindDirection"):
             add_item("Current_WindDirection", item_type="Number:Angle", groups=["gOpenWeatherMap"], label="Current: Wind direction [SCALE(windDirection.scale):%s]", tags=["OpenWeatherMap"])
-            add_link("Current_WindDirection", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#wind-direction"))
+            add_link("Current_WindDirection", ChannelUID(owmThingUID + ":current#wind-direction"))
         if not ir.getItems("Current_Cloudiness"):
             add_item("Current_Cloudiness", item_type="Number:Dimensionless", groups=["gOpenWeatherMap"], label="Current: Cloudiness [%d %unit%]", tags=["OpenWeatherMap"])
-            add_link("Current_Cloudiness", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#cloudiness"))
+            add_link("Current_Cloudiness", ChannelUID(owmThingUID + ":current#cloudiness"))
         if not ir.getItems("Current_RainVolume"):
             add_item("Current_RainVolume", item_type="Number:Length", groups=["gOpenWeatherMap"], label="Current: Rain volume [%.1f %unit%]", tags=["OpenWeatherMap"])
-            add_link("Current_RainVolume", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#rain"))
+            add_link("Current_RainVolume", ChannelUID(owmThingUID + ":current#rain"))
         if not ir.getItems("Current_SnowVolume"):
             add_item("Current_SnowVolume", item_type="Number:Length", groups=["gOpenWeatherMap"], label="Current: Snow volume [%.1f %unit%]", tags=["OpenWeatherMap"])
-            add_link("Current_SnowVolume", ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":current#snow"))
+            add_link("Current_SnowVolume", ChannelUID(owmThingUID + ":current#snow"))
 
         # create Forecast groups
         for index in range(1, 6):
@@ -186,43 +186,43 @@ def addOWMItemsToGroups(event):
         for index in range(1, 41):
             #if not ir.getItems("Forecast_Timestamp_{:03d}".format(3 * index)):
             #    add_item("Forecast_Timestamp_{:03d}".format(3 * index), item_type="DateTime", label="Forecast ({:03d}): Timestamp [%1$tY-%1$tm-%1$tdT%1$tH:%1$tM:%1$tS]".format(3 * index), tags=["OpenWeatherMap"])
-            #    add_link("Forecast_Timestamp_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#time-stamp".format(3 * index)))
+            #    add_link("Forecast_Timestamp_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#time-stamp".format(3 * index)))
             #if not ir.getItems("Forecast_Condition_{:03d}".format(3 * index)):
             #    add_item("Forecast_Condition_{:03d}".format(3 * index), item_type="String", label="Forecast ({:03d}): Condition [%s]".format(3 * index), tags=["OpenWeatherMap"])
-            #    add_link("Forecast_Condition_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#condition".format(3 * index)))
+            #    add_link("Forecast_Condition_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#condition".format(3 * index)))
             #if not ir.getItems("Forecast_ConditionID_{:03d}".format(3 * index)):
             #    add_item("Forecast_ConditionID_{:03d}".format(3 * index), item_type="String", label="Forecast ({:03d}): Condition ID [%s]".format(3 * index), tags=["OpenWeatherMap"])
-            #    add_link("Forecast_ConditionID_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#condition-id".format(3 * index)))
+            #    add_link("Forecast_ConditionID_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#condition-id".format(3 * index)))
             #if not ir.getItems("Forecast_Icon_{:03d}".format(3 * index)):
             #    add_item("Forecast_Icon_{:03d}".format(3 * index), item_type="Image", label="Forecast ({:03d}): Icon".format(3 * index), tags=["OpenWeatherMap"])
-            #    add_link("Forecast_Icon_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#icon".format(3 * index)))
+            #    add_link("Forecast_Icon_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#icon".format(3 * index)))
             if not ir.getItems("Forecast_Temperature_{:03d}".format(3 * index)):
                 add_item("Forecast_Temperature_{:03d}".format(3 * index), item_type="Number:Temperature", label="Forecast ({:03d}): Temperature [%.0f %unit%]".format(3 * index), tags=["OpenWeatherMap"])
-                add_link("Forecast_Temperature_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#temperature".format(3 * index)))
+                add_link("Forecast_Temperature_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#temperature".format(3 * index)))
             if not ir.getItems("Forecast_Pressure_{:03d}".format(3 * index)):
                 add_item("Forecast_Pressure_{:03d}".format(3 * index), item_type="Number:Pressure", label="Forecast ({:03d}): Pressure [%.1f %unit%]".format(3 * index), tags=["OpenWeatherMap"])
-                add_link("Forecast_Pressure_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#pressure".format(3 * index)))
+                add_link("Forecast_Pressure_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#pressure".format(3 * index)))
             if not ir.getItems("Forecast_Humidity_{:03d}".format(3 * index)):
                 add_item("Forecast_Humidity_{:03d}".format(3 * index), item_type="Number:Dimensionless", label="Forecast ({:03d}): Humidity [%d %unit%]".format(3 * index), tags=["OpenWeatherMap"])
-                add_link("Forecast_Humidity_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#humidity".format(3 * index)))
+                add_link("Forecast_Humidity_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#humidity".format(3 * index)))
             if not ir.getItems("Forecast_WindSpeed_{:03d}".format(3 * index)):
                 add_item("Forecast_WindSpeed_{:03d}".format(3 * index), item_type="Number:Speed", label="Forecast ({:03d}): Wind speed [%.0f %unit%]".format(3 * index), tags=["OpenWeatherMap"])
-                add_link("Forecast_WindSpeed_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#wind-speed".format(3 * index)))
+                add_link("Forecast_WindSpeed_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#wind-speed".format(3 * index)))
             #if not ir.getItems("Forecast_GustSpeed_{:03d}".format(3 * index)):
             #    add_item("Forecast_GustSpeed_{:03d}".format(3 * index), item_type="Number:Speed", label="Forecast ({:03d}): Gust speed [%.0f %unit%]".format(3 * index), tags=["OpenWeatherMap"])
-            #    add_link("Forecast_GustSpeed_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#gust-speed".format(3 * index)))
+            #    add_link("Forecast_GustSpeed_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#gust-speed".format(3 * index)))
             if not ir.getItems("Forecast_WindDirection_{:03d}".format(3 * index)):
                 add_item("Forecast_WindDirection_{:03d}".format(3 * index), item_type="Number:Angle", label="Forecast ({:03d}): Wind direction [SCALE(windDirection.scale):%s]".format(3 * index), tags=["OpenWeatherMap"])
-                add_link("Forecast_WindDirection_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#wind-direction".format(3 * index)))
+                add_link("Forecast_WindDirection_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#wind-direction".format(3 * index)))
             if not ir.getItems("Forecast_Cloudiness_{:03d}".format(3 * index)):
                 add_item("Forecast_Cloudiness_{:03d}".format(3 * index), item_type="Number:Dimensionless", label="Forecast ({:03d}): Cloudiness [%d %unit%]".format(3 * index), tags=["OpenWeatherMap"])
-                add_link("Forecast_Cloudiness_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#cloudiness".format(3 * index)))
+                add_link("Forecast_Cloudiness_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#cloudiness".format(3 * index)))
             if not ir.getItems("Forecast_RainVolume_{:03d}".format(3 * index)):
                 add_item("Forecast_RainVolume_{:03d}".format(3 * index), item_type="Number:Length", label="Forecast ({:03d}): Rain volume [%.1f %unit%]".format(3 * index), tags=["OpenWeatherMap"])
-                add_link("Forecast_RainVolume_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#rain".format(3 * index)))
+                add_link("Forecast_RainVolume_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#rain".format(3 * index)))
             if not ir.getItems("Forecast_SnowVolume_{:03d}".format(3 * index)):
                 add_item("Forecast_SnowVolume_{:03d}".format(3 * index), item_type="Number:Length", label="Forecast ({:03d}): Snow volume [%.1f %unit%]".format(3 * index), tags=["OpenWeatherMap"])
-                add_link("Forecast_SnowVolume_{:03d}".format(3 * index), ChannelUID("openweathermap:weather-and-forecast:" + owmThingID + ":forecastHours{:02d}#snow".format(3 * index)))
+                add_link("Forecast_SnowVolume_{:03d}".format(3 * index), ChannelUID(owmThingUID + ":forecastHours{:02d}#snow".format(3 * index)))
 
     currentHour = DateTime.now().getHourOfDay()
     forecastsLeftInDay = 8 - int(math.floor(currentHour / 3))# max 8, min 1
