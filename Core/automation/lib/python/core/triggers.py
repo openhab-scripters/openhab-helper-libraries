@@ -297,8 +297,8 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             raise ValueError("when: \"{}\" could not be parsed. target_type is missing or invalid. Valid target_type values are: Item, Member of, Descendent of, Thing, Channel, System, and Time.".format(target))
         elif target_type != "System" and trigger_type is None:
             raise ValueError("when: \"{}\" could not be parsed because trigger_type cannot be None".format(target)) 
-        elif target_type in ["Item", "Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target) is None:# throws ItemNotFoundException if item does not exist
-            raise ValueError("when: \"{}\" could not be parsed because Item \"{}\" is not in the itemRegistry".format(target, trigger_target))
+        elif target_type in ["Item", "Member of", "Descendent of"] and scope.itemRegistry.getItems(trigger_target) == []:
+            raise ValueError("when: \"{}\" could not be parsed because Item \"{}\" is not in the ItemRegistry".format(target, trigger_target))
         elif target_type in ["Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target).type != "Group":
             raise ValueError("when: \"{}\" could not be parsed because \"{}\" was specified, but \"{}\" is not a group".format(target, target_type, trigger_target))
         elif target_type == "Item" and old_state is not None and trigger_type == "changed" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, old_state):
@@ -312,7 +312,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         elif target_type == "Channel" and scope.things.getChannel(ChannelUID(trigger_target)).kind != ChannelKind.TRIGGER:
             raise ValueError("when: \"{}\" could not be parsed because Channel \"{}\" is not a trigger".format(target, trigger_target))
         elif target_type == "Thing" and scope.things.get(ThingUID(trigger_target)) is None:# returns null if Thing does not exist
-            raise ValueError("when: \"{}\" could not be parsed because Thing \"{}\" is not in the thingRegistry".format(target, trigger_target))
+            raise ValueError("when: \"{}\" could not be parsed because Thing \"{}\" is not in the ThingRegistry".format(target, trigger_target))
         elif target_type == "Thing" and old_state and not hasattr(ThingStatus, old_state):
             raise ValueError("when: \"{}\" is not a valid Thing status".format(old_state))
         elif target_type == "Thing" and new_state and not hasattr(ThingStatus, new_state):

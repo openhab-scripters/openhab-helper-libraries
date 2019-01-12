@@ -37,10 +37,16 @@ def add_item(item, item_type=None, category=None, groups=None, label=None, tags=
 
 def remove_item(item):
     try:
-        if isinstance(item, basestring) and scope.itemRegistry.getItems(item):
-            item = scope.ir.getItem(item)
-        elif not (hasattr(item, 'name') and scope.itemRegistry.getItems(item.name)):
-            raise Exception("The 'item' argument must be a string or an existing Item")
+        from org.eclipse.smarthome.core.items import GenericItem
+        if isinstance(item, basestring):
+            if scope.itemRegistry.getItems(item) == []:
+                raise Exception("\"{}\" is not in the ItemRegistry".format(item))
+            else:
+                item = scope.ir.getItem(item)
+        elif not isinstance(item, GenericItem):
+            raise Exception("\"{}\" is not a string or Item".format(item))
+        elif scope.itemRegistry.getItems(item.name) == []:
+            raise Exception("\"{}\" is not in the ItemRegistry".format(item))
         remove_all_links(item)
         JythonItemProvider.remove(item)
         log.debug("Item removed: [{}]".format(item))
