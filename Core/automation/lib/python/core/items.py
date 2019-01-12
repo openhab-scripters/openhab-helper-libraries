@@ -8,7 +8,7 @@ log = logging.getLogger(LOG_PREFIX + ".core.items")
 
 __all__ = ["add_item", "remove_item"]
 
-def add_item(item, item_type=None, category=None, groups=None, label=None, tags=None, gi_base_type=None, group_function=None):
+def add_item(item, item_type=None, category=None, groups=None, label=None, tags=list(), gi_base_type=None, group_function=None):
     try:
         if isinstance(item, basestring):
             if item_type is None:
