@@ -156,8 +156,10 @@ def addOWMItemsToGroups(event):
             #    add_item("gForecast_ConditionID_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label="Forecast " + str(index) + ": Condition ID [%.0f %unit%]", tags=["OpenWeatherMap"])
             #if not ir.getItems("gForecast_Icon_" + str(index)):
             #    add_item("gForecast_Icon_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label="Forecast " + str(index) + ": Icon [%.0f %unit%]", tags=["OpenWeatherMap"])
-            if not ir.getItems("gForecast_Temperature_" + str(index)):
-                add_item("gForecast_Temperature_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label="Forecast " + str(index) + ": Temperature [%.0f %unit%]", gi_base_type="Number:Temperature", group_function=ArithmeticGroupFunction.Max(), tags=["OpenWeatherMap"])
+            if not ir.getItems("gForecast_Temperature_High_" + str(index)):
+                add_item("gForecast_Temperature_High_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label="Forecast " + str(index) + ": Temperature (high) [%.0f %unit%]", gi_base_type="Number:Temperature", group_function=ArithmeticGroupFunction.Max(), tags=["OpenWeatherMap"])
+            if not ir.getItems("gForecast_Temperature_Low_" + str(index)):
+                add_item("gForecast_Temperature_Low_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label="Forecast " + str(index) + ": Temperature (low) [%.0f %unit%]", gi_base_type="Number:Temperature", group_function=ArithmeticGroupFunction.Min(), tags=["OpenWeatherMap"])
             if not ir.getItems("gForecast_Pressure_" + str(index)):
                 add_item("gForecast_Pressure_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label="Forecast " + str(index) + ": Pressure [%.1f %unit%]", gi_base_type="Number:Pressure", group_function=ArithmeticGroupFunction.Max(), tags=["OpenWeatherMap"])
             if not ir.getItems("gForecast_Humidity_" + str(index)):
@@ -231,8 +233,10 @@ def addOWMItemsToGroups(event):
         #    ir.getItem("gForecast_ConditionID_{}".format(groupIndex)).removeMember(member)
         #for member in ir.getItem("gForecast_Icon_{}".format(groupIndex)).getMembers():
         #    ir.getItem("gForecast_Icon_{}".format(groupIndex)).removeMember(member)
-        for member in ir.getItem("gForecast_Temperature_{}".format(groupIndex)).getMembers():
-            ir.getItem("gForecast_Temperature_{}".format(groupIndex)).removeMember(member)
+        for member in ir.getItem("gForecast_Temperature_High_{}".format(groupIndex)).getMembers():
+            ir.getItem("gForecast_Temperature_High_{}".format(groupIndex)).removeMember(member)
+        for member in ir.getItem("gForecast_Temperature_Low_{}".format(groupIndex)).getMembers():
+            ir.getItem("gForecast_Temperature_Low_{}".format(groupIndex)).removeMember(member)
         for member in ir.getItem("gForecast_Pressure_{}".format(groupIndex)).getMembers():
             ir.getItem("gForecast_Pressure_{}".format(groupIndex)).removeMember(member)
         for member in ir.getItem("gForecast_Humidity_{}".format(groupIndex)).getMembers():
@@ -257,7 +261,8 @@ def addOWMItemsToGroups(event):
             #ir.getItem("gForecast_Condition_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Condition_{:03d}".format(3 * index)))
             #ir.getItem("gForecast_ConditionID_{}".format(groupIndex)).addMember(ir.getItem("Forecast_ConditionID_{:03d}".format(3 * index)))
             #ir.getItem("gForecast_Icon_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Icon_{:03d}".format(3 * index)))
-            ir.getItem("gForecast_Temperature_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Temperature_{:03d}".format(3 * index)))
+            ir.getItem("gForecast_Temperature_High_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Temperature_{:03d}".format(3 * index)))
+            ir.getItem("gForecast_Temperature_Low_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Temperature_{:03d}".format(3 * index)))
             ir.getItem("gForecast_Pressure_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Pressure_{:03d}".format(3 * index)))
             ir.getItem("gForecast_Humidity_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Humidity_{:03d}".format(3 * index)))
             ir.getItem("gForecast_WindSpeed_{}".format(groupIndex)).addMember(ir.getItem("Forecast_WindSpeed_{:03d}".format(3 * index)))
