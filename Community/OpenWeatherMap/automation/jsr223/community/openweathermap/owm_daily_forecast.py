@@ -36,15 +36,19 @@ REQUIRES:
         to adjust the script.
     All OWM Items should be removed before using rule
     The SCALE transformation service is required, but it will be installed for
-        you. If you manually editted the 'transformation' line in addons.cfg, be sure to
-        add it there, or it will uninstall next OH update or cache clearing.
+        you. If you manually editted the 'transformation' line in addons.cfg,
+        be sure to add it there, or it will uninstall next OH update or cache
+        clearing.
 
 KNOWN ISSUES:
 ArithmethicGroupFunction.Avg does not properly average angles. An ESH issue has
     been opened for this... https://github.com/eclipse/smarthome/issues/6792.
+I noticed the units for the Cloudiness and Humidity groups display as 'one',
+    but the Items display properly as '%'.
 
 01/11/19: I've just corrected an issue where the Items were not linking.
-01/12/19: Removed Forecast_Temperature_X, and added Forecast_Temperature_High_X and Forecast_Temperature_Low_X
+01/12/19: Removed Forecast_Temperature_X, and added Forecast_Temperature_High_X
+    and Forecast_Temperature_Low_X
 '''
 from core.log import logging, LOG_PREFIX, log_traceback
 
