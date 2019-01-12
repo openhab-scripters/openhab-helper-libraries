@@ -8,18 +8,23 @@ log = logging.getLogger(LOG_PREFIX + ".core.links")
 __all__ = ["add_link", "remove_link"]
 
 def validate_item(item):
-    if hasattr(item, 'name') and scope.itemRegistry.getItems(item.name):
+    from org.eclipse.smarthome.core.items import GenericItem
+    if isinstance(item, GenericItem):
         item = item.name
-    elif not (isinstance(item, basestring) and scope.itemRegistry.getItems(item)):
-        raise Exception("The 'item' argument must be a string or an existing Item")
+    elif not isinstance(item, basestring):
+        raise Exception("\"{}\" is not a string or Item".format(item))
+    if scope.itemRegistry.getItems(item) == []:
+        raise Exception("\"{}\" is not in the ItemRegistry".format(item))
     return item
 
 def validate_channel_uid(channel_uid):
     from org.eclipse.smarthome.core.thing import ChannelUID
-    if isinstance(channel_uid, basestring) and scope.things.getChannel(ChannelUID(channel_uid)) is not None:
+    if isinstance(channel_uid, basestring):
         channel_uid = ChannelUID(channel_uid)
-    elif not (isinstance(channel_uid, ChannelUID) and scope.things.getChannel(channel_uid) is not None):
-        raise Exception("The 'channel_uid' argument must be a string or an existing ChannelUID")
+    elif not isinstance(channel_uid, ChannelUID):
+        raise Exception("\"{}\" is not a string or ChannelUID".format(channel_uid))
+    if scope.things.getChannel(channel_uid) is None:
+        raise Exception("\"{}\" is not a valid Channel".format(channel_uid))
     return channel_uid
 
 def add_link(item, channel_uid):
