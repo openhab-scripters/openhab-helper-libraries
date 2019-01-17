@@ -21,7 +21,13 @@ every time the binding pulls in new values.
 gOpenWeatherMap
     gCurrent
     gForecast_X
-        gForecast_Temperature_X
+        gForecast_Timestamp_X
+        gForecast_Condition_X
+        gForecast_ConditionID_X
+        gForecast_Icon_X
+        gForecast_IconID_X
+        gForecast_Temperature_High_X
+        gForecast_Temperature_Low_X
         gForecast_Pressure_X
         gForecast_Humidity_X
         gForecast_WindSpeed_X
