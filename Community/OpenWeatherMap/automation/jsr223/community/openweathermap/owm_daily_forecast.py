@@ -80,7 +80,7 @@ def removeOWMItems():
             removeOWMItems.log.debug("removeOWMItems: [{}]".format(item))
             remove_item(item)
     '''    
-removeOWMItems()
+#removeOWMItems()
 
 def addOWMItems():
     addOWMItems.log = logging.getLogger(LOG_PREFIX + ".addOWMItems")
