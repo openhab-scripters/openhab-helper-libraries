@@ -21,13 +21,7 @@ every time the binding pulls in new values.
 gOpenWeatherMap
     gCurrent
     gForecast_X
-        gForecast_Timestamp_X
-        gForecast_Condition_X
-        gForecast_ConditionID_X
-        gForecast_Icon_X
-        gForecast_IconID_X
-        gForecast_Temperature_High_X
-        gForecast_Temperature_Low_X
+        gForecast_Temperature_X
         gForecast_Pressure_X
         gForecast_Humidity_X
         gForecast_WindSpeed_X
@@ -68,6 +62,8 @@ I noticed the units for the Cloudiness and Humidity groups display as 'one',
 01/16/19: Added IconID
 01/16/19: Added manual group aggregation for Condition, ConditionID, Icon,
     IconID, and WindDirection
+01/18/19: Fixed issue with Items not being added to groups properly
+01/18/19: Added a NULL check when manually setting group aggregation values
 '''
 from core.log import logging, LOG_PREFIX, log_traceback
 
@@ -319,9 +315,9 @@ def addOWMItems():
         # add Forecast Items to groups, and update the labels to reflect time
         groupIndex = 1
         for index in range(1, 41):
-            if DateTime(str(items["Forecast_Timestamp_{:02}".format(3 * index)])).getDayOfWeek() != DateTime.now().getDayOfWeek() + groupIndex - 1:
+            if DateTime(str(items["Forecast_Timestamp_{:02}".format(3 * index)])).getDayOfWeek() - 1 != (DateTime.now().getDayOfWeek() + groupIndex - 2) % 7:
                 if groupIndex == 5:
-                    break
+                    break# we're at the end of the forecasts that fit into 5 days
                 else:
                     groupIndex += 1
             labelTime = items["Forecast_Timestamp_{:02}".format(3 * index)].format("%1$tl:%1$tM%1$tp")
@@ -384,9 +380,10 @@ def addOWMItems():
                     events.postUpdate(ir.getItem("gForecast_Icon_" + str(index)), items[selectedItem.name.replace("ConditionID", "Icon")])
                     break
             # this can be removed when ArithmeticGroupFunction.Avg() is fixed for Number:Angle
-            windDirectionItemStates = map(lambda item: item.state.intValue(), ir.getItem("gForecast_WindDirection_" + str(index)).getMembers())
-            windDirectionAvg = reduce(lambda x, y: (((x + y) / 2) if y - x < 180 else (x + y + 360) / 2) % 360, windDirectionItemStates)
-            events.postUpdate("gForecast_WindDirection_" + str(index), str(windDirectionAvg))
+            windDirectionItemStates = map(lambda item: item.state.intValue(), filter(lambda member: member.state != NULL and member.state != UNDEF, ir.getItem("gForecast_WindDirection_" + str(index)).getMembers()))
+            if len(windDirectionItemStates) > 0:
+                windDirectionAvg = reduce(lambda x, y: (((x + y) / 2) if y - x < 180 else (x + y + 360) / 2) % 360, windDirectionItemStates)
+                events.postUpdate("gForecast_WindDirection_" + str(index), str(windDirectionAvg))
         
         addOWMItemsToGroups.log.debug("Updated groups and Items")
 
