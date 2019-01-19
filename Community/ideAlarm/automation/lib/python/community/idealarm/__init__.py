@@ -135,7 +135,7 @@ class IdeAlarmZone(object):
 
         # There might be open sensors when trying to arm. If so, the custom function onArmingWithOpenSensors
         # gets called. (That doesn't necessarily need to be an error condition).
-        #  However if the zone has been configured not to allow opened sensors during arming, 
+        #  However if the zone has been configured not to allow opened sensors during arming,
         # the zone status will be set to ERROR and onZoneStatusChange will be able to trap track it down.
         if newArmingMode in [ARMINGMODE['ARMED_AWAY'], ARMINGMODE['ARMED_HOME']] \
         and self.getZoneStatus() != ZONESTATUS['ARMING'] and self.getZoneStatus() is not None \
@@ -206,7 +206,7 @@ class IdeAlarmZone(object):
         '''
     Gets all open sensor objects for the zone
     - mins Integer 0-9999 Number of minutes that the sensor must have been updated within.
-        A 0 value will return sensor devices who are currently open. 
+        A 0 value will return sensor devices who are currently open.
     - armingMode
         A sensor is regarded to be open only in the context of an arming mode. Defaults to the zones current arming mode.
     - isArming Boolean. In an arming scenario we don't want to include sensors that are set not to warn when arming.
@@ -238,12 +238,12 @@ class IdeAlarmZone(object):
         '''Returns true if disarmed, otherwise false'''
         return not self.isArmed()
 
-    def onToggleSwitch(self, item):
+    def onToggleSwitch(self, event):
         '''
         Called whenever an alarm arming mode toggle switch has been switched.
         '''
         newArmingMode = None
-        if item.name == self.armAwayToggleSwitch:
+        if event.itemName == self.armAwayToggleSwitch:
             if self.getArmingMode() in [ARMINGMODE['DISARMED']]:
                 newArmingMode = ARMINGMODE['ARMED_AWAY']
             else:
@@ -311,7 +311,7 @@ class IdeAlarmZone(object):
 
     def countOpenSections(self):
         '''
-        A sensor has changed its state. We are here to calculate 
+        A sensor has changed its state. We are here to calculate
         how many open sensors there are in the zone at this very moment.
         Saves the result in self.openSections and returns it.
         WE DO NOT INCLUDE MOTION DETECTORS IN THE COUNT UNLESS ARMED AWAY!
@@ -360,7 +360,7 @@ class IdeAlarm(object):
 
         self.log = logging.getLogger(LOG_PREFIX+'.IdeAlarm V'+self.__version__)
 
-        import idealarm.config ######### TEMP 
+        import idealarm.config ######### TEMP
         #reload(idealarm.config) ######### TEMP
         #self.log.debug('Configuration file has been reloaded!!!') ######### TEMP
 
@@ -454,24 +454,23 @@ class IdeAlarm(object):
         '''
         Returns a Python list of all triggers that shall trigger ideAlarm.
         '''
-        triggerItems = [ ItemStateChangeTrigger(item) for item in self.getSensors() ]
+        triggerItems = [ ItemStateChangeTrigger(item).trigger for item in self.getSensors() ]
         for i in range(len(self.alarmZones)):
             #self.log.debug('Getting trigger items for alarm zone: ' + self.alarmZones[i].name.decode('utf-8'))
-            triggerItems.append(ItemStateChangeTrigger(self.alarmZones[i].armAwayToggleSwitch, str(ON)))
-            triggerItems.append(ItemStateChangeTrigger(self.alarmZones[i].armHomeToggleSwitch, str(ON)))
-            triggerItems.append(ItemCommandTrigger('Z'+str(i+1)+'_Entry_Timer', str(OFF)))
-            triggerItems.append(ItemCommandTrigger('Z'+str(i+1)+'_Exit_Timer', str(OFF)))
-            triggerItems.append(ItemCommandTrigger('Z'+str(i+1)+'_Nag_Timer', str(OFF)))
-            triggerItems.append(ItemCommandTrigger('Z'+str(i+1)+'_Alert_Max_Timer', str(OFF)))
+            triggerItems.append(ItemStateChangeTrigger(self.alarmZones[i].armAwayToggleSwitch, str(ON)).trigger)
+            triggerItems.append(ItemStateChangeTrigger(self.alarmZones[i].armHomeToggleSwitch, str(ON)).trigger)
+            triggerItems.append(ItemCommandTrigger('Z'+str(i+1)+'_Entry_Timer', str(OFF)).trigger)
+            triggerItems.append(ItemCommandTrigger('Z'+str(i+1)+'_Exit_Timer', str(OFF)).trigger)
+            triggerItems.append(ItemCommandTrigger('Z'+str(i+1)+'_Nag_Timer', str(OFF)).trigger)
+            triggerItems.append(ItemCommandTrigger('Z'+str(i+1)+'_Alert_Max_Timer', str(OFF)).trigger)
 
         return triggerItems
 
-    def execute(self, parent, modules, inputs):
+    def execute(self, event):
         '''
         Main function called whenever an item has triggered
         '''
         self.log.setLevel(DEBUG)
-        event = parent.event
 
         #self.log.debug(event.type)
         #self.log.debug('item: ' + unicode(event.itemName) + ' currently has state: ' + str(event.itemState) + ' ---> isActive(): ' + str(event.isActive))
