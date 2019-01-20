@@ -64,6 +64,7 @@ I noticed the units for the Cloudiness and Humidity groups display as 'one',
     IconID, and WindDirection
 01/18/19: Fixed issue with Items not being added to groups properly
 01/18/19: Added a NULL check when manually setting group aggregation values
+01/20/19: Fixed improper log entry after SCALE transform has been installed
 '''
 from core.log import logging, LOG_PREFIX, log_traceback
 
@@ -98,7 +99,7 @@ def addOWMItems():
             addOWMItems.log.debug("Scale transformation service installation failed")
             return
         else:
-            log.debug("Scale transformation service has been installed")
+            addOWMItems.log.debug("Scale transformation service has been installed")
     else:
         addOWMItems.log.debug("Scale transformation service is already installed")
 
