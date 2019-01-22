@@ -316,6 +316,9 @@ def addOWMItems():
         # add Forecast Items to groups, and update the labels to reflect time
         groupIndex = 1
         for index in range(1, 41):
+            # Check if Timestamp exists
+            if items["Forecast_Timestamp_{:02}".format(3 * index)] == NULL:
+                break
             if DateTime(str(items["Forecast_Timestamp_{:02}".format(3 * index)])).getDayOfWeek() - 1 != (DateTime.now().getDayOfWeek() + groupIndex - 2) % 7:
                 if groupIndex == 5:
                     break# we're at the end of the forecasts that fit into 5 days
