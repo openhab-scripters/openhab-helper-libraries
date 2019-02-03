@@ -80,7 +80,7 @@ The current experimental wrappers include trigger-related classes, so the previo
 scriptExtension.importPreset("RuleSimple")
 scriptExtension.importPreset("RuleSupport")
 
-from core.triggers import ItemStateUpdateTrigger
+from core.triggers import ItemStateChangeTrigger
 
 class exampleExtensionRule(SimpleRule):
     def __init__(self):
