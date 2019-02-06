@@ -72,6 +72,8 @@ I noticed the units for the Cloudiness and Humidity groups display as 'one',
 01/20/19: Fixed improper log entry after SCALE transform has been installed
 02/04/19: Added check to make sure a Thing with ThingUID
     'openweathermap:forecast-and-weather' exists and is ONLINE
+02/06/19: Added verification that the forecastHours and forecastDays are
+    configured properly in the Thing
 '''
 from core.log import logging, LOG_PREFIX, log_traceback
 
@@ -98,6 +100,7 @@ def addOWMItems():
     # create OWM Items and groups, if they do not exist
     from org.eclipse.smarthome.core.thing import ThingTypeUID
     from org.eclipse.smarthome.core.thing import ChannelUID
+    from org.eclipse.smarthome.config.core import Configuration
     from org.eclipse.smarthome.core.library.types import ArithmeticGroupFunction
 
     from core.items import add_item
@@ -105,11 +108,23 @@ def addOWMItems():
 
     owmThingUID = None
     for thing in things.getAll():
-        if thing.getThingTypeUID() == ThingTypeUID("openweathermap:weather-and-forecast") and str(thing.statusInfo) == "ONLINE":
-            owmThingUID = str(thing.getUID())
-            break
+        if thing.getThingTypeUID() == ThingTypeUID("openweathermap:weather-and-forecast"):
+            if str(thing.statusInfo) == "ONLINE":
+                thingConfiguration = thing.getConfiguration()
+                forecastHours = thingConfiguration.get("forecastHours")
+                if str(forecastHours) == "120":
+                    forecastDays = thingConfiguration.get("forecastDays")
+                    if str(forecastDays) == "0":
+                        owmThingUID = str(thing.getUID())
+                        break
+                    else:
+                        addOWMItems.log.warn("Thing found, but forecastDays is not set to [0]: forecastDays=[{}]".format(forecastDays))
+                else:
+                    addOWMItems.log.warn("Thing found, but forecastHours is not set to [120]: forecastHours=[{}]".format(forecastHours))
+            else:
+                addOWMItems.log.warn("Thing found, but statusInfo was not [ONLINE]: statusInfo=[{}]".format(thing.statusInfo))
     if owmThingUID is None:
-        addOWMItems.log.warn("No Thinng found with ThingUID 'openweathermap:weather-and-forecast', so exiting script")
+        addOWMItems.log.warn("No Thing found with ThingTypeUID 'openweathermap:weather-and-forecast', or it was not ONLINE, or it was improperly configured for the free API. Exiting script.")
     else:
         addOWMItems.log.debug("owmThingUID set to [{}]".format(owmThingUID))
 
