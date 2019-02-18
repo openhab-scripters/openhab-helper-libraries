@@ -24,7 +24,7 @@ from java.time.temporal.ChronoUnit import DAYS, HOURS, MINUTES, SECONDS
 from org.openhab.core.library.types import DateTimeType as LegacyDateTimeType
 from org.eclipse.smarthome.core.library.types import DateTimeType
 
-__all__ = ["formatDate", "daysBetween", "hoursBetween", "minutesBetween", "secondsBetween",
+__all__ = ["ZonedDateTime", "formatDate", "daysBetween", "hoursBetween", "minutesBetween", "secondsBetween",
             "to_java_zoneddatetime", "toJTime", "to_java_calendar", "toJCal", 
             "to_python_datetime", "toPyDT", "pyTimezone",
             "to_joda_datetime", "toJodaDT"]
