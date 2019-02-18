@@ -1,6 +1,15 @@
 """
-Date/time utilities for converting between the several different types
-used by openHAB.
+Date/time utilities for converting between the several different types used by openHAB.
+
+Can convert the following types:
+- java.time.ZonedDateTime
+- java.time.LocalDateTime
+- java.util.Calendar
+- java.util.Date
+- org.joda.DateTime
+- datetime.datetime (Python)
+- org.eclipse.smarthome.core.library.types.DateTimeType
+- org.openhab.core.library.types.DateTimeType
 """
 import datetime
 import sys
@@ -17,58 +26,55 @@ if 'org.smarthome.automation' in sys.modules:
     
 from org.joda.time import DateTime, DateTimeZone
 from java.util import Calendar, Date, TimeZone
-from java.text import SimpleDateFormat
 from java.time import LocalDateTime, ZonedDateTime, ZoneId, ZoneOffset
 from java.time.format import DateTimeFormatter
 from java.time.temporal.ChronoUnit import DAYS, HOURS, MINUTES, SECONDS
 from org.openhab.core.library.types import DateTimeType as LegacyDateTimeType
 from org.eclipse.smarthome.core.library.types import DateTimeType
 
-__all__ = ["ZonedDateTime", "formatDate", "daysBetween", "hoursBetween", "minutesBetween", "secondsBetween",
+__all__ = ["formatDate", "daysBetween", "hoursBetween", "minutesBetween", "secondsBetween",
             "to_java_zoneddatetime", "toJTime", "to_java_calendar", "toJCal", 
             "to_python_datetime", "toPyDT", "pyTimezone",
             "to_joda_datetime", "toJodaDT"]
 
 
 def formatDate(value, formatString="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
-    '''Returns string of date formatted according to formatString'''
-    return toJTime(value).format(DateTimeFormatter.ofPattern(formatString))
+    '''Returns string of date formatted according to formatString
+    Accepts any date type used by this module'''
+    return to_java_zoneddatetime(value).format(DateTimeFormatter.ofPattern(formatString))
 
 def daysBetween(tFrom, tTo):
     '''Returns number of whole days between tFrom and tTo.
-    Arguments must be Java ZonedDateTime/LocalDate/Calendar/Date,
-    Joda DateTime, Python datetime, ESH DateTimeType, or OH DateTimeType'''
+    Accepts any date type used by this module'''
     return DAYS.between(toJTime(tFrom), toJTime(tTo))
 
 def hoursBetween(tFrom, tTo):
     '''Returns number of whole hours between tFrom and tTo.
-    Arguments must be Java ZonedDateTime/LocalDate/Calendar/Date,
-    Joda DateTime, Python datetime, ESH DateTimeType, or OH DateTimeType'''
+    Accepts any date type used by this module'''
     return HOURS.between(toJTime(tFrom), toJTime(tTo))
 
 def minutesBetween(tFrom, tTo):
     '''Returns number of whole minutes between tFrom and tTo.
-    Arguments must be Java ZonedDateTime/LocalDate/Calendar/Date,
-    Joda DateTime, Python datetime, ESH DateTimeType, or OH DateTimeType'''
+    Accepts any date type used by this module'''
     return MINUTES.between(toJTime(tFrom), toJTime(tTo))
 
 def secondsBetween(tFrom, tTo):
     '''Returns number of whole seconds between tFrom and tTo.
-    Arguments must be Java ZonedDateTime/LocalDate/Calendar/Date,
-    Joda DateTime, Python datetime, ESH DateTimeType, or OH DateTimeType'''
+    Accepts any date type used by this module'''
     return SECONDS.between(toJTime(tFrom), toJTime(tTo))
 
-def toJTime(value):
-    '''Returns java.time.ZonedDateTime (with system timezone if none specified)'''
-    TZId = ZoneId.systemDefault()
+def to_java_zoneddatetime(value):
+    '''Returns java.time.ZonedDateTime (with system timezone if none specified)
+    Accepts any date type used by this module'''
+    TimezoneId = ZoneId.systemDefault()
     if isinstance(value, ZonedDateTime):
         return value
     # java.time.LocalDateTime
     if isinstance(value, LocalDateTime):
-        return value.atZone(TZId)
+        return value.atZone(TimezoneId)
     # python datetime
     if isinstance(value, datetime.datetime):
-        if value.tzinfo is not Null: TZId = ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(value.utcoffset().total_seconds()))
+        if value.tzinfo is not None: TimezoneId = ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(value.utcoffset().total_seconds()))
         return ZonedDateTime.of(
             value.year,
             value.month,
@@ -77,7 +83,7 @@ def toJTime(value):
             value.minute,
             value.second,
             value.microsecond * 1000,
-            TZId
+            TimezoneId
         )
     # java.util.Calendar
     if isinstance(value, Calendar):
@@ -88,21 +94,19 @@ def toJTime(value):
     # Joda DateTime
     if isinstance(value, DateTime):
         return value.toGregorianCalendar.toZonedDateTime
-    # OH DateTimeType
-    if isinstance(value, LegacyDateTimeType):
-        return toJTime(value.calendar)
-    # ESH DateTimeType
-    if isinstance(value, DateTimeType):
-        return toJTime(value.calendar)
+    # OH DateTimeType or ESH DateTimeType
+    if isinstance(value, (LegacyDateTimeType, DateTimeType)):
+        return to_java_zoneddatetime(value.calendar)
 
     raise Exception("Invalid conversion: " + str(type(value)))
 
-def toJCal(value):
-    '''Returns java.util.calendar type'''
+def to_java_calendar(value):
+    '''Returns java.util.calendar type
+    Accepts any date type used by this module'''
     if isinstance(value, Calendar):
         return value
     
-    zdt = toJTime(value)
+    zdt = to_java_zoneddatetime(value)
     c = Calendar.getInstance(TimeZone.getTimeZone(zdt.getZone().getID()))
     c.set(Calendar.YEAR, zdt.getYear)
     c.set(Calendar.MONTH, zdt.getMonthValue - 1)
@@ -113,12 +117,13 @@ def toJCal(value):
     c.set(Calendar.MILLISECOND, int(zdt.getNano / 1000000))
     return c
 
-def toPyDT(value):
-    '''Returns Python datetime.datetime type'''
+def to_python_datetime(value):
+    '''Returns Python datetime.datetime type
+    Accepts any date type used by this module'''
     if isinstance(value, datetime.datetime):
         return value
 
-    zdt = toJTime(value)
+    zdt = to_java_zoneddatetime(value)
     return datetime.datetime(
         zdt.getYear,
         zdt.getMonthValue,
@@ -130,12 +135,13 @@ def toPyDT(value):
         pyTimezone(int(zdt.getOffset.getTotalSeconds / 60))
     )
 
-def toJodaDT(value):
-    '''Returns org.joda.time.DateTime type'''
+def to_joda_datetime(value):
+    '''Returns org.joda.time.DateTime type
+    Accepts any date type used by this module'''
     if isinstance(value, DateTime):
             return value
     
-    zdt = toJTime(value)
+    zdt = to_java_zoneddatetime(value)
     return DateTime(
         zdt.toInstant,
         DateTimeZone.forID(zdt.getZone().getID())
@@ -174,8 +180,8 @@ class pyTimezone(datetime.tzinfo):
         return sHHMM
 
 
-# aliases for compatibility
-to_java_calendar = toJCal
-to_python_datetime = toPyDT
-to_joda_datetime = toJodaDT
-to_java_zoneddatetime = toJTime
+# aliases
+toJTime = to_java_zoneddatetime
+toJCal = to_java_calendar
+toPyDT = to_python_datetime
+toJodaDT = to_joda_datetime
