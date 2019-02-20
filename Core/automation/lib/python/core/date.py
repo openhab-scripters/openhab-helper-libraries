@@ -49,7 +49,7 @@ from org.eclipse.smarthome.core.library.types import DateTimeType
 __all__ = ["ZonedDateTime", "format_date", 
            "days_between", "hours_between", "minutes_between", "seconds_between",
            "to_java_zoneddatetime", "toJTime", "to_java_calendar", "toJCal", 
-           "to_python_datetime", "toPyDT", "pyTimezone",
+           "to_python_datetime", "toPyDT", "pythonTimezone",
            "to_joda_datetime", "toJodaDT"]
 
 
