@@ -197,6 +197,42 @@ core.link.remove_link("Kodi_Control")
 ```
 </ul>
 
+#### Module: [`core.date`](../Core/automation/lib/python/core/date.py)
+<ul>
+
+This module includes functions for converting between various datetime types used in openHAB and Jython, several functions for determining durations, and a function to format datetimes. The preferred datetime type is `ZonedDateTime` from `java.time` as `org.joda.DateTime` is depreciated beyond Java 8. The usage of `ZonedDateTime` is similar to the joda `DateTime` type, the Java doc for it can be found [here](https://docs.oracle.com/javase/8/docs/api/java/time/ZonedDateTime.html).
+
+All of the functions in this module accept any mix of the following datetime types:
+`java.time.ZonedDateTime`, `java.time.LocalDateTime`, `java.util.Calendar`, `java.util.Date`, `org.joda.DateTime`, `datetime.datetime` (Python), `org.eclipse.smarthome.core.library.types.DateTimeType`, and `org.openhab.core.library.types.DateTimeType`.
+
+The conversion functions provided are:
+
+* __to_java_zoneddatetime(datetime)__  - returns a `java.time.ZonedDateTime` value
+* __to_java_calendar(datetime)__ - returns a `java.util.Calendar` value
+* __to_joda_datetime(datetime)__ - returns a `org.joda.DateTime` value
+* __to_python_datetime(datetime)__ - returns Python's built-in `datetime.datetime` value
+
+&nbsp;
+
+The following functions can be used to determine the duration between two datetimes and will return an `int`. They will return a negative value if the first datetime is after the second:
+
+* __seconds_between(datetime_from, datetime_to)__ will return the number of whole seconds between the two times
+* __minutes_between(datetime_from, datetime_to)__ will return the number of whole minutes
+* __hours_between(datetime_from, datetime_to)__ will return the number of whole hours
+* __days_between(datetime_from, datetime_to)__ will return the number of whole days
+
+&nbsp;
+
+There is also a function to format a datetime as a string. This is useful for setting `DateTimeItem` values. It is not neccesary to supply a format string, the default is identical to the format used in openHAB.
+&nbsp;
+For information on format codes to use in the `format_string`, see the documentation for [`java.time.format.DateTimeFormatter`](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html).
+
+* __format_date(datetime[, format_string])__
+
+&nbsp;
+
+</ul>
+
 #### Module: [`core.testing`](../Core/automation/lib/python/core/testing.py)
 <ul>
 
