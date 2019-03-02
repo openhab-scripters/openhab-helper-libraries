@@ -17,24 +17,24 @@ and can convert from the following types:
 - org.openhab.core.library.types.DateTimeType
 
 It can also format any of these types for sending to an openHAB Item using
-format_date(value) which will return the date as a string in the correct format
+format_date(value), which will return the date as a string in the correct format.
 
-There are also some conveniece functions for determine the span between two datetimes.
+There are also some conveniece functions for determining the span between two datetimes.
 days_between, hours_between, minutes_between, and seconds_between will return the
-number of whole units of each's unit of time between the two datetimes passed. They
+number of whole units of each unit of time between the two datetimes passed. They
 will return negative numbers if the first datetime passed is after the second.
-See docs for java.time.temporal.ChronoUnit if you want more information.
+See docs for java.time.temporal.ChronoUnit, if you want more information.
 """
 import datetime
 import sys
 
-if 'org.smarthome.automation' in sys.modules:
+if 'org.eclipse.smarthome.automation' in sys.modules:
     # Workaround for Jython JSR223 bug where
     # dates and datetimes are converted to java.sql.Date
     # and java.sql.Timestamp
     def remove_java_converter(clazz):
-        if hasattr(clazz, '__java__'):
-            del clazz.__java__
+        if hasattr(clazz, '__tojava__'):
+            del clazz.__tojava__
     remove_java_converter(datetime.date)
     remove_java_converter(datetime.datetime)
     
@@ -54,34 +54,34 @@ __all__ = ["ZonedDateTime", "format_date",
 
 
 def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
-    '''Returns string of date formatted according to format_string
-    Accepts any date type used by this module
-    See java.time.format.DateTimeFormatter docs for format string tokens'''
+    '''Returns string of date formatted according to format_string.
+    Accepts any date type used by this module.
+    See java.time.format.DateTimeFormatter docs for format string tokens.'''
     return to_java_zoneddatetime(value).format(DateTimeFormatter.ofPattern(format_string))
 
 def days_between(value_from, value_to):
-    '''Returns number of whole days between value_from and value_to.
+    '''Returns number of whole days between value_from and value_to. 
     Accepts any date type used by this module'''
     return DAYS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def hours_between(value_from, value_to):
-    '''Returns number of whole hours between value_from and value_to.
+    '''Returns number of whole hours between value_from and value_to. 
     Accepts any date type used by this module'''
     return HOURS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def minutes_between(value_from, value_to):
-    '''Returns number of whole minutes between value_from and value_to.
-    Accepts any date type used by this module'''
+    '''Returns number of whole minutes between value_from and value_to. 
+    Accepts any date type used by this module.'''
     return MINUTES.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def seconds_between(value_from, value_to):
-    '''Returns number of whole seconds between value_from and value_to.
-    Accepts any date type used by this module'''
+    '''Returns number of whole seconds between value_from and value_to. 
+    Accepts any date type used by this module.'''
     return SECONDS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def to_java_zoneddatetime(value):
-    '''Returns java.time.ZonedDateTime (with system timezone if none specified)
-    Accepts any date type used by this module'''
+    '''Returns java.time.ZonedDateTime (with system timezone, if none specified). 
+    Accepts any date type used by this module.'''
     timezone_id = ZoneId.systemDefault()
     if isinstance(value, ZonedDateTime):
         return value
@@ -117,7 +117,7 @@ def to_java_zoneddatetime(value):
     raise Exception("Invalid conversion: " + str(type(value)))
 
 def to_java_calendar(value):
-    '''Returns java.util.calendar type (with system timezone if none specified)
+    '''Returns java.util.calendar type (with system timezone if none specified). 
     Accepts any date type used by this module'''
     if isinstance(value, Calendar):
         return value
@@ -134,7 +134,7 @@ def to_java_calendar(value):
     return new_calendar
 
 def to_python_datetime(value):
-    '''Returns Python datetime.datetime type (with system timezone if none specified)
+    '''Returns Python datetime.datetime type (with system timezone if none specified). 
     Accepts any date type used by this module'''
     if isinstance(value, datetime.datetime):
         return value
@@ -152,7 +152,7 @@ def to_python_datetime(value):
     )
 
 def to_joda_datetime(value):
-    '''Returns org.joda.time.DateTime type (with system timezone if none specified)
+    '''Returns org.joda.time.DateTime type (with system timezone if none specified). 
     Accepts any date type used by this module'''
     if isinstance(value, DateTime):
             return value
@@ -164,7 +164,7 @@ def to_joda_datetime(value):
     )
 
 class pythonTimezone(datetime.tzinfo):
-    '''Python tzinfo with offset in minutes'''
+    '''Python tzinfo with offset in minutes.'''
     
     def __init__(self, offset=0, name=""):
         self.__offset = offset
