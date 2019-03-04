@@ -47,7 +47,7 @@ Trigger classes for wrapping Automation API (see [Using Jython extensions](Defin
 
 * __ItemStateChangeTrigger__
 * __ItemStateUpdateTrigger__
-* __ItemCommandStrigger__
+* __ItemCommandTrigger__
 * __ItemEventTrigger__ (based on "core.GenericEventTrigger")
 * __CronTrigger__
 * __StartupTrigger__ - fires when rule is activated (implemented in Jython)
