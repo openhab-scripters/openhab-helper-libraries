@@ -197,6 +197,41 @@ core.link.remove_link("Kodi_Control")
 ```
 </ul>
 
+#### Module: [`core.metadata`](..Core/automation/lib/python/core/metadata.py)
+<ul>
+
+This module allows simpler interaction with item metadata. There are two instance classes that can be used manage a single namespace, or multiple namespaces of a single item.
+
+__`metadata_namespace`__ is used to manage a single namespace. It can be used like a python `dict` to get and set key-value pairs in the namespace configuration. It will attempt to convert the namespace and configuration values to a `bool`, `float`, or `int` when loading from the registry. Below is a list of all of the methods, detailed descriptions can be found at the beginning of each one in the code.
+```python
+metadata_namespace(item_name, name, value=None, configuration={}, load=True, save=False)
+metadata_namespace.load()
+metadata_namespace.save()
+metadata_namespace.remove()
+metadata_namespace.set_value(value)
+metadata_namespace.get_value()
+metadata_namespace.set_config_value(key, value, save=True)
+metadata_namespace[key] = value # same as above
+metadata_namespace.get_config_value(key)
+value = metadata_namespace[key] # same as above
+metadata_namespace.delete_config_value(key, save=True)
+del metadata_namespace[key] # same as above
+metadata_namespace.set_configuration(configuration, save=True)
+metadata_namespace.add_configuration(configuration, save=True)
+metadata_namespace.clear_configuration(save=True)
+```
+
+__`item_metadata`__ is used to manage multiple namespaces for a single item using only one object. It can be used similar to a python `dict` containing instances of `metadata_namespace`. Below is a list of all the methods, detailed descriptions can be found at the beginning of each on in the code.
+```python
+item_metadata(item_name)
+item_metadata.add_namespace(name)
+item_metadata[name] # returns metadata_namespace object
+item_metadata.delete_namespace(name, remove=False)
+del item_metadata[name] # same as above
+```
+
+</ul>
+
 #### Module: [`core.testing`](../Core/automation/lib/python/core/testing.py)
 <ul>
 
