@@ -77,6 +77,7 @@ class metadata_namespace(MutableMapping):
             item=item_name, namespace=name))
         self._item_name = item_name
         self._name = name
+        self._keyUID = MetadataKey(self._name, self._item_name)
         self._value = value
         self._configuration = configuration
         if load: 
@@ -100,7 +101,7 @@ class metadata_namespace(MutableMapping):
         log.debug("Metadata: Getting metadata for item '{item}' from namespace '{namespace}'".format( \
             item=self._item_name, namespace=self._name))
         # read from registry
-        metadata = MetadataRegistry.get(MetadataKey(self._name, self._item_name))
+        metadata = MetadataRegistry.get(self._keyUID)
         log.debug("Metadata: {metadata}".format( \
             metadata=str(metadata)))
         # parse data
@@ -119,13 +120,13 @@ class metadata_namespace(MutableMapping):
         strConfiguration = {}
         for key, value in self._configuration: strConfiguration[key] = str(value)
         # save to the registry
-        MetadataRegistry.add(Metadata(MetadataKey(self._name, self._item_name), str(self._value), strConfiguration))
+        MetadataRegistry.add(Metadata(self._keyUID, str(self._value), strConfiguration))
         del strConfiguration
     
     def remove(self):
         '''Deletes this namespace from the registry.
         This instance will be preserved and can be written back to the registry.'''
-        MetadataRegistry.remove(MetadataKey(self._name, self._item_name))
+        MetadataRegistry.remove(self._keyUID)
     
     def set_value(self, value, save=True):
         '''Sets the namespace "value".
