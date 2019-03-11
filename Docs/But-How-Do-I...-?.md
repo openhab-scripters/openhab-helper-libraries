@@ -115,7 +115,7 @@ sendHttpPutRequest("someURL.com, "application/json", '{"this": "that"}')
 
 from core.actions import Audio
 Audio.playSound("doorbell.mp3")# using the default audiosink
-Audi.playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
+Audio.playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
 Audio.playStream("http://myAudioServer/myAudioFile.mp3")# using the default audiosink
 Audio.playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")# specifying an audiosink
 
