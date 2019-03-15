@@ -208,8 +208,10 @@ metadata_namespace(item_name, name, value=None, configuration={}, load=True, sav
 metadata_namespace.load()
 metadata_namespace.save()
 metadata_namespace.remove()
-metadata_namespace.set_value(value)
+metadata_namespace.set_value(value, save=True)
+metadata_namespace.value = value # same as above
 metadata_namespace.get_value()
+value = metadata_namespace.value # same as above
 metadata_namespace.set_config_value(key, value, save=True)
 metadata_namespace[key] = value # same as above
 metadata_namespace.get_config_value(key)
@@ -221,7 +223,7 @@ metadata_namespace.add_configuration(configuration, save=True)
 metadata_namespace.clear_configuration(save=True)
 ```
 
-__`item_metadata`__ is used to manage multiple namespaces for a single item using only one object. It can be used similar to a python `dict` containing instances of `metadata_namespace`. Below is a list of all the methods, detailed descriptions can be found at the beginning of each on in the code.
+__`item_metadata`__ is used to manage multiple namespaces for a single item using only one object. It can be used similar to a python `dict` containing instances of `metadata_namespace`. Below is a list of all the methods, detailed descriptions can be found at the beginning of each one in the code.
 ```python
 item_metadata(item_name)
 item_metadata.add_namespace(name)

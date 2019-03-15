@@ -93,7 +93,7 @@ class metadata_namespace(MutableMapping):
     def __len__(self): return len(self._configuration)
     def __setitem__(self, key, value): return self.set_config_value(key, value)
     def __getitem__(self, key): return self.get_config_value(key)
-    def __delitem__(self, key): self.delete_config_value(key)
+    def __delitem__(self, key): return self.delete_config_value(key)
 
     def load(self):
         '''Loads the namespace from the metadata registry.
@@ -122,12 +122,12 @@ class metadata_namespace(MutableMapping):
         # save to the registry
         MetadataRegistry.add(Metadata(self._keyUID, str(self._value), strConfiguration))
         del strConfiguration
-    
+
     def remove(self):
         '''Deletes this namespace from the registry.
         This instance will be preserved and can be written back to the registry.'''
         MetadataRegistry.remove(self._keyUID)
-    
+
     def set_value(self, value, save=True):
         '''Sets the namespace "value".
         Set "save" flag to False to skip saving to openHAB. You must take care to manually save
@@ -135,9 +135,19 @@ class metadata_namespace(MutableMapping):
         self._value = value
         if save: self.save()
 
+    @value.setter
+    def value(self, value):
+        '''Sets the namespace "value" and saves to the registry.'''
+        return self.set_value(value)
+
     def get_value(self):
         '''Gets the namespace "value".'''
         return self._value
+
+    @property
+    def value(self):
+        '''Returns the namespace "value".'''
+        return self.get_value
 
     def set_config_value(self, key, value, save=True):
         '''Sets the namespace configuration value for the specified key.
