@@ -147,6 +147,12 @@ from core.actions import Mail
 Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the message")
 ```
 
+[MQTT2](https://www.openhab.org/addons/bindings/mqtt/)
+```python
+# no import needed
+actions.get("mqtt", "mqtt:systemBroker:embedded-mqtt-broker").publishMQTT("test/system/started", "true");
+```
+
 #### Use a timer:
 See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples for examples of using both Jython and the [`createTimer`](https://www.openhab.org/docs/configuration/actions.html#timers) Action.
 
