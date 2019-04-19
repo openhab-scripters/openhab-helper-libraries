@@ -8,6 +8,7 @@ Core/automation/lib/javascript/personal/**
 Core/automation/lib/groovy/personal/**
 Core/automation/lib/python/configuration.py
 Core/automation/jython/**
+
 # VSCode settings
 .vscode/
 

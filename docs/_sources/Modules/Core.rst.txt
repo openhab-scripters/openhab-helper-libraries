@@ -1,0 +1,9 @@
+Core
+====
+
+.. toctree::
+    :caption: Module Core
+    :maxdepth: 2
+    :glob:
+
+    Core/*
