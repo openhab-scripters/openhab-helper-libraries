@@ -15,31 +15,11 @@ import sys
 sys.path.insert(0, os.path.abspath('./../Core/automation/lib/python'))
 
 
-# -- Mock setup --------------------------------------------------------------
-
-# allows autodoc to import modules that import things that Sphinx/RTD can't import
-
-import mock
-
-# list of modules to spoof
-# all java and dynamic modules that Sphinx won't be able to load in
-# a normal python env
-MOCK_MODULES = ['core.jsr223.scope',
-    'org', 'org.joda', 'org.joda.time',
-    'java', 'java.util', 'java.time', 'java.time.format', 'java.time.temporal', 'java.time.temporal.ChronoUnit',
-    'org.openhab', 'org.openhab.core', 'org.openhab.core.library', 'org.openhab.core.library.types',
-    'org.eclipse', 'org.eclipse.smarthome', 'org.eclipse.smarthome.core', 'org.eclipse.smarthome.core.library',
-    'org.eclipse.smarthome.core.library.types'
-]
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
-
-
 # -- Project information -----------------------------------------------------
 
 project = 'openHAB Scripters - Jython'
-author = 'Scott Rushworth, Mike Murton'
-copyright = '2019, Scott Rushworth, Mike Murton'
+author = 'Scott Rushworth, Michael Murton'
+copyright = '2019, Scott Rushworth, Michael Murton'
 version = 'latest'
 
 
@@ -57,7 +37,11 @@ pygments_style = 'sphinx'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.githubpages',
+    'sphinx.ext.napoleon'
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -83,11 +67,36 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # shows class and __init__ docstrings
 autoclass_content = 'both'
 
-# sorts class/func/attr in order found in code
-autodoc_member_order = 'bysource'
+# autodoc default options for directives
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'show-inheritance': True
+}
+
+# base modules that should be mock'd
+autodoc_mock_imports = ['org', 'java']
+
+
+# -- Mock --------------------------------------------------------------------
+
+# allows autodoc to import modules that import things that Sphinx can't import
+
+import mock
+
+# list of modules to spoof
+# use this only for specific imports that arent working. entire modules can be
+# spoofed using autodoc_mock_imports in the section above
+MOCK_MODULES = ['core.jsr223.scope']
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
 
 
 # -- Options for HTML output -------------------------------------------------
+
+# root url for these docs, also used to make CNAME for GH Pages
+html_baseurl = "https://github.com/OH-Jython-Scripters/openhab2-jython/"
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.

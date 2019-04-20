@@ -1,9 +1,9 @@
-Welcome to the openHAB Scripters Jython documentation!
-======================================================
+.. include:: introduction.rst
+
 
 .. toctree::
-    :caption: Main TOC
-    :maxdepth: 3
+    :caption: First Steps
+    :maxdepth: 2
 
     installation
     getting-started
