@@ -95,9 +95,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Modules</span></p>
+<p class="caption"><span class="caption-text">Core Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="lib/python/core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lib/python/core/date.html">Date</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="writing-docs.html">Writing Documentation</a></li>
 </ul>
 
             
@@ -200,7 +204,7 @@ insures OH is started completely before loading other scripts.</p></li>
 <code class="docutils literal notranslate"><span class="pre">/etc/openhab2/automation/jython/</span></code>.</p></li>
 <li><p>Add/modify your <code class="docutils literal notranslate"><span class="pre">EXTRA_JAVA_OPTS</span></code> in <code class="docutils literal notranslate"><span class="pre">/etc/default/openhab2</span></code> to include
 the following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">EXTRA_JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">EXTRA_JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python&quot;</span>
 </pre></div>
 </div>
 <p><em>If creating a new file, remember to set the permissions so that the OH
@@ -232,7 +236,7 @@ insures OH is started completely before loading other scripts.</p></li>
 <code class="docutils literal notranslate"><span class="pre">/opt/openhab2/conf/automation/jython/</span></code>.</p></li>
 <li><p>Add/modify your <code class="docutils literal notranslate"><span class="pre">EXTRA_JAVA_OPTS</span></code> in <code class="docutils literal notranslate"><span class="pre">/opt/openhab2/start.sh</span></code> to include
 the following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">EXTRA_JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">EXTRA_JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python&quot;</span>
 </pre></div>
 </div>
 <p><em>If creating a new file, remember to set the permissions so that the OH

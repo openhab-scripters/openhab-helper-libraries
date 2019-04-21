@@ -39,6 +39,7 @@ pygments_style = 'sphinx'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon'
 ]
@@ -91,6 +92,13 @@ import mock
 MOCK_MODULES = ['core.jsr223.scope']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
+
+
+# -- Options for autosectionlabel --------------------------------------------
+
+# prefixes sections with doc and a colon
+# ex installation:package
+autosectionlabel_prefix_document = True
 
 
 # -- Options for HTML output -------------------------------------------------

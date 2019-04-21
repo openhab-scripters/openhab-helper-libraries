@@ -39,7 +39,9 @@ openHABian, these instructions are for you!
 5. Download the `standalone Jython 2.7.0 jar`_ and copy it to
    ``/etc/openhab2/automation/jython/``.
 6. Add/modify your ``EXTRA_JAVA_OPTS`` in ``/etc/default/openhab2`` to include
-   the following::
+   the following:
+
+   .. code-block:: bash
 
      EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
 
@@ -73,7 +75,9 @@ If you installed openHAB manually, these instructions are for you!
 5. Download the `standalone Jython 2.7.0 jar`_ and copy it to
    ``/opt/openhab2/conf/automation/jython/``.
 6. Add/modify your ``EXTRA_JAVA_OPTS`` in ``/opt/openhab2/start.sh`` to include
-   the following::
+   the following:
+
+   .. code-block:: bash
 
      export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
 
