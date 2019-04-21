@@ -17,25 +17,25 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
-    <script type="text/javascript" src="_static/js/theme.js"></script>
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Date" href="lib/python/core/date.html" /> 
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Testing" href="../lib/python/core/testing.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> openHAB Scripters - Jython
+            <a href="../index.html" class="icon icon-home"> openHAB Scripters - Jython
           
 
           
@@ -66,7 +66,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -86,12 +86,19 @@
             
               <p class="caption"><span class="caption-text">First Steps</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../first-steps/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../first-steps/getting-started.html">Getting Started</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Core Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="lib/python/core/date.html">Date</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/python/core/rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/python/core/triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/python/core/log.html">Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/python/core/actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/python/core/date.html">Date</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/python/core/items.html">Items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/python/core/links.html">Links</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/python/core/testing.html">Testing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Contributing</span></p>
 <ul class="current">
@@ -141,7 +148,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">openHAB Scripters - Jython</a>
+          <a href="../index.html">openHAB Scripters - Jython</a>
         
       </nav>
 
@@ -170,7 +177,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html">Docs</a> &raquo;</li>
         
       <li>Writing Documentation</li>
     
@@ -178,7 +185,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/writing-docs.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/contributing/writing-docs.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -333,8 +340,9 @@ functions, classes, and attributes to look at. eg. ``:members: func1,
 func2, attr1, class1``.</em></p></li>
 <li><p>Note the trailing empty line, all <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files must end with a blank line</p></li>
 </ul>
-<p>You should now go to the <a class="reference internal" href="#building-the-docs"><span class="std std-ref">Building the Docs</span></a> section and
-make sure your documentation is compiling and rendering correctly.</p>
+<p>You should now go to the <a class="reference internal" href="#building-the-docs"><span class="std std-ref">Building the Docs</span></a>
+section and make sure your documentation is compiling and rendering
+correctly.</p>
 <p>More advanced parsing options are documented <a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html">here</a>
 if you need them.</p>
 </div></blockquote>
@@ -384,8 +392,8 @@ any files found will be displayed in alphabetical order.</em></p></li>
 </ul>
 <p>You should now have files similar to the following in the
 <code class="docutils literal notranslate"><span class="pre">/Community/</span></code> directory relating to your module. You should now
-go to the <a class="reference internal" href="#building-the-docs"><span class="std std-ref">Building the Docs</span></a> section and make sure your
-documentation is compiling and rendering correctly.</p>
+go to the <a class="reference internal" href="#building-the-docs"><span class="std std-ref">Building the Docs</span></a> section and
+make sure your documentation is compiling and rendering correctly.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/Community/my_module.rst
 /Community/my_module/__init__.py
 /Community/my_module/my_package.py
@@ -408,8 +416,8 @@ If you already have a Virtual Environment setup for this, you can skip to
 <a class="reference internal" href="#building"><span class="std std-ref">Building</span></a>.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Make sure you follow the steps in <a class="reference internal" href="#finalizing"><span class="std std-ref">Finalizing</span></a> before
-making your pull request.</p>
+<p>Make sure you follow the steps in <a class="reference internal" href="#finalizing"><span class="std std-ref">Finalizing</span></a>
+before making your pull request.</p>
 </div>
 </div></blockquote>
 <div class="section" id="virtual-environment">
@@ -550,21 +558,21 @@ This is a normal text paragraph again.
 <h3>Hyperlinks<a class="headerlink" href="#hyperlinks" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>External links can be made inline like this:</p>
-<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span>This file is <span class="s">`here </span><span class="si">&lt;https://github.com/OH-Jython-Scripters/openhab2-jython/tree/master/Sphinx/writing-docs.rst&gt;</span><span class="s">`_</span>
+<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span>This file is <span class="s">`here </span><span class="si">&lt;https://github.com/OH-Jython-Scripters/openhab2-jython/tree/master/Sphinx/contributing/writing-docs.rst&gt;</span><span class="s">`_</span>
 </pre></div>
 </div>
 <p>or separately like this:</p>
 <div class="highlight-rest notranslate"><div class="highlight"><pre><span></span>This file is <span class="s">`here`_</span>
 
-<span class="p">..</span> <span class="nt">_here:</span> https://github.com/OH-Jython-Scripters/openhab2-jython/tree/master/Sphinx/writing-docs.rst
+<span class="p">..</span> <span class="nt">_here:</span> https://github.com/OH-Jython-Scripters/openhab2-jython/tree/master/Sphinx/contributing/writing-docs.rst
 </pre></div>
 </div>
 <p>You can also link to other sections on any page like this:</p>
-<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span>This section is <span class="na">:ref:</span><span class="nv">`writing-docs:hyperlinks`</span>
+<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span>This section is <span class="na">:ref:</span><span class="nv">`contributing/writing-docs:hyperlinks`</span>
 </pre></div>
 </div>
 <p>or documents within this documentation:</p>
-<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span>This page is <span class="na">:doc:</span><span class="nv">`writing-docs`</span>
+<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span>This page is <span class="na">:doc:</span><span class="nv">`contributing/1writing-docs`</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -611,7 +619,7 @@ returns. They should also be used to detail class and module attributes.</div>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="lib/python/core/date.html" class="btn btn-neutral float-left" title="Date" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../lib/python/core/testing.html" class="btn btn-neutral float-left" title="Testing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

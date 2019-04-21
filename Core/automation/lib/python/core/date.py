@@ -1,6 +1,6 @@
 """
 :Organization: openHAB Scripters
-:Authors: Scott Rushworth; Michael Murton
+:Authors: Scott Rushworth, Michael Murton
 
 Date/time utilities for converting between the several different types used by openHAB.
 

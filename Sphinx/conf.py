@@ -89,7 +89,11 @@ import mock
 # list of modules to spoof
 # use this only for specific imports that arent working. entire modules can be
 # spoofed using autodoc_mock_imports in the section above
-MOCK_MODULES = ['core.jsr223.scope']
+MOCK_MODULES = [
+    'core.jsr223.scope',
+    'core.JythonItemProvider',
+    'core.JythonItemChannelLinkProvider'
+]
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 

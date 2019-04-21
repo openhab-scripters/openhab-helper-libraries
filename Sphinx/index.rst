@@ -5,8 +5,18 @@
     :caption: First Steps
     :maxdepth: 2
 
-    installation
-    getting-started
+    first-steps/installation
+    first-steps/getting-started
+
+
+.. toctree::
+    :caption: Writing Guides
+    :maxdepth: 2
+
+
+.. toctree::
+    :caption: Design Patterns
+    :maxdepth: 2
 
 
 .. toctree::
@@ -14,6 +24,10 @@
     :maxdepth: 2
     :glob:
 
+    lib/python/core/rules.rst
+    lib/python/core/triggers.rst
+    lib/python/core/log.rst
+    lib/python/core/actions.rst
     lib/python/core/*
 
 
@@ -29,7 +43,7 @@
     :caption: Contributing
     :maxdepth: 2
 
-    writing-docs
+    contributing/writing-docs
 
 
 Indices and tables

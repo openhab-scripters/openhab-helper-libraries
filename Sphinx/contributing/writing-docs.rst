@@ -106,7 +106,7 @@ Adding Documentation for a Module
       this.
     | In particular for this library, it means that autodoc will throw errors
       when trying to import openHAB classes, the solution to this is outlined
-      in :ref:`writing-docs:building the docs`
+      in :ref:`contributing/writing-docs:building the docs`
 
 Single Page Module Documentation
 --------------------------------
@@ -141,8 +141,9 @@ Single Page Module Documentation
       func2, attr1, class1``.*
     * Note the trailing empty line, all ``.rst`` files must end with a blank line
 
-    You should now go to the :ref:`writing-docs:building the docs` section and
-    make sure your documentation is compiling and rendering correctly.
+    You should now go to the :ref:`contributing/writing-docs:building the docs`
+    section and make sure your documentation is compiling and rendering
+    correctly.
 
     More advanced parsing options are documented `here <http://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
     if you need them.
@@ -189,8 +190,8 @@ Multi-Page Module Documentation
 
     You should now have files similar to the following in the
     ``/Community/`` directory relating to your module. You should now
-    go to the :ref:`writing-docs:building the docs` section and make sure your
-    documentation is compiling and rendering correctly.
+    go to the :ref:`contributing/writing-docs:building the docs` section and
+    make sure your documentation is compiling and rendering correctly.
 
     .. code-block:: bash
 
@@ -211,11 +212,11 @@ Building the Docs
 
   This section will go over all of the steps to build the docs from nothing.
   If you already have a Virtual Environment setup for this, you can skip to
-  :ref:`writing-docs:building`.
+  :ref:`contributing/writing-docs:building`.
 
   .. important::
-    Make sure you follow the steps in :ref:`writing-docs:finalizing` before
-    making your pull request.
+    Make sure you follow the steps in :ref:`contributing/writing-docs:finalizing`
+    before making your pull request.
 
 Virtual Environment
 -------------------
@@ -371,7 +372,7 @@ Hyperlinks
 
     .. code-block:: rest
 
-      This file is `here <https://github.com/OH-Jython-Scripters/openhab2-jython/tree/master/Sphinx/writing-docs.rst>`_
+      This file is `here <https://github.com/OH-Jython-Scripters/openhab2-jython/tree/master/Sphinx/contributing/writing-docs.rst>`_
 
     or separately like this:
 
@@ -379,19 +380,19 @@ Hyperlinks
 
       This file is `here`_
 
-      .. _here: https://github.com/OH-Jython-Scripters/openhab2-jython/tree/master/Sphinx/writing-docs.rst
+      .. _here: https://github.com/OH-Jython-Scripters/openhab2-jython/tree/master/Sphinx/contributing/writing-docs.rst
 
     You can also link to other sections on any page like this:
 
     .. code-block:: rest
 
-      This section is :ref:`writing-docs:hyperlinks`
+      This section is :ref:`contributing/writing-docs:hyperlinks`
 
     or documents within this documentation:
 
     .. code-block:: rest
 
-      This page is :doc:`writing-docs`
+      This page is :doc:`contributing/writing-docs`
 
 Field Lists
 -----------
