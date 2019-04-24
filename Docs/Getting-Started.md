@@ -26,7 +26,7 @@ These examples assume that you will be using the standalone Jython 2.7.0 jar.
     ```
 - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. 
 A full install of Jython can also be used, but the paths above will need to be modified. 
-- You must have at least one item defined. Otherwise the jython scripts will through an error. Therefore, create an itemsfile and populate it with an item definition.
+- You must have at least one item defined. Otherwise the jython scripts will throw an error. Therefore, create an items file and populate it with at least one item definition.
     ```
     String My_First_Item // We need at least one item to avoid errors during loading scripts
     ```
