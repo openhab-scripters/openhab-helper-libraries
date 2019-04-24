@@ -1,0 +1,8 @@
+# Allow
+!*example_config.py
+
+# Ignore
+*.py[cod]
+*$py.class
+*config.py
+*MY_PERSONAL_NOTES.md
