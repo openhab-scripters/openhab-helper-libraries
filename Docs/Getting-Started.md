@@ -26,6 +26,10 @@ These examples assume that you will be using the standalone Jython 2.7.0 jar.
     ```
 - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. 
 A full install of Jython can also be used, but the paths above will need to be modified. 
+- You must have at least one item defined. Otherwise the jython scripts will through an error. Therefore, create an itemsfile and populate it with an item definition.
+    ```
+    String My_First_Item // We need at least one item to avoid errors during loading scripts
+    ```
 - Copy the [`hello_world.py`](/Script%20Examples/hello_world.py) example script to `/automation/jsr223/personal/` to test if everything is working. 
 This script will make a log entry every 10s, and should be deleted after installation has been verified.
 - Start openHAB and watch the logs for errors and the entries from the `hello_world.py` script.
