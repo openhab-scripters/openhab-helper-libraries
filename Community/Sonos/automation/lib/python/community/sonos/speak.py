@@ -1,11 +1,8 @@
-from org.eclipse.smarthome.core.library.types import PercentType
 from core.actions import Voice
 from core.utils import getItemValue
 from configuration import sonos, PRIO
-from org.eclipse.smarthome.core.library.types import OnOffType
-
+from core.jsr223 import scope
 from core.log import logging, LOG_PREFIX
-ON = OnOffType.ON
 
 def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
     '''
@@ -18,9 +15,7 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
     @param ttsRoom: Room to speak in
     @return: this is a description of what is returned
     '''
-    module_name = 'speak'
-    log = logging.getLogger(LOG_PREFIX+'.'+module_name)
-    log.setLevel(logging.INFO)
+    log = logging.getLogger(LOG_PREFIX + ".community.sonos.speak")
 
     def getDefaultRoom():
         # Search for the default room to speak in
@@ -29,8 +24,8 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
                 return the_key
         return 'All'
 
-    if ((getItemValue('Sonos_Allow_TTS_And_Sounds', ON) != ON) and (ttsPrio <= PRIO['MODERATE'])):
-        log.info("Item Sonos_Allow_TTS_And_Sounds is OFF and ttsPrio is to low to speak \'" + ttsSay + "\' at this moment.")
+    if getItemValue(customItemNames['allowTTSSwitch'], scope.OnOffType.ON) != scope.OnOffType.ON and ttsPrio <= PRIO['MODERATE']:
+        log.info("[{}] is OFF and ttsPrio is too low to speak [{}] at this moment".format(customItemNames['allowTTSSwitch'], ttsSay))
         return False
 
     ttsRoom = getDefaultRoom() if 'ttsRoom' not in keywords else keywords['ttsRoom']
@@ -39,14 +34,14 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
     if ttsRoom == 'All' or ttsRoom is None:
         for the_key, the_value in sonos['rooms'].iteritems():
             ttsRooms.append(sonos['rooms'][the_key])
-            log.debug('TTS room found: ' + sonos['rooms'][the_key]['name'])
+            log.debug("TTS room found: [{}]".format(sonos['rooms'][the_key]['name']))
     else:
         sonosSpeaker = sonos['rooms'].get(ttsRoom, None)
         if sonosSpeaker is None:
-            log.error("Room "+ttsRoom+" wasn't found in the sonos rooms dictionary")
+            log.warn("Room [{}] wasn't found in the sonos rooms dictionary".format(ttsRoom))
             return
         ttsRooms.append(sonosSpeaker)
-        log.debug('TTS room found: ' + sonosSpeaker['name'])
+        log.debug("TTS room found: [{}]".format(sonosSpeaker['name']))
 
     for room in ttsRooms:
         ttsVol = None if 'ttsVol' not in keywords else keywords['ttsVol']
@@ -65,8 +60,8 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
         ttsLang = room['ttslang'] if 'ttsLang' not in keywords else keywords['ttsLang']
         ttsVoice = room['ttsvoice'] if 'ttsVoice' not in keywords else keywords['ttsVoice']
         ttsEngine = room['ttsengine'] if 'ttsEngine' not in keywords else keywords['ttsEngine']
-        #Voice.say(ttsSay, ttsEngine + ':' + ttsVoice, room['audiosink'], PercentType(10)) # Notification sound volume doesn't seem to be supported
-        Voice.say(ttsSay, ttsEngine + ':' + ttsVoice, room['audiosink'])
-        log.info("TTS: Speaking \'" + ttsSay + "\'" + ' in room: \'' + room['name'] + '\' at volume: \'' + str(ttsVol) + '\'.')
+        #Voice.say(ttsSay, ttsEngine + ':' + ttsVoice, room['audiosink'], scope.PercentType(10)) # Notification sound volume doesn't seem to be supported
+        Voice.say(ttsSay, "{}:{}".format(ttsEngine, ttsVoice), room['audiosink'])
+        log.info("TTS: Speaking [{}] in room [{}] at volume [{}]".format(ttsSay, room['name'], ttsVol)
 
     return True
