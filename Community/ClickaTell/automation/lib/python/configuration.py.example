@@ -1,4 +1,4 @@
-clickatell = {
+clickatell_configuration = {
     'sender': '49123456789',
     'user': 'xxxxxxxxxxxx',
     'password': 'xxxxxxxxxxxxxxxxx',

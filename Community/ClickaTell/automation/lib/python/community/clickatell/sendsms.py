@@ -1,6 +1,6 @@
 from core.log import logging, LOG_PREFIX
-from core.clickatell import Clickatell
-from configuration import clickatell
+import community.clickatell
+from configuration import clickatell_configuration
 
 def sms(message, subscriber='Default'):
     '''
@@ -10,20 +10,20 @@ def sms(message, subscriber='Default'):
     @param param1: SMS Text
     @param param2: Subscriber. A numeric phone number or a phonebook name entry (String)
     '''
-    log = logging.getLogger(LOG_PREFIX)
-    phoneNumber = clickatell['phonebook'].get(subscriber, None)
+    log = logging.getLogger(LOG_PREFIX + ".community.clickatell.sendsms")
+    phoneNumber = clickatell_configuration['phonebook'].get(subscriber, None)
     if phoneNumber is None:
         if subscriber.isdigit():
             phoneNumber = subscriber
         else:
-            log.error("Subscriber "+subscriber+" wasn't found in the phone book")
+            log.warn("Subscriber [{}] wasn't found in the phone book".format(subscriber))
             return
-    gateway = Clickatell(clickatell['user'], clickatell['password'], clickatell['apiid'], clickatell['sender'])
+    gateway = Clickatell(clickatell_configuration['user'], clickatell_configuration['password'], clickatell_configuration['apiid'], clickatell_configuration['sender'])
     message = {'to': phoneNumber, 'text': message}
-    log.info("Sending SMS to: " + str(phoneNumber))
+    log.info("Sending SMS to: [{}]".format(phoneNumber))
     retval, msg = gateway.sendmsg(message)
     if retval == True:
-        log.info("SMS Sent: " + msg)
+        log.info("SMS sent: [{}]".format(msg))
     else:
-        log.error("Error while sending SMS: " + str(retval))
+        log.warn("Error while sending SMS: [{}]".format(retval))
     return
