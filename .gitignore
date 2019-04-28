@@ -1,0 +1,7 @@
+*.py[cod]
+*$py.class
+configuration.py
+!configuration.py.example
+Core/automation/jsr223/personal/**
+Core/automation/lib/python/personal/**
+Core/automation/jython/**

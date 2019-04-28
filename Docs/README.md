@@ -19,4 +19,4 @@ These works are based on the original contributions of Steve Bate, for which we 
     - [Using Jython Extensions](Defining-Rules.md#using-jython-extensions)
         - [Rule and Trigger Decorators](Defining-Rules.md#rule-and-trigger-decorators)
     - [Event object attributes](Event-Object-Attributes.md)
-- [But how do I...?](But-How-Do-I...-%3F.md)
+- [But how do I...?](But-How-Do-I.md)
