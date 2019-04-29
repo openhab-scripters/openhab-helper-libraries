@@ -26,7 +26,7 @@ version = 'latest'
 # -- General configuration ---------------------------------------------------
 
 # Master document file, must contain 'toctree' directive
-master_doc = 'index'
+master_doc = 'Index'
 
 # Default code-block language highlighting to use
 highlight_language = 'python'
@@ -66,13 +66,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for autodoc -----------------------------------------------------
 
 # shows class and __init__ docstrings
-autoclass_content = 'both'
+#autoclass_content = 'both'
 
 # autodoc default options for directives
 autodoc_default_options = {
     'members': True,
     'member-order': 'bysource',
-    'special-members': '__init__',
     'show-inheritance': True
 }
 

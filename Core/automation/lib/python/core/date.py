@@ -1,7 +1,4 @@
 """
-:Organization: openHAB Scripters
-:Authors: Scott Rushworth, Michael Murton
-
 Date/time utilities for converting between the several different types used by openHAB.
 
 It can also format any of these types for sending to an openHAB Item using
@@ -57,12 +54,14 @@ __all__ = ["ZonedDateTime", "format_date",
 def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
     """Returns string of ``value`` formatted according to ``format_string``.
 
-    This function can be used when updating items in openHAB like this:
+    This function can be used when updating items in openHAB or to format any
+    DateTime value for output.
 
-    .. code-block::
+    Examples:
+        .. code-block::
 
-        sendCommand("item_name", date.format_date(date_value))
-    
+            sendCommand("item_name", date.format_date(date_value))
+
     Args:
         value: any known DateTime value.
         format_string (string): pattern to format ``value`` with.
@@ -205,7 +204,7 @@ def to_joda_datetime(value):
         value: any known DateTime value.
     
     Returns:
-        | A ``org.joda.time.DateTime`` representing ``value``.
+        | An ``org.joda.time.DateTime`` representing ``value``.
         | If ``value`` does not have timezone information, the system default
           will be used.
     
@@ -222,15 +221,14 @@ def to_joda_datetime(value):
     )
 
 class pythonTimezone(datetime.tzinfo):
-    """Python tzinfo with offset in minutes."""
+    """Python tzinfo with ``offset`` in minutes and name ``name``.
+        
+    Args:
+        offset (int): timezone offset from UTC in minutes.
+        name (str): display name of this instance.
+    """
     
     def __init__(self, offset=0, name=""):
-        """Inits pythonTimezone with ``offset`` minutes and ``name``.
-        
-        Args:
-            offset (int): timezone offset from UTC in minutes.
-            name (str): display name of this instance.
-        """
         self.__offset = offset
         self.__name = name
 
