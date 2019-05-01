@@ -24,8 +24,8 @@ def playsound(fileName, ttsPrio=PRIO['MODERATE'], **keywords):
                 return the_key
         return 'All'
 
-    if getItemValue(customItemNames['allowTTSSwitch'], scope.OnOffType.ON) != scope.OnOffType.ON and ttsPrio <= PRIO['MODERATE']:
-        log.info("[{}] is OFF and ttsPrio is too low to play sound [{}] at this moment".format(customItemNames['allowTTSSwitch'], fileName))
+    if getItemValue(customItemNames['Sonos_Allow_TTS_And_Sounds'], scope.OnOffType.ON) != scope.OnOffType.ON and ttsPrio <= PRIO['MODERATE']:
+        log.info("[{}] is OFF and ttsPrio is too low to play sound [{}] at this moment".format(customItemNames['Sonos_Allow_TTS_And_Sounds'], fileName))
         return False
 
     room = getDefaultRoom() if 'room' not in keywords else keywords['room']

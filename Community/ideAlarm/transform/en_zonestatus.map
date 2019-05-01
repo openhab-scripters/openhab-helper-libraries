@@ -1,0 +1,12 @@
+0.0=Normal
+1.0=Alert
+2.0=Error
+3.0=Triggered
+4.0=Time out
+0=Normal
+1=Alert
+2=Error
+3=Triggered
+4=Time out
+-=?
+NULL=?

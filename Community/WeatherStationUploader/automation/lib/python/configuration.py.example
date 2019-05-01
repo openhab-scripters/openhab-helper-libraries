@@ -1,0 +1,34 @@
+# Weather Underground Config
+# Sensors for each type of weather data are put in a python list in priority order.
+# The first sensor that has been reporting data since the time out defined in sensor_dead_after_mins
+# will be used. If you don't have a certain sensor type, just put None (Don't put None inside a list)
+# Not mandatory. You may remove.
+wunderground = {
+    'logLevel': DEBUG,
+    'stationdata': {
+        "weather_upload": False, # Set to True to actually upload anything
+        "rapid_fire_mode": True, # If you would like to send real-time data every few seconds, select Rapid Fire. RapidFire Updates allow you to update weather station conditions at a frequency up to once observation every 2.5 seconds. Web site visitors will see these observations change in real-time on the wunderground.com site.
+        "station_id": "XXXXXX",
+        "station_key": "xxxxxxxx",
+        "upload_frequency_seconds": 30 # Must be a multiple of 10, e.g. 10, 20, 50, 120, 600 etc
+    },
+    "sensor_dead_after_mins": 65, # If sensors hasn't reported within this time, they are presumed dead
+    'sensors': {
+        "tempc": ['XXX', 'YYY'], # The script will pick the first sensor in the list that is not presumed dead
+        "humidity": [None],
+        "pressurembar": [None],
+        "rainhour": [None],
+        "raintoday": [None],
+        "soiltempc": [None],
+        "soilmoisture": [None],
+        "winddir": [None],
+        "windspeedms": [None], # Using a 10m avg device here will become much smoother
+        "windgustms": [None], # Using a 10m avg device here will become much smoother
+        "windgustdir": [None], # Using a 10m avg device here will become much smoother
+        "winddir_avg2m": [None],
+        "windspeedms_avg2m": [None],
+        "windgustms_10m": [None], # Do not set if using a 10m avg device for instant wind speed above
+        "windgustdir_10m": [None], # Do not set if using a 10m avg device for instant wind gust above
+        "solarradiation": ['XXXXXX', 'YYYYYYY'] # The script will pick the first solar light sensor in the list with the highest value
+    }
+}

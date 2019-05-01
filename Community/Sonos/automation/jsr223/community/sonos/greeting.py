@@ -9,29 +9,13 @@ import random
 
 from core.rules import rule
 from core.triggers import when
-from community.sonos.speak import tts
+from community.sonos.speak import tts, greeting
 from configuration import PRIO
 from core.utils import getItemValue
 
 @rule("Greeting example")
 @when("Time cron 0 * * * * ?")
 def exampleGreeting(event):
-    def greeting():
-        # To use this, you should set up astro.py as described
-        # here https://github.com/OH-Jython-Scripters/Script%20Examples/astro.py
-        # It will take care of updating the item 'V_TimeOfDay' for you
-        timeOfDay = getItemValue('V_TimeOfDay', TIMEOFDAY['DAY'])
-        greeting = {
-            0: 'Good night',
-            1: 'Good morning',
-            2: 'Good day',
-            3: 'Good evening'
-        }
-        if timeOfDay in greeting:
-            return greeting[timeOfDay]
-        else:
-            return 'good day'
-
     greetings = [greeting(), 'Hello', 'How are you', 'How are you doing', 'Good to see you', 'Long time no see', 'It\’s been a while']
     peopleAtHome = []
     for member in itemRegistry.getItem('G_Presence_Family').getAllMembers():
