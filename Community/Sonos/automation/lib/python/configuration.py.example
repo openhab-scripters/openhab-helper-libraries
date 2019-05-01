@@ -1,8 +1,6 @@
 PRIO = {'LOW': 0, 'MODERATE': 1, 'HIGH': 2, 'EMERGENCY': 3}
 
 customItemNames = {
-    'sysLightLevel': 'Sys_LightLevel', # Item that holds daylight value in LUX
-    'reloadFinished': 'ZZZ_Test_Reload_Finished', # A persisted item that we use to check if releoad has finished
     'allowTTSSwitch': 'Sonos_Allow_TTS_And_Sounds', # Switch item that must be ON to allow normal prio TTS and sounds to pass
 }
 

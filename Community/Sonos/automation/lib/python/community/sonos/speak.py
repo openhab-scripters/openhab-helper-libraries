@@ -24,8 +24,8 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
                 return the_key
         return 'All'
 
-    if getItemValue(customItemNames['allowTTSSwitch'], scope.OnOffType.ON) != scope.OnOffType.ON and ttsPrio <= PRIO['MODERATE']:
-        log.info("[{}] is OFF and ttsPrio is too low to speak [{}] at this moment".format(customItemNames['allowTTSSwitch'], ttsSay))
+    if getItemValue(customItemNames['Sonos_Allow_TTS_And_Sounds'], scope.OnOffType.ON) != scope.OnOffType.ON and ttsPrio <= PRIO['MODERATE']:
+        log.info("[{}] is OFF and ttsPrio is too low to speak [{}] at this moment".format(customItemNames['Sonos_Allow_TTS_And_Sounds'], ttsSay))
         return False
 
     ttsRoom = getDefaultRoom() if 'ttsRoom' not in keywords else keywords['ttsRoom']
@@ -65,3 +65,19 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
         log.info("TTS: Speaking [{}] in room [{}] at volume [{}]".format(ttsSay, room['name'], ttsVol)
 
     return True
+
+def greeting():
+    # To use this, you should set up astro.py as described
+    # here https://github.com/OH-Jython-Scripters/Script%20Examples/astro.py
+    # It will take care of updating the item 'V_TimeOfDay' for you
+    timeOfDay = getItemValue('V_TimeOfDay', TIMEOFDAY['DAY'])
+    greeting = {
+        0: 'Good night',
+        1: 'Good morning',
+        2: 'Good day',
+        3: 'Good evening'
+    }
+    if timeOfDay in greeting:
+        return greeting[timeOfDay]
+    else:
+        return 'good day'

@@ -1,5 +1,4 @@
 from core.log import logging, LOG_PREFIX
-import community.clickatell
 from configuration import clickatell_configuration
 
 def sms(message, subscriber='Default'):

@@ -2,27 +2,26 @@
 import random
 import time
 
-import core.config as config
+import configuration
 from core.log import logging, LOG_PREFIX
-log = logging.getLogger(LOG_PREFIX + '.core.utils')
+from core.jsr223 import scope
 
 from org.joda.time import DateTime
 from org.joda.time.format import DateTimeFormat
 
-# Get direct access to the JSR223 scope types and objects (for Jython modules imported into scripts)
-from core.jsr223 import scope
+log = logging.getLogger(LOG_PREFIX + '.core.utils')
 scope.scriptExtension.importPreset("default")
 
 def isActive(item):
     '''
     Tries to determine if a device is active (tripped) from the perspective of an alarm system.
-    A door lock is special in the way that when it's locked its contacts are OPEN hence
+    A door lock is special in the way that when it's locked its contacts are OPEN, hence
     the value needs to be inverted for the alarm system to determine if it's 'active'
     '''
     active = False
     if item.state in [ON, OPEN]:
         active = True
-    active = not active if config.customGroupNames['lockDevice'] in item.groupNames else active
+    active = not active if configuration.customGroupNames['lockDevice'] in item.groupNames else active
     return active
 
 def kw(dict, search):
@@ -85,7 +84,7 @@ def postUpdate(itemName, newValue):
     '''
     events.postUpdate(itemName, str(newValue))
 
-def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=-1):
+def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=None):
     '''
     newValue must be of a type supported by the item
 
@@ -113,7 +112,7 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
             Therefore, comparing the stored value with the new value will most likely always result in a difference.
             You can supply the named argument floatPrecision to round the value before comparing
             '''
-            if floatPrecision == -1:
+            if floatPrecision is None:
                 compareValue = itemRegistry.getItem(itemName).state.floatValue()
             else:
                 compareValue = round(itemRegistry.getItem(itemName).state.floatValue(), floatPrecision)
@@ -134,25 +133,25 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
     else:
         return False
 
-def sendCommandCheckFirst(itemName, newValue, floatPrecision=-1):
+def sendCommandCheckFirst(itemName, newValue, floatPrecision=None):
     ''' See postUpdateCheckFirst '''
     return postUpdateCheckFirst(itemName, newValue, sendACommand=True, floatPrecision=floatPrecision)
 
 def isBright():
     '''Returns true when light level is bright'''
-    return getItemValue(config.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) == LIGHT_LEVEL['BRIGHT']
+    return getItemValue(configuration.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) == LIGHT_LEVEL['BRIGHT']
 
 def isShady():
     '''Returns true when shady or darker than shady'''
-    return getItemValue(config.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['SHADY']
+    return getItemValue(configuration.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['SHADY']
 
 def isDark():
     '''Returns true when dark or darker than dark'''
-    return getItemValue(config.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['DARK']
+    return getItemValue(configuration.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['DARK']
 
 def isBlack():
     '''Returns true if black, otherwise false'''
-    return getItemValue(config.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['BLACK']
+    return getItemValue(configuration.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['BLACK']
 
 '''
 				 Safety pig has arrived!
