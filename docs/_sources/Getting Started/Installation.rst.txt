@@ -6,9 +6,6 @@ Since the ESH automation API is still under development, it is best to use a
 current testing or snapshot release of openHAB. More importantly, there are
 breaking changes in the API, so at least OH 2.4 snapshot 1319 or milestone M3
 is required to use these modules.
-**The ESH integration into the openHAB core has broken the JSR223 scripting
-automation -- we are in the process of updating openHAB and this library to
-work post-integration**
 
 | Given that the automation API and this library are still under development, it
   is highly recommended to turn on debug logging. This can be done using the
@@ -55,7 +52,7 @@ openHABian, these instructions are for you!
 8. Start openHAB and watch the logs for errors and the entries from the
    ``hello_world.py`` script.
 
-Check out the :doc:`Getting Started` page for what to do next.
+Check out the :doc:`First Steps` page for what to do next.
 
 
 Manual Install
@@ -91,7 +88,7 @@ If you installed openHAB manually, these instructions are for you!
 8. Start openHAB and watch the logs for errors and the entries from the
    ``hello_world.py`` script.
 
-Check out the :doc:`Getting Started` page for what to do next.
+Check out the :doc:`First Steps` page for what to do next.
 
 
 Docker

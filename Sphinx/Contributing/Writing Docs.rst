@@ -44,7 +44,7 @@ File Header
         ``__init__.py``. It should contain and overview of what your module
         does. If your module does not have an ``__init__.py`` file, you should
         put this information above the ``.. toctree::`` directive in the main
-        ``.rst`` file for your module, unless your module is a single file.
+        ``.rst`` file for your module.
       * All packages or files with their own page should also read *docstrings*
         from those files. They should give an overview of what the package is
         intended for.
@@ -100,10 +100,10 @@ Adding Documentation for a Module
   module is a folder or just a single file.
 
   .. warning::
-    | autodoc is also written in python and will import your module. This means
-      that any imports or code that runs when loaded will happen when it does
-      this.
-    | In particular for this library, it means that autodoc will throw errors
+    | *autodoc* is used to read the *docstrings* from the code and is also
+      written in python and will import your module. This means that any
+      imports or code that runs when loaded will be executed.
+    | In particular for this library, it means that *autodoc* will throw errors
       when trying to import openHAB classes, the solution to this is outlined
       in :ref:`Contributing/Writing Docs:Building the Docs`
 
@@ -212,10 +212,6 @@ Building the Docs
   If you already have a Virtual Environment setup for this, you can skip to
   :ref:`Contributing/Writing Docs:Building`.
 
-  .. important::
-    Make sure you follow the steps in :ref:`Contributing/Writing Docs:Finalizing`
-    before making your pull request.
-
 Virtual Environment
 -------------------
 
@@ -245,7 +241,7 @@ Virtual Environment
 
       $ source .venv/bin/activate
 
-    After activating, the environment your prompt should change to this:
+    After activating the environment your prompt should change to this:
 
     .. code-block:: bash
 
@@ -273,13 +269,14 @@ Building
 
     .. code-block:: bash
 
-      (.venv) $ sphinx-build Sphinx/ docs/
+      (.venv) $ sphinx-build -a Sphinx/ docs/
 
-    | This should produce some output and end with ``build succeeded.``
-    | If the build produces any errors, they must be fixed before your pull
-      request can be merged. If you are seeing any Import Errors, see the next
-      section. If you are seeing other errors and are not able to resolve them,
-      make your pull request and ask for help.
+    This should produce some output and end with ``build succeeded.``
+    
+    If the build produces any errors, they must be fixed before your pull
+    request can be merged. If you are seeing any Import Errors, see the next
+    section. If you are seeing other errors and are not able to resolve them,
+    make your pull request and ask for help.
 
 Import Errors
 -------------
@@ -301,27 +298,12 @@ Import Errors
       No module named 'org'
 
     You may encounter a case where excluding an entire module is not possible.
-    For example, in this library's core, it loads an automation scope from
+    For example, in this library's ``core``, it loads an automation scope from
     openHAB. This scope must be loaded at runtime and so does not exist if you
     simply import ``core.jsr223``. So when other packages in the core try to
     import ``core.jsr223.scope`` it produces errors, but excluding ``core``
     would result in the module as a whole being ignored. When you need to
     exclude only a specific package you can add it to the ``MOCK_MODULES`` list.
-
-Finalizing
-----------
-
-    Once you are satisfied with the documentation and ready to make or
-    finalize your pull request, it will be necessary to completely rebuild the
-    html docs.
-
-    Sphinx only generates the pages that have changed when it builds. This
-    means that any pages that are unchanged will not have an updated
-    navigation menu showing any new pages or sections that have been added.
-
-    When you are ready, simply delete the entire contents of the ``docs``
-    directory and run ``sphinx-build`` following the instructions above.
-    That's it!
 
 
 Formatting
@@ -329,19 +311,46 @@ Formatting
 
   The following is a summary of useful reStructuredText inline markdowns and
   directives. Any of these can be used in the ``.rst`` files you create, or
-  directly in the docstrings in your ``.py`` files. You can find examples in
+  directly in the *docstrings* in your ``.py`` files. You can find examples in
   the ``core`` module.
 
 Emphasis
 --------
 
-    * Text can be made *italic* by surrounding it with single asterisks
+    * Text can be made *italic* by surrounding it with single asterisk
       ``*italic*``
     * Text can be made **bold** by surrounding it with two asterisks
       ``**bold**``
     * Inline code ``like this`` is done with two ticks: ````like this````
     * The content between these symbols may not start or end with whitespace
       ``* wrong*``
+
+Lists
+-----
+
+    Lists are simple to create and can be bullets or number, and can also be
+    nested by indenting. Numbers for numbered lists are ignored, items will be
+    numbered automatically.
+
+    .. code-block:: rest
+
+      1. This is a numbered list
+
+      * This is a bullet
+        and can span multiple lines
+
+      #. This is also a numbered list
+         
+         #. With a nested item
+
+    1. This is a numbered list
+      
+    * This is a bullet
+      and can span multiple lines
+
+    #. This is also a numbered list
+       
+       #. With a nested item
 
 Codeblocks
 ----------
@@ -395,15 +404,19 @@ Hyperlinks
 Field Lists
 -----------
 
-    | Field lists should be used to detail class and function arguments and
-      returns. They should also be used to detail class and module attributes.
-    | *This will be done automatically when pulling docstrings from code*
+    | Field lists are a more specific type of list that is available
 
     .. code-block:: rest
 
       :param my_arg: Description of argument
       :attr my_attr: Description of attribute
       :returns: Function return value
+
+    Results in:
+
+    :param my_arg: Description of argument
+    :attr my_attr: Description of attribute
+    :returns: Function return value
 
 Images
 ------

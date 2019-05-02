@@ -84,14 +84,15 @@
               
             
             
-              <p class="caption"><span class="caption-text">First Steps</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../First Steps/Installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../First Steps/Getting Started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
 </ul>
 <p class="caption"><span class="caption-text">How To's</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../How Tos/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../How Tos/Logging.html">Logging</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Core Modules</span></p>
 <ul>
@@ -124,11 +125,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#virtual-environment">Virtual Environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#building">Building</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#import-errors">Import Errors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#finalizing">Finalizing</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#formatting">Formatting</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#emphasis">Emphasis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lists">Lists</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#codeblocks">Codeblocks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hyperlinks">Hyperlinks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#field-lists">Field Lists</a></li>
@@ -244,7 +245,7 @@ in the format below.</p></li>
 <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>. It should contain and overview of what your module
 does. If your module does not have an <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file, you should
 put this information above the <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">toctree::</span></code> directive in the main
-<code class="docutils literal notranslate"><span class="pre">.rst</span></code> file for your module, unless your module is a single file.</p></li>
+<code class="docutils literal notranslate"><span class="pre">.rst</span></code> file for your module.</p></li>
 <li><p>All packages or files with their own page should also read <em>docstrings</em>
 from those files. They should give an overview of what the package is
 intended for.</p></li>
@@ -305,10 +306,10 @@ module is a folder or just a single file.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <div class="line-block">
-<div class="line">autodoc is also written in python and will import your module. This means
-that any imports or code that runs when loaded will happen when it does
-this.</div>
-<div class="line">In particular for this library, it means that autodoc will throw errors
+<div class="line"><em>autodoc</em> is used to read the <em>docstrings</em> from the code and is also
+written in python and will import your module. This means that any
+imports or code that runs when loaded will be executed.</div>
+<div class="line">In particular for this library, it means that <em>autodoc</em> will throw errors
 when trying to import openHAB classes, the solution to this is outlined
 in <a class="reference internal" href="#building-the-docs"><span class="std std-ref">Building the Docs</span></a></div>
 </div>
@@ -420,11 +421,6 @@ a maintainer will have to do it and this will delay merging your module.</p>
 <p>This section will go over all of the steps to build the docs from nothing.
 If you already have a Virtual Environment setup for this, you can skip to
 <a class="reference internal" href="#building"><span class="std std-ref">Building</span></a>.</p>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>Make sure you follow the steps in <a class="reference internal" href="#finalizing"><span class="std std-ref">Finalizing</span></a>
-before making your pull request.</p>
-</div>
 </div></blockquote>
 <div class="section" id="virtual-environment">
 <h3>Virtual Environment<a class="headerlink" href="#virtual-environment" title="Permalink to this headline">¶</a></h3>
@@ -447,7 +443,7 @@ repository on your computer.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">source</span> .venv/bin/activate
 </pre></div>
 </div>
-<p>After activating, the environment your prompt should change to this:</p>
+<p>After activating the environment your prompt should change to this:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>.venv<span class="o">)</span> $
 </pre></div>
 </div>
@@ -467,16 +463,14 @@ documented you need to have Sphinx rebuild the html files.</p>
 </pre></div>
 </div>
 <p>Then run Sphinx build:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>.venv<span class="o">)</span> $ sphinx-build Sphinx/ docs/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>.venv<span class="o">)</span> $ sphinx-build -a Sphinx/ docs/
 </pre></div>
 </div>
-<div class="line-block">
-<div class="line">This should produce some output and end with <code class="docutils literal notranslate"><span class="pre">build</span> <span class="pre">succeeded.</span></code></div>
-<div class="line">If the build produces any errors, they must be fixed before your pull
+<p>This should produce some output and end with <code class="docutils literal notranslate"><span class="pre">build</span> <span class="pre">succeeded.</span></code></p>
+<p>If the build produces any errors, they must be fixed before your pull
 request can be merged. If you are seeing any Import Errors, see the next
 section. If you are seeing other errors and are not able to resolve them,
-make your pull request and ask for help.</div>
-</div>
+make your pull request and ask for help.</p>
 </div></blockquote>
 </div>
 <div class="section" id="import-errors">
@@ -495,26 +489,12 @@ No module named <span class="s1">&#39;org&#39;</span>
 </pre></div>
 </div>
 <p>You may encounter a case where excluding an entire module is not possible.
-For example, in this library’s core, it loads an automation scope from
+For example, in this library’s <code class="docutils literal notranslate"><span class="pre">core</span></code>, it loads an automation scope from
 openHAB. This scope must be loaded at runtime and so does not exist if you
 simply import <code class="docutils literal notranslate"><span class="pre">core.jsr223</span></code>. So when other packages in the core try to
 import <code class="docutils literal notranslate"><span class="pre">core.jsr223.scope</span></code> it produces errors, but excluding <code class="docutils literal notranslate"><span class="pre">core</span></code>
 would result in the module as a whole being ignored. When you need to
 exclude only a specific package you can add it to the <code class="docutils literal notranslate"><span class="pre">MOCK_MODULES</span></code> list.</p>
-</div></blockquote>
-</div>
-<div class="section" id="finalizing">
-<h3>Finalizing<a class="headerlink" href="#finalizing" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Once you are satisfied with the documentation and ready to make or
-finalize your pull request, it will be necessary to completely rebuild the
-html docs.</p>
-<p>Sphinx only generates the pages that have changed when it builds. This
-means that any pages that are unchanged will not have an updated
-navigation menu showing any new pages or sections that have been added.</p>
-<p>When you are ready, simply delete the entire contents of the <code class="docutils literal notranslate"><span class="pre">docs</span></code>
-directory and run <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code> following the instructions above.
-That’s it!</p>
 </div></blockquote>
 </div>
 </div>
@@ -523,14 +503,14 @@ That’s it!</p>
 <blockquote>
 <div><p>The following is a summary of useful reStructuredText inline markdowns and
 directives. Any of these can be used in the <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files you create, or
-directly in the docstrings in your <code class="docutils literal notranslate"><span class="pre">.py</span></code> files. You can find examples in
+directly in the <em>docstrings</em> in your <code class="docutils literal notranslate"><span class="pre">.py</span></code> files. You can find examples in
 the <code class="docutils literal notranslate"><span class="pre">core</span></code> module.</p>
 </div></blockquote>
 <div class="section" id="emphasis">
 <h3>Emphasis<a class="headerlink" href="#emphasis" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><ul class="simple">
-<li><p>Text can be made <em>italic</em> by surrounding it with single asterisks
+<li><p>Text can be made <em>italic</em> by surrounding it with single asterisk
 <code class="docutils literal notranslate"><span class="pre">*italic*</span></code></p></li>
 <li><p>Text can be made <strong>bold</strong> by surrounding it with two asterisks
 <code class="docutils literal notranslate"><span class="pre">**bold**</span></code></p></li>
@@ -538,6 +518,38 @@ the <code class="docutils literal notranslate"><span class="pre">core</span></co
 <li><p>The content between these symbols may not start or end with whitespace
 <code class="docutils literal notranslate"><span class="pre">*</span> <span class="pre">wrong*</span></code></p></li>
 </ul>
+</div></blockquote>
+</div>
+<div class="section" id="lists">
+<h3>Lists<a class="headerlink" href="#lists" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Lists are simple to create and can be bullets or number, and can also be
+nested by indenting. Numbers for numbered lists are ignored, items will be
+numbered automatically.</p>
+<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span><span class="m">1.</span> This is a numbered list
+
+<span class="m">*</span> This is a bullet
+  and can span multiple lines
+
+<span class="m">#.</span> This is also a numbered list
+
+   <span class="m">#.</span> With a nested item
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>This is a numbered list</p></li>
+</ol>
+<ul class="simple">
+<li><p>This is a bullet
+and can span multiple lines</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>This is also a numbered list</p>
+<ol class="arabic simple">
+<li><p>With a nested item</p></li>
+</ol>
+</li>
+</ol>
 </div></blockquote>
 </div>
 <div class="section" id="codeblocks">
@@ -587,15 +599,25 @@ This is a normal text paragraph again.
 <h3>Field Lists<a class="headerlink" href="#field-lists" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><div class="line-block">
-<div class="line">Field lists should be used to detail class and function arguments and
-returns. They should also be used to detail class and module attributes.</div>
-<div class="line"><em>This will be done automatically when pulling docstrings from code</em></div>
+<div class="line">Field lists are a more specific type of list that is available</div>
 </div>
 <div class="highlight-rest notranslate"><div class="highlight"><pre><span></span><span class="nc">:param my_arg:</span> <span class="nf">Description of argument</span>
 <span class="nc">:attr my_attr:</span> <span class="nf">Description of attribute</span>
 <span class="nc">:returns:</span> <span class="nf">Function return value</span>
 </pre></div>
 </div>
+<p>Results in:</p>
+<dl class="field-list simple">
+<dt class="field-odd">param my_arg</dt>
+<dd class="field-odd"><p>Description of argument</p>
+</dd>
+<dt class="field-even">attr my_attr</dt>
+<dd class="field-even"><p>Description of attribute</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>Function return value</p>
+</dd>
+</dl>
 </div></blockquote>
 </div>
 <div class="section" id="images">
