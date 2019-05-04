@@ -24,7 +24,7 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
                 return the_key
         return 'All'
 
-    if getItemValue(customItemNames['Sonos_Allow_TTS_And_Sounds'], scope.OnOffType.ON) != scope.OnOffType.ON and ttsPrio <= PRIO['MODERATE']:
+    if getItemValue(customItemNames['Sonos_Allow_TTS_And_Sounds'], scope.ON) != scope.ON and ttsPrio <= PRIO['MODERATE']:
         log.info("[{}] is OFF and ttsPrio is too low to speak [{}] at this moment".format(customItemNames['Sonos_Allow_TTS_And_Sounds'], ttsSay))
         return False
 

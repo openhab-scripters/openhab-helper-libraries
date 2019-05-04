@@ -21,7 +21,6 @@ from community.clickatell.sendsms import sms
 from community import autoremote
 
 log = logging.getLogger(LOG_PREFIX + '.ideAlarm.custom')
-scope.scriptExtension.importPreset("default")
 
 ZONESTATUS = {'NORMAL': 0, 'ALERT': 1, 'ERROR': 2, 'TRIPPED': 3, 'ARMING': 4}
 ARMINGMODE = {'DISARMED': 0, 'ARMED_HOME': 1, 'ARMED_AWAY': 2}
@@ -32,8 +31,8 @@ def sayHello():
         return
     greetings = [greeting(), 'Hello', 'Greetings', 'Hi']
     peopleAtHome = []
-    for member in itemRegistry.getItem('G_Presence_Family').getAllMembers():
-        if member.state == OPEN: peopleAtHome.append(member.label)
+    for member in scope.itemRegistry.getItem('G_Presence_Family').getAllMembers():
+        if member.state == scope.OPEN: peopleAtHome.append(member.label)
     random.shuffle(peopleAtHome)
     msg = random.choice(greetings)
     for i in range(len(peopleAtHome)):
@@ -57,14 +56,14 @@ def onArmingModeChange(zone, newArmingMode, oldArmingMode):
             Pushover.pushover("An Alarm Zone arming mode change for {} triggered, new value is: {}".format(zone.name, kw(ARMINGMODE, newArmingMode)), PUSHOVER_DEF_DEV, PUSHOVER_PRIO['NORMAL'])
 
         if newArmingMode == ARMINGMODE['DISARMED']:
-            sendCommandCheckFirst('Alarm_Status_Indicator_1', OFF)
-            sendCommandCheckFirst('Wall_Plug_Bedroom_Fan', OFF)
+            sendCommandCheckFirst('Alarm_Status_Indicator_1', scope.OFF)
+            sendCommandCheckFirst('Wall_Plug_Bedroom_Fan', scope.OFF)
             sayHello()
         elif newArmingMode == ARMINGMODE['ARMED_HOME']:
-            sendCommandCheckFirst('Wall_Plug_Bedroom_Fan', ON)
+            sendCommandCheckFirst('Wall_Plug_Bedroom_Fan', scope.ON)
 
         if newArmingMode != ARMINGMODE['DISARMED']:
-            sendCommandCheckFirst('Alarm_Status_Indicator_1', ON)
+            sendCommandCheckFirst('Alarm_Status_Indicator_1', scope.ON)
 
     log.debug("onArmingModeChange: {} ---> {}".format(zone.name, kw(ARMINGMODE, newArmingMode)))
 
@@ -159,7 +158,7 @@ def onNagTimer(zone, nagSensors):
             msg +=', '
     msg = "Open sections in {}. {}".format(zone.name, msg)
     log.info(msg)
-    if zone.zoneNumber in [1, 3, 4] and itemRegistry.getItem('Z1_Block_Nag_Timer').state != ON:
+    if zone.zoneNumber in [1, 3, 4] and scope.itemRegistry.getItem('Z1_Block_Nag_Timer').state != scope.ON:
         tts(msg, PRIO['HIGH'])
-    elif zone.zoneNumber == 2 and itemRegistry.getItem('Z2_Block_Nag').state != ON:
+    elif zone.zoneNumber == 2 and scope.itemRegistry.getItem('Z2_Block_Nag').state != scope.ON:
         tts(msg, PRIO['MODERATE'])

@@ -3,7 +3,6 @@
 import weakref # Using this to prevent problems with garbage collection
 
 from core.jsr223 import scope
-from core.triggers import ItemCommandTrigger, ItemStateChangeTrigger
 from core.log import logging, LOG_PREFIX
 from core.utils import isActive, getItemValue, postUpdateCheckFirst, sendCommandCheckFirst, kw
 from community.idealarm import custom
@@ -13,7 +12,6 @@ from org.eclipse.smarthome.model.persistence.extensions import PersistenceExtens
 from org.joda.time import DateTime
 
 log = logging.getLogger(LOG_PREFIX + '.ideAlarm')
-scope.scriptExtension.importPreset("default")
 
 ZONESTATUS = {'NORMAL': 0, 'ALERT': 1, 'ERROR': 2, 'TRIPPED': 3, 'ARMING': 4}
 ARMINGMODE = {'DISARMED': 0, 'ARMED_HOME': 1, 'ARMED_AWAY': 2}
@@ -44,7 +42,7 @@ class IdeAlarmSensor(object):
         self.nagTimeoutMins = cfg['nagTimeoutMins']
         self.armWarn = cfg['armWarn']
         self.enabled = cfg['enabled']
-        self.log = logging.getLogger(LOG_PREFIX+'.IdeAlarmSensor.'+self.name.decode('utf8'))
+        self.log = logging.getLogger("{}.IdeAlarmSensor.{}".format(LOG_PREFIX, self.name))
         #self.log.info("ideAlarm sensor {} initialized...".format(self.name))
 
     def isEnabled(self):
@@ -98,7 +96,7 @@ class IdeAlarmZone(object):
         self.canArmWithTrippedSensors = cfg['canArmWithTrippedSensors']
         self.alarmTestMode = parent.alarmTestMode
         self.parent = weakref.ref(parent) # <= garbage-collector safe!
-        self.log = logging.getLogger(LOG_PREFIX+'.IdeAlarmZone.'+self.name.decode('utf8'))
+        self.log = logging.getLogger("{}.IdeAlarmZone.{}".format(LOG_PREFIX, self.name))
         self.sensors = []
         for sensor in cfg['sensors']:
             self.sensors.append(IdeAlarmSensor(self, sensor))
@@ -133,7 +131,7 @@ class IdeAlarmZone(object):
         and self.openSections > 0:
             if 'onArmingWithOpenSensors' in dir(custom):
                 custom.onArmingWithOpenSensors(self, newArmingMode)
-            if not self.canArmWithTrippedSensors :
+            if not self.canArmWithTrippedSensors:
                 self.setZoneStatus(ZONESTATUS['ERROR'], errorMessage='Arming is not allowed with open sensors')
                 self.log.warn("Zone \'{}'\' can not be set to new arming mode: {} due to that there are open sensors!".format(self.name, kw(ARMINGMODE, newArmingMode)))
                 import time
@@ -146,7 +144,7 @@ class IdeAlarmZone(object):
         if newArmingMode == ARMINGMODE['ARMED_AWAY'] \
         and self.getZoneStatus() is not None and self.getZoneStatus() != ZONESTATUS['ARMING']:
             self.setZoneStatus(ZONESTATUS['ARMING'])
-            postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Exit_Timer', ON)
+            postUpdateCheckFirst("Z{}_Exit_Timer".format(self.zoneNumber), scope.ON)
             return
         self._armingMode = newArmingMode
 
@@ -178,13 +176,13 @@ class IdeAlarmZone(object):
         if newZoneStatus in [ZONESTATUS['NORMAL']]:
 
             # Cancel all timers so they won't fire
-            postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Entry_Timer', OFF)
-            postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Exit_Timer', OFF)
-            postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Alert_Max_Timer', OFF)
+            postUpdateCheckFirst("Z{}_Entry_Timer".format(self.zoneNumber), scope.OFF)
+            postUpdateCheckFirst("Z{}_Exit_Timer".format(self.zoneNumber), scope.OFF)
+            postUpdateCheckFirst("Z{}_Alert_Max_Timer".format(self.zoneNumber), scope.OFF)
 
             # Cancel sirens
             for alertDevice in self.alertDevices:
-                sendCommandCheckFirst(alertDevice, OFF)
+                sendCommandCheckFirst(alertDevice, scope.OFF)
 
         # Sync the Zone Status Item
         postUpdateCheckFirst(self.statusItem, newZoneStatus, sendCommand)
@@ -262,11 +260,11 @@ class IdeAlarmZone(object):
         # We need to make some noise here!
         if not self.alarmTestMode:
             for alertDevice in self.alertDevices:
-                sendCommandCheckFirst(alertDevice, ON)
+                sendCommandCheckFirst(alertDevice, scope.ON)
             self.log.info('You should be able to hear the sirens now...')
         else:
             self.log.info('ALARM_TEST_MODE is activated. No sirens!')
-        postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Alert_Max_Timer', ON)
+        postUpdateCheckFirst("Z{}_Alert_Max_Timer".format(self.zoneNumber), scope.ON)
 
     def onExitTimer(self):
         '''
@@ -281,7 +279,7 @@ class IdeAlarmZone(object):
         '''
         # Cancel alert devices, e.g. the sirens
         for alertDevice in self.alertDevices:
-            sendCommandCheckFirst(alertDevice, OFF)
+            sendCommandCheckFirst(alertDevice, scope.OFF)
         self.log.debug('Alert devices have been switched off due to they\'ve reached their time limit')
 
     def getNagSensors(self, timerTimedOut=False):
@@ -294,9 +292,9 @@ class IdeAlarmZone(object):
             if sensor.isEnabled() and sensor.isActive() and sensor.nag and self.getArmingMode() == ARMINGMODE['DISARMED']:
                 nagSensors.append(sensor)
         if len(nagSensors) == 0:
-            postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Nag_Timer', OFF) # Cancel the nag timer
+            postUpdateCheckFirst("Z{}_Nag_Timer".format(self.zoneNumber), scope.OFF) # Cancel the nag timer
         else:
-            postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Nag_Timer', ON)
+            postUpdateCheckFirst("Z{}_Nag_Timer".format(self.zoneNumber), scope.ON)
             if timerTimedOut and 'onNagTimer' in dir(custom):
                 self.log.debug('Calling custom onNagTimer function')
                 custom.onNagTimer(self, nagSensors)
@@ -312,13 +310,13 @@ class IdeAlarmZone(object):
         '''
         self.openSections = 0
         for sensor in self.sensors:
-            #self.log.debug('Checking sensor: '+sensor.name+'. : '+ str(sensor.isEnabled() and sensor.isActive()))
+            #self.log.debug("Checking sensor: {} : {}".format(sensor.name, sensor.isEnabled() and sensor.isActive()))
             if sensor.isEnabled() and sensor.isActive() \
             and ('G_Motion' not in itemRegistry.getItem(sensor.name).groupNames or self.getArmingMode() in [ARMINGMODE['ARMED_AWAY']]):
                 self.openSections += 1
-                self.log.debug('Open sensor: '+sensor.name)
-        self.log.debug('Number of open sections in '+self.name.decode('utf-8')+' is: '+str(self.openSections))
-        postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Open_Sections', self.openSections)
+                self.log.debug("Open sensor: {}".format(sensor.name))
+        self.log.debug("Number of open sections in {} is: {}".format(self.name, self.openSections))
+        postUpdateCheckFirst("Z{}_Open_Sections".format(self.zoneNumber), self.openSections)
         return self.openSections
 
     def onSensorChange(self, sensor):
@@ -328,13 +326,13 @@ class IdeAlarmZone(object):
         if self.getArmingMode() not in [ARMINGMODE['ARMED_HOME'], ARMINGMODE['ARMED_AWAY']] \
         or self.getZoneStatus() not in [ZONESTATUS['NORMAL']] \
         or (self.getArmingMode() == ARMINGMODE['ARMED_HOME'] and sensor.sensorClass == 'B') \
-        or getItemValue('Z'+str(self.zoneNumber)+'_Exit_Timer', OFF) == ON:
+        or getItemValue("Z{}_Exit_Timer".format(self.zoneNumber), scope.OFF) == scope.ON:
             self.log.info("{} was tripped, but we are ignoring it".format(sensor.name))
             return
 
         self.setZoneStatus(ZONESTATUS['TRIPPED'])
         self.log.info("{} was tripped, starting entry timer".format(sensor.name))
-        postUpdateCheckFirst('Z'+str(self.zoneNumber)+'_Entry_Timer', ON)
+        postUpdateCheckFirst("Z{}_Entry_Timer".format(self.zoneNumber), scope.ON)
 
 class IdeAlarm(object):
     '''
@@ -350,8 +348,7 @@ class IdeAlarm(object):
         '''
         self.__version__ = '3.0.1'
         self.__version_info__ = tuple([ int(num) for num in self.__version__.split('.')])
-
-        self.log = logging.getLogger(LOG_PREFIX+'.IdeAlarm V'+self.__version__)
+        self.log = logging.getLogger("{}.IdeAlarm V{}".format(LOG_PREFIX, self.__version__))
 
         import idealarm.config ######### TEMP
         #reload(idealarm.config) ######### TEMP
@@ -426,9 +423,9 @@ class IdeAlarm(object):
         sensorList = []
         for i in range(len(self.alarmZones)):
             alarmZone = self.alarmZones[i] # Get the alarm zone object
-            #self.log.info('Getting sensors for alarm zone ' + alarmZone.name.decode('utf-8'))
+            #self.log.info("Getting sensors for alarm zone {}".format(alarmZone.name))
             for sensor in alarmZone.sensors:
-                #self.log.info('Sensor: ' + sensor.name)
+                #self.log.info("Sensor: {}".format(sensor.name))
                 sensorList.append(sensor.name)
         return sensorList
 
@@ -439,7 +436,7 @@ class IdeAlarm(object):
         alertingZones = 0
         for i in range(len(self.alarmZones)):
             alarmZone = self.alarmZones[i] # Get the alarm zone object
-            #self.log.info('Checking for alert status in zone ' + alarmZone.name.decode('utf-8'))
+            #self.log.info("Checking for alert status in zone {}".format(alarmZone.name))
             if self.getZoneStatus(i) == ZONESTATUS['ALERT']: alertingZones += 1
         return alertingZones
 
@@ -468,7 +465,7 @@ class IdeAlarm(object):
         self.log.setLevel(DEBUG)
 
         #self.log.debug(event.type)
-        #self.log.debug('item: ' + unicode(event.itemName) + ' currently has state: ' + str(event.itemState) + ' ---> isActive(): ' + str(event.isActive))
+        #self.log.debug("item: {} currently has state: {} ---> isActive(): {}".format(event.itemName, event.itemState, event.isActive))
 
         # Why are we here? What caused this script to trigger?
         # Is it a change of status, armingMode toggleSwitch or is it a sensor?
@@ -478,16 +475,16 @@ class IdeAlarm(object):
             if event.itemName in [alarmZone.armAwayToggleSwitch, alarmZone.armHomeToggleSwitch]:
                 alarmZone.onToggleSwitch(event.item)
                 break
-            elif event.itemName == 'Z'+str(i+1)+'_Entry_Timer':
+            elif event.itemName == "Z{}_Entry_Timer".format(i+1):
                 alarmZone.onEntryTimer() # Fundera på ifall vi bara ska hantera event.isCommand och skippa event.isUpdate (Cancelled timer)
                 break
-            elif event.itemName == 'Z'+str(i+1)+'_Exit_Timer':
+            elif event.itemName == "Z{}_Exit_Timer".format(i+1):
                 alarmZone.onExitTimer()
                 break
-            elif event.itemName == 'Z'+str(i+1)+'_Nag_Timer':
+            elif event.itemName == "Z{}_Nag_Timer".format(i+1):
                 alarmZone.getNagSensors(True)
                 break
-            elif event.itemName == 'Z'+str(i+1)+'_Alert_Max_Timer':
+            elif event.itemName == "Z{}_Alert_Max_Timer".format(i+1):
                 result = alarmZone.onAlertMaxTimer()
                 break
             else:

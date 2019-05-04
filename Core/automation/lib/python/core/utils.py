@@ -10,7 +10,6 @@ from org.joda.time import DateTime
 from org.joda.time.format import DateTimeFormat
 
 log = logging.getLogger(LOG_PREFIX + '.core.utils')
-scope.scriptExtension.importPreset("default")
 
 def isActive(item):
     '''
@@ -19,7 +18,7 @@ def isActive(item):
     the value needs to be inverted for the alarm system to determine if it's 'active'
     '''
     active = False
-    if item.state in [ON, OPEN]:
+    if item.state in [scope.ON, scope.OPEN]:
         active = True
     active = not active if configuration.customGroupNames['lockDevice'] in item.groupNames else active
     return active
@@ -40,20 +39,20 @@ def getItemValue(itemName, defVal):
     Returns the Item's value if the Item is initialized, otherwise return the default value.
     itemRegistry.getItem will return an object also for uninitialized items but it has less methods.
     '''
-    item = itemRegistry.getItem(itemName)
+    item = scope.itemRegistry.getItem(itemName)
     if type(defVal) is int:
-        return item.state.intValue() if item.state not in [NULL, UNDEF] else defVal
+        return item.state.intValue() if item.state not in [scope.NULL, scope.UNDEF] else defVal
     elif type(defVal) is float:
-        return item.state.floatValue() if item.state not in [NULL, UNDEF] else defVal
-    elif defVal in [ON, OFF, OPEN, CLOSED]:
-        return item.state if item.state not in [NULL, UNDEF] else defVal
+        return item.state.floatValue() if item.state not in [scope.NULL, scope.UNDEF] else defVal
+    elif defVal in [scope.ON, scope.OFF, scope.OPEN, scope.CLOSED]:
+        return item.state if item.state not in [scope.NULL, scope.UNDEF] else defVal
     elif type(defVal) is str:
-        return item.state.toFullString() if item.state not in [NULL, UNDEF] else defVal
+        return item.state.toFullString() if item.state not in [scope.NULL, scope.UNDEF] else defVal
     elif type(defVal) is DateTime:
         # We return a org.joda.time.DateTime from a org.eclipse.smarthome.core.library.types.DateTimeType
-        return DateTime(item.state.calendar.timeInMillis) if item.state not in [NULL, UNDEF] else defVal
+        return DateTime(item.state.calendar.timeInMillis) if item.state not in [scope.NULL, scope.UNDEF] else defVal
     else:
-        log.error("The type of the passed default value is not handled")
+        log.warn("The type of the passed default value is not handled")
         return None
 
 def getLastUpdate(pe, item):
@@ -99,11 +98,11 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
     using postUpdate.
     '''
     compareValue = None
-    item = itemRegistry.getItem(itemName)
+    item = scope.itemRegistry.getItem(itemName)
 
-    if item.state not in [NULL, UNDEF]:
+    if item.state not in [scope.NULL, scope.UNDEF]:
         if type(newValue) is int:
-            compareValue = itemRegistry.getItem(itemName).state.intValue()
+            compareValue = scope.itemRegistry.getItem(itemName).state.intValue()
         elif type(newValue) is float:
             '''
             Unfortunately, most decimal fractions cannot be represented exactly as binary fractions.
@@ -113,16 +112,16 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
             You can supply the named argument floatPrecision to round the value before comparing
             '''
             if floatPrecision is None:
-                compareValue = itemRegistry.getItem(itemName).state.floatValue()
+                compareValue = scope.itemRegistry.getItem(itemName).state.floatValue()
             else:
-                compareValue = round(itemRegistry.getItem(itemName).state.floatValue(), floatPrecision)
-        elif newValue in [ON, OFF, OPEN, CLOSED]:
-            compareValue = itemRegistry.getItem(itemName).state
+                compareValue = round(scope.itemRegistry.getItem(itemName).state.floatValue(), floatPrecision)
+        elif newValue in [scope.ON, scope.OFF, scope.OPEN, scope.CLOSED]:
+            compareValue = scope.itemRegistry.getItem(itemName).state
         elif type(newValue) is str:
-            compareValue = itemRegistry.getItem(itemName).state.toString()
+            compareValue = scope.itemRegistry.getItem(itemName).state.toString()
         else:
             log.warn("Can not set [{}] to the unsupported type [{}]. Value: [{}]".format(itemName, type(newValue), newValue))
-    if (compareValue is not None and compareValue != newValue) or item.state in [NULL, UNDEF]:
+    if (compareValue is not None and compareValue != newValue) or item.state in [scope.NULL, scope.UNDEF]:
         if sendACommand:
             log.debug("New sendCommand value for [{}] is [{}]".format(itemName, newValue))
             sendCommand(itemName, newValue)

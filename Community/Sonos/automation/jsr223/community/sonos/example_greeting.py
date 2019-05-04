@@ -1,7 +1,7 @@
 '''
 This script speaks a random greeting every minute on your Sonos speaker system.
 To use this, you should set up astro.py as described here
-https://github.com/OH-Jython-Scripters/lucid/blob/master/Script%20Examples/astro.py.
+https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Design%20Pattern%20Examples/Time%20of%20Day.
 It also assumes that you've set up an openHAB contact items to represent the presence of
 persons to be greeted. Each item should belong to the item group "G_Presence_Family".
 '''

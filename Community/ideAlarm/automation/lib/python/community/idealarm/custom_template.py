@@ -3,12 +3,10 @@
 Custom ideAlarm functions library.
 Edit this file to suit your needs.
 '''
-from core.jsr223 import scope
 from core.log import logging, LOG_PREFIX
 from core.utils import kw
 
 log = logging.getLogger(LOG_PREFIX + '.ideAlarm.custom')
-scope.scriptExtension.importPreset("default")
 
 ZONESTATUS = {'NORMAL': 0, 'ALERT': 1, 'ERROR': 2, 'TRIPPED': 3, 'ARMING': 4}
 ARMINGMODE = {'DISARMED': 0, 'ARMED_HOME': 1, 'ARMED_AWAY': 2}

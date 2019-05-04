@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from core.jsr223 import scope
 
-scope.scriptExtension.importPreset("default")
-
 ALARM_TEST_MODE = True
 LOGGING_LEVEL = 'DEBUG'
 NAG_INTERVAL_MINUTES = 6
@@ -14,7 +12,7 @@ def d5Enabled(events, itemRegistry, log):
     '''
     Door 5 sensor shall only be enabled if an Internet connection is available.
     '''
-    return (itemRegistry.getItem('Network_Internet').state == ON)
+    return (itemRegistry.getItem('Network_Internet').state == scope.ON)
 
 ALARM_ZONES = [
     {
