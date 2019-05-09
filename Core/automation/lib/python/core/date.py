@@ -103,13 +103,13 @@ def to_java_zoneddatetime(value):
         )
     # java.util.Calendar
     if isinstance(value, Calendar):
-        return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.of(value.getTimeZone().getID()))
+        return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.of(value.getTimeZone().getId()))
     # java.util.Date
     if isinstance(value, Date):
         return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(value.getTimezoneOffset()*60)))
     # Joda DateTime
     if isinstance(value, DateTime):
-        return value.toGregorianCalendar.toZonedDateTime
+        return value.toGregorianCalendar().toZonedDateTime()
     # OH DateTimeType or ESH DateTimeType
     if isinstance(value, (LegacyDateTimeType, DateTimeType)):
         return to_java_zoneddatetime(value.calendar)
@@ -123,14 +123,14 @@ def to_java_calendar(value):
         return value
     
     value_zoneddatetime = to_java_zoneddatetime(value)
-    new_calendar = Calendar.getInstance(TimeZone.getTimeZone(value_zoneddatetime.getZone().getID()))
-    new_calendar.set(Calendar.YEAR, value_zoneddatetime.getYear)
-    new_calendar.set(Calendar.MONTH, value_zoneddatetime.getMonthValue - 1)
-    new_calendar.set(Calendar.DAY_OF_MONTH, value_zoneddatetime.getDayOfMonth)
-    new_calendar.set(Calendar.HOUR_OF_DAY, value_zoneddatetime.getHour)
-    new_calendar.set(Calendar.MINUTE, value_zoneddatetime.getMinute)
-    new_calendar.set(Calendar.SECOND, value_zoneddatetime.getSecond)
-    new_calendar.set(Calendar.MILLISECOND, int(value_zoneddatetime.getNano / 1000000))
+    new_calendar = Calendar.getInstance(TimeZone.getTimeZone(value_zoneddatetime.getZone().getId()))
+    new_calendar.set(Calendar.YEAR, value_zoneddatetime.getYear())
+    new_calendar.set(Calendar.MONTH, value_zoneddatetime.getMonthValue() - 1)
+    new_calendar.set(Calendar.DAY_OF_MONTH, value_zoneddatetime.getDayOfMonth())
+    new_calendar.set(Calendar.HOUR_OF_DAY, value_zoneddatetime.getHour())
+    new_calendar.set(Calendar.MINUTE, value_zoneddatetime.getMinute())
+    new_calendar.set(Calendar.SECOND, value_zoneddatetime.getSecond())
+    new_calendar.set(Calendar.MILLISECOND, int(value_zoneddatetime.getNano() / 1000000))
     return new_calendar
 
 def to_python_datetime(value):
@@ -141,14 +141,14 @@ def to_python_datetime(value):
 
     value_zoneddatetime = to_java_zoneddatetime(value)
     return datetime.datetime(
-        value_zoneddatetime.getYear,
-        value_zoneddatetime.getMonthValue,
-        value_zoneddatetime.getDayOfMonth,
-        value_zoneddatetime.getHour,
-        value_zoneddatetime.getMinute,
-        value_zoneddatetime.getSecond,
-        int(value_zoneddatetime.getNano / 1000),
-        pythonTimezone(int(value_zoneddatetime.getOffset.getTotalSeconds / 60))
+        value_zoneddatetime.getYear(),
+        value_zoneddatetime.getMonthValue(),
+        value_zoneddatetime.getDayOfMonth(),
+        value_zoneddatetime.getHour(),
+        value_zoneddatetime.getMinute(),
+        value_zoneddatetime.getSecond(),
+        int(value_zoneddatetime.getNano() / 1000),
+        pythonTimezone(int(value_zoneddatetime.getOffset().getTotalSeconds() / 60))
     )
 
 def to_joda_datetime(value):
@@ -159,8 +159,8 @@ def to_joda_datetime(value):
     
     value_zoneddatetime = to_java_zoneddatetime(value)
     return DateTime(
-        value_zoneddatetime.toInstant,
-        DateTimeZone.forID(value_zoneddatetime.getZone().getID())
+        value_zoneddatetime.toInstant(),
+        DateTimeZone.forID(value_zoneddatetime.getZone().getId())
     )
 
 class pythonTimezone(datetime.tzinfo):
