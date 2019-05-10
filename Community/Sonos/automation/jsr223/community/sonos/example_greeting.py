@@ -4,19 +4,21 @@ To use this, you should set up astro.py as described here
 https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Design%20Pattern%20Examples/Time%20of%20Day.
 It also assumes that you've set up an openHAB contact items to represent the presence of
 persons to be greeted. Each item should belong to the item group "G_Presence_Family".
+
+Finally make sure that you add the contents of the configuration.py.example file
+into your own configuration file:
 '''
 import random
 
 from core.rules import rule
 from core.triggers import when
-from community.sonos.speak import tts, greeting
-from configuration import PRIO
+from community.sonos.speak import tts, greeting, PRIO
 from core.utils import getItemValue
 
 @rule("Greeting example")
 @when("Time cron 0 * * * * ?")
 def exampleGreeting(event):
-    greetings = [greeting(), 'Hello', 'How are you', 'How are you doing', 'Good to see you', 'Long time no see', 'It\’s been a while']
+    greetings = [greeting(), 'Hello', 'How are you', 'How are you doing', 'Good to see you', 'Long time no see', 'Its been a while']
     peopleAtHome = []
     for member in itemRegistry.getItem('G_Presence_Family').getAllMembers():
         if member.state == OPEN: peopleAtHome.append(member.label)

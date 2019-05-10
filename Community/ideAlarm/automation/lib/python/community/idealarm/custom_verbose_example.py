@@ -13,12 +13,12 @@ from core.jsr223 import scope
 from core.log import logging, LOG_PREFIX
 from org.joda.time import DateTime
 from org.joda.time.format import DateTimeFormat
-from configuration import PRIO, PUSHOVER_PRIO, PUSHOVER_DEF_DEV
+from configuration import PUSHOVER_PRIO, PUSHOVER_DEF_DEV
 from core.utils import kw, sendCommandCheckFirst
 from core.actions import Pushover
-from community.sonis.speak import tts, greeting
+from community.sonos.speak import tts, greeting, PRIO
 from community.clickatell.sendsms import sms
-from community import autoremote
+#from community import autoremote
 
 log = logging.getLogger(LOG_PREFIX + '.ideAlarm.custom')
 

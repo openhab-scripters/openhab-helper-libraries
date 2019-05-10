@@ -32,3 +32,13 @@ wunderground = {
         "solarradiation": ['XXXXXX', 'YYYYYYY'] # The script will pick the first solar light sensor in the list with the highest value
     }
 }
+
+'''
+You can customize the format of date and time shown in log entries to suit your preferences.
+See java.time.format.DateTimeFormatter docs for format string tokens.
+'''
+customDateTimeFormats = {
+    'date': 'yyyy-MM-dd', # Date only
+    'dateTime': 'yyyy-MM-dd HH:mm:ss', # Date and time
+    'time': 'HH:mm:ss' # Time only
+}

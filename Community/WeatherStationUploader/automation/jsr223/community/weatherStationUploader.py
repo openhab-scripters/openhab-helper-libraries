@@ -1,31 +1,40 @@
 '''
-This project on GitHUB: https://github.com/OH-Jython-Scripters/weatherStationUploader
+This is a community script distributed together with with Jython scripting for openHAB 2.x
+https://github.com/OH-Jython-Scripters/openhab2-jython
 
-To install and use meteocalc: https://pypi.org/project/meteocalc/
+To run, this script should be placed into the automation\jsr223\community folder. Even better
+is to create a symbolic link from automation\jsr223\community\weatherStationUploader.py
+to Community\WeatherStationUploader\automation\jsr223\community\weatherStationUploader.py 
+
+You will also need to insert the example configuration entries found in
+Community\WeatherStationUploader\automation\lib\python\configuration.py.example into your
+openHab2-jython configuration file e.g. automation\lib\python\configuration.py
+After doing that, edit the configuration data to suit your needs.
+
+This script is dependent of an external library named meteocalc.
+To install and use meteocalc, please have a look at : https://pypi.org/project/meteocalc/
+
+Example installation command:
 sudo pip install meteocalc && sudo ln -s /usr/local/lib/python2.7/dist-packages/meteocalc meteocalc
 Edit classutils.py, change line 5 to: PYTHON2 = 2#sys.version_info.major
+You should also add the directory /usr/local/lib/python2.7/dist-packages to the -Dpython.path in the EXTRA_JAVA_OPTS environment variable
+typically found in /etc/default/openhab2 or if you have made a manual OH installation it can be set in /opt/openhab2/start.sh
 '''
 
-__version__ = '3.3.1'
+__version__ = '4.0.0'
 __version_info__ = tuple([ int(num) for num in __version__.split('.')])
 
 import os, time, math
-
+from meteocalc import Temp, dew_point, heat_index
+from org.joda.time import DateTime, DateTimeZone
+from org.joda.time.format import DateTimeFormat
+from core.date import format_date
 from core.rules import rule
 from core.triggers import when
 from core.utils import getItemValue, getLastUpdate
 import configuration
 
-import org.joda.time.DateTime as DateTime
-import org.joda.time.DateTimeZone as DateTimeZone
-from org.joda.time.format import DateTimeFormat
-from org.eclipse.smarthome.model.persistence.extensions import PersistenceExtensions
-
-from meteocalc import Temp, dew_point, heat_index
-
-log = logging.getLogger(LOG_PREFIX + ".weatherStationUploader")
-
-wu_loop_count = 1 # Loop counter
+wu_second_count = 10 # Loop counter
 
 reload(configuration) # This will reload the config file when this file is saved.
 
@@ -41,7 +50,7 @@ def mm_to_inch(mm):
 
 def mbar_to_inches_mercury(input_pressure):
     # convert mbar to inches mercury
-    return round(input_pressure * 0.02953, 2)
+    return round(input_pressure * 0.02953, 3)
 
 def lux_to_watts_m2(lux):
     # Convert lux [lx] to watt/m² (at 555 nm)
@@ -56,11 +65,13 @@ def getTheSensor(lbl, never_assume_dead=False, getHighest=False, getLowest=False
     # When "getHighest" argument is set to True, the sensor name with the highest value is picked.
     # When "getlowest" argument is set to True, the sensor name with the lowest value is picked.
 
+    sensor_dead_after_mins = configuration.wunderground['sensor_dead_after_mins'] # The time after which a sensor is presumed to be dead
+
     def isSensorAlive(sName):
-        if getLastUpdate(PersistenceExtensions, ir.getItem(sName)).isAfter(DateTime.now().minusMinutes(sensor_dead_after_mins)):
+        if getLastUpdate(ir.getItem(sName)).isAfter(DateTime.now().minusMinutes(sensor_dead_after_mins)):
             return True
         else:
-            log.warn("Sensor device {} has not reported since: {}".format(sName, getLastUpdate(PersistenceExtensions, ir.getItem(sName))))
+            weatherStationUploader.log.warn("Sensor device {} has not reported since: {}".format(sName, format_date(getLastUpdate(ir.getItem(sName)), configuration.customDateTimeFormats['dateTime'])))
             return False
 
     sensorName = None
@@ -92,16 +103,16 @@ def getTheSensor(lbl, never_assume_dead=False, getHighest=False, getLowest=False
                 sensorName = tSens
 
     if sensorName is not None:
-        log.debug("Device used for {}: {}".format(lbl, sensorName))
+        weatherStationUploader.log.debug("Device used for {}: {}".format(lbl, sensorName))
     return sensorName
 
 @rule("Weather station uploader")
-@when("Time cron 0 * * * * ?")
+@when("Time cron 0/10 * * * * ?")
 def weatherStationUploader(event):
-    global wu_loop_count
-    sensor_dead_after_mins = configuration.wunderground['sensor_dead_after_mins'] # The time after which a sensor is presumed to be dead
+    weatherStationUploader.log.setLevel(configuration.wunderground['logLevel'])
+    global wu_second_count
     if (not configuration.wunderground['stationdata']['weather_upload']) \
-    or (configuration.wunderground['stationdata']['weather_upload'] and wu_loop_count%configuration.wunderground['stationdata']['upload_frequency'] == 0):
+    or (configuration.wunderground['stationdata']['weather_upload'] and wu_second_count%configuration.wunderground['stationdata']['upload_frequency_seconds'] == 0):
         if configuration.wunderground['stationdata']['weather_upload']:
             weatherStationUploader.log.debug('Uploading data to Weather Underground')
         else:
@@ -205,6 +216,8 @@ def weatherStationUploader(event):
 
         cmd = 'curl -s -G "' + WU_URL + '" ' \
             + '--data-urlencode "action=updateraw" ' \
+            + ('--data-urlencode "realtime=1" ' if configuration.wunderground['stationdata']['rapid_fire_mode'] else '') \
+            + ('--data-urlencode "rtfreq='+str(configuration.wunderground['stationdata']['upload_frequency_seconds'])+'" ' if configuration.wunderground['stationdata']['rapid_fire_mode'] else '') \
             + '--data-urlencode "ID='+configuration.wunderground['stationdata']['station_id']+'" ' \
             + '--data-urlencode "PASSWORD='+configuration.wunderground['stationdata']['station_key']+'" ' \
             + '--data-urlencode "dateutc='+dateutc+'" ' \
@@ -274,12 +287,12 @@ def weatherStationUploader(event):
         weatherStationUploader.log.debug("")
 
         if configuration.wunderground['stationdata']['weather_upload']:
-            weatherStationUploader.log.debug("WeatherUpload version {}, performing an upload. (loop count is: {})".format(__version__, wu_loop_count))
+            weatherStationUploader.log.debug("WeatherUpload version {}, performing an upload. (second count is: {})".format(__version__, wu_second_count))
             weatherStationUploader.log.debug("cmd: {}".format(cmd))
             os.system(cmd)
     else:
-        weatherStationUploader.log.debug("WeatherUpload version {}, skipping upload. (loop count is: {})".format(__version__, wu_loop_count))
+        weatherStationUploader.log.debug("WeatherUpload version {}, skipping upload. (second count is: {})".format(__version__, wu_second_count))
 
-    if (wu_loop_count%configuration.wunderground['stationdata']['upload_frequency'] == 0):
-        wu_loop_count = 0
-    wu_loop_count = wu_loop_count + 1
+    if (wu_second_count%configuration.wunderground['stationdata']['upload_frequency_seconds'] == 0):
+        wu_second_count = 0
+    wu_second_count = wu_second_count + 10 # Corresponding to CronTrigger(EVERY_10_SECONDS)

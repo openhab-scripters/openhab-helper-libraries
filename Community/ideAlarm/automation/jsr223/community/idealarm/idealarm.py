@@ -1,7 +1,7 @@
 from core.rules import rule
 from community.idealarm import ideAlarm
 
-@rule("Example ideAlarm rule", description="Make ideAlarm trigger on item changes")
+@rule("ideAlarm main rule", description="Make ideAlarm trigger on item changes. Do not alter.")
 @ideAlarm.getTriggers()
-def exampleIdealarmRule(event):
+def ideAlarmMainRule(event):
     ideAlarm.execute(event)

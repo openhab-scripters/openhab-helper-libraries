@@ -1,5 +1,3 @@
-PRIO = {'LOW': 0, 'MODERATE': 1, 'HIGH': 2, 'EMERGENCY': 3}
-
 customItemNames = {
     'allowTTSSwitch': 'Sonos_Allow_TTS_And_Sounds', # Switch item that must be ON to allow normal prio TTS and sounds to pass
 }
@@ -27,4 +25,11 @@ sonos = {
             "ttsengine": 'pollytts'
         },
     }
+}
+
+timeofdayGreetings = {
+    0: 'Good night',
+    1: 'Good morning',
+    2: 'Good day',
+    3: 'Good evening'
 }

@@ -5,6 +5,7 @@ import time
 import configuration
 from core.log import logging, LOG_PREFIX
 from core.jsr223 import scope
+from core.actions import PersistenceExtensions
 
 from org.joda.time import DateTime
 from org.joda.time.format import DateTimeFormat
@@ -36,8 +37,9 @@ def iround(x):
 
 def getItemValue(itemName, defVal):
     '''
-    Returns the Item's value if the Item is initialized, otherwise return the default value.
+    Returns the Item's value if the Item exists and is initialized, otherwise returns the default value.
     itemRegistry.getItem will return an object also for uninitialized items but it has less methods.
+    itemRegistry.getItem will throw an exception if the Item is not in the registry.
     '''
     item = scope.itemRegistry.getItem(itemName)
     if type(defVal) is int:
@@ -55,33 +57,35 @@ def getItemValue(itemName, defVal):
         log.warn("The type of the passed default value is not handled")
         return None
 
-def getLastUpdate(pe, item):
+def getLastUpdate(item):
     '''
     Returns the Item's last update datetime as a 'org.joda.time.DateTime',
     http://joda-time.sourceforge.net/apidocs/org/joda/time/DateTime.html
     '''
     try:
-        if pe.lastUpdate(item) is None:
+        if PersistenceExtensions.lastUpdate(item) is None:
             log.warning("No existing lastUpdate data for item: [{}], returning 1970-01-01T00:00:00Z".format(item.name))
             return DateTime(0)
-        return pe.lastUpdate(item).toDateTime()
+        return PersistenceExtensions.lastUpdate(item).toDateTime()
     except:
         # I have an issue with OH file changes being detected (StartupTrigger only) before the file
         # is completely written. The first read breaks because of a partial file write and the second read succeeds.
         log.warning("Exception when getting lastUpdate data for item: [{}], returning 1970-01-01T00:00:00Z".format(item.name))
         return DateTime(0)
 
-def sendCommand(itemName, newValue):
+def sendCommand(item, newValue):
     '''
     Sends a command to an item regerdless of it's current state
+    The item can be passed as an OH item type or by using the item's name (string)
     '''
-    events.sendCommand(itemName, str(newValue))
+    scope.events.sendCommand((scope.itemRegistry.getItem(item) if isinstance(item, basestring) else item), newValue)
 
-def postUpdate(itemName, newValue):
+def postUpdate(item, newValue):
     '''
     Posts an update to an item regerdless of it's current state
+    The item can be passed as an OH item type or by using the item's name (string)
     '''
-    events.postUpdate(itemName, str(newValue))
+    scope.events.postUpdate((scope.itemRegistry.getItem(item) if isinstance(item, basestring) else item), newValue)
 
 def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=None):
     '''
@@ -124,10 +128,10 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
     if (compareValue is not None and compareValue != newValue) or item.state in [scope.NULL, scope.UNDEF]:
         if sendACommand:
             log.debug("New sendCommand value for [{}] is [{}]".format(itemName, newValue))
-            sendCommand(itemName, newValue)
+            sendCommand(item, newValue)
         else:
             log.debug("New postUpdate value for [{}] is [{}]".format(itemName, newValue))
-            postUpdate(itemName, newValue)
+            postUpdate(item, newValue)
         return True
     else:
         return False
@@ -135,37 +139,3 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
 def sendCommandCheckFirst(itemName, newValue, floatPrecision=None):
     ''' See postUpdateCheckFirst '''
     return postUpdateCheckFirst(itemName, newValue, sendACommand=True, floatPrecision=floatPrecision)
-
-def isBright():
-    '''Returns true when light level is bright'''
-    return getItemValue(configuration.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) == LIGHT_LEVEL['BRIGHT']
-
-def isShady():
-    '''Returns true when shady or darker than shady'''
-    return getItemValue(configuration.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['SHADY']
-
-def isDark():
-    '''Returns true when dark or darker than dark'''
-    return getItemValue(configuration.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['DARK']
-
-def isBlack():
-    '''Returns true if black, otherwise false'''
-    return getItemValue(configuration.customItemNames['sysLightLevel'], LIGHT_LEVEL['BRIGHT']) <= LIGHT_LEVEL['BLACK']
-
-'''
-				 Safety pig has arrived!
-				
-				  _._ _..._ .-',     _.._(`))
-				 '-. `     '  /-._.-'    ',/
-				    )         \            '.
-				   / _    _    |             \
-				  |  a    a    /              |
-				  \   .-.                     ;  
-				   '-('' ).-'       ,'       ;
-				      '-;           |      .'
-				         \           \    /
-				         | 7  .__  _.-\   \
-				         | |  |  ``/  /`  /
-				        /,_|  |   /,_/   /
-				           /,_/      '`-'
-'''

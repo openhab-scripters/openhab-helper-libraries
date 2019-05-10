@@ -1,1 +1,79 @@
-PUSHOVER_PRIO = {'LOWEST': -2, 'LOW': -1, 'NORMAL': 0, 'HIGH': 1, 'EMERGENCY': 2}
+# -*- coding: utf-8 -*-
+'''
+This is an example configuration file for ideAlarm.
+You should copy the contents of this file abd paste into your ordinary
+openhab2-jython configuration file e.g. automation\lib\python\configuration.py
+'''
+# The following import statements should be in your configuration
+from core.jsr223 import scope
+
+# You can define functions to determine if a sensor is enabled or not.
+# The following functions takes 2 arguments, events and log.
+# The function shall return a boolean.
+# If you are not going to use functions to determine if a sensor is enabled or not,
+# you dont have to include it in your configuration file.
+def d5Enabled(events, log):
+    '''
+    Door 5 sensor shall only be enabled if an Internet connection is available.
+    '''
+    return (scope.itemRegistry.getItem('Network_Internet').state == scope.ON)
+
+# ideAlarm Configuration example for two zones.
+
+idealarm = {
+    'ALARM_TEST_MODE': True,
+    'LOGGING_LEVEL': 'DEBUG',
+    'NAG_INTERVAL_MINUTES': 6,
+    'ALARM_ZONES': [
+        {
+            'name': 'My Home',
+            'armingModeItem': 'Z1_Arming_Mode',
+            'statusItem': 'Z1_Status',
+            'alertDevices': ['Siren_Indoors', 'Siren_Gardenshed'],
+            'sensors': [
+                {'name': 'Door_1_Lock', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': True},
+                {'name': 'Door_4_Lock', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': False},
+                {'name': 'Door_4', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': True},
+                {'name': 'Door_5_Lock', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 10, 'armWarn': True, 'enabled': d5Enabled}
+            ],
+            'armAwayToggleSwitch': 'Toggle_Z1_Armed_Away',
+            'armHomeToggleSwitch': 'Toggle_Z1_Armed_Home',
+            'mainZone': True,
+            'canArmWithTrippedSensors': False
+        },
+        {
+            'name': 'Pembridge Square Residence',
+            'armingModeItem': 'Z2_Arming_Mode',
+            'statusItem': 'Z2_Status',
+            'alertDevices': ['Siren_Indoors', 'Siren_Gardenshed'],
+            'sensors': [
+                {'name': 'Door_2_Lock', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': True},
+                {'name': 'Window_Room_1', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': True},
+                {'name': 'Window_Room_2', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': True},
+                {'name': 'Window_Bathroom_2', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': True},
+                {'name': 'MD_Bathroom_2', 'sensorClass': 'B', 'nag': False, 'nagTimeoutMins': 4, 'armWarn': False, 'enabled': False}
+            ],
+            'armAwayToggleSwitch': 'Toggle_Z2_Armed_Away',
+            'armHomeToggleSwitch': 'Toggle_Z2_Armed_Home',
+            'mainZone': False,
+            'canArmWithTrippedSensors': True
+        }
+    ] 
+}
+
+'''
+You can customize the format of date and time shown in log entries to suit your preferences.
+See java.time.format.DateTimeFormatter docs for format string tokens.
+'''
+customDateTimeFormats = {
+    'date': 'yyyy-MM-dd', # Date only
+    'dateTime': 'yyyy-MM-dd HH:mm:ss', # Date and time
+    'time': 'HH:mm:ss' # Time only
+}
+
+
+# Pushover related.
+# Uncomment if you are going to use Pushover notifications https://pushover.net
+# as shown in the custom_verbose_example.py file
+# PUSHOVER_PRIO = {'LOWEST': -2, 'LOW': -1, 'NORMAL': 0, 'HIGH': 1, 'EMERGENCY': 2}
+# PUSHOVER_DEF_DEV = "MyCellPhone" # Default device for Pushover messages to be delivered to 

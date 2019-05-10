@@ -1,8 +1,11 @@
 from core.actions import Audio
 from core.utils import getItemValue
-from configuration import sonos, customItemNames, PRIO
+from configuration import sonos, customItemNames
 from core.jsr223 import scope
 from core.log import logging, LOG_PREFIX
+
+PRIO = {'LOW': 0, 'MODERATE': 1, 'HIGH': 2, 'EMERGENCY': 3}
+TIMEOFDAY = {'NIGHT': 0, 'MORNING': 1, 'DAY': 2, 'EVENING': 3} # Regardless of the sun
 
 def playsound(fileName, ttsPrio=PRIO['MODERATE'], **keywords):
     '''
@@ -24,8 +27,8 @@ def playsound(fileName, ttsPrio=PRIO['MODERATE'], **keywords):
                 return the_key
         return 'All'
 
-    if getItemValue(customItemNames['Sonos_Allow_TTS_And_Sounds'], scope.ON) != scope.ON and ttsPrio <= PRIO['MODERATE']:
-        log.info("[{}] is OFF and ttsPrio is too low to play sound [{}] at this moment".format(customItemNames['Sonos_Allow_TTS_And_Sounds'], fileName))
+    if getItemValue(customItemNames['allowTTSSwitch'], scope.ON) != scope.ON and ttsPrio <= PRIO['MODERATE']:
+        log.info("[{}] is OFF and ttsPrio is too low to play the sound [{}] at this moment".format(customItemNames['allowTTSSwitch'], fileName))
         return False
 
     room = getDefaultRoom() if 'room' not in keywords else keywords['room']
@@ -34,14 +37,14 @@ def playsound(fileName, ttsPrio=PRIO['MODERATE'], **keywords):
     if room == 'All' or room is None:
         for the_key, the_value in sonos['rooms'].iteritems():
             rooms.append(sonos['rooms'][the_key])
-            log.debug("Room found: [{}]".format(sonos['rooms'][the_key]['name']))
+            log.debug(u"Room found: [{}]".format(sonos['rooms'][the_key]['name'].decode('utf8')))
     else:
         sonosSpeaker = sonos['rooms'].get(room, None)
         if sonosSpeaker is None:
-            log.warn("Room [{}] wasn't found in the sonos rooms dictionary".format(room))
+            log.warn(u"Room [{}] wasn't found in the sonos rooms dictionary".format(room.decode('utf8')))
             return
         rooms.append(sonosSpeaker)
-        log.debug("Room found: [{}]".format(sonosSpeaker['name']))
+        log.debug(u"Room found: [{}]".format(sonosSpeaker['name'].decode('utf8')))
 
     for aRoom in rooms:
         ttsVol = None if 'ttsVol' not in keywords else keywords['ttsVol']
@@ -58,6 +61,6 @@ def playsound(fileName, ttsPrio=PRIO['MODERATE'], **keywords):
                 ttsVol = aRoom['ttsvolume']
 
         Audio.playSound(aRoom['audiosink'], fileName)
-        log.info("playSound: Playing [{}] in room [{}] at volume [{}]".format(filename, aRoom['name'], ttsVol))
+        log.info(u"playSound: Playing [{}] in room [{}] at volume [{}]".format(fileName.decode('utf8'), aRoom['name'].decode('utf8'), ttsVol))
 
     return True

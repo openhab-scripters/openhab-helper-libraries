@@ -3,5 +3,9 @@
 configuration.py
 !configuration.py.example
 Core/automation/jsr223/personal/**
+Core/automation/jsr223/community/**
+!Core/automation/jsr223/community/README.md
 Core/automation/lib/python/personal/**
+Core/automation/lib/python/community/**
+!Core/automation/lib/python/community/__init__.py
 Core/automation/jython/**

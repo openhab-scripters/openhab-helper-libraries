@@ -28,14 +28,14 @@ def onArmingModeChange(zone, newArmingMode, oldArmingMode):
         if newArmingMode != ARMINGMODE['DISARMED']:
             pass
 
-    log.debug("onArmingModeChange: {} ---> {}".format(zone.name, kw(ARMINGMODE, newArmingMode)))
+    log.debug("onArmingModeChange: [{}] ---> [{}]".format(zone.name.decode('utf-8'), kw(ARMINGMODE, newArmingMode)))
 
 def onZoneStatusChange(zone, newZoneStatus, oldZoneStatus, errorMessage=None):
     '''
     This function will be called when there is a change of zone status.
     oldZoneStatus is None when initializing.
     '''
-    log.info("onZoneStatusChange: {} ---> {}".format(zone.name, kw(ZONESTATUS, newZoneStatus)))
+    log.info("onZoneStatusChange: [{}] ---> [{}]".format(zone.name.decode('utf-8'), kw(ZONESTATUS, newZoneStatus)))
 
     if newZoneStatus == ZONESTATUS['ERROR']:
         pass

@@ -25,7 +25,9 @@ These examples assume that you will be using the standalone Jython 2.7.0 jar.
     export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
     ```
 - Download the [standalone Jython 2.7.0 jar](http://www.jython.org/downloads.html) and copy it to the path specified above. 
-A full install of Jython can also be used, but the paths above will need to be modified. 
+A full install of Jython can also be used, but the paths above will need to be modified.
+
+- You'll need a main configuration file for openhab2-jython. In directory `Core\automation\lib\python\`, rename the file `configuration.py.example` to `configuration.py`. Then edit the configuration file to suit your needs.
 - You must have at least one item defined. Otherwise the jython scripts will throw an error. Therefore, create an items file and populate it with at least one item definition.
     ```
     String My_First_Item // We need at least one item to avoid errors during loading scripts
