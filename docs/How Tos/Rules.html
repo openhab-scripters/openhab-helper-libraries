@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Logging" href="Logging.html" />
+    <link rel="next" title="Triggers" href="Triggers.html" />
     <link rel="prev" title="First Steps" href="../Getting Started/First Steps.html" /> 
 </head>
 
@@ -93,11 +93,18 @@
 <p class="caption"><span class="caption-text">How To's</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Rules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#decorators">Decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#decorators">Decorators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rule">&#64;rule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when">&#64;when</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function">Function</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#extensions">Extensions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#automation-api">Automation API</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Logging.html">Logging</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Core Modules</span></p>
@@ -181,8 +188,125 @@
             
   <div class="section" id="rules">
 <h1>Rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h1>
+<p>One of the primary use cases for JSR223 scripting in OH is to define rules for
+the <a class="reference external" href="http://www.eclipse.org/smarthome/documentation/features/rules.html">Eclipse Smarthome rule engine</a> using the <a class="reference external" href="http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api">Java Automation API</a>. The ESH
+rule engine structures rules as <em>Modules</em> (Triggers, Conditions, Actions).
+Jython rules can use rule Modules that are already present in ESH, and can
+define new Modules that can be used outside of JSR223 scripting. Take care not
+to confuse ESH Modules with Jython modules.</p>
+<p>In increasing order of complexity, rules can be written using the <a class="reference internal" href="#decorators"><span class="std std-ref">Decorators</span></a>,
+Jython <a class="reference internal" href="#extensions"><span class="std std-ref">Extensions</span></a>, or the raw <a class="reference internal" href="#automation-api"><span class="std std-ref">Automation API</span></a>.
+The details for all of these methods are included here for reference, but the
+section on <a class="reference internal" href="#decorators"><span class="std std-ref">Decorators</span></a> should be all that is needed for
+creating your rules.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Take care in your choice of object names used in your rules, so as not to use
+one that is already included in the <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required">default scope</a>.</p>
+</div>
 <div class="section" id="decorators">
 <h2>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The easiest way to write rules, and most familiar if you have used the openHAB
+DSL, is using the decorators provided by this library. Function decorators
+are part of the Python language and allow you to modify a function, to
+“decorate” it, using another function. This library provides a decorator
+called <code class="docutils literal notranslate"><span class="pre">rule</span></code> for defining rules, and another called <code class="docutils literal notranslate"><span class="pre">when</span></code> for adding
+triggers to rules. This section will show you how to define rules and
+triggers, and will compare to the syntax of the Rules DSL to help with
+migration.</p>
+</div></blockquote>
+<div class="section" id="import">
+<h3>Import<a class="headerlink" href="#import" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>When writing rules with the decorators you must import the decorator
+functions, this only needs to be done once at the top of each file you will
+be using them in.
+Two simple lines at the top of your file will accomplish this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="rule">
+<h3>&#64;rule<a class="headerlink" href="#rule" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>The first step to creating a rule is to give it a name that is unique in
+your openHAB configuration, and optionally a description and tags, using
+the <code class="docutils literal notranslate"><span class="pre">rule</span></code> decorator like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">description</span></code> is optional and allows for more detail about what a rule
+does. The <code class="docutils literal notranslate"><span class="pre">tags</span></code> list is also optional, tags are used to help categorize
+and search rules in the UI.</p>
+<p>In the openHAB Rules DSL this is equivilent of:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="s">&quot;Rule Name&quot;</span>
+    <span class="s">&quot;Rule Description&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="when">
+<h3>&#64;when<a class="headerlink" href="#when" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Next we need to add triggers to the rule using the <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator. You
+may add as many or as few triggers as you want, technically you don’t have to
+add any but your rule will never be triggered if you don’t. <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> must
+always follow <code class="docutils literal notranslate"><span class="pre">&#64;rule</span></code> when writing rules. The syntax for <code class="docutils literal notranslate"><span class="pre">when</span></code> is quite
+simple:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item my_item changed to ON&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That’s all there is to it! In the Rules DSL this looks like:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="s">&quot;Rule Name&quot;</span>
+    <span class="s">&quot;Rule Description&quot;</span>
+<span class="n">when</span>
+    <span class="n">Item</span> <span class="n">my_item</span> <span class="n">changed</span> <span class="n">to</span> <span class="n">ON</span>
+</pre></div>
+</div>
+<p>The full list of triggers and details on each one can be found on the
+<a class="reference internal" href="Triggers.html"><span class="doc">Triggers</span></a> page.</p>
+</div></blockquote>
+</div>
+<div class="section" id="function">
+<h3>Function<a class="headerlink" href="#function" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Finally the last piece is the actual code of your rule, which is a function.
+The name of this function must be unique within the file it is in. It must
+be able to accept 1 positional argument, which will always be <code class="docutils literal notranslate"><span class="pre">event</span></code> in
+this documentation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item my_item changed to ON&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_rule_function</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="c1"># your Python code here</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">The rule UID is available as an attribute of the rule if you need it:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">my_rule_function.UID</span></code></div>
+</div>
+<div class="line-block">
+<div class="line">A logger is also provided for each rule:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">my_rule_function.log.info(&quot;Log</span> <span class="pre">message&quot;)</span></code></div>
+<div class="line">Which logs to:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;core.logging.LOG_PREFIX&gt;.Rule_Name</span></code></div>
+<div class="line">More information on logging can be found on the <a class="reference internal" href="Logging.html"><span class="doc">Logging</span></a> page.</div>
+</div>
+<p>In the Rules DSL this looks like:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="s">&quot;Rule Name&quot;</span>
+    <span class="s">&quot;Rule Description&quot;</span>
+<span class="n">when</span>
+    <span class="n">Item</span> <span class="n">my_item</span> <span class="n">changed</span> <span class="n">to</span> <span class="n">ON</span>
+<span class="n">then</span>
+    <span class="c1">// your DSL code here</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
 </div>
 <div class="section" id="extensions">
 <h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h2>
@@ -200,7 +324,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Logging.html" class="btn btn-neutral float-right" title="Logging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Triggers.html" class="btn btn-neutral float-right" title="Triggers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../Getting Started/First Steps.html" class="btn btn-neutral float-left" title="First Steps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

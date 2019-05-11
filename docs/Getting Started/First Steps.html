@@ -93,6 +93,7 @@
 <p class="caption"><span class="caption-text">How To's</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../How Tos/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../How Tos/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../How Tos/Logging.html">Logging</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Core Modules</span></p>
@@ -223,17 +224,17 @@ to be done once at the top of each file you will be writing rules in.</p>
 </pre></div>
 </div>
 <p>When writing an automation rule we need to start with the <code class="docutils literal notranslate"><span class="pre">&#64;rule</span></code> decorator.
-It needs to be first, and there can only be one for each rule you write.</p>
+It needs to be first, and there can only be one for each rule you write.
+The rule decorator must be provided a name you want to use for your rule as
+the first argument. This name must be unique in your openHAB instance, and
+will be used as the display name of your rule in PaperUI. Optionally you can
+also provide a longer description of what your rule does, and a list of tags
+that can be used to categorize and help search for rules in PaperUI.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;My Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;My Rule Description&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Test tag&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">hellowWorldDecoratorCron</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="c1"># your code here</span>
 </pre></div>
 </div>
-<p>The rule decorator must be provided a name you want to use for your rule as
-the first argument. This name must be unique in your openHAB instance, and
-will be used as the display name of your rule in PaperUI. Optionally you can
-also provide a longer description of what your rule does, and a list of tags
-that can be used to categorize and help search for rules in PaperUI.</p>
 <p>Now the rule above is written correctly, but it will never run because we
 haven’t told openHAB what should trigger the rule. The last piece is the
 <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> decorator. Each event that you want to trigger the rule needs its
@@ -241,7 +242,7 @@ own <code class="docutils literal notranslate"><span class="pre">&#64;when</span
 decorator only needs one argument which is a string representing the event
 that should trigger the rule. In this example we are using <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">cron</span></code>
 which allows triggering rules at a certain time of day (every 10s in this
-case)</p>
+case).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 0/10 * * * * ?&quot;</span><span class="p">)</span>
 </pre></div>
 </div>

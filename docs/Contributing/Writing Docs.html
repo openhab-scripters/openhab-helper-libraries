@@ -92,6 +92,7 @@
 <p class="caption"><span class="caption-text">How To's</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../How Tos/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../How Tos/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../How Tos/Logging.html">Logging</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Core Modules</span></p>
@@ -116,9 +117,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-documentation-for-a-module">Adding Documentation for a Module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#single-page-module-documentation">Single Page Module Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#multi-page-module-documentation">Multi-Page Module Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-documentation-for-modules">Adding Documentation for Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-documentation">Module Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#package-documentation">Package Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#building-the-docs">Building the Docs</a><ul>
@@ -234,29 +235,29 @@ follow <code class="docutils literal notranslate"><span class="pre">#:</span></c
 <div class="section" id="file-header">
 <h3>File Header<a class="headerlink" href="#file-header" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>Each page of a module’s documentation should be reading the header
-<em>docstring</em> from a file. It must be the first thing in the file.</p>
+<div><p>Each module page should be reading the header <em>docstring</em> from the file.
+It must be the first thing in the file.</p>
 <ul class="simple">
-<li><p>If your module is only a single file, it should start with a <em>docstring</em>
-in the format below.</p></li>
-<li><p>If your module is a folder with several files:</p>
+<li><p>If your addition is only a single module, it should start with a
+<em>docstring</em> in the format below.</p></li>
+<li><p>If your addition is a package with several files:</p>
 <ul>
-<li><p>The main page should be reading its <em>docstring</em> from your module’s
-<code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>. It should contain and overview of what your module
+<li><p>The main page should be reading its <em>docstring</em> from your package’s
+<code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>. It should contain and overview of what your package
 does. If your module does not have an <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file, you should
 put this information above the <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">toctree::</span></code> directive in the main
-<code class="docutils literal notranslate"><span class="pre">.rst</span></code> file for your module.</p></li>
-<li><p>All packages or files with their own page should also read <em>docstrings</em>
-from those files. They should give an overview of what the package is
+<code class="docutils literal notranslate"><span class="pre">.rst</span></code> file for your package (more on directives later).</p></li>
+<li><p>All modules or files with their own page should also read <em>docstrings</em>
+from those files. They should give an overview of what the module is
 intended for.</p></li>
 </ul>
 </li>
 </ul>
 <p>This is an example of what a header <em>docstring</em> should look like:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">One line summary of your module.</span>
+<span class="sd">One line summary of your module or package.</span>
 
-<span class="sd">Longer description of your module and its use</span>
+<span class="sd">Longer description of your module or package and its use</span>
 <span class="sd">should go here. It can be as long or short as you need.</span>
 <span class="sd">Inline reST markdowns can be used, as well as directives like</span>
 <span class="sd">&#39;.. code-block::&#39; if you need them.</span>
@@ -272,6 +273,9 @@ intended for.</p></li>
 be inline using <code class="docutils literal notranslate"><span class="pre">#:</span></code> at the end of the line, or on the following line
 like functions and methods.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_public_attr</span> <span class="o">=</span> <span class="bp">True</span>   <span class="c1">#: short description of attr</span>
+
+<span class="n">my_other_attr</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="sd">&quot;&quot;&quot;description of attr&quot;&quot;&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -280,8 +284,7 @@ like functions and methods.</p>
 <h3>Functions and Methods<a class="headerlink" href="#functions-and-methods" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>All functions and methods should have <em>docstrings</em> unless they are private
-to the module or their use is obvious. They should follow the
-<a class="reference external" href="https://google.github.io/styleguide/pyguide.html#383-functions-and-methods">Functions and Methods</a>
+or their use is obvious. They should follow the <a class="reference external" href="https://google.github.io/styleguide/pyguide.html#383-functions-and-methods">Functions and Methods</a>
 guidelines for content and format.</p>
 </div></blockquote>
 </div>
@@ -292,17 +295,17 @@ guidelines for content and format.</p>
 follow the <a class="reference external" href="https://google.github.io/styleguide/pyguide.html#384-classes">Classes</a>
 guidelines for content and format, except for the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method.
 The class <em>docstring</em> should also contain a description of the <code class="docutils literal notranslate"><span class="pre">__init__</span></code>
-methord and its arguments.</p>
+method and its arguments.</p>
 </div></blockquote>
 </div>
 </div>
-<div class="section" id="adding-documentation-for-a-module">
-<h2>Adding Documentation for a Module<a class="headerlink" href="#adding-documentation-for-a-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="adding-documentation-for-modules">
+<h2>Adding Documentation for Modules<a class="headerlink" href="#adding-documentation-for-modules" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>When you are contributing a new module to this repo you need to add a simple
-reST file (<code class="docutils literal notranslate"><span class="pre">.rst</span></code>) to allow Sphinx to extract the Python <em>docstrings</em> from
-your module. This file must have the same name as your module, whether your
-module is a folder or just a single file.</p>
+<div><p>When you are contributing a new module or package to this repo you need to
+add a simple reST file (<code class="docutils literal notranslate"><span class="pre">.rst</span></code>) to allow Sphinx to extract the Python
+<em>docstrings</em> from your module. This file must have the same name as your
+module or package</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <div class="line-block">
@@ -315,15 +318,15 @@ in <a class="reference internal" href="#building-the-docs"><span class="std std-
 </div>
 </div>
 </div></blockquote>
-<div class="section" id="single-page-module-documentation">
-<h3>Single Page Module Documentation<a class="headerlink" href="#single-page-module-documentation" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-documentation">
+<h3>Module Documentation<a class="headerlink" href="#module-documentation" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>If your module requires only a single page of documentation, you will only
-need to create one file. This file must have the same name as your module
-to avoid naming conflicts with other modules, and be in the
-<code class="docutils literal notranslate"><span class="pre">/Sphinx/Community</span> <span class="pre">Modules/</span></code> directory.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/Community/my_package.py
-/Sphinx/Community Modules/my_package.rst
+<div><p>If your addition is only a single module, you will only need to create one
+file. This file must have the same name as your module to avoid naming
+conflicts with other modules, and be in the <code class="docutils literal notranslate"><span class="pre">/Sphinx/Community/</span></code>
+directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/Community/my_module.py
+/Sphinx/Community/my_module.rst
 </pre></div>
 </div>
 <p>Below is an example of what is required in this file:</p>
@@ -348,60 +351,64 @@ correctly.</p>
 if you need them.</p>
 </div></blockquote>
 </div>
-<div class="section" id="multi-page-module-documentation">
-<h3>Multi-Page Module Documentation<a class="headerlink" href="#multi-page-module-documentation" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="package-documentation">
+<h3>Package Documentation<a class="headerlink" href="#package-documentation" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>It is also possible for each file or package of a module to have its own
-page in the docs.</p>
+<div><p>If your addition is a package it will require a minimum of one page, but
+it is also possible for each module to have its own page in the docs. If
+your package will only have one page, follow the instructions above for
+<a class="reference internal" href="#module-documentation"><span class="std std-ref">Module Documentation</span></a>. If your package will
+have multiple pages, follow the instructions below.</p>
 <ol class="arabic">
 <li><div class="line-block">
-<div class="line">Create an <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file for each package in your module and place them
-in <code class="docutils literal notranslate"><span class="pre">/Sphinx/Community</span> <span class="pre">Modules/my_module/</span></code>, using the content for a
+<div class="line">Create an <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file for each module in your package that should
+have a page and place them
+in <code class="docutils literal notranslate"><span class="pre">/Sphinx/Community/my_package/</span></code>, using the content for a
 single page module.</div>
 <div class="line">Use <code class="docutils literal notranslate"><span class="pre">---</span></code> instead of <code class="docutils literal notranslate"><span class="pre">===</span></code> under the heading.</div>
 </div>
 </li>
-<li><p>Then create an <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file in the <code class="docutils literal notranslate"><span class="pre">/Sphinx/Community</span> <span class="pre">Modules/</span></code>
-directory with the same name as your module, with the following content:</p>
-<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span><span class="gh">My Module</span>
-<span class="gh">=========</span>
+<li><p>Then create an <code class="docutils literal notranslate"><span class="pre">.rst</span></code> file in the <code class="docutils literal notranslate"><span class="pre">/Sphinx/Community/</span></code>
+directory with the same name as your package, with the following content:</p>
+<div class="highlight-rest notranslate"><div class="highlight"><pre><span></span><span class="gh">My Package</span>
+<span class="gh">==========</span>
 
-<span class="cp">.. automodule: community.my_module</span>
+<span class="cp">.. automodule: community.my_package</span>
 
 <span class="p">..</span> <span class="ow">toctree</span><span class="p">::</span>
   <span class="nc">:maxdepth:</span> <span class="nf">1</span>
   <span class="nc">:glob:</span>
 
-  my_module/*
+  my_package/*
 </pre></div>
 </div>
 </li>
 </ol>
 <ul>
-<li><p>The heading is the name of your module as it should appear in the
+<li><p>The heading is the name of your package as it should appear in the
 documentation, the <code class="docutils literal notranslate"><span class="pre">===</span></code> line below it must be at least the same length
 as the heading.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">automodule:</span> <span class="pre">community.my_module</span></code> will pull the docstring from your
-module’s <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> to describe its purpose.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">automodule:</span> <span class="pre">community.my_package</span></code> will pull the <em>docstring</em> from
+your package’s <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> to describe its purpose.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">:maxdepth:</span></code> should always be <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">:glob:</span></code> tells Sphinx to look for any <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files in the directories
 listed below.</p></li>
 <li><div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">my_module/*</span></code> Sphinx will look for any <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files in the directory.</div>
-<div class="line"><em>If your module contains subdirectories, you will need to list them here
-as well. They will be scanned for files in the order you put them, and
-any files found will be displayed in alphabetical order.</em></div>
-<div class="line">Alternatively, you can specify each documentation file manually, in the
-order you want them to appear.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">my_package/*</span></code> Sphinx will look for any <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files in the
+directory and add them in alphabetical order.</div>
+<div class="line">Alternatively, if you want to control the order you can specify each
+documentation file manually, in the order you want them to appear. You
+may also specify some files and glob the rest, each file will only
+appear once.</div>
 </div>
 </li>
 <li><p>All <code class="docutils literal notranslate"><span class="pre">.rst</span></code> files must end with a blank line</p></li>
 </ul>
-<p>You should now have created files similar to the following for your module.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/Community/my_module/__init__.py
-/Community/my_module/my_package.py
-/Sphinx/Community Modules/my_module.rst
-/Sphinx/Community Modules/my_module/my_package.rst
+<p>You should now have created files similar to the following for your package.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/Community/my_package/__init__.py
+/Community/my_package/my_module.py
+/Sphinx/Community/my_package.rst
+/Sphinx/Community/my_package/my_module.rst
 </pre></div>
 </div>
 <p>You should now go to the <a class="reference internal" href="#building-the-docs"><span class="std std-ref">Building the Docs</span></a>
@@ -413,11 +420,11 @@ correctly.</p>
 <div class="section" id="building-the-docs">
 <h2>Building the Docs<a class="headerlink" href="#building-the-docs" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>When writing documentation for a module we ask that you build the
+<div><p>When writing documentation for a module or package we ask that you build the
 docs and make sure that your pages are appearing correctly. This will also
 allow you to view what the rendered docs will look like if you are using
 any formatting. If you do not build the documentation yourself and verify it,
-a maintainer will have to do it and this will delay merging your module.</p>
+a maintainer will have to do it and this will delay merging your package.</p>
 <p>This section will go over all of the steps to build the docs from nothing.
 If you already have a Virtual Environment setup for this, you can skip to
 <a class="reference internal" href="#building"><span class="std std-ref">Building</span></a>.</p>
@@ -476,25 +483,25 @@ make your pull request and ask for help.</p>
 <div class="section" id="import-errors">
 <h3>Import Errors<a class="headerlink" href="#import-errors" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>In order to read the <em>docstrings</em> from your module, <code class="docutils literal notranslate"><span class="pre">autodoc</span></code> needs to
+<div><p>In order to read the <em>docstrings</em> from your modules, <code class="docutils literal notranslate"><span class="pre">autodoc</span></code> needs to
 import it. This can lead to issues trying to import modules that the
 Sphinx environment doesn’t have access to.</p>
 <p>In our particular case, this includes every Java import. Thankfully there
-are ways around this. The easiest way is adding the base module name to
+are ways around this. The easiest way is adding the base package name to
 <code class="docutils literal notranslate"><span class="pre">autodoc_mock_imports</span></code> in <code class="docutils literal notranslate"><span class="pre">/Sphinx/conf.py</span></code>. The most common <code class="docutils literal notranslate"><span class="pre">org</span></code>
-and <code class="docutils literal notranslate"><span class="pre">java</span></code> modules are already there.</p>
+and <code class="docutils literal notranslate"><span class="pre">java</span></code> packages are already there.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">org</span></code> is removed from that list, you will see errors like this:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>WARNING: autodoc: failed to import module <span class="s1">&#39;date&#39;</span> from module <span class="s1">&#39;core&#39;</span><span class="p">;</span> the following exception was raised:
 No module named <span class="s1">&#39;org&#39;</span>
 </pre></div>
 </div>
-<p>You may encounter a case where excluding an entire module is not possible.
+<p>You may encounter a case where excluding an entire package is not possible.
 For example, in this library’s <code class="docutils literal notranslate"><span class="pre">core</span></code>, it loads an automation scope from
 openHAB. This scope must be loaded at runtime and so does not exist if you
 simply import <code class="docutils literal notranslate"><span class="pre">core.jsr223</span></code>. So when other packages in the core try to
 import <code class="docutils literal notranslate"><span class="pre">core.jsr223.scope</span></code> it produces errors, but excluding <code class="docutils literal notranslate"><span class="pre">core</span></code>
-would result in the module as a whole being ignored. When you need to
-exclude only a specific package you can add it to the <code class="docutils literal notranslate"><span class="pre">MOCK_MODULES</span></code> list.</p>
+would result in the entire package being ignored. When you need to
+exclude only a specific module you can add it to the <code class="docutils literal notranslate"><span class="pre">MOCK_MODULES</span></code> list.</p>
 </div></blockquote>
 </div>
 </div>

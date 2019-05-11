@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Logging &mdash; openHAB Scripters - Jython  documentation</title>
+  <title>Triggers &mdash; openHAB Scripters - Jython  documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Rules" href="../Core Modules/Rules.html" />
-    <link rel="prev" title="Triggers" href="Triggers.html" /> 
+    <link rel="next" title="Logging" href="Logging.html" />
+    <link rel="prev" title="Rules" href="Rules.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,8 +93,11 @@
 <p class="caption"><span class="caption-text">How To's</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Rules.html">Rules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Triggers.html">Triggers</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Logging</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Triggers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#item-item-name-changed-from-state-to-state"><code class="docutils literal notranslate"><span class="pre">&quot;Item</span> <span class="pre">ITEM_NAME</span> <span class="pre">changed</span> <span class="pre">[from</span> <span class="pre">STATE]</span> <span class="pre">[to</span> <span class="pre">STATE]&quot;</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">Logging</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Core Modules</span></p>
 <ul>
@@ -156,13 +159,13 @@
     
       <li><a href="../Index.html">Docs</a> &raquo;</li>
         
-      <li>Logging</li>
+      <li>Triggers</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/How Tos/Logging.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/How Tos/Triggers.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -175,8 +178,45 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="logging">
-<h1>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="triggers">
+<h1>Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>The following is a list of available triggers. Any text in square brackets
+(<code class="docutils literal notranslate"><span class="pre">[]</span></code>) indicates it is optional, and any text in CAPITAL LETTERS should
+be replaced with a value specific to your use case.</p>
+</div></blockquote>
+<div class="section" id="item-item-name-changed-from-state-to-state">
+<h2><code class="docutils literal notranslate"><span class="pre">&quot;Item</span> <span class="pre">ITEM_NAME</span> <span class="pre">changed</span> <span class="pre">[from</span> <span class="pre">STATE]</span> <span class="pre">[to</span> <span class="pre">STATE]&quot;</span></code><a class="headerlink" href="#item-item-name-changed-from-state-to-state" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&quot;Item</span> <span class="pre">ITEM_NAME</span> <span class="pre">received</span> <span class="pre">update</span> <span class="pre">[STATE]&quot;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&quot;Item</span> <span class="pre">ITEM_NAME</span> <span class="pre">received</span> <span class="pre">command</span> <span class="pre">[COMMAND]&quot;</span></code></div>
+</div>
+</div></blockquote>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+from core.rules import rule
+from core.triggers import when</p>
+<p>&#64;rule(“This is the name of a test rule”, tags=[“Tag 1”, “Tag 2”])
+&#64;when(“Item Test_Switch_1 received command OFF”)
+&#64;when(“Item Test_Switch_2 received update ON”)
+&#64;when(“Item gMotion_Sensors changed to ON”)
+&#64;when(“Member of gMotion_Sensors changed to OFF”)
+&#64;when(“Descendent of gContact_Sensors changed to ON”)# Similar to ‘Member of’, but will create a trigger for each non-group sibling Item (think group_item.allMembers())
+&#64;when(“Thing kodi:kodi:familyroom changed”)# ThingStatusInfo (from &lt;status&gt; to &lt;status&gt;) cannot currently be used in triggers
+&#64;when(“Channel astro:sun:local:eclipse#event triggered START”)
+&#64;when(“System started”)# ‘System shuts down’ cannot currently be used as a trigger, and ‘System started’ needs to be updated to work with Automation API updates
+&#64;when(“Time cron 55 55 5 * * ?”)
+def testFunction(event):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if items[“Test_Switch_1”] == OnOffType.ON:</dt><dd><p>events.postUpdate(“Test_String_1”, “The test rule has been executed!”)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -187,10 +227,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../Core Modules/Rules.html" class="btn btn-neutral float-right" title="Rules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Logging.html" class="btn btn-neutral float-right" title="Logging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Triggers.html" class="btn btn-neutral float-left" title="Triggers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Rules.html" class="btn btn-neutral float-left" title="Rules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

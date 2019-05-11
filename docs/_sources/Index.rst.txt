@@ -34,6 +34,7 @@ are very thankful!
     :maxdepth: 2
 
     How Tos/Rules.rst
+    How Tos/Triggers.rst
     How Tos/Logging.rst
 
 

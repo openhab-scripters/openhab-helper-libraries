@@ -58,7 +58,7 @@ def rule(name=None, description=None, tags=None):
     Args:
         name (str): Display name of the rule.
         description (str): Description of the rule.
-        tags (list, str): List of tags.
+        tags (list[str]): List of tags.
     """
 
     def rule_decorator(object):

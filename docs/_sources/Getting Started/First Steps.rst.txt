@@ -62,18 +62,17 @@ First Steps
 
   When writing an automation rule we need to start with the ``@rule`` decorator.
   It needs to be first, and there can only be one for each rule you write.
+  The rule decorator must be provided a name you want to use for your rule as
+  the first argument. This name must be unique in your openHAB instance, and
+  will be used as the display name of your rule in PaperUI. Optionally you can
+  also provide a longer description of what your rule does, and a list of tags
+  that can be used to categorize and help search for rules in PaperUI.
 
   .. code-block::
 
     @rule("My Rule Name", description="My Rule Description", tags=["Test tag", "Hello World"])
     def hellowWorldDecoratorCron(event):
         # your code here
-
-  The rule decorator must be provided a name you want to use for your rule as
-  the first argument. This name must be unique in your openHAB instance, and
-  will be used as the display name of your rule in PaperUI. Optionally you can
-  also provide a longer description of what your rule does, and a list of tags
-  that can be used to categorize and help search for rules in PaperUI.
 
   Now the rule above is written correctly, but it will never run because we
   haven't told openHAB what should trigger the rule. The last piece is the
@@ -82,7 +81,7 @@ First Steps
   decorator only needs one argument which is a string representing the event
   that should trigger the rule. In this example we are using ``Time cron``
   which allows triggering rules at a certain time of day (every 10s in this
-  case)
+  case).
 
   .. code-block::
 

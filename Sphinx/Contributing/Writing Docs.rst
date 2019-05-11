@@ -33,20 +33,21 @@ Format
 File Header
 -----------
 
-    Each page of a module's documentation should be reading the header
-    *docstring* from a file. It must be the first thing in the file.
+    Each module page should be reading the header *docstring* from the file.
+    It must be the first thing in the file.
 
-    * If your module is only a single file, it should start with a *docstring*
-      in the format below.
-    * If your module is a folder with several files:
+    * If your addition is only a single module, it should start with a
+      *docstring* in the format below.
 
-      * The main page should be reading its *docstring* from your module's
-        ``__init__.py``. It should contain and overview of what your module
+    * If your addition is a package with several files:
+
+      * The main page should be reading its *docstring* from your package's
+        ``__init__.py``. It should contain and overview of what your package
         does. If your module does not have an ``__init__.py`` file, you should
         put this information above the ``.. toctree::`` directive in the main
-        ``.rst`` file for your module.
-      * All packages or files with their own page should also read *docstrings*
-        from those files. They should give an overview of what the package is
+        ``.rst`` file for your package (more on directives later).
+      * All modules or files with their own page should also read *docstrings*
+        from those files. They should give an overview of what the module is
         intended for.
 
     This is an example of what a header *docstring* should look like:
@@ -54,9 +55,9 @@ File Header
     .. code-block::
 
       """
-      One line summary of your module.
+      One line summary of your module or package.
 
-      Longer description of your module and its use
+      Longer description of your module or package and its use
       should go here. It can be as long or short as you need.
       Inline reST markdowns can be used, as well as directives like
       '.. code-block::' if you need them.
@@ -73,12 +74,14 @@ Module Attributes
 
       my_public_attr = True   #: short description of attr
 
+      my_other_attr = False
+      """description of attr"""
+
 Functions and Methods
 ---------------------
 
     All functions and methods should have *docstrings* unless they are private
-    to the module or their use is obvious. They should follow the
-    `Functions and Methods <https://google.github.io/styleguide/pyguide.html#383-functions-and-methods>`_
+    or their use is obvious. They should follow the `Functions and Methods <https://google.github.io/styleguide/pyguide.html#383-functions-and-methods>`_
     guidelines for content and format.
 
 Classes
@@ -88,16 +91,16 @@ Classes
     follow the `Classes <https://google.github.io/styleguide/pyguide.html#384-classes>`_
     guidelines for content and format, except for the ``__init__`` method.
     The class *docstring* should also contain a description of the ``__init__``
-    methord and its arguments.
+    method and its arguments.
 
 
-Adding Documentation for a Module
-=================================
+Adding Documentation for Modules
+================================
 
-  When you are contributing a new module to this repo you need to add a simple
-  reST file (``.rst``) to allow Sphinx to extract the Python *docstrings* from
-  your module. This file must have the same name as your module, whether your
-  module is a folder or just a single file.
+  When you are contributing a new module or package to this repo you need to
+  add a simple reST file (``.rst``) to allow Sphinx to extract the Python
+  *docstrings* from your module. This file must have the same name as your
+  module or package
 
   .. warning::
     | *autodoc* is used to read the *docstrings* from the code and is also
@@ -107,18 +110,18 @@ Adding Documentation for a Module
       when trying to import openHAB classes, the solution to this is outlined
       in :ref:`Contributing/Writing Docs:Building the Docs`
 
-Single Page Module Documentation
---------------------------------
+Module Documentation
+--------------------
 
-    If your module requires only a single page of documentation, you will only
-    need to create one file. This file must have the same name as your module
-    to avoid naming conflicts with other modules, and be in the
-    ``/Sphinx/Community Modules/`` directory.
+    If your addition is only a single module, you will only need to create one
+    file. This file must have the same name as your module to avoid naming
+    conflicts with other modules, and be in the ``/Sphinx/Community/``
+    directory.
 
     .. code-block:: bash
 
-      /Community/my_package.py
-      /Sphinx/Community Modules/my_package.rst
+      /Community/my_module.py
+      /Sphinx/Community/my_module.rst
 
     Below is an example of what is required in this file:
 
@@ -143,56 +146,60 @@ Single Page Module Documentation
     More advanced parsing options are documented `here <http://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
     if you need them.
 
-Multi-Page Module Documentation
--------------------------------
+Package Documentation
+---------------------
 
-    It is also possible for each file or package of a module to have its own
-    page in the docs.
+    If your addition is a package it will require a minimum of one page, but
+    it is also possible for each module to have its own page in the docs. If
+    your package will only have one page, follow the instructions above for
+    :ref:`Contributing/Writing Docs:Module Documentation`. If your package will
+    have multiple pages, follow the instructions below.
 
-    1.  | Create an ``.rst`` file for each package in your module and place them
-          in ``/Sphinx/Community Modules/my_module/``, using the content for a
+    1.  | Create an ``.rst`` file for each module in your package that should
+          have a page and place them
+          in ``/Sphinx/Community/my_package/``, using the content for a
           single page module.
         | Use ``---`` instead of ``===`` under the heading.
-    2.  Then create an ``.rst`` file in the ``/Sphinx/Community Modules/``
-        directory with the same name as your module, with the following content:
+    2.  Then create an ``.rst`` file in the ``/Sphinx/Community/``
+        directory with the same name as your package, with the following content:
 
         .. code-block:: rest
 
-          My Module
-          =========
+          My Package
+          ==========
 
-          .. automodule: community.my_module
+          .. automodule: community.my_package
 
           .. toctree::
             :maxdepth: 1
             :glob:
 
-            my_module/*
+            my_package/*
 
-    * The heading is the name of your module as it should appear in the
+    * The heading is the name of your package as it should appear in the
       documentation, the ``===`` line below it must be at least the same length
       as the heading.
-    * ``.. automodule: community.my_module`` will pull the docstring from your
-      module's ``__init__.py`` to describe its purpose.
+    * ``.. automodule: community.my_package`` will pull the *docstring* from
+      your package's ``__init__.py`` to describe its purpose.
     * ``:maxdepth:`` should always be ``1``.
     * ``:glob:`` tells Sphinx to look for any ``.rst`` files in the directories
       listed below.
-    * | ``my_module/*`` Sphinx will look for any ``.rst`` files in the directory.
-      | *If your module contains subdirectories, you will need to list them here
-        as well. They will be scanned for files in the order you put them, and
-        any files found will be displayed in alphabetical order.*
-      | Alternatively, you can specify each documentation file manually, in the
-        order you want them to appear.
+    * | ``my_package/*`` Sphinx will look for any ``.rst`` files in the
+        directory and add them in alphabetical order.
+      | Alternatively, if you want to control the order you can specify each
+        documentation file manually, in the order you want them to appear. You
+        may also specify some files and glob the rest, each file will only
+        appear once.
     * All ``.rst`` files must end with a blank line
 
-    You should now have created files similar to the following for your module.
+    You should now have created files similar to the following for your package.
 
     .. code-block:: bash
 
-      /Community/my_module/__init__.py
-      /Community/my_module/my_package.py
-      /Sphinx/Community Modules/my_module.rst
-      /Sphinx/Community Modules/my_module/my_package.rst
+      /Community/my_package/__init__.py
+      /Community/my_package/my_module.py
+      /Sphinx/Community/my_package.rst
+      /Sphinx/Community/my_package/my_module.rst
 
     You should now go to the :ref:`Contributing/Writing Docs:Building the Docs`
     section and make sure your documentation is compiling and rendering
@@ -202,11 +209,11 @@ Multi-Page Module Documentation
 Building the Docs
 =================
 
-  When writing documentation for a module we ask that you build the
+  When writing documentation for a module or package we ask that you build the
   docs and make sure that your pages are appearing correctly. This will also
   allow you to view what the rendered docs will look like if you are using
   any formatting. If you do not build the documentation yourself and verify it,
-  a maintainer will have to do it and this will delay merging your module.
+  a maintainer will have to do it and this will delay merging your package.
 
   This section will go over all of the steps to build the docs from nothing.
   If you already have a Virtual Environment setup for this, you can skip to
@@ -281,14 +288,14 @@ Building
 Import Errors
 -------------
 
-    In order to read the *docstrings* from your module, ``autodoc`` needs to
+    In order to read the *docstrings* from your modules, ``autodoc`` needs to
     import it. This can lead to issues trying to import modules that the
     Sphinx environment doesn't have access to.
 
     In our particular case, this includes every Java import. Thankfully there
-    are ways around this. The easiest way is adding the base module name to
+    are ways around this. The easiest way is adding the base package name to
     ``autodoc_mock_imports`` in ``/Sphinx/conf.py``. The most common ``org``
-    and ``java`` modules are already there.
+    and ``java`` packages are already there.
 
     If ``org`` is removed from that list, you will see errors like this:
 
@@ -297,13 +304,13 @@ Import Errors
       WARNING: autodoc: failed to import module 'date' from module 'core'; the following exception was raised:
       No module named 'org'
 
-    You may encounter a case where excluding an entire module is not possible.
+    You may encounter a case where excluding an entire package is not possible.
     For example, in this library's ``core``, it loads an automation scope from
     openHAB. This scope must be loaded at runtime and so does not exist if you
     simply import ``core.jsr223``. So when other packages in the core try to
     import ``core.jsr223.scope`` it produces errors, but excluding ``core``
-    would result in the module as a whole being ignored. When you need to
-    exclude only a specific package you can add it to the ``MOCK_MODULES`` list.
+    would result in the entire package being ignored. When you need to
+    exclude only a specific module you can add it to the ``MOCK_MODULES`` list.
 
 
 Formatting
