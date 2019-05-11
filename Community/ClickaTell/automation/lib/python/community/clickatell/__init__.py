@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 python module which can be used to send SMS messages via the Clickatell HTTP/S API
 Interface on https://api.clickatell.com/

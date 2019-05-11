@@ -4,14 +4,26 @@ from org.joda.time import DateTime
 from core.jsr223 import scope
 from core.date import format_date
 from core.log import logging, LOG_PREFIX
-from core.utils import isActive, getItemValue, postUpdateCheckFirst, sendCommandCheckFirst, kw
+from core.utils import getItemValue, postUpdateCheckFirst, sendCommandCheckFirst, kw
 from core.actions import PersistenceExtensions
-from configuration import customDateTimeFormats
+from configuration import idealarm_configuration, customDateTimeFormats
 from personal.idealarm import custom
 
-log = logging.getLogger(LOG_PREFIX + '.ideAlarm')
+log = logging.getLogger(LOG_PREFIX + '.community.ideAlarm')
 ZONESTATUS = {'NORMAL': 0, 'ALERT': 1, 'ERROR': 2, 'TRIPPED': 3, 'ARMING': 4}
 ARMINGMODE = {'DISARMED': 0, 'ARMED_HOME': 1, 'ARMED_AWAY': 2}
+
+def isActive(item):
+    '''
+    Tries to determine if a device is active (tripped) from the perspective of an alarm system.
+    A door lock is special in the way that when it's locked its contacts are OPEN, hence
+    the value needs to be inverted for the alarm system to determine if it's 'active'
+    '''
+    active = False
+    if item.state in [scope.ON, scope.OPEN]:
+        active = True
+    active = not active if configuration.customGroupNames['lockDevice'] in item.groupNames else active
+    return active
 
 class IdeAlarmError(Exception):
     '''
@@ -68,7 +80,6 @@ class IdeAlarmSensor(object):
             lastUpdate = DateTime(0)
             self.log.info(u"Could not retrieve persistence data for sensor: {}".format(self.name.decode('utf8')))
         return lastUpdate
-
 
 class IdeAlarmZone(object):
     '''
@@ -347,19 +358,18 @@ class IdeAlarm(object):
         self.__version__ = '4.0.0'
         self.__version_info__ = tuple([ int(num) for num in self.__version__.split('.')])
         self.log = logging.getLogger("{}.IdeAlarm V{}".format(LOG_PREFIX, self.__version__))
-        from configuration import idealarm as _cfg
 
-        self.alarmTestMode = _cfg['ALARM_TEST_MODE']
-        self.loggingLevel = _cfg['LOGGING_LEVEL']
+        self.alarmTestMode = idealarm_configuration['ALARM_TEST_MODE']
+        self.loggingLevel = idealarm_configuration['LOGGING_LEVEL']
         self.log.setLevel(self.loggingLevel)
         self.log.debug('ideAlarm configuration was reloaded')
-        self.nagIntervalMinutes = _cfg['NAG_INTERVAL_MINUTES']
+        self.nagIntervalMinutes = idealarm_configuration['NAG_INTERVAL_MINUTES']
         self.timeCreated = DateTime.now()
 
         self.alarmZones = []
-        for i in range(len(_cfg['ALARM_ZONES'])):
+        for i in range(len(idealarm_configuration['ALARM_ZONES'])):
             zoneNumber = i+1
-            self.alarmZones.append(IdeAlarmZone(self, zoneNumber, _cfg['ALARM_ZONES'][i]))
+            self.alarmZones.append(IdeAlarmZone(self, zoneNumber, idealarm_configuration['ALARM_ZONES'][i]))
 
         for alarmZone in self.alarmZones:
             alarmZone.getNagSensors()
@@ -436,12 +446,12 @@ class IdeAlarm(object):
             if self.getZoneStatus(i) == ZONESTATUS['ALERT']: alertingZones += 1
         return alertingZones
 
-    def getTriggers(self):
+    def get_triggers(self):
         '''
         Wraps the function with core.triggers.when for all triggers that shall trigger ideAlarm.
         '''
         from core.triggers import when
-        def generatedTriggers(function):
+        def generated_triggers(function):
             for item in self.getSensors():
                 when("Item {} changed".format(item))(function) # TODO: Check if this works for items with accented characters in the name
             for i in range(len(self.alarmZones)):
@@ -452,7 +462,7 @@ class IdeAlarm(object):
                 when("Item Z{}_Nag_Timer received command OFF".format(i + 1))(function)
                 when("Item Z{}_Alert_Max_Timer received command OFF".format(i + 1))(function)
             return function
-        return generatedTriggers
+        return generated_triggers
 
     def execute(self, event):
         '''

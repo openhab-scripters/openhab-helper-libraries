@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 '''
 Custom ideAlarm functions library.
 Edit this file to suit your needs.
@@ -6,7 +5,7 @@ Edit this file to suit your needs.
 from core.log import logging, LOG_PREFIX
 from core.utils import kw
 
-log = logging.getLogger(LOG_PREFIX + '.ideAlarm.custom')
+log = logging.getLogger(LOG_PREFIX + '.personal.ideAlarm.custom')
 
 ZONESTATUS = {'NORMAL': 0, 'ALERT': 1, 'ERROR': 2, 'TRIPPED': 3, 'ARMING': 4}
 ARMINGMODE = {'DISARMED': 0, 'ARMED_HOME': 1, 'ARMED_AWAY': 2}

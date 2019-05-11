@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 '''
 This is an example configuration file for ideAlarm.
-You should copy the contents of this file abd paste into your ordinary
+You should copy the contents of this file and paste into your ordinary
 openhab2-jython configuration file e.g. automation\lib\python\configuration.py
 '''
-# The following import statements should be in your configuration
 from core.jsr223 import scope
 
 # You can define functions to determine if a sensor is enabled or not.
@@ -12,7 +10,7 @@ from core.jsr223 import scope
 # The function shall return a boolean.
 # If you are not going to use functions to determine if a sensor is enabled or not,
 # you dont have to include it in your configuration file.
-def d5Enabled(events, log):
+def d5Enabled():
     '''
     Door 5 sensor shall only be enabled if an Internet connection is available.
     '''
@@ -20,7 +18,7 @@ def d5Enabled(events, log):
 
 # ideAlarm Configuration example for two zones.
 
-idealarm = {
+idealarm_configuration = {
     'ALARM_TEST_MODE': True,
     'LOGGING_LEVEL': 'DEBUG',
     'NAG_INTERVAL_MINUTES': 6,
@@ -34,7 +32,7 @@ idealarm = {
                 {'name': 'Door_1_Lock', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': True},
                 {'name': 'Door_4_Lock', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': False},
                 {'name': 'Door_4', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 4, 'armWarn': True, 'enabled': True},
-                {'name': 'Door_5_Lock', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 10, 'armWarn': True, 'enabled': d5Enabled}
+                {'name': 'Door_5_Lock', 'sensorClass': 'A', 'nag': True, 'nagTimeoutMins': 10, 'armWarn': True, 'enabled': d5Enabled()}
             ],
             'armAwayToggleSwitch': 'Toggle_Z1_Armed_Away',
             'armHomeToggleSwitch': 'Toggle_Z1_Armed_Home',
@@ -71,6 +69,9 @@ customDateTimeFormats = {
     'time': 'HH:mm:ss' # Time only
 }
 
+customGroupNames = {
+    'lockDevice': 'G_Lock', # Group Item name that you've assigned to all your door lock devices
+}
 
 # Pushover related.
 # Uncomment if you are going to use Pushover notifications https://pushover.net

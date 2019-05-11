@@ -3,7 +3,7 @@
 # The first sensor that has been reporting data since the time out defined in sensor_dead_after_mins
 # will be used. If you don't have a certain sensor type, just put None (Don't put None inside a list)
 # Not mandatory. You may remove.
-wunderground = {
+weatherStationUploader_configuration = {
     'logLevel': DEBUG,
     'stationdata': {
         "weather_upload": False, # Set to True to actually upload anything

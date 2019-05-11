@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
 import random
 import time
+
+from org.eclipse.smarthome.core.types import TypeParser
 
 import configuration
 from core.log import logging, LOG_PREFIX
@@ -11,18 +12,6 @@ from org.joda.time import DateTime
 from org.joda.time.format import DateTimeFormat
 
 log = logging.getLogger(LOG_PREFIX + '.core.utils')
-
-def isActive(item):
-    '''
-    Tries to determine if a device is active (tripped) from the perspective of an alarm system.
-    A door lock is special in the way that when it's locked its contacts are OPEN, hence
-    the value needs to be inverted for the alarm system to determine if it's 'active'
-    '''
-    active = False
-    if item.state in [scope.ON, scope.OPEN]:
-        active = True
-    active = not active if configuration.customGroupNames['lockDevice'] in item.groupNames else active
-    return active
 
 def kw(dict, search):
     '''Get key by value in dictionary'''
@@ -57,35 +46,39 @@ def getItemValue(itemName, defVal):
         log.warn("The type of the passed default value is not handled")
         return None
 
-def getLastUpdate(item):
+def getLastUpdate(itemName):
     '''
     Returns the Item's last update datetime as a 'org.joda.time.DateTime',
     http://joda-time.sourceforge.net/apidocs/org/joda/time/DateTime.html
     '''
     try:
-        if PersistenceExtensions.lastUpdate(item) is None:
-            log.warning("No existing lastUpdate data for item: [{}], returning 1970-01-01T00:00:00Z".format(item.name))
+        item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
+        lastUpdate = PersistenceExtensions.lastUpdate(item)
+        if lastUpdate is None:
+            log.warning("No existing lastUpdate data for item: [{}], so returning 1970-01-01T00:00:00Z".format(item.name))
             return DateTime(0)
-        return PersistenceExtensions.lastUpdate(item).toDateTime()
+        return lastUpdate.toDateTime()
     except:
-        # I have an issue with OH file changes being detected (StartupTrigger only) before the file
+        # There is an issue using the StartupTrigegr and saving scripts over SMB, where changes are detected before the file
         # is completely written. The first read breaks because of a partial file write and the second read succeeds.
-        log.warning("Exception when getting lastUpdate data for item: [{}], returning 1970-01-01T00:00:00Z".format(item.name))
+        log.warning("Exception when getting lastUpdate data for item: [{}], so returning 1970-01-01T00:00:00Z".format(item.name))
         return DateTime(0)
 
-def sendCommand(item, newValue):
+def sendCommand(itemName, newValue):
     '''
     Sends a command to an item regerdless of it's current state
     The item can be passed as an OH item type or by using the item's name (string)
     '''
-    scope.events.sendCommand((scope.itemRegistry.getItem(item) if isinstance(item, basestring) else item), newValue)
+    item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
+    scope.events.sendCommand(item, newValue)
 
-def postUpdate(item, newValue):
+def postUpdate(itemName, newValue):
     '''
     Posts an update to an item regerdless of it's current state
     The item can be passed as an OH item type or by using the item's name (string)
     '''
-    scope.events.postUpdate((scope.itemRegistry.getItem(item) if isinstance(item, basestring) else item), newValue)
+    item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
+    scope.events.postUpdate(item, newValue)
 
 def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=None):
     '''
@@ -100,40 +93,34 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
     If your items' states are not being updated by a binding, the autoupdate feature
     or something else external, you will probably want to update the state in a rule
     using postUpdate.
+
+    Unfortunately, most decimal fractions cannot be represented exactly as binary fractions.
+    A consequence is that, in general, the decimal floating-point numbers you enter are only
+    approximated by the binary floating-point numbers actually stored in the machine.
+    Therefore, comparing the stored value with the new value will most likely always result in a difference.
+    You can supply the named argument floatPrecision to round the value before comparing.
     '''
     compareValue = None
-    item = scope.itemRegistry.getItem(itemName)
-
-    if item.state not in [scope.NULL, scope.UNDEF]:
-        if type(newValue) is int:
-            compareValue = scope.itemRegistry.getItem(itemName).state.intValue()
-        elif type(newValue) is float:
-            '''
-            Unfortunately, most decimal fractions cannot be represented exactly as binary fractions.
-            A consequence is that, in general, the decimal floating-point numbers you enter are only
-            approximated by the binary floating-point numbers actually stored in the machine.
-            Therefore, comparing the stored value with the new value will most likely always result in a difference.
-            You can supply the named argument floatPrecision to round the value before comparing
-            '''
-            if floatPrecision is None:
-                compareValue = scope.itemRegistry.getItem(itemName).state.floatValue()
-            else:
-                compareValue = round(scope.itemRegistry.getItem(itemName).state.floatValue(), floatPrecision)
-        elif newValue in [scope.ON, scope.OFF, scope.OPEN, scope.CLOSED]:
-            compareValue = scope.itemRegistry.getItem(itemName).state
-        elif type(newValue) is str:
-            compareValue = scope.itemRegistry.getItem(itemName).state.toString()
-        else:
-            log.warn("Can not set [{}] to the unsupported type [{}]. Value: [{}]".format(itemName, type(newValue), newValue))
-    if (compareValue is not None and compareValue != newValue) or item.state in [scope.NULL, scope.UNDEF]:
-        if sendACommand:
-            log.debug("New sendCommand value for [{}] is [{}]".format(itemName, newValue))
-            sendCommand(item, newValue)
-        else:
-            log.debug("New postUpdate value for [{}] is [{}]".format(itemName, newValue))
-            postUpdate(item, newValue)
-        return True
+    item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
+    
+    if sendACommand:
+        compareValue = TypeParser.parseCommand(item.acceptedCommandTypes, str(newValue))
     else:
+        compareValue = TypeParser.parseState(item.acceptedDataTypes, str(newValue))
+
+    if compareValue is not None:
+        if item.state != compareValue or (type(newValue) is float and floatPrecision is not None and round(item.state.floatValue(), floatPrecision) != newValue):
+            if sendACommand:
+                sendCommand(item, newValue)
+                log.debug("New sendCommand value for [{}] is [{}]".format(itemName, newValue))
+            else:
+                postUpdate(item, newValue)
+                log.debug("New postUpdate value for [{}] is [{}]".format(itemName, newValue))
+            return True
+        else:
+            return False
+    else:
+        log.warn("[{}] is not an accepted {} for [{}]".format(newValue, "command type" if sendACommand else "state", item.name))
         return False
 
 def sendCommandCheckFirst(itemName, newValue, floatPrecision=None):

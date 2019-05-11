@@ -32,7 +32,7 @@ from core.date import format_date
 from core.rules import rule
 from core.triggers import when
 from core.utils import getItemValue, getLastUpdate
-import configuration
+from configuration import weatherStationUploader_configuration, customDateTimeFormats
 
 wu_second_count = 10 # Loop counter
 
@@ -65,18 +65,18 @@ def getTheSensor(lbl, never_assume_dead=False, getHighest=False, getLowest=False
     # When "getHighest" argument is set to True, the sensor name with the highest value is picked.
     # When "getlowest" argument is set to True, the sensor name with the lowest value is picked.
 
-    sensor_dead_after_mins = configuration.wunderground['sensor_dead_after_mins'] # The time after which a sensor is presumed to be dead
+    sensor_dead_after_mins = weatherStationUploader_configuration['sensor_dead_after_mins'] # The time after which a sensor is presumed to be dead
 
     def isSensorAlive(sName):
         if getLastUpdate(ir.getItem(sName)).isAfter(DateTime.now().minusMinutes(sensor_dead_after_mins)):
             return True
         else:
-            weatherStationUploader.log.warn("Sensor device {} has not reported since: {}".format(sName, format_date(getLastUpdate(ir.getItem(sName)), configuration.customDateTimeFormats['dateTime'])))
+            weatherStationUploader.log.warn("Sensor device {} has not reported since: {}".format(sName, format_date(getLastUpdate(ir.getItem(sName)), customDateTimeFormats['dateTime'])))
             return False
 
     sensorName = None
-    if lbl in configuration.wunderground['sensors'] and configuration.wunderground['sensors'][lbl] is not None:
-        tSens = configuration.wunderground['sensors'][lbl]
+    if lbl in weatherStationUploader_configuration['sensors'] and weatherStationUploader_configuration['sensors'][lbl] is not None:
+        tSens = weatherStationUploader_configuration['sensors'][lbl]
         if isinstance(tSens, list):
             _highestValue = 0
             _lowestValue = 999999999
@@ -109,11 +109,11 @@ def getTheSensor(lbl, never_assume_dead=False, getHighest=False, getLowest=False
 @rule("Weather station uploader")
 @when("Time cron 0/10 * * * * ?")
 def weatherStationUploader(event):
-    weatherStationUploader.log.setLevel(configuration.wunderground['logLevel'])
+    weatherStationUploader.log.setLevel(weatherStationUploader_configuration['logLevel'])
     global wu_second_count
-    if (not configuration.wunderground['stationdata']['weather_upload']) \
-    or (configuration.wunderground['stationdata']['weather_upload'] and wu_second_count%configuration.wunderground['stationdata']['upload_frequency_seconds'] == 0):
-        if configuration.wunderground['stationdata']['weather_upload']:
+    if (not weatherStationUploader_configuration['stationdata']['weather_upload']) \
+    or (weatherStationUploader_configuration['stationdata']['weather_upload'] and wu_second_count%weatherStationUploader_configuration['stationdata']['upload_frequency_seconds'] == 0):
+        if weatherStationUploader_configuration['stationdata']['weather_upload']:
             weatherStationUploader.log.debug('Uploading data to Weather Underground')
         else:
             weatherStationUploader.log.debug('No data to will be upladed to Weather Underground')
@@ -216,15 +216,15 @@ def weatherStationUploader(event):
 
         cmd = 'curl -s -G "' + WU_URL + '" ' \
             + '--data-urlencode "action=updateraw" ' \
-            + ('--data-urlencode "realtime=1" ' if configuration.wunderground['stationdata']['rapid_fire_mode'] else '') \
-            + ('--data-urlencode "rtfreq='+str(configuration.wunderground['stationdata']['upload_frequency_seconds'])+'" ' if configuration.wunderground['stationdata']['rapid_fire_mode'] else '') \
-            + '--data-urlencode "ID='+configuration.wunderground['stationdata']['station_id']+'" ' \
-            + '--data-urlencode "PASSWORD='+configuration.wunderground['stationdata']['station_key']+'" ' \
+            + ('--data-urlencode "realtime=1" ' if weatherStationUploader_configuration['stationdata']['rapid_fire_mode'] else '') \
+            + ('--data-urlencode "rtfreq='+str(weatherStationUploader_configuration['stationdata']['upload_frequency_seconds'])+'" ' if weatherStationUploader_configuration['stationdata']['rapid_fire_mode'] else '') \
+            + '--data-urlencode "ID='+weatherStationUploader_configuration['stationdata']['station_id']+'" ' \
+            + '--data-urlencode "PASSWORD='+weatherStationUploader_configuration['stationdata']['station_key']+'" ' \
             + '--data-urlencode "dateutc='+dateutc+'" ' \
             + '--data-urlencode "softwaretype=openHAB" '
         weatherStationUploader.log.debug("")
 
-        if configuration.wunderground['stationdata']['weather_upload']:
+        if weatherStationUploader_configuration['stationdata']['weather_upload']:
             weatherStationUploader.log.debug("Below is the weather data that we will send:")
         else:
             weatherStationUploader.log.debug("Below is the weather data that we would send (if weather_upload was enabled):")
@@ -286,13 +286,13 @@ def weatherStationUploader(event):
         cmd += ' 1>/dev/null 2>&1 &'
         weatherStationUploader.log.debug("")
 
-        if configuration.wunderground['stationdata']['weather_upload']:
+        if weatherStationUploader_configuration['stationdata']['weather_upload']:
             weatherStationUploader.log.debug("WeatherUpload version {}, performing an upload. (second count is: {})".format(__version__, wu_second_count))
             weatherStationUploader.log.debug("cmd: {}".format(cmd))
             os.system(cmd)
     else:
         weatherStationUploader.log.debug("WeatherUpload version {}, skipping upload. (second count is: {})".format(__version__, wu_second_count))
 
-    if (wu_second_count%configuration.wunderground['stationdata']['upload_frequency_seconds'] == 0):
+    if (wu_second_count%weatherStationUploader_configuration['stationdata']['upload_frequency_seconds'] == 0):
         wu_second_count = 0
     wu_second_count = wu_second_count + 10 # Corresponding to CronTrigger(EVERY_10_SECONDS)
