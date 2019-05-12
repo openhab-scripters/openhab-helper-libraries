@@ -200,30 +200,65 @@ core.link.remove_link("Kodi_Control")
 #### Module: [`core.metadata`](..Core/automation/lib/python/core/metadata.py)
 <ul>
 
-This module allows simpler interaction with item metadata. There are two instance classes that can be used manage a single namespace, or multiple namespaces of a single item.
+This module allows simpler interaction with item metadata.
+There are two instance classes that can be used manage a single namespace, or multiple namespaces of a single item.
 
-__`metadata_namespace`__ is used to manage a single namespace. It can be used like a python `dict` to get and set key-value pairs in the namespace configuration. It will attempt to convert the namespace and configuration values to a `bool`, `float`, or `int` when loading from the registry. Below is a list of all of the methods, detailed descriptions can be found at the beginning of each one in the code.
+__`metadata_namespace`__ is used to manage a single namespace.
+It can be used like a python `dict` to get and set key-value pairs in the namespace configuration.
+It will attempt to convert the namespace and configuration values to a `bool`, `float`, or `int` when loading from the registry.
+
 ```python
-metadata_namespace(item_name, name, value=None, configuration={}, load=True, save=False)
-metadata_namespace.load()
-metadata_namespace.save()
-metadata_namespace.remove()
-metadata_namespace.set_value(value, save=True)
-metadata_namespace.value = value # same as above
-metadata_namespace.get_value()
-value = metadata_namespace.value # same as above
-metadata_namespace.set_config_value(key, value, save=True)
-metadata_namespace[key] = value # same as above
-metadata_namespace.get_config_value(key)
-value = metadata_namespace[key] # same as above
-metadata_namespace.delete_config_value(key, save=True)
-del metadata_namespace[key] # same as above
-metadata_namespace.set_configuration(configuration, save=True)
-metadata_namespace.add_configuration(configuration, save=True)
-metadata_namespace.clear_configuration(save=True)
+from core.metadata import metadata_namespace
+
+# load existing metadata namespace from item
+test_metadata = metadata_namespace("Test_Item", "Test_Namespace")
+log.info(test_metadata.value) # print value
+for key, value in test_metadata.iteritems():
+    log.info(key + ": " + value) # print all config keys and values
+
+# create new namespace and save immediately
+new_metadata = metadata_namespace("Test_Item", "New_Namespace", value=False, load=False, save=True)
+new_metadata["New_Key"] = 100 # add new config value and save
+del new_metadata["New_Key"] # delete config value and save
+new_metadata.remove() # remove metadata namespace from registry
 ```
 
-__`item_metadata`__ is used to manage multiple namespaces for a single item using only one object. It can be used similar to a python `dict` containing instances of `metadata_namespace`. Below is a list of all the methods, detailed descriptions can be found at the beginning of each one in the code.
+Below is a list of all of the methods, detailed descriptions can be found at the beginning of each one in the code.
+
+```python
+metadata_namespace(item_name, name, value=None, configuration={}, load=True, save=False)
+metadata_namespace.load() # manually load from registry
+metadata_namespace.save() # manually save to registry
+metadata_namespace.remove() # delete namespace from registry
+metadata_namespace.set_value(value, save=True) # set namespace value
+metadata_namespace.value = value # same as above
+metadata_namespace.get_value() # get namespace value
+value = metadata_namespace.value # same as above
+metadata_namespace.set_config_value(key, value, save=True) # set configuration value
+metadata_namespace[key] = value # same as above
+metadata_namespace.get_config_value(key) # get configuration value
+value = metadata_namespace[key] # same as above
+metadata_namespace.delete_config_value(key, save=True) # delete configuration value
+del metadata_namespace[key] # same as above
+metadata_namespace.set_configuration(configuration, save=True) # set the passed dict as the configuration dict
+metadata_namespace.add_configuration(configuration, save=True) # adds the passed dict or list to configuration dict
+metadata_namespace.clear_configuration(save=True) # deletes the configuration dict
+```
+
+__`item_metadata`__ is used to manage multiple namespaces for a single item using only one object.
+It can be used similar to a python `dict` containing instances of `metadata_namespace`.
+
+```python
+from core.metadata import item_metadata
+
+test_item_metadata = item_metadata("Test_Item") # create object
+test_item_metadata.add_namespace("Test_Namespace") # add namespace
+test_item_metadata["Test_Namespace"]["New_Key"] = 42 # add configuration value to "Test_Namespace"
+test_item_metadata.delete_namespace("Test_Namespace", remove=True) # remove metadata namespace from registry and object
+```
+
+Below is a list of all the methods, detailed descriptions can be found at the beginning of each one in the code.
+
 ```python
 item_metadata(item_name)
 item_metadata.add_namespace(name)
