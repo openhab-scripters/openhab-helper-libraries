@@ -8,11 +8,13 @@ from org.eclipse.smarthome.core.items import Metadata, MetadataKey
 from core.log import logging, LOG_PREFIX
 log = logging.getLogger(LOG_PREFIX + ".core.metadata")
 from core import osgi
-MetadataRegistry = osgi.get_service("org.eclipse.smarthome.core.items.MetadataRegistry")
+metadata_registry = osgi.get_service("org.eclipse.smarthome.core.items.MetadataRegistry")
 
 __all__ = [ "namespace_exists", "item_metadata", "metadata_namespace" ]
 
-# valid characters for names
+# Valid characters for names
+# this allows only numbers and letters for first char, 
+# then numbers, letters, and underscore for the rest
 _valid_chars_re = "^[a-zA-Z][a-zA-Z0-9_]*$"
 
 
@@ -22,7 +24,7 @@ def namespace_exists(item_name, namespace):
     '''
     if not re.match(_valid_chars_re, namespace):
         raise ValueError("'{}' is not a valid namespace name".format(namespace))
-    return False if MetadataRegistry.get(MetadataKey(namespace, item_name)) is None else True
+    return False if metadata_registry.get(MetadataKey(namespace, item_name)) is None else True
 
 def _item_exists(item_name):
     '''
@@ -99,7 +101,7 @@ class item_metadata(MutableMapping):
         if name in self._namespaces:
             raise KeyError
         else:
-            self._namespaces[name] = metadata_namespace(self._item_name ,name)
+            self._namespaces[name] = metadata_namespace(self._item_name, name)
 
     def delete_namespace(self, name, remove=False):
         '''
@@ -112,7 +114,6 @@ class item_metadata(MutableMapping):
             if remove:
                 self._namespaces[name].remove
             self._namespaces.pop(name, None)
-
 
 class metadata_namespace(MutableMapping):
     def __init__(self, item_name, name, value=None, configuration={}, load=True, save=False):
@@ -146,7 +147,7 @@ class metadata_namespace(MutableMapping):
             log.debug("Metadata: Save on initialize for item '{item}' namespace '{namespace}' with value '{value}' and configuration'{configuration}'".format( \
                 item=item_name, namespace=name, value=str(value), configuration=str(configuration)))
             self.save()
-    
+
     def __iter__(self):
         return iter(self._configuration)
 
@@ -170,7 +171,7 @@ class metadata_namespace(MutableMapping):
         log.debug("Metadata: Getting metadata for item '{item}' from namespace '{namespace}'".format( \
             item=self._item_name, namespace=self._name))
         # read from registry
-        metadata = MetadataRegistry.get(self._key_uid)
+        metadata = metadata_registry.get(self._key_uid)
         log.debug("Metadata: {metadata}".format( \
             metadata=str(metadata)))
         # parse data
@@ -188,15 +189,12 @@ class metadata_namespace(MutableMapping):
         unless the "save" flag was set to false when making those changes)
         '''
         # convert all values to strings
-        if self._value is None:
-            strValue = "None"
-        else:
-            strValue = str(self._value)
+        strValue = str(self._value)
         strConfiguration = {}
         for key, value in self._configuration:
             strConfiguration[key] = str(value)
         # save to the registry
-        MetadataRegistry.add(Metadata(self._key_uid, strValue, strConfiguration))
+        metadata_registry.add(Metadata(self._key_uid, strValue, strConfiguration))
         del strConfiguration
 
     def remove(self):
@@ -204,7 +202,20 @@ class metadata_namespace(MutableMapping):
         Deletes this namespace from the registry.
         This instance will be preserved and can be written back to the registry.
         '''
-        MetadataRegistry.remove(self._key_uid)
+        metadata_registry.remove(self._key_uid)
+
+    def get_value(self):
+        '''
+        Gets the namespace "value".
+        '''
+        return self._value
+
+    @property
+    def value(self):
+        '''
+        Returns the namespace "value".
+        '''
+        return self.get_value
 
     def set_value(self, value, save=True):
         '''
@@ -222,19 +233,6 @@ class metadata_namespace(MutableMapping):
         Sets the namespace "value" and saves to the registry.
         '''
         return self.set_value(value)
-
-    def get_value(self):
-        '''
-        Gets the namespace "value".
-        '''
-        return self._value
-
-    @property
-    def value(self):
-        '''
-        Returns the namespace "value".
-        '''
-        return self.get_value
 
     def set_config_value(self, key, value, save=True):
         '''
