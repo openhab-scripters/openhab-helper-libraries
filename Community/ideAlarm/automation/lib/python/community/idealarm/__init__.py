@@ -6,7 +6,7 @@ from core.date import format_date
 from core.log import logging, LOG_PREFIX
 from core.utils import getItemValue, postUpdateCheckFirst, sendCommandCheckFirst, kw
 from core.actions import PersistenceExtensions
-from configuration import idealarm_configuration, customDateTimeFormats
+from configuration import idealarm_configuration, customDateTimeFormats, customGroupNames
 from personal.idealarm import custom
 
 log = logging.getLogger(LOG_PREFIX + '.community.ideAlarm')
@@ -22,7 +22,7 @@ def isActive(item):
     active = False
     if item.state in [scope.ON, scope.OPEN]:
         active = True
-    active = not active if configuration.customGroupNames['lockDevice'] in item.groupNames else active
+    active = not active if customGroupNames['lockDevice'] in item.groupNames else active
     return active
 
 class IdeAlarmError(Exception):

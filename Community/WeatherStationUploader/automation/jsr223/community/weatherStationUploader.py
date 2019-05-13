@@ -36,8 +36,6 @@ from configuration import weatherStationUploader_configuration, customDateTimeFo
 
 wu_second_count = 10 # Loop counter
 
-reload(configuration) # This will reload the config file when this file is saved.
-
 WU_URL = "http://weatherstation.wunderground.com/weatherstation/updateweatherstation.php"
 
 def ms_to_mph(input_speed):
