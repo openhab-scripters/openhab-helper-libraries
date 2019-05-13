@@ -30,7 +30,7 @@ After the prerequisits are met:
 * Add the following Weather Underground configuration dictionary to the lucid configuration file:
 ```
 # Weather Underground Config
-wunderground = {
+weatherStationUploader_configuration = {
     'logLevel': DEBUG,
     'stationdata': {
         "weather_upload": True,
