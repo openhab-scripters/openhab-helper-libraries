@@ -59,7 +59,7 @@ def getLastUpdate(itemName):
             return DateTime(0)
         return lastUpdate.toDateTime()
     except:
-        # There is an issue using the StartupTrigegr and saving scripts over SMB, where changes are detected before the file
+        # There is an issue using the StartupTrigger and saving scripts over SMB, where changes are detected before the file
         # is completely written. The first read breaks because of a partial file write and the second read succeeds.
         log.warning("Exception when getting lastUpdate data for item: [{}], so returning 1970-01-01T00:00:00Z".format(item.name))
         return DateTime(0)
