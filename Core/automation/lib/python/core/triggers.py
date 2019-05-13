@@ -98,6 +98,7 @@ class ThingEventTrigger(Trigger):
         })).build()
 
 EVERY_SECOND = "0/1 * * * * ?"
+EVERY_10_SECONDS = "0/10 * * * * ?"
 EVERY_MINUTE = "0 * * * * ?"
 EVERY_HOUR = "0 0 * * * ?"
 

@@ -1,0 +1,11 @@
+clickatell_configuration = {
+    'sender': '49123456789',
+    'user': 'xxxxxxxxxxxx',
+    'password': 'xxxxxxxxxxxxxxxxx',
+    'apiid': 999999999999,
+    'phonebook': {
+        'Default': '49123456789',
+        'Carl': '49987654321',
+        'Betty': '4911111111',
+    }
+}
