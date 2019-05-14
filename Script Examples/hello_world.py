@@ -67,7 +67,7 @@ class GenericCronTriggerRawAPI(SimpleRule):
 automationManager.addRule(GenericCronTriggerRawAPI())
 '''
 
-# These rules require an Item names Test_Switch_1
+# These rules require an Item named Test_Switch_1
 '''
 from core.rules import rule
 from core.triggers import when
