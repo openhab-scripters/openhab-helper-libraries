@@ -112,10 +112,10 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
         if item.state != compareValue or (type(newValue) is float and floatPrecision is not None and round(item.state.floatValue(), floatPrecision) != newValue):
             if sendACommand:
                 sendCommand(item, newValue)
-                log.debug("New sendCommand value for [{}] is [{}]".format(itemName, newValue))
+                log.debug("New sendCommand value for [{}] is [{}]".format(item.name, newValue))
             else:
                 postUpdate(item, newValue)
-                log.debug("New postUpdate value for [{}] is [{}]".format(itemName, newValue))
+                log.debug("New postUpdate value for [{}] is [{}]".format(item.name, newValue))
             return True
         else:
             return False
