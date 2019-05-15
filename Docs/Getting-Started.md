@@ -28,10 +28,10 @@ These examples assume that you will be using the standalone Jython 2.7.0 jar.
 A full install of Jython can also be used, but the paths above will need to be modified.
 
 - You'll need a main configuration file for openhab2-jython. In directory `Core\automation\lib\python\`, rename the file `configuration.py.example` to `configuration.py`. Then edit the configuration file to suit your needs.
-- You must have at least one item defined. Otherwise the jython scripts will throw an error. Therefore, create an items file and populate it with at least one item definition.
-    ```
-    String My_First_Item // We need at least one item to avoid errors during loading scripts
-    ```
+- In order to view logs from the libraries and your scripts, run `log:set DEBUG jsr223.jython` in Karaf. 
+This location can be changed by modifying the LOG_PREFIX variable in configuration.py. 
+If you change it, be sure to set the logging level too.
+- You must have at least one item defined. Otherwise the jython scripts will throw an error.
 - Copy the [`hello_world.py`](/Script%20Examples/hello_world.py) example script to `/automation/jsr223/personal/` to test if everything is working. 
 This script will make a log entry every 10s, and should be deleted after installation has been verified.
 - Start openHAB and watch the logs for errors and the entries from the `hello_world.py` script.
