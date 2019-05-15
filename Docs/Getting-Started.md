@@ -8,7 +8,7 @@ Directions specifically for installation in a Docker container are available [he
 More importantly, there are breaking changes in the API, so at least OH 2.4 snapshot 1319 or milestone M3 is required to use these modules.
 - Install the [Experimental Rule Engine](https://www.openhab.org/docs/configuration/rules-ng.html) add-on.
 - Review the [JSR223 Jython documentation](https://www.openhab.org/docs/configuration/jsr223-jython.html).
-- Turn on debugging for org.eclipse.smarthome.automation (`log:set DEBUG org.eclipse.smarthome.automation` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
+- Turn on debugging for jsr223.jython (`log:set DEBUG jsr223.jython` in Karaf). Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
 - Shut down openHAB.
 - Download the contents of this repository and, using the openHAB account, copy the _contents_ of the `/Core/` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf/` (default manual OH install). 
 This will create a directory structure as described in [File Locations](#file-locations), and will include all of the Core files, including a startup delay script that insures OH is started completely before loading other scripts.
