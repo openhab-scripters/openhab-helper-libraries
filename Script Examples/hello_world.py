@@ -3,8 +3,8 @@ from core.triggers import when
 
 @rule("Jython Hello World (cron decorators)", description="This is an example cron triggered rule using decorators", tags=["Test tag", "Hello World"])# [description and tags are optional]
 @when("Time cron 0/10 * * * * ?")
-def hellowWorldCronDecorators(event):
-    hellowWorldCronDecorators.log.info("Hello World!")
+def helloWorldCronDecorators(event):
+    helloWorldCronDecorators.log.info("Hello World!")
 
 # The following cron triggered rules are for demonstration of how the Jython helper libraries have evolved
 '''
