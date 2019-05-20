@@ -13,6 +13,12 @@ ItemBuilderFactory = osgi.get_service(
         "org.eclipse.smarthome.core.items.ItemBuilderFactory"
     )
 
+ManagedItemProvider = osgi.get_service(
+        "org.openhab.core.items.ManagedItemProvider"
+    ) or osgi.get_service(
+        "org.eclipse.smarthome.core.items.ManagedItemProvider"
+    )
+
 log = logging.getLogger(LOG_PREFIX + ".core.items")
 
 __all__ = ["add_item", "remove_item"]
@@ -39,6 +45,7 @@ def add_item(item_or_item_name, item_type=None, category=None, groups=None, labe
                                                     .build()
 
         JythonItemProvider.add(item)
+        ManagedItemProvider.add(item)
         log.debug("Item added: [{}]".format(item))
     except:
         import traceback
@@ -62,6 +69,7 @@ def remove_item(item_or_item_name):
             raise Exception("\"{}\" is not in the ItemRegistry".format(item.name))
         remove_all_links(item)
         JythonItemProvider.remove(item)
+        ManagedItemProvider.remove(item)
         log.debug("Item removed: [{}]".format(item))
     except:
         import traceback
