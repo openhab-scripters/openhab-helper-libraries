@@ -69,7 +69,7 @@ def remove_item(item_or_item_name):
             raise Exception("\"{}\" is not in the ItemRegistry".format(item.name))
         remove_all_links(item)
         JythonItemProvider.remove(item)
-        ManagedItemProvider.remove(item)
+        ManagedItemProvider.remove(item.name)
         log.debug("Item removed: [{}]".format(item))
     except:
         import traceback
