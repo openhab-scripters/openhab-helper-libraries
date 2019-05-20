@@ -1,19 +1,27 @@
+scriptExtension.importPreset(None)
+
 from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
 
-from org.eclipse.smarthome.automation import Visibility
-from org.eclipse.smarthome.automation.handler import TriggerHandler
-from org.eclipse.smarthome.core.service import AbstractWatchService
+try:
+    from org.openhab.core.automation.handler import TriggerHandler
+except:
+    from org.eclipse.smarthome.automation.handler import TriggerHandler
+
+try:
+    from org.openhab.core.service import AbstractWatchService
+except:
+    from org.eclipse.smarthome.core.service import AbstractWatchService
 
 import core
 from core.log import logging, log_traceback, LOG_PREFIX
 
 log = logging.getLogger(LOG_PREFIX + ".core.DirectoryEventTrigger")
 
+scriptExtension.importPreset("RuleSimple")
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")
 
 class JythonDirectoryWatcher(AbstractWatchService):
-
     def __init__(self, path, event_kinds=[ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY], watch_subdirectories=False):
         AbstractWatchService.__init__(self, path)
         self.event_kinds = event_kinds
@@ -32,7 +40,6 @@ class JythonDirectoryWatcher(AbstractWatchService):
             self.callback(event, kind, path)
 
 class _DirectoryEventTriggerHandlerFactory(TriggerHandlerFactory):
-        
     class Handler(TriggerHandler):
         @log_traceback
         def __init__(self, trigger):
@@ -70,19 +77,16 @@ def scriptLoaded(*args):
     automationManager.addTriggerHandler(
         core.DIRECTORY_TRIGGER_MODULE_ID, 
         _DirectoryEventTriggerHandlerFactory())
-    log.info("TriggerHandler added".format(core.DIRECTORY_TRIGGER_MODULE_ID))
+    log.info("TriggerHandler added [{}]".format(core.DIRECTORY_TRIGGER_MODULE_ID))
 
     automationManager.addTriggerType(TriggerType(
-        core.DIRECTORY_TRIGGER_MODULE_ID,
-        [],
+        core.DIRECTORY_TRIGGER_MODULE_ID, None,
         "a directory change event is detected.", 
         "Triggers when a directory change event is detected.",
-        set(),
-        Visibility.VISIBLE,
-        []))
-    log.info("TriggerType added".format(core.DIRECTORY_TRIGGER_MODULE_ID))
+        None, Visibility.VISIBLE, None))
+    log.info("TriggerType added [{}]".format(core.DIRECTORY_TRIGGER_MODULE_ID))
 
 def scriptUnloaded():
     automationManager.removeHandler(core.DIRECTORY_TRIGGER_MODULE_ID)
     automationManager.removeModuleType(core.DIRECTORY_TRIGGER_MODULE_ID)
-    log.info("TriggerType and TriggerHandler removed".format(core.DIRECTORY_TRIGGER_MODULE_ID))
+    log.info("TriggerType and TriggerHandler removed [{}]".format(core.DIRECTORY_TRIGGER_MODULE_ID))

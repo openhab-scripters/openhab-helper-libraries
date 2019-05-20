@@ -92,36 +92,37 @@ class exampleExtensionRule(SimpleRule):
 automationManager.addRule(exampleExtensionRule())
 ```
 
-This removes the need to know the internal ESH trigger type strings, 
-define trigger names, and to know configuration dictionary requirements.
+This removes the need to know the internal ESH trigger type strings, define trigger names, and to know the requirements for the configuration dictionary.
 
 #### Rule and Trigger Decorators
 <ul>
 
-To make rule creation _even simpler_, `core.rules` defines a decorator that can be 
-used to create a rule, which can be fed triggers from a decorator in `core.triggers`. 
+To make rule creation _even simpler_, `core.rules` defines a decorator that can be used to create a rule, which can be fed triggers from a decorator in `core.triggers`. 
 These triggers can be defined similarly to how it is done in the Rules DSL. 
-The `tags` parameter is optional. The rule's UID will also be supplied as an attribute of the rule's function (`testFunction.UID`).
+The `description` and `tags` parameter are optional. 
+The rule's UID is supplied as an attribute of the function (`testFunction.UID`). 
+A log attribute is also added to the function (`testFunction.log.info("Testing")`).
 
 ```python
 from core.rules import rule
 from core.triggers import when
 
-@rule("This is the name of a test rule", tags=["Tag 1", "Tag 2"])
+@rule("This is the name of a test rule", description="This is a description for a test rule", tags=["Tag 1", "Tag 2"])
 @when("Item Test_Switch_1 received command OFF")
 @when("Item Test_Switch_2 received update ON")
-@when("Item gMotion_Sensors changed to ON")
-@when("Member of gMotion_Sensors changed to OFF")
-@when("Descendent of gContact_Sensors changed to ON")# Similar to 'Member of', but will create a trigger for each non-group sibling Item (think group_item.allMembers())
-@when("Thing kodi:kodi:familyroom changed")# ThingStatusInfo (from <status> to <status>) cannot currently be used in triggers
+@when("Item gMotion_Sensors changed")
+@when("Member of gMotion_Sensors changed from ON to OFF")
+@when("Descendent of gContact_Sensors changed to OPEN")# Similar to 'Member of', but creates a trigger for each non-group sibling Item (think group_item.allMembers())
+@when("Thing kodi:kodi:familyroom changed")# ThingStatusInfo (from <status> to <status>) cannot currently be used in Thing triggers
 @when("Channel astro:sun:local:eclipse#event triggered START")
-@when("System started")# 'System shuts down' cannot currently be used as a trigger, and 'System started' needs to be updated to work with Automation API updates
+@when("System started")# 'System shuts down' is not available
 @when("Time cron 55 55 5 * * ?")
 def testFunction(event):
-    if items["Test_Switch_1"] == OnOffType.ON:
+    if items["Test_Switch_1"] == ON:
         events.postUpdate("Test_String_1", "The test rule has been executed!")
+        testFunction.log.info("The test run has been executed")
 ```
 
-Notice there is no explicit preset import, and the generated rule is registered automatically with the `HandlerRegistry`. 
+Notice there is no explicit preset import and the generated rule is registered automatically with the `HandlerRegistry`. 
 
 </ul>

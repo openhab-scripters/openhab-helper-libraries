@@ -1,45 +1,60 @@
-from org.eclipse.smarthome.core.thing import ThingProvider
+scriptExtension.importPreset(None)
+
+provider_class = None
+try:
+    from org.openhab.core.thing import ThingProvider
+    provider_class = "org.openhab.core.thing.ThingProvider"
+except:
+    from org.eclipse.smarthome.core.thing import ThingProvider
+    provider_class = "org.eclipse.smarthome.core.thing.ThingProvider"
 
 import core
-import core.osgi
+from core.log import logging, LOG_PREFIX
 
-class JythonThingProvider(ThingProvider):
-    def __init__(self):
-        self.things = []
-        self.listeners = []
+try:
+    class JythonThingProvider(ThingProvider):
+        def __init__(self):
+            self.things = []
+            self.listeners = []
+            
+        def addProviderChangeListener(self, listener): # ProviderChangeListener
+            self.listeners.append(listener)
+
+        def removeProviderChangeListener(self, listener):
+            if listener in self.listeners:
+                self.listeners.remove(listener)
         
-    def addProviderChangeListener(self, listener): # ProviderChangeListener
-        self.listeners.append(listener)
-    
-    def getAll(self):
-        return self.things
-
-    def removeProviderChangeListener(self, listener):
-        if listener in self.listeners:
-            self.listeners.remove(listener)
-    
-    def add(self, thing):
-        self.things.append(thing)
-        for listener in self.listeners:
-            listener.added(self, thing)
-            
-    def remove(self, thing):
-        if thing in self.things:
-            self.things.remove(thing)
+        def add(self, thing):
+            self.things.append(thing)
             for listener in self.listeners:
-                listener.removed(self, thing)
-            
-    def update(self, thing):
-        for listener in self.listeners:
-            listener.updated(self, thing)
+                listener.added(self, thing)
+                
+        def remove(self, thing):
+            if thing in self.things:
+                self.things.remove(thing)
+                for listener in self.listeners:
+                    listener.removed(self, thing)
+                
+        def update(self, thing):
+            for listener in self.listeners:
+                listener.updated(self, thing)
 
-core.JythonThingProvider = JythonThingProvider()
+        def getAll(self):
+            return self.things
+
+    core.JythonThingProvider = JythonThingProvider()
+except:
+    core.JythonThingProvider = None
+    import traceback
+    logging.getLogger(LOG_PREFIX + ".core.JythonThingProvider").error(traceback.format_exc())
 
 def scriptLoaded(id):
-    core.osgi.register_service(
-        core.JythonThingProvider, 
-        ["org.eclipse.smarthome.core.thing.ThingProvider"])
+    if core.JythonThingProvider is not None:
+        core.osgi.register_service(core.JythonThingProvider, [provider_class])
+        logging.getLogger(LOG_PREFIX + ".core.JythonThingProvider.scriptLoaded").debug("Registered service")
     
 def scriptUnloaded():
-    core.osgi.unregister_service(core.JythonThingProvider)
-    delattr(core, 'JythonThingProvider')
+    if core.JythonThingProvider is not None:
+        core.osgi.unregister_service(core.JythonThingProvider)
+        core.JythonThingProvider = None
+        logging.getLogger(LOG_PREFIX + ".core.JythonThingProvider.scriptUnloaded").debug("Unregistered service")

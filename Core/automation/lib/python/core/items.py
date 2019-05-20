@@ -1,30 +1,42 @@
 # NOTE: Requires JythonItemProvider component
-from core import osgi, jsr223, JythonItemProvider
 from core.jsr223 import scope
+scope.scriptExtension.importPreset(None)
+
+import core
+from core import osgi, JythonItemProvider
 from core.log import logging, LOG_PREFIX
 from core.links import remove_all_links
+
+ItemBuilderFactory = osgi.get_service(
+        "org.openhab.core.items.ItemBuilderFactory"
+    ) or osgi.get_service(
+        "org.eclipse.smarthome.core.items.ItemBuilderFactory"
+    )
 
 log = logging.getLogger(LOG_PREFIX + ".core.items")
 
 __all__ = ["add_item", "remove_item"]
 
-def add_item(item, item_type=None, category=None, groups=None, label=None, tags=[], gi_base_type=None, group_function=None):
+def add_item(item_or_item_name, item_type=None, category=None, groups=None, label=None, tags=[], gi_base_type=None, group_function=None):
     try:
-        if isinstance(item, basestring):
+        if not isinstance(item_or_item_name, basestring) and not hasattr(item_or_item_name, 'name'):
+            raise Exception("\"{}\" is not a string or Item".format(item_or_item_name))
+        item = item_or_item_name
+        if isinstance(item_or_item_name, basestring):
+            item_name = item_or_item_name
             if item_type is None:
-                raise Exception("Must provide item_type when creating an item by name")
+                raise Exception("Must provide item_type when creating an Item by name")
 
-            itemBuilderFactory = osgi.get_service("org.eclipse.smarthome.core.items.ItemBuilderFactory")
-            baseItem = None if item_type != "Group" or gi_base_type is None else itemBuilderFactory.newItemBuilder(gi_base_type, item + "_baseItem").build()
+            base_item = None if item_type != "Group" or gi_base_type is None else ItemBuilderFactory.newItemBuilder(gi_base_type, item_name + "_baseItem").build()
             group_function = None if item_type != "Group" else group_function
-            item = itemBuilderFactory.newItemBuilder(item_type, item)   \
-                                    .withCategory(category)             \
-                                    .withGroups(groups)                 \
-                                    .withLabel(label)                   \
-                                    .withBaseItem(baseItem)             \
-                                    .withGroupFunction(group_function)  \
-                                    .withTags(set(tags))                \
-                                    .build()
+            item = ItemBuilderFactory.newItemBuilder(item_type, item_name)\
+                                                    .withCategory(category)\
+                                                    .withGroups(groups)\
+                                                    .withLabel(label)\
+                                                    .withBaseItem(base_item)\
+                                                    .withGroupFunction(group_function)\
+                                                    .withTags(set(tags))\
+                                                    .build()
 
         JythonItemProvider.add(item)
         log.debug("Item added: [{}]".format(item))
@@ -35,18 +47,19 @@ def add_item(item, item_type=None, category=None, groups=None, label=None, tags=
     else:
         return item
 
-def remove_item(item):
+def remove_item(item_or_item_name):
     try:
-        from org.eclipse.smarthome.core.items import GenericItem
+        item = item_or_item_name
         if isinstance(item, basestring):
             if scope.itemRegistry.getItems(item) == []:
                 raise Exception("\"{}\" is not in the ItemRegistry".format(item))
             else:
-                item = scope.ir.getItem(item)
-        elif not isinstance(item, GenericItem):
-            raise Exception("\"{}\" is not a string or Item".format(item))
-        elif scope.itemRegistry.getItems(item.name) == []:
-            raise Exception("\"{}\" is not in the ItemRegistry".format(item))
+                item = scope.ir.getItem(item_or_item_name)
+        elif not hasattr(item_or_item_name, 'name'):
+            raise Exception("\"{}\" is not a string or Item".format(item_or_item_name))
+        
+        if scope.itemRegistry.getItems(item.name) == []:
+            raise Exception("\"{}\" is not in the ItemRegistry".format(item.name))
         remove_all_links(item)
         JythonItemProvider.remove(item)
         log.debug("Item removed: [{}]".format(item))

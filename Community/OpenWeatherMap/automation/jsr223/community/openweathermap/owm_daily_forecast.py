@@ -49,7 +49,7 @@ REQUIRES:
         clearing.
 
 KNOWN ISSUES:
-ArithmethicGroupFunction.Avg does not properly average angles. An ESH issue has
+ArithmeticGroupFunction.Avg does not properly average angles. An ESH issue has
     been opened for this... https://github.com/eclipse/smarthome/issues/6792.
 I noticed the units for the Cloudiness and Humidity groups display as 'one',
     but the Items display properly as '%'.
@@ -98,10 +98,18 @@ def addOWMItems():
     addOWMItems.log = logging.getLogger(LOG_PREFIX + ".addOWMItems")
 
     # create OWM Items and groups, if they do not exist
-    from org.eclipse.smarthome.core.thing import ThingTypeUID
-    from org.eclipse.smarthome.core.thing import ChannelUID
-    from org.eclipse.smarthome.config.core import Configuration
-    from org.eclipse.smarthome.core.library.types import ArithmeticGroupFunction
+    scriptExtension.importPreset("RuleSupport")
+    try:
+        from org.openhab.core.thing import ThingTypeUID
+        from org.openhab.core.thing import ChannelUID
+    except:
+        from org.eclipse.smarthome.core.thing import ThingTypeUID
+        from org.eclipse.smarthome.core.thing import ChannelUID
+
+    try:
+        from org.eclipse.smarthome.core.library.types import ArithmeticGroupFunction
+    except:
+        from org.openhab.core.library.types import ArithmeticGroupFunction
 
     from core.items import add_item
     from core.links import add_link

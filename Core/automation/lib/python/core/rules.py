@@ -1,10 +1,14 @@
 from inspect import isclass
 from java.util import UUID
-from org.eclipse.smarthome.automation import Rule as SmarthomeRule
+
+try:
+    from org.openhab.core.automation import Rule as SmarthomeRule
+except:
+    from org.eclipse.smarthome.automation import Rule as SmarthomeRule
 
 from core.log import logging, LOG_PREFIX, log_traceback
-
 from core.jsr223 import scope, get_automation_manager
+
 scope.scriptExtension.importPreset("RuleSimple")
 
 # this needs some attention in order to work with Automation API changes in 2.4.0 snapshots since build 1319
@@ -18,7 +22,6 @@ def set_uid_prefix(rule, prefix=None):
 class _FunctionRule(scope.SimpleRule):
     def __init__(self, callback, triggers, name=None, description=None, tags=None):
         self.triggers = triggers
-        self.callback = log_traceback(callback)
         if name is None:
             if hasattr(callback, '__name__'):
                 name = callback.__name__
@@ -26,6 +29,7 @@ class _FunctionRule(scope.SimpleRule):
                 name = "JSR223-Jython"
         self.name = name
         callback.log = logging.getLogger(LOG_PREFIX + "." + name)
+        self.callback = log_traceback(callback)
         if description is not None:
             self.description = description
         if tags is not None:
@@ -36,7 +40,7 @@ class _FunctionRule(scope.SimpleRule):
             self.callback(inputs.get('event'))
         except:
             import traceback
-            self.log.error(traceback.format_exc())
+            self.callback.log.error(traceback.format_exc())
 
 def rule(name=None, description=None, tags=None):
     def rule_decorator(object):
@@ -68,10 +72,11 @@ def rule(name=None, description=None, tags=None):
         else:
             function = object
             newRule = _FunctionRule(function, function.triggers, name=name, description=description, tags=tags)
-            get_automation_manager().addRule(newRule)
+            addRule(newRule)
             function.triggers = None
             return function
     return rule_decorator
 
 def addRule(rule):
     get_automation_manager().addRule(rule)
+    logging.getLogger(LOG_PREFIX + ".core.rules").debug("Added rule [{}]".format(rule.name))

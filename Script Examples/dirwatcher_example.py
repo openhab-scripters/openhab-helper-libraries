@@ -1,5 +1,4 @@
-
-# Requires 000_DirectoryTrigger.py component
+# Requires 100_DirectoryTrigger.py component
 
 from core.triggers import DirectoryEventTrigger, ENTRY_CREATE     
 from core.rules import rule

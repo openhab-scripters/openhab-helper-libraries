@@ -21,7 +21,7 @@ from core.triggers import when
 from core.rules import rule
 
 def getLockStates():
-    return "all doors are locked" if items["gSecurity"] == OnOffType.OFF else "the following doors are not locked, \n{}".format("\n".join(map(lambda unlockedLock: unlockedLock.label, filter(lambda lock: lock.state == OnOffType.OFF, list(ir.getItem("gSecurity").getAllMembers())))))
+    return "all doors are locked" if items["gSecurity"] == ON else "the following doors are not locked, \n{}".format("\n".join(map(lambda unlockedLock: unlockedLock.label, filter(lambda lock: lock.state == OFF, ir.getItem("gSecurity").getAllMembers()))))
 
 @rule("Alert: Voice command alert")
 @when("Member of gAlexa_LastVoiceCommand received update")
