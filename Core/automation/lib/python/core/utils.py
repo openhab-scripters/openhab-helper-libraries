@@ -1,9 +1,11 @@
 import random
 import time
 
-from org.eclipse.smarthome.core.types import TypeParser
+try:
+    from org.eclipse.smarthome.core.types import TypeParser
+except:
+    from org.openhab.core.types import TypeParser
 
-import configuration
 from core.log import logging, LOG_PREFIX
 from core.jsr223 import scope
 from core.actions import PersistenceExtensions

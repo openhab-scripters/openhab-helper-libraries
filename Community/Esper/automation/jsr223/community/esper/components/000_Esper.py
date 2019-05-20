@@ -1,3 +1,5 @@
+scriptExtension.importPreset(None)
+
 import json
 
 import community.esper.java
@@ -101,6 +103,3 @@ def scriptUnloaded():
         log.info("Destroyed Esper provider")
         OsgiEventAdmin.remove_listener(esper_bridge)
         log.info("Esper event bridge removed")
-
-        
-

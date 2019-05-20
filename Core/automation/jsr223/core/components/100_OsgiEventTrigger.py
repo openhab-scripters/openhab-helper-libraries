@@ -1,9 +1,13 @@
+scriptExtension.importPreset(None)
+
 import java.util
 import traceback
 import uuid
 
-from org.eclipse.smarthome.automation import Visibility
-from org.eclipse.smarthome.automation.handler import TriggerHandler
+try:
+    from org.openhab.core.automation.handler import TriggerHandler
+except:
+    from org.eclipse.smarthome.automation.handler import TriggerHandler
 
 import core
 from core.osgi.events import OsgiEventAdmin, event_dict, osgi_triggers
@@ -11,6 +15,7 @@ from core.log import logging, LOG_PREFIX
 
 log = logging.getLogger(LOG_PREFIX + ".core.OsgiEventTrigger")
 
+scriptExtension.importPreset("RuleSimple")
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")
 
@@ -61,19 +66,15 @@ core.OSGI_TRIGGER_ID = "jsr223.OsgiEventTrigger"
 
 def scriptLoaded(*args):
     automationManager.addTriggerHandler(core.OSGI_TRIGGER_ID, OsgiEventTriggerHandlerFactory())  
-    log.info("TriggerHandler added".format(core.OSGI_TRIGGER_ID))
+    log.info("TriggerHandler added [{}]".format(core.OSGI_TRIGGER_ID))
   
-    automationManager.addTriggerType(TriggerType(
-        core.OSGI_TRIGGER_ID,
-        [],
+    automationManager.addTriggerType(TriggerType(core.OSGI_TRIGGER_ID, None,
         "an OSGI event is published",
         "Triggers when an OSGI event is published",
-        set(),
-        Visibility.VISIBLE,
-        []))
-    log.info("TriggerType added".format(core.OSGI_TRIGGER_ID))
+        None, Visibility.VISIBLE, None))
+    log.info("TriggerType added [{}]".format(core.OSGI_TRIGGER_ID))
     
 def scriptUnloaded():
     automationManager.removeHandler(core.OSGI_TRIGGER_ID)
     automationManager.removeModuleType(core.OSGI_TRIGGER_ID)
-    log.info("TriggerType and TriggerHandler removed".format(core.OSGI_TRIGGER_ID))
+    log.info("TriggerType and TriggerHandler removed [{}]".format(core.OSGI_TRIGGER_ID))

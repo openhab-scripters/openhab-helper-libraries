@@ -1,6 +1,6 @@
 from org.slf4j import Logger, LoggerFactory
 
-ScriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleSupport")
 
 class LoggerAction(ActionHandler):
     def __init__(self, module):

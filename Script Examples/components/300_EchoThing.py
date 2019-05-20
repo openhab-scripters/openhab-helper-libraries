@@ -7,10 +7,21 @@ to the state of the items linked to the output channel. It requires several othe
     
 Note: there are load ordering issues that will need to be resolved.
 """
-from org.eclipse.smarthome.core.thing import ThingTypeUID, ChannelUID
-from org.eclipse.smarthome.core.thing.type import ThingType, ChannelTypeUID, ChannelType, ChannelDefinition
-from org.eclipse.smarthome.core.thing.binding import ThingFactory, ThingHandlerFactory, BaseThingHandlerFactory, BaseThingHandler, ThingTypeProvider
-from org.eclipse.smarthome.core.binding import BindingInfo, BindingInfoProvider
+scriptExtension.importPreset(None)
+
+try:
+    from org.openhab.core.thing import ThingTypeUID, ChannelUID
+    from org.openhab.core.thing.type import ThingType, ChannelTypeUID, ChannelType, ChannelDefinition
+    from org.openhab.core.thing.binding import ThingFactory, ThingHandlerFactory, BaseThingHandlerFactory, BaseThingHandler, ThingTypeProvider
+except:
+    from org.eclipse.smarthome.core.thing import ThingTypeUID, ChannelUID
+    from org.eclipse.smarthome.core.thing.type import ThingType, ChannelTypeUID, ChannelType, ChannelDefinition
+    from org.eclipse.smarthome.core.thing.binding import ThingFactory, ThingHandlerFactory, BaseThingHandlerFactory, BaseThingHandler, ThingTypeProvider
+
+try:
+    from org.openhab.core.binding import BindingInfo, BindingInfoProvider
+except:
+    from org.eclipse.smarthome.core.binding import BindingInfo, BindingInfoProvider
 
 import core
 from core.osgi import register_service, unregister_service, get_service
@@ -22,8 +33,16 @@ OUTPUT_CHANNEL_NAME = "output"
 THING_NAME = "echo"
 THING_TYPE_UID = ThingTypeUID(BINDING_ID, THING_NAME)
 
-config_description_registry = get_service("org.eclipse.smarthome.config.core.ConfigDescriptionRegistry")
-thing_type_registry = get_service("org.eclipse.smarthome.core.thing.type.ThingTypeRegistry")
+config_description_registry = get_service(
+        "org.openhab.core.config.core.ConfigDescriptionRegistry"
+    ) or get_service(
+        "org.eclipse.smarthome.config.core.ConfigDescriptionRegistry"
+    )
+thing_type_registry = get_service(
+        "org.openhab.core.thing.type.ThingTypeRegistry"
+    ) or get_service(
+        "org.eclipse.smarthome.core.thing.type.ThingTypeRegistry"
+    )
 
 log = core.log.logging.getLogger("{}.{}".format(BINDING_ID, THING_NAME))
 

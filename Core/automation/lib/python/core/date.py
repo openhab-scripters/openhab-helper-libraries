@@ -28,10 +28,9 @@ See docs for java.time.temporal.ChronoUnit, if you want more information.
 import datetime
 import sys
 
-if 'org.eclipse.smarthome.automation' in sys.modules:
-    # Workaround for Jython JSR223 bug where
-    # dates and datetimes are converted to java.sql.Date
-    # and java.sql.Timestamp
+if 'org.eclipse.smarthome.automation' in sys.modules or 'org.openhab.core.automation' in sys.modules:
+    # Workaround for Jython JSR223 bug where dates and datetimes are converted
+    # to java.sql.Date and java.sql.Timestamp
     def remove_java_converter(clazz):
         if hasattr(clazz, '__tojava__'):
             del clazz.__tojava__
@@ -183,7 +182,6 @@ class pythonTimezone(datetime.tzinfo):
 
     def dst(self, value):
         return datetime.timedelta(0)
-
 
 # aliases
 toJTime = to_java_zoneddatetime

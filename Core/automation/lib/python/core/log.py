@@ -54,8 +54,8 @@ def log_traceback(fn):
             import core.actions
             if hasattr(core.actions, 'NotificationAction'):
                 import configuration
-                if hasattr(configuration, 'adminEmail') and configuration.adminEmail != "admin_email@some_domain.com":
-                    core.actions.NotificationAction.sendNotification(configuration.adminEmail, "Exception: {}: [{}]".format(rule_name, traceback.format_exc()))
+                if hasattr(configuration, 'admin_email') and configuration.admin_email != "admin_email@some_domain.com":
+                    core.actions.NotificationAction.sendNotification(configuration.admin_email, "Exception: {}: [{}]".format(rule_name, traceback.format_exc()))
                 else:
                     core.actions.NotificationAction.sendBroadcastNotification("Exception: {}: [{}]".format(rule_name, traceback.format_exc()))
     return wrapper

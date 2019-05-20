@@ -1,3 +1,6 @@
+from core.jsr223 import scope
+scope.scriptExtension.importPreset(None)
+
 import inspect
 import json
 import uuid
@@ -5,15 +8,31 @@ import uuid
 import java.util
 from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
 
-from org.eclipse.smarthome.automation.core.util import TriggerBuilder
-from org.eclipse.smarthome.automation import Trigger
-from org.eclipse.smarthome.config.core import Configuration
-from org.eclipse.smarthome.core.thing import ChannelUID, ThingUID, ThingStatus
-from org.eclipse.smarthome.core.thing.type import ChannelKind
-from org.eclipse.smarthome.core.types import TypeParser
+try:
+    from org.openhab.core.automation.util import TriggerBuilder
+    from org.openhab.core.automation import Trigger
+except:
+    from org.eclipse.smarthome.automation.core.util import TriggerBuilder
+    from org.eclipse.smarthome.automation import Trigger
+
+try:
+    from org.openhab.config.core import Configuration
+except:
+    from org.eclipse.smarthome.config.core import Configuration
+
+try:
+    from org.openhab.core.thing import ChannelUID, ThingUID, ThingStatus
+    from org.openab.core.thing.type import ChannelKind
+except:
+    from org.eclipse.smarthome.core.thing import ChannelUID, ThingUID, ThingStatus
+    from org.eclipse.smarthome.core.thing.type import ChannelKind
+
+try:
+    from org.eclipse.smarthome.core.types import TypeParser
+except:
+    from org.openhab.core.types import TypeParser
 
 import core
-from core.jsr223 import scope
 from core.osgi.events import OsgiEventTrigger
 from core.log import logging, LOG_PREFIX
 
@@ -110,12 +129,7 @@ class CronTrigger(Trigger):
 class StartupTrigger(Trigger):
     def __init__(self, triggerName=None):
         triggerName = triggerName or uuid.uuid1().hex
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID(core.STARTUP_MODULE_ID).withConfiguration(Configuration()).build()
-
-class ShutdownTrigger(Trigger):
-    def __init__(self, triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID(core.SHUTDOWN_MODULE_ID).withConfiguration(Configuration()).build()
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("jsr223.StartupTrigger").withConfiguration(Configuration()).build()
 
 # Item Registry Triggers
 
@@ -170,7 +184,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             else:
                 group_members = [ item ]
             for member in group_members:
-                trigger_name = "Item-{}-{}{}{}".format(member.name, trigger_type.replace(" ","-"), "-from-{}".format(old_state) if old_state else "", "-to-{}".format(new_state) if new_state else "")
+                trigger_name = "Item-{}-{}{}{}{}".format(member.name, trigger_type.replace(" ","-"), "-from-{}".format(old_state) if old_state is not None else "", "-to-" if new_state is not None and trigger_type == "changed" else "", new_state if new_state is not None else "")
                 if trigger_type == "received update":
                     function.triggers.append(ItemStateUpdateTrigger(member.name, state=new_state, triggerName=trigger_name).trigger)
                 elif trigger_type == "received command":
@@ -208,7 +222,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         def thing_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
-            event_types = "ThingStatusInfoChangedEvent" if (trigger_type == "changed") else "ThingStatusInfoEvent"
+            event_types = "ThingStatusInfoChangedEvent" if trigger_type == "changed" else "ThingStatusInfoEvent"
             function.triggers.append(ThingEventTrigger(trigger_target, event_types, triggerName=trigger_name).trigger)
             log.debug("when: Created thing_trigger: [{}]".format(trigger_name))
             return function
@@ -285,7 +299,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                         elif len(inputList) > 0:# there are no more possible combinations, but there is more data
                             raise ValueError("when: \"{}\" could not be parsed. \"{}\" is invalid for \"{} {} {}\"".format(target, inputList, target_type, trigger_target, trigger_type))
 
-            else:# a simple Item target was used, so add default target_type and trigger_type (Item XXXXX changed)
+            else:# a simple Item target was used, so add a default target_type and trigger_type (Item XXXXX changed)
                 if target_type is None:
                     target_type = "Item"
                 if trigger_target is None:
@@ -302,11 +316,11 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             raise ValueError("when: \"{}\" could not be parsed because Item \"{}\" is not in the ItemRegistry".format(target, trigger_target))
         elif target_type in ["Member of", "Descendent of"] and scope.itemRegistry.getItem(trigger_target).type != "Group":
             raise ValueError("when: \"{}\" could not be parsed because \"{}\" was specified, but \"{}\" is not a group".format(target, target_type, trigger_target))
-        elif target_type == "Item" and old_state is not None and trigger_type == "changed" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, old_state):
+        elif target_type == "Item" and old_state is not None and trigger_type == "changed" and TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, old_state) is None:
             raise ValueError("when: \"{}\" could not be parsed because \"{}\" is not a valid state for \"{}\"".format(target, old_state, trigger_target))
-        elif target_type == "Item" and new_state is not None and (trigger_type == "changed" or trigger_type == "received update") and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, new_state):
+        elif target_type == "Item" and new_state is not None and (trigger_type == "changed" or trigger_type == "received update") and TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedDataTypes, new_state) is None:
             raise ValueError("when: \"{}\" could not be parsed because \"{}\" is not a valid state for \"{}\"".format(target, new_state, trigger_target))
-        elif target_type == "Item" and new_state is not None and trigger_type == "received command" and not TypeParser.parseState(scope.itemRegistry.getItem(trigger_target).acceptedCommandTypes, new_state):
+        elif target_type == "Item" and new_state is not None and trigger_type == "received command" and TypeParser.parseCommand(scope.itemRegistry.getItem(trigger_target).acceptedCommandTypes, new_state) is None:
             raise ValueError("when: \"{}\" could not be parsed because \"{}\" is not a valid command for \"{}\"".format(target, new_state, trigger_target))
         elif target_type == "Channel" and scope.things.getChannel(ChannelUID(trigger_target)) is None:# returns null if Channel does not exist
             raise ValueError("when: \"{}\" could not be parsed because Channel \"{}\" does not exist".format(target, trigger_target))
@@ -320,10 +334,8 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             raise ValueError("when: \"{}\" is not a valid Thing status".format(new_state))   
         elif target_type == "Thing" and (old_state is not None or new_state is not None):# there is only an event trigger for Things, so old_state and new_state can't be used yet *****TO BE REMOVED*****
             raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support checking the from/to status for Things".format(target))
-        elif target_type == "System" and trigger_target != "started" and trigger_target != "shuts down":
-            raise ValueError("when: \"{}\" could not be parsed. trigger_target \"{}\" is invalid for target_type \"System\". Valid trigger_type values are \"started\" and \"shuts down\"".format(target, target_type))
-        elif target_type == "System":# 'System shuts down' is not currently supported, and the 'System started' trigger needs to be reworked for the update API *****TO BE REMOVED*****
-            raise ValueError("when: \"{}\" could not be parsed because rule triggers do not currently support target_type \"System\"".format(target))
+        elif target_type == "System" and trigger_target != "started":# and trigger_target != "shuts down":
+            raise ValueError("when: \"{}\" could not be parsed. trigger_target \"{}\" is invalid for target_type \"System\". The only valid trigger_type value is \"started\"".format(target, target_type))# and \"shuts down\"".format(target, target_type))
 
         log.debug("when: target=[{}], target_type={}, trigger_target={}, trigger_type={}, old_state={}, new_state={}".format(target, target_type, trigger_target, trigger_type, old_state, new_state))
 
