@@ -9,6 +9,7 @@ except:
     transformation_class = "org.eclipse.smarthome.core.transform.TransformationService"
 
 import core
+from core import osgi
 from core.log import logging, LOG_PREFIX
 
 try:

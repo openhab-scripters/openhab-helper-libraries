@@ -18,6 +18,7 @@ except:
     )
 
 import core
+from core import osgi
 from core.log import logging, LOG_PREFIX
 
 try:
