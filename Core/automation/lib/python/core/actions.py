@@ -19,11 +19,13 @@ try:
     from org.openhab.core.model.script.actions import HTTP
     from org.openhab.core.model.script.actions import LogAction
     from org.openhab.core.model.script.actions import Ping
+    from org.openhab.core.model.script.actions import ScriptExecution
 except:
     from org.eclipse.smarthome.model.script.actions import Exec
     from org.eclipse.smarthome.model.script.actions import HTTP
     from org.eclipse.smarthome.model.script.actions import LogAction
     from org.eclipse.smarthome.model.script.actions import Ping
+    from org.eclipse.smarthome.model.script.actions import ScriptExecution
 
 static_imports = [Exec, HTTP, LogAction, Ping]
 
