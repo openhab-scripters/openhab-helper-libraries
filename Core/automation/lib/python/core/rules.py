@@ -68,15 +68,18 @@ def rule(name=None, description=None, tags=None):
                     self.tags = set(tags)
             subclass = type(clazz.__name__, (clazz, scope.SimpleRule), dict(__init__=init))
             subclass.execute = log_traceback(clazz.execute)
-            return addRule(subclass())
+            new_rule = addRule(subclass())
+            subclass.UID = new_rule.UID
+            return subclass
         else:
-            function = object
-            newRule = _FunctionRule(function, function.triggers, name=name, description=description, tags=tags)
-            addRule(newRule)
-            function.triggers = None
-            return function
+            callable_obj = object
+            simple_rule = _FunctionRule(callable_obj, callable_obj.triggers, name=name, description=description, tags=tags)
+            new_rule = addRule(simple_rule)
+            callable_obj.UID = new_rule.UID
+            callable_obj.triggers = None
+            return callable_obj
     return rule_decorator
 
 def addRule(rule):
-    get_automation_manager().addRule(rule)
     logging.getLogger(LOG_PREFIX + ".core.rules").debug("Added rule [{}]".format(rule.name))
+    return get_automation_manager().addRule(rule)
