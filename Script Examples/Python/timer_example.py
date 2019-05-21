@@ -28,8 +28,7 @@ def batteryChargingMonitor1(event):
         batteryChargingMonitor1.log.info("Battery charging monitor: Cancelled battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]".format(event.itemState, event.oldItemState))
 
 # Example using the createTimer Action
-from org.eclipse.smarthome.model.script.actions.Timer import *
-from org.eclipse.smarthome.model.script.actions.ScriptExecution import createTimer
+from core.actions import ScriptExecution
 from org.joda.time import DateTime
 chargerTimer2 = None
 
@@ -40,7 +39,7 @@ def batteryChargingMonitor2(event):
     global chargerTimer2
     if items["Outlet9"] == ON and event.itemState <= DecimalType(8) and event.oldItemState <= DecimalType(8):
         if chargerTimer2 is None or chargerTimer2.hasTerminated():
-            chargerTimer2 = createTimer(DateTime.now().plusMinutes(5), lambda: events.sendCommand("Outlet9","OFF"))
+            chargerTimer2 = ScriptExecution.createTimer(DateTime.now().plusMinutes(5), lambda: events.sendCommand("Outlet9","OFF"))
             batteryChargingMonitor2.log.info("Battery charging monitor: Started battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]".format(event.itemState, event.oldItemState))
     elif chargerTimer2 is not None and not chargerTimer2.hasTerminated():
         chargerTimer2.cancel()

@@ -106,12 +106,22 @@ PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTim
 ```
 
 #### Use other [Core & Cloud Actions](https://www.openhab.org/docs/configuration/actions.html#core-actions):
-```python
-from org.eclipse.smarthome.model.script.actions.Exec import executeCommandLine
-executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
+In order to avoid namespace conflicts with the `actions` object provided in the default scope, don't do `import core.actions`.
 
-from org.eclipse.smarthome.model.script.actions.HTTP import sendHttpPutRequest
-sendHttpPutRequest("someURL.com, "application/json", '{"this": "that"}')
+For ScriptExecution, see the [timer example](#use-a-timer).
+For LogAction, see the [logging example](#logging).
+```python
+from core.actions import Exec
+Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
+
+from core.actions import HTTP
+HTTP.sendHttpPutRequest("someURL.com, "application/json", '{"this": "that"}')
+
+from core.actions import Ping
+if Ping.checkVitality("10.5.5.5", 0, 5000):
+    log.info("Server is online")
+else:
+    log.info("Server is offline")
 
 from core.actions import Audio
 Audio.playSound("doorbell.mp3")# using the default audiosink
@@ -154,18 +164,18 @@ actions.get("mqtt", "mqtt:systemBroker:embedded-mqtt-broker").publishMQTT("test/
 ```
 
 #### Use a timer:
-See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/timer_example.py) in the Script Examples for examples of using both Python ['threading.Timer'](https://docs.python.org/2/library/threading.html#timer-objects) and the OH [`createTimer`](https://www.openhab.org/docs/configuration/actions.html#timers) Action.
+See the [`timer_example.py`](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/Python/timer_example.py) in the Script Examples for examples of using both Python ['threading.Timer'](https://docs.python.org/2/library/threading.html#timer-objects) and the OH [`createTimer`](https://www.openhab.org/docs/configuration/actions.html#timers) Action.
 
 #### Logging:
 In these examples, the logger can be modified to wherever you want the log to go. Be sure to [configure your logging](https://www.openhab.org/docs/administration/logging.html#logging-in-openhab) to include the logger chosen, or the logs light not be visible.
 
-Using the log module, which logs to 'jsr223.jython' by default (configurable in [configuration.py](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Core/automation/lib/python/configuration.py.example#L2)...
+###### Using the log module, which logs to 'jsr223.jython' by default (configurable in [configuration.py](https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Core/automation/lib/python/configuration.py.example#L2)...
 ```python
 from core.log import logging, LOG_PREFIX
 log = logging.getLogger(LOG_PREFIX + ".TEST")
 log.debug("This is a test log")
 ```
-Using slf4j directly...
+###### Using slf4j directly...
 ```python
 from org.slf4j import Logger, LoggerFactory
 log = LoggerFactory.getLogger("jsr223.jython")
@@ -174,11 +184,11 @@ log.info("Test info log")
 log.warn("Test warn log")
 log.error("Test error log")
 ```
-Using LogAction, as in the rules DSL...
+###### Using LogAction, as in the rules DSL...
 ```python
-from org.eclipse.smarthome.model.script.actions.LogAction import logInfo
+from core.actionn import LogAction
 test = 55555
-logInfo("JSR223 test", "This is a test [{}]", test)
+LogAction.logInfo("Test", "This is a test [{}]", test)
 ```
 
 #### Convert a value to a state for comparison:
