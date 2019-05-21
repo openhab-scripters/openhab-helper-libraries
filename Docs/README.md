@@ -2,4 +2,4 @@
 
 - [Groovy](Groovy/README.md)
 - [Javascript](Javascript/README.md)
-- [Python (Jython)](Python/README.md)
+- [Jython (Python)](Python/README.md)
