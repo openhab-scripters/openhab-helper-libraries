@@ -1,7 +1,10 @@
 *.py[cod]
 *$py.class
-configuration.py
-!configuration.py.example
-Core/automation/jsr223/personal/**
+Core/automation/jsr223/python/personal/**
+Core/automation/jsr223/javascript/personal/**
+Core/automation/jsr223/groovy/personal/**
 Core/automation/lib/python/personal/**
+Core/automation/lib/javascript/personal/**
+Core/automation/lib/groovy/personal/**
+Core/automation/lib/python/configuration.py
 Core/automation/jython/**
