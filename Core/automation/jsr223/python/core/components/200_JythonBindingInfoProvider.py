@@ -11,6 +11,7 @@ except:
     provider_class = "org.eclipse.smarthome.core.binding.BindingInfoProvider"
 
 import core
+from core import osgi
 from core.log import logging, LOG_PREFIX
 
 try:

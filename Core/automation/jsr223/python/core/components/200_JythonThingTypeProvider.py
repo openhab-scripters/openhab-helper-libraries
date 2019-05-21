@@ -9,6 +9,8 @@ except:
     provider_class = "org.eclipse.smarthome.core.thing.binding.ThingTypeProvider"
 
 import core
+from core import osgi
+from core.log import logging, LOG_PREFIX
 
 try:
     class JythonThingTypeProvider(ThingTypeProvider):
