@@ -4,12 +4,12 @@
 
 When a rule is triggered, the function is provided the event instance that triggered it.
 The specific data depends on the event type.
-For example, the [`ItemStateChangedEvent`](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java) event type has `itemName`, `itemState`, and `oldItemState` attributes. Rather than digging through the code to look up the attributes available in a particular `event` object, you can add a log entry inside the function, and then trigger the rule:
+For example, the [`ItemStateChangedEvent`](https://github.com/eclipse/smarthome/blob/master/bundles/core/org.eclipse.smarthome.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java) event type has `itemName`, `itemState`, and `oldItemState` attributes. The `StartupTrigger` and `GenericCronTrigger` do not provide any `event` objects. Rather than digging through the code to look up the attributes available in a particular `event` object, you can add a log entry inside the function, and then trigger the rule:
 ```
 log.info("JSR223: dir(event)=[{}]".format(dir(event)))
 ```
 
-Here is a table of the attributes available in `event` objects (or `inputs.get('event')` if using Raw ESH or extensions), including a comparison to the Rules DSL implicit variables:
+Here is a table of the attributes available in `event` objects (or `inputs.get('event')` if using Raw API or extensions), including a comparison to the Rules DSL implicit variables:
 
 | Rules DSL | JSR223 | @when Trigger(s) | Raw ESH Event(s) | Description
 | --- | --- | --- | --- | --- |

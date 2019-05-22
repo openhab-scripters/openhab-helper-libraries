@@ -67,9 +67,15 @@ Trigger function decorator (see the `core.rules` module for the [rule decorator]
 * __@when("Descendent of gContact_Sensors changed to ON")__
 * __@when("Thing kodi:kodi:familyroom changed")__# Thing statuses cannot currently be used in triggers
 * __@when("Channel astro:sun:local:eclipse#event triggered START")__
-* __@when("System started")__# 'System shuts down' cannot currently be used as a trigger
+* __@when("System started")__# 'System started' requires S1566 or newer, and 'System shuts down' is not available
 * __@when("55 55 5 * * ?")__
 
+&nbsp;
+
+As a workaround for 'System started', add the rule function directly to the script. Here is an example that can be used with the function from the [`hello_world.py`](/Script%20Examples/Python/hello_world.py) example script...
+```python
+helloWorldCronDecorators(None)
+```
 </ul>
 
 #### Module: [`core.rules`](../../Core/automation/lib/python/core/rules.py)
