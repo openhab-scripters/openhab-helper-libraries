@@ -1,5 +1,5 @@
 ---
-name: Bug report
+name: Jython: Bug report
 about: Create a report about something that seems broken
 title: ''
 labels: bug, jython
