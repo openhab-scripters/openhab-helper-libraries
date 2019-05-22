@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 by Helmut Lehmeyer.
+ * Copyright (c) 2019 Contributors to the openHAB Scripters project
  * 
  * @author Helmut Lehmeyer 
  */
