@@ -1,5 +1,5 @@
 ---
-name: Javascript: Feature request
+name: Javascript - Feature request
 about: Suggest an idea for this project
 title: ''
 labels: enhancement, javascript

@@ -1,5 +1,5 @@
 ---
-name: Jython: Feature request
+name: Jython - Feature request
 about: Suggest an idea for this project
 title: ''
 labels: enhancement, jython
