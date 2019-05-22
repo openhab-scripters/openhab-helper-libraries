@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report about something that seems broken
 title: ''
-labels: bug
+labels: bug, groovy
 assignees: ''
 
 ---
@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Environment (please complete the following information):**
- - Jython version: [e.g. 2.7.0 standalone, 2.7.1 full]
+ - Groovy version: [e.g. 2.4.12, 2.5.6]
  - openHAB version: [e.g. 2.4.0, S1575]
  - Release: [e.g. 1.0.0, 1.1.5]
 
