@@ -1,5 +1,5 @@
 ---
-name: Javascript: Bug report
+name: Javascript - Bug report
 about: Create a report about something that seems broken
 title: ''
 labels: bug, javascript
