@@ -363,7 +363,6 @@ class IdeAlarm(object):
         self.alarmTestMode = idealarm_configuration['ALARM_TEST_MODE']
         self.loggingLevel = idealarm_configuration['LOGGING_LEVEL']
         self.log.setLevel(self.loggingLevel)
-        self.log.debug('ideAlarm configuration was reloaded')
         self.nagIntervalMinutes = idealarm_configuration['NAG_INTERVAL_MINUTES']
         self.timeCreated = DateTime.now()
 
