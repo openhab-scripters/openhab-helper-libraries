@@ -115,7 +115,7 @@ from core.triggers import when
 @when("Descendent of gContact_Sensors changed to OPEN")# Similar to 'Member of', but creates a trigger for each non-group sibling Item (think group_item.allMembers())
 @when("Thing kodi:kodi:familyroom changed")# ThingStatusInfo (from <status> to <status>) cannot currently be used in Thing triggers
 @when("Channel astro:sun:local:eclipse#event triggered START")
-@when("System started")# 'System shuts down' is not available
+@when("System started")# 'System started' requires S1566 or newer, and 'System shuts down' is not available
 @when("Time cron 55 55 5 * * ?")
 def testFunction(event):
     if items["Test_Switch_1"] == ON:
@@ -123,6 +123,6 @@ def testFunction(event):
         testFunction.log.info("The test run has been executed")
 ```
 
-Notice there is no explicit preset import and the generated rule is registered automatically with the `HandlerRegistry`. 
+Notice there is no explicit preset import and the generated rule is registered automatically with the `RuleRegistry`. 
 
 </ul>

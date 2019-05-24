@@ -1,3 +1,4 @@
+
 from core.rules import rule
 from core.triggers import when
 
@@ -40,7 +41,7 @@ class CronTriggerExtension(SimpleRule):
 automationManager.addRule(CronTriggerExtension())
 '''
 '''
-from org.slf4j import Logger, LoggerFactory
+from org.slf4j import LoggerFactory
 
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleSimple")
@@ -59,7 +60,7 @@ class GenericCronTriggerRawAPI(SimpleRule):
         self.name = "Jython Hello World (GenericCronTrigger raw API)"
         self.description = "This is an example Jython cron rule using the raw API"
         self.tags = set("Example rule tag")
-        self.log = LoggerFactory.getLogger("jython.Hello World (GenericCronTrigger raw API)")
+        self.log = LoggerFactory.getLogger("jsr223.jython.Hello World (GenericCronTrigger raw API)")
 
     def execute(self, module, inputs):
         self.log.info("Hello World!")
@@ -111,7 +112,7 @@ class ItemStateUpdateTriggerExtension(SimpleRule):
 automationManager.addRule(ItemStateUpdateTriggerExtension())
 '''
 '''
-from org.slf4j import Logger, LoggerFactory
+from org.slf4j import LoggerFactory
 
 scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleSimple")
@@ -131,7 +132,7 @@ class ItemStateUpdateTriggerRawAPI(SimpleRule):
         self.name = "Jython Hello World (ItemStateUpdateTrigger raw API)"
         self.description = "This is an example Jython cron rule using the raw API"
         self.tags = set("Example rule tag")
-        self.log = logging.getLogger("{}.Hello World (ItemStateUpdateTrigger raw API)".format(LOG_PREFIX))
+        self.log = LoggerFactory.getLogger("jsr223.jython.Hello World (ItemStateUpdateTrigger raw API)")
 
     def execute(self, module, input):
         self.log.info("Hello World!")
