@@ -1,24 +1,26 @@
 /**
+ * Tests for checking the availability of objects provided by the built in scriptExtensions
+ * 
  * Copyright (c) 2019 Contributors to the openHAB Scripters project
  * 
- * @author Helmut Lehmeyer 
+ * @author Helmut Lehmeyer - initial contribution
  */
-
 'use strict';
 
-var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF"); // most this is /etc/openhab2
-load(OPENHAB_CONF+'/automation/lib/javascript/core/helper.js');
-load(OPENHAB_CONF+'/automation/lib/javascript/core/triggersAndConditions.js');
+var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF"); // repository installation: /etc/openhab2, manual installation: /opt/openhab2/conf
+load(OPENHAB_CONF+'/automation/lib/javascript/core/utils.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/triggers.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/conditions.js');
 
-logInfo("################# AccessibleFromAutomation.js ##################");
+logInfo("################# AccessibleFromAutomationTest.js ##################");
 
-var rSup = se.importPreset("RuleSupport");
-var rSim = se.importPreset("RuleSimple");
-var rFac = se.importPreset("RuleFactories");
-var rDef = se.importPreset("default");
-var rMed = se.importPreset("media");
+var rSup = scriptExtension.importPreset("RuleSupport");
+var rSim = scriptExtension.importPreset("RuleSimple");
+var rFac = scriptExtension.importPreset("RuleFactories");
+var rDef = scriptExtension.importPreset("default");
+var rMed = scriptExtension.importPreset("media");
 
-logWarn(" -- ScriptExtension.presets "+__LINE__, se.presets); 
+logWarn(" -- scriptExtension.presets "+__LINE__, scriptExtension.presets); 
 
 logInfo(" reachable"+__LINE__, "###############################################");
 logInfo(" reachable"+__LINE__, "SimpleRule", SimpleRule);
@@ -105,4 +107,3 @@ logInfo(" services "+__LINE__, "things", things);
 logInfo(" services "+__LINE__, "events", events);
 logInfo(" services "+__LINE__, "rules", rules);
 logInfo(" services "+__LINE__, "###############################################");
-

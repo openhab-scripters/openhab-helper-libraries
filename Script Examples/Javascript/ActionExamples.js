@@ -1,17 +1,17 @@
 /**
+ * Example rules that utilize Actions
+ * 
  * Copyright (c) 2019 Contributors to the openHAB Scripters project
  * 
- * @author Helmut Lehmeyer 
+ * @author Helmut Lehmeyer - initial contribution
  */
-
 'use strict';
 
 var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF"); // most this is /etc/openhab2
-load(OPENHAB_CONF+'/automation/lib/javascript/core/JSRule.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/rules.js');
 
 var me = "ActionExamples.js";
 logInfo("################# "+me+" ##################");
-
 
 var myRule = JSRule({
 	name: me+" Busevents",
@@ -38,7 +38,7 @@ var myRule = JSRule({
 		
 		logInfo("################ "+me+" Line: "+__LINE__+"  #################");
 		//logWarn(" -- oh ", oh);
-		logInfo("################ "+me+" Line: "+__LINE__+"  #################");
+		//logInfo("################ "+me+" Line: "+__LINE__+"  #################");
 		logWarn(" -- Rule ", Rule);
 		logInfo("################ "+me+" Line: "+__LINE__+"  #################");
 		

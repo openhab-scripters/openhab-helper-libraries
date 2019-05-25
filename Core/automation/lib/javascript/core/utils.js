@@ -1,10 +1,12 @@
 /**
+ * Utility functions and variables
+ * 
  * Copyright (c) 2019 Contributors to the openHAB Scripters project
  * 
- * @author Helmut Lehmeyer 
+ * @author Helmut Lehmeyer - initial contribution
  */
+'use strict';
 
-'use strict'; 
 	var OPENHAB_CONF 			= Java.type("java.lang.System").getenv("OPENHAB_CONF");
 	var automationPath 			= OPENHAB_CONF+'/automation/';
 	var mainPath 				= automationPath + 'lib/javascript/core/';
@@ -27,14 +29,16 @@
 	var IOUtils					= Java.type("org.apache.commons.io.IOUtils");
 	
 
-	//Types
+    //Types
+    /* included in "default" preset
 	var UnDefType 				= Java.type("org.eclipse.smarthome.core.types.UnDefType");
 	var StringListType 			= Java.type("org.eclipse.smarthome.core.library.types.StringListType");	
 	var RawType 				= Java.type("org.eclipse.smarthome.core.library.types.RawType");
 	var RewindFastforwardType 	= Java.type("org.eclipse.smarthome.core.library.types.RewindFastforwardType");
 	var PlayPauseType 			= Java.type("org.eclipse.smarthome.core.library.types.PlayPauseType");
 	var NextPreviousType 		= Java.type("org.eclipse.smarthome.core.library.types.NextPreviousType");
-		
+    */
+    	
 	//Time JAVA 7 joda
 	var DateTime 				= Java.type("org.joda.time.DateTime");
 	//Time JAVA 8
@@ -59,6 +63,7 @@
 	context.automationPath 	= automationPath;
 	context.mainPath 		= mainPath;
 
+    /* included in "default" preset
 	//Todo missing:
 	context.UnDefType 	= UnDefType;
 	context.OPEN 		= OpenClosedType.OPEN;
@@ -69,7 +74,8 @@
 	context.PAUSE		= PlayPauseType.PAUSE;
 	context.NEXT		= NextPreviousType.NEXT;
     context.PREVIOUS	= NextPreviousType.PREVIOUS;
-	
+    */
+    
 	context.uuid = uuid;
 	
 	context.logInfo = function(type , value) {
@@ -103,7 +109,7 @@
 		return isUndefinedState(item.state);
 	};
 	context.isUndefinedStr = function(itemStr) {
-		return ir.getItem(itemStr) ? isUndefinedState(ir.getItem(itemStr).state) : true;
+		return itemRegistry.getItem(itemStr) ? isUndefinedState(itemRegistry.getItem(itemStr).state) : true;
 	};
 	
 	context.isUndefinedState = function(itemState) {
@@ -113,8 +119,8 @@
 	
 	context.getItem = function(it) {
 		try {
-			//print("################## "+ir.getItem(it));
-			return (typeof it === 'string' || it instanceof String) ? ir.getItem(it) : it;
+			//print("################## "+itemRegistry.getItem(it));
+			return (typeof it === 'string' || it instanceof String) ? itemRegistry.getItem(it) : it;
 		}catch(err) {
 			context.logError("getItem "+__LINE__, err);
 		} 
@@ -195,7 +201,7 @@
 		try {
 			events.postUpdate(item, value);
 		}catch(err) {
-			context.logError("helper.js postUpdate " + __LINE__ + ". Item: '" + item + "' with value: '" + value + "' ' Error:" +  err);
+			context.logError("utils.js postUpdate " + __LINE__ + ". Item: '" + item + "' with value: '" + value + "' ' Error:" +  err);
 		}
 	};
 	
@@ -203,7 +209,7 @@
 		try {
 			events.sendCommand(item, value);
 		}catch(err) {
-			context.logError("helper.js sendCommand " + __LINE__ + ". Item: '" + item + "' with value: '" + value + "' ' Error:" +  err);
+			context.logError("utils.js sendCommand " + __LINE__ + ". Item: '" + item + "' with value: '" + value + "' ' Error:" +  err);
 		}
 	};
 
@@ -216,7 +222,7 @@
 	
 	//NOT TESTED YET: storeStates(Item...);
 	context.storeStates = function(item) {
-		events.storeStates((typeof item === 'string' || item instanceof String) ? ir.getItem(item) : item);
+		events.storeStates((typeof item === 'string' || item instanceof String) ? itemRegistry.getItem(item) : item);
 	};
 	//NOT TESTED YET: restoreStates(Map<Item, State>);
 	context.restoreStates = function(mapArray) {
@@ -227,7 +233,7 @@
 		try{
 			return ScriptExecution.createTimer(time, runnable);
 		}catch(err) {
-			context.logError("helper.js createTimer " + __LINE__ + " Error:" +  err);
+			context.logError("utils.js createTimer " + __LINE__ + " Error:" +  err);
 		}
 	};
 
@@ -253,15 +259,15 @@
 							t.evLoops[tCountLocal].purge();
 						}
 					}catch(err) {
-						context.logError("helper.js setTimeout " + __LINE__ + " Error:" +  err);
+						context.logError("utils.js setTimeout " + __LINE__ + " Error:" +  err);
 					}
 				}, millis);
 				return t.evLoops[t.timerCount];
 			}else{
-				context.logWarn("helper.js setTimeout " + __LINE__ + "Please use like: setTimeout(function, milliseconds, arguments)");
+				context.logWarn("utils.js setTimeout " + __LINE__ + "Please use like: setTimeout(function, milliseconds, arguments)");
 			}
 		}catch(err) {
-			context.logError("helper.js setTimeout " + __LINE__ + " Error:" +  err);
+			context.logError("utils.js setTimeout " + __LINE__ + " Error:" +  err);
 		}
 	};
 
@@ -414,7 +420,7 @@
 
 
 	/**
-	 * SIEHE ### getActions ### in helper.js
+	 * SIEHE ### getActions ### in utils.js
 	 * sendHttpGetRequest(String url)
 	 * sendHttpGetRequest(String url, int timeout)
 	 * sendHttpPutRequest(String url)
@@ -503,7 +509,7 @@
 			});
 			return jsArray;
 		}catch(err) {
-			context.logError("helper.js javaCollectionToArray " + __LINE__ + " Error:" +  err);
+			context.logError("utils.js javaCollectionToArray " + __LINE__ + " Error:" +  err);
 		}
 		return null;
 		
@@ -514,7 +520,7 @@
 				if(val != undefined && val == key+"")return true;
 			};
 		}catch(err) {
-			context.logError("helper.js includes " + __LINE__ + " Error:" +  err);
+			context.logError("utils.js includes " + __LINE__ + " Error:" +  err);
 			return false;
 		}
 		return false;

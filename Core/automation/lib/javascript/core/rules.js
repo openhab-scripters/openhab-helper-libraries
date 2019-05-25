@@ -1,19 +1,21 @@
 /**
+ * Functions for creating rules
+ * 
  * Copyright (c) 2019 Contributors to the openHAB Scripters project
  * 
- * @author Helmut Lehmeyer 
+ * @author Helmut Lehmeyer - initial contribution
  */
+'use strict';
 
-'use strict'; 
-
-se.importPreset("RuleSupport"); //https://www.openhab.org/docs/configuration/jsr223.html#overview
-se.importPreset("RuleSimple");
-se.importPreset("RuleFactories");
-se.importPreset("default");
+scriptExtension.importPreset("RuleSupport"); //https://www.openhab.org/docs/configuration/jsr223.html#overview
+scriptExtension.importPreset("RuleSimple");
+scriptExtension.importPreset("RuleFactories");
+scriptExtension.importPreset("default");
 
 var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF");
-load(OPENHAB_CONF+'/automation/lib/javascript/core/helper.js');
-load(OPENHAB_CONF+'/automation/lib/javascript/core/triggersAndConditions.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/utils.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/triggers.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/conditions.js');
 
 //https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/api.html
 //var StSimpleRule = Java.type("org.openhab.core.automation.module.script.rulesupport.shared.simple.SimpleRule");

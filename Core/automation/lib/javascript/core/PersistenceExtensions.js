@@ -1,9 +1,10 @@
 /**
+ * Functions to aid in using PersistenceExtensions
+ * 
  * Copyright (c) 2019 Contributors to the openHAB Scripters project
  * 
- * @author Helmut Lehmeyer 
+ * @author Helmut Lehmeyer - initial contribution
  */
-
 'use strict';
 
 var PersistenceExtensions	= Java.type("org.eclipse.smarthome.model.persistence.extensions.PersistenceExtensions");

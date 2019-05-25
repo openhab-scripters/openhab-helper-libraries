@@ -1,14 +1,16 @@
 /**
+ * Examples of rules
+ * 
  * Copyright (c) 2019 Contributors to the openHAB Scripters project
  * 
- * @author Helmut Lehmeyer 
+ * @author Helmut Lehmeyer - initial contribution
  */
-
 'use strict';
 
 var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF"); // most this is /etc/openhab2
-load(OPENHAB_CONF+'/automation/lib/javascript/core/JSRule.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/rules.js');
 
+var me = "SimpleRuleExamples.js";
 logInfo("################# SimpleRuleExamples.js ##################", TimerTrigger);
 
 //### Example 1: Default spelling, not simplified
