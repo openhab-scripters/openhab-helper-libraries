@@ -28,7 +28,7 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
         return 'All'
 
     if getItemValue(customItemNames['allowTTSSwitch'], scope.ON) != scope.ON and ttsPrio <= PRIO['MODERATE']:
-        log.info(u"[{}] is OFF and ttsPrio is too low to speak [{}] at this moment".format(customItemNames['allowTTSSwitch'].decode('utf8'), ttsSay.decode('utf8')))
+        log.info(u"[{}] is OFF and ttsPrio is too low to speak [{}] at this moment".format(customItemNames['allowTTSSwitch'].decode('utf8'), ttsSay))
         return False
 
     ttsRoom = getDefaultRoom() if 'ttsRoom' not in keywords else keywords['ttsRoom']
