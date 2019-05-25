@@ -1,4 +1,5 @@
 'use strict';
+
 var Thread = Java.type("java.lang.Thread");
 var log = Java.type("org.slf4j.LoggerFactory").getLogger("jsr223.javascript.core.startup_delay");
 
