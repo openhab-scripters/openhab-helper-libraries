@@ -8,7 +8,9 @@ The JSR223 scripting extensions can be used for general scripting purposes, incl
 
 ## Installation
 
-Copy Files into /etc/openhab2/automation/jsr223
+Download the contents of this repository and, using the openHAB account, copy the _contents_ of the `/Core/` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf/` (default manual OH install). 
+This will create a directory structure as described in [File Locations](../Python/Getting-Started.md#file-locations), and will include all of the Core files, including a startup delay script that ensures OH is started completely before loading other scripts.
+If you are not also setting up Javascript and Groovy, remove the directories for them under `/automation/jsr223/` and `/automation/lib/`.
 
 ## Defining Rules
 
@@ -24,7 +26,7 @@ Simplified with some extra JavaScript Code, found in `jslib/JSRule.js`:
 'use strict';
 
 var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF");
-load(OPENHAB_CONF+'/automation/jsr223/jslib/JSRule.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/rule.js');
 
 JSRule({
     name: "My JS Rule",
@@ -40,15 +42,12 @@ JSRule({
 });
 ```
 
-`jslib/helper.js` contains more simplifying and helping functions.
+`/automation/lib/javascript/core/utils.js` contains more simplifying and helping functions.
 
-`jslib/PersistenceExtensions.js` contains more simplifying PersistenceExtensions functions.
+`/automation/lib/javascript/core/PersistenceExtensions.js` contains more simplifying PersistenceExtensions functions.
 
-`jslib/triggersAndConditions.js` contains trigger functions.
+`/automation/lib/javascript/core/triggers.js` contains trigger functions.
 
-`ActionExamples.js` contains examples for default actions like PersistenceExtensions, HTTP, Ping, Audio, Voice, ThingAction.
+`Script Examples/Javascript/ActionExamples.js` contains examples for default actions like PersistenceExtensions, HTTP, Ping, Audio, Voice, ThingAction.
 
-`itemTest.js` contains examples for testing Items and Groups.
-
- 
-
+`Script Examples/Javascript/ItemTest.js` contains examples for testing Items and Groups.
