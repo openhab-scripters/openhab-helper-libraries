@@ -26,7 +26,7 @@ Simplified with some extra JavaScript Code, found in `jslib/JSRule.js`:
 'use strict';
 
 var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF");
-load(OPENHAB_CONF+'/automation/lib/javascript/core/rule.js');
+load(OPENHAB_CONF+'/automation/lib/javascript/core/rules.js');
 
 JSRule({
     name: "My JS Rule",
