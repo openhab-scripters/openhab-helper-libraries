@@ -20,7 +20,7 @@ Further links and information: [openHAB 1 Scripted Rule Support](https://github.
 
 ### Rules: Raw ESH API
 
-Simplified with some extra JavaScript Code, found in `jslib/JSRule.js`:
+Simplified with some extra JavaScript Code, found in `/automation/lib/javascript/core/rules.js`:
 
 ```JavaScript
 'use strict';
