@@ -107,7 +107,7 @@ def to_java_zoneddatetime(value):
         )
     # java.util.Calendar
     if isinstance(value, Calendar):
-        return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.of(value.getTimeZone().getId()))
+        return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.of(value.getTimeZone().getID()))
     # java.util.Date
     if isinstance(value, Date):
         return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(value.getTimezoneOffset()*60)))
