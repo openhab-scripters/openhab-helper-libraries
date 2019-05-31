@@ -301,7 +301,14 @@
 			}
 		}
 	};
-	
+
+	context.getTriggeringItemStr = function(input)
+	{
+		var ev = input.get("event")+"";
+		var evArr = ev.split("'").join("").split("Item ").join("").split(" ");
+		return evArr[0];
+	};
+
 	//### getTriggeredData ###
 	context.getTriggeredData = function(input) {
 		
