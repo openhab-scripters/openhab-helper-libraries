@@ -1,9 +1,11 @@
-# This check for the existence of 'scope' and verifying it is not a mock.Mock
-# instance are needed for Sphinx autodoc because it tries to search all attrs
-import mock
-from core import jsr223
+try:
+    # if this check fails we assume we are in Jython
+    # if this check passes we assume we are in Python building docs
+    # this is needed to avoid errors with autodoc iterating over all methods
+    # and erroring with the attribute-getter below
+    import mock
 
-if hasattr(jsr223, 'scope') and not isinstance(jsr223.scope, mock.Mock):
+except:
 
     from core.jsr223.scope import items
 
