@@ -18,9 +18,9 @@ sys.path.insert(0, os.path.abspath('./../Community'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'openHAB Scripters - Jython'
-author = 'Scott Rushworth, Michael Murton'
-copyright = '2019, Scott Rushworth, Michael Murton'
+project = 'openHAB Helper Libraries'
+author = 'Michael Murton'
+copyright = 'Copyright (c) 2019 Contributors to the openHAB Scripters project'
 version = 'latest'
 
 
@@ -108,7 +108,7 @@ autosectionlabel_prefix_document = True
 # -- Options for HTML output -------------------------------------------------
 
 # root url for these docs, also used to make CNAME for GH Pages
-html_baseurl = "https://github.com/OH-Jython-Scripters/openhab2-jython/"
+html_baseurl = "https://github.com/openhab-scripters/openhab-helper-libraries/"
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
