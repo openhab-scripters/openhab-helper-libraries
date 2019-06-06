@@ -1,26 +1,12 @@
-# openHAB 2.x: JSR223 JavaScript Code since 2.4
+[[Home]](../README.md)
 
-This is a repository of very experimental JavaScript code that can be used with the SmartHome platform and openHAB 2.x.
+### Applications
 
-## Applications
+The extensions can be used for general scripting purposes, including defining rules and scripted Actions and Conditions using JavaScript for openHAB Scripted Automation.
 
-The JSR223 scripting extensions can be used for general scripting purposes, including defining rules with JavaScript Code for openHAB 2 JSR223 Scripting.
+### Rules: Raw API
 
-## Installation
-
-Download the contents of this repository and, using the openHAB account, copy the _contents_ of the `/Core/` directory into `/etc/openhab2/` (package repository OH install, like openHABian) or `/opt/openhab2/conf/` (default manual OH install). 
-This will create a directory structure as described in [File Locations](../Python/Getting-Started.md#file-locations), and will include all of the Core files, including a startup delay script that ensures OH is started completely before loading other scripts.
-If you are not also setting up Javascript and Groovy, remove the directories for them under `/automation/jsr223/` and `/automation/lib/`.
-
-## Defining Rules
-
-OpenHAB 2 JSR223 Scripting Documentation: [JSR223 Scripting and Rule Support](https://www.openhab.org/docs/configuration/jsr223.html#jsr223-scripting).
-
-Further links and information: [openHAB 1 Scripted Rule Support](https://github.com/eclipse/smarthome/wiki/Scripted-Rule-Support).
-
-### Rules: Raw ESH API
-
-Simplified with some extra JavaScript Code, found in `/automation/lib/javascript/core/rules.js`:
+Simplified with some extra JavaScript code found in `/automation/lib/javascript/core/rules.js`:
 
 ```JavaScript
 'use strict';

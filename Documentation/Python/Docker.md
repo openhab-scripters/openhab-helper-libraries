@@ -1,4 +1,4 @@
-[[Home]](README.md)
+[[Jython Home]](README.md)
 
 ## Running Jython in an openHAB Docker image
 

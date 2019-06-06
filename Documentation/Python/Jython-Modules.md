@@ -1,9 +1,14 @@
-[[Home]](README.md)
+[[Jython Home]](README.md)
 
 ## Modules
 
 One of the benefits of Jython over the openHAB rule DSL scripts is that you can use the full power of Python packages and modules to structure your code into reusable components. 
-When using the instructions in the [Quick Start Guide](Getting-Started.md#quick-start-guide), these modules should be located in `/automation/lib/python/`
+When using the instructions in the [Quick Start Guide](/Docs/README.md#quick-start-guide), these modules will be located in `/automation/lib/python/`.
+They can be located anywhere, but the Python path must be configured to find them.
+There are several ways to do this: 
+1) Append the path to the `python.path` used in the EXTRA_JAVA_OPTS, separated woth a colon in Linux and a semicolon in Windows, e.g. `-Dpython.path=mypath1:mypath2`. 
+2) Modify the `sys.path` list in a Jython script that loads early (like a component script).
+3) Add a symlink in `/automation/lib/python/personal/`, which is already in the Python path, to the module or a package that contains it.
 
 #### Modifying Modules
 
@@ -32,7 +37,9 @@ from core.triggers import when
 
 #### Custom Modules
 
-Custom modules and packages can also be added into `/automation/lib/python/personal/`. Modules do not have the same scope as scripts, but this can be remedied by importing `scope` from the `jsr223` module. This will allow for things like accessing the itemRegistry:
+Custom modules and packages should be placed in `/automation/lib/python/personal/`. 
+Modules do not have the same scope as scripts, but this can be remedied by importing `scope` from the `jsr223` module. 
+This will allow for things like accessing the itemRegistry:
 ```
 from core.jsr223 import scope
 scope.itemRegistry.getItem("MyItem")
@@ -100,14 +107,11 @@ class ExampleRule(object):
     def execute(self, module, inputs):
         self.log.info("rule executed")
 ```
-The `rule` decorator adds the SimpleRule base class and will call `getEventTriggers` to get the triggers, or you can define a constructor and set `self.triggers` to your list of triggers (commented out in the example).
-
-The `addRule` function is similar to the `automationManager.addRule` function except that it can be safely used in modules (versus scripts).
-Since the `automationManager` is different for every script scope, the `core.rules.addRule` function looks up the automation manager for each call.
-
-The decorator also adds a log object based on the name of the rule (`self.log` can be overridden in a constructor) and 
-wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information if an exception 
-is thrown.
+The `rule` decorator adds the SimpleRule base class and will call `getEventTriggers` to get the triggers, or you can define a constructor and set `self.triggers` to your list of triggers (commented out in the example). 
+The `addRule` function is similar to the `automationManager.addRule` function, except that it can be safely used in modules (versus scripts).
+Since the `automationManager` is different for every script scope, the `core.rules.addRule` function looks up the automation manager for each call. 
+The decorator adds a log object based on the name of the decorated class or function, but `self.log` can be overridden in a constructor. 
+It also wraps the event trigger and `execute` functions in a wrapper that will print nicer stack trace information, if an exception is thrown. 
 
 The following example shows how the rule decorator is used to decorate the trigger decorator:
 

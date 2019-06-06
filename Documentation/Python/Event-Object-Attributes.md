@@ -1,4 +1,4 @@
-[[Home]](README.md)
+[[Jython Home]](README.md)
 
 ## Event Object Attributes
 

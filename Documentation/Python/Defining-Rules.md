@@ -1,4 +1,4 @@
-[[Home]](README.md)
+[[Jython Home]](README.md)
 
 ## Defining Rules
 
@@ -25,7 +25,7 @@ class MyRule(SimpleRule):
     def __init__(self):
         self.triggers = [
             TriggerBuilder.create()
-                    .withId("MyTrigger")
+                    .withId("MyTrigger")# Note: trigger IDs must be unique within the rule instance and fit the pattern [A-Za-z0-9_-]*
                     .withTypeUID("core.ItemStateUpdateTrigger")
                     .withConfiguration(
                         Configuration({
