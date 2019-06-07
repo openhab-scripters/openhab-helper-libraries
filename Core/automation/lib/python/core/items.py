@@ -19,7 +19,7 @@ ManagedItemProvider = osgi.get_service(
         "org.eclipse.smarthome.core.items.ManagedItemProvider"
     )
 
-log = logging.getLogger(LOG_PREFIX + ".core.items")
+log = logging.getLogger("{}.core.items".format(LOG_PREFIX))
 
 __all__ = ["add_item", "remove_item"]
 

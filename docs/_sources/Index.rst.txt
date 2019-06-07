@@ -1,78 +1,47 @@
-******************************************************
-Welcome to the openHAB Scripters Jython documentation!
-******************************************************
-
-This is a repository of experimental Jython code that can be used with the
-`Eclipse SmartHome <https://www.eclipse.org/smarthome/>`_ platform and
-`openHAB 2.x <http://openhab.org/>`_ (post OH snapshot build 1318).
-A previous version with reduced functionality, but compatible with OH 2.3, has
-been archived in this
-`branch <https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)>`_.
-
-These works are based on the original contributions of Steve Bate, for which we
-are very thankful!
-
-.. note::
-    The following documentation assumes that you have chosen to use Jython for
-    JSR223 scripting in openHAB because you have at least a basic understanding
-    of Python. If you have come here with no knowledge of Python, we recommend
-    seeking out some tutorials to get you started with the language, such as
-    `learnpython.org <https://www.learnpython.org/>`_.
+************************************************
+Helper Libraries for openHAB Scripted Automation
+************************************************
 
 
+.. tabs::
 
-.. toctree::
-    :caption: Getting Started
-    :maxdepth: 2
+    .. code-tab:: py
 
-    Getting Started/Installation
-    Getting Started/First Steps
+        import sys
 
+    .. code-tab:: js
 
-.. toctree::
-    :caption: How To's
-    :maxdepth: 2
+        import sys;
 
-    How Tos/Rules.rst
-    How Tos/Triggers.rst
-    How Tos/Logging.rst
+    .. code-tab:: groovy
+
+        import sys;
+
+.. tabs::
+
+    .. code-tab:: py
+
+        import sys
+
+    .. code-tab:: js
+
+        import sys;
+
+    .. code-tab:: groovy
+
+        import sys;
 
 
 .. toctree::
-    :caption: Design Patterns
     :maxdepth: 2
+
+    Quick Start.rst
 
 
 .. toctree::
-    :caption: Core Modules
-    :maxdepth: 2
-    :glob:
+    :caption: Languages
+    :maxdepth: 0
 
-    Core Modules/Rules.rst
-    Core Modules/Triggers.rst
-    Core Modules/Log.rst
-    Core Modules/Actions.rst
-    Core Modules/*
-
-
-.. toctree::
-    :caption: Community Modules
-    :maxdepth: 2
-    :glob:
-
-    Community Modules/*
-
-
-.. toctree::
-    :caption: Contributing
-    :maxdepth: 2
-
-    Contributing/Writing Docs
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    Python <file:///home/mike/git/openhab/openhab-helper-libraries/docs/Python/Index.html>
+    Javascript/index.rst
+    Groovy/index.rst

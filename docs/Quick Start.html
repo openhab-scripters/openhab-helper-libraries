@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick Start Guide &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/sphinx_tabs/tabs.js"></script>
+        <script type="text/javascript" src="_static/sphinx_tabs/semantic-ui-2.2.10/tab.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/sphinx_tabs/tabs.css" type="text/css" />
+  <link rel="stylesheet" href="_static/sphinx_tabs/semantic-ui-2.2.10/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/sphinx_tabs/semantic-ui-2.2.10/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/sphinx_tabs/semantic-ui-2.2.10/tab.min.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Helper Libraries for openHAB Scripted Automation" href="Index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="Index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Languages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="file:///home/mike/git/openhab/openhab-helper-libraries/docs/Python/Index.html">Python</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="Index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="Index.html">Docs</a> &raquo;</li>
+        
+      <li>Quick Start Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Quick Start.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quick-start-guide">
+<h1>Quick Start Guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<ol class="arabic simple">
+<li><p>The <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> is still in development, so it is recommended to use the latest snapshot or milestone release of openHAB.</p></li>
+<li><p>Use the <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html">Karaf logging</a> commands to enable debug logging for automation:
+<code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">org.openhab.core.automation</span></code>
+Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
+For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to changed this to <cite>org.eclipse.smarthome.automation</cite>.</p></li>
+<li><p>Enable debug logging for jsr223:
+<cite>log:set DEBUG jsr223</cite>
+This is the default logger used in the examples and the helper libraries.</p></li>
+<li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB JSR223 Scripting</a> and the language specific documentation found as links on that page.</p></li>
+<li><p>Install the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> add-on.</p></li>
+<li><p>Shut down openHAB.</p></li>
+<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a> and, using the openHAB account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into:
+- <code class="docutils literal notranslate"><span class="pre">/etc/openhab2/</span></code> (package repository OH install, like openHABian)
+- <code class="docutils literal notranslate"><span class="pre">/opt/openhab2/conf/</span></code> (default manual OH install).
+This will create a directory structure, as described in [File Locations](#File-Locations).
+This will contain all of the Core files for each language, including the startup delay scripts that ensure OH has started completely before loading other scripts.
+If you do not plan to use all of the languages, you may want to remove the directories for them under <cite>/automation/jsr223/</cite> and <cite>/automation/lib/</cite>.</p></li>
+<li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
+For example, in <code class="docutils literal notranslate"><span class="pre">\automation\lib\python\</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.py.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.py</span></code>.
+These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
+<li><p>For Jython, follow the steps in the [Getting Started](Python/Getting-Started.md#additional-setup-for-jython). For Groovy, follow the steps in the [Getting Started](Groovy/README.md#additional-setup-for-groovy). When complete, come back here.</p></li>
+<li><p>Copy the Hello World example script for the language(s) that you are using to the <code class="docutils literal notranslate"><span class="pre">jsr223</span></code> directory:
+- copy [<cite>/Script Examples/Python/hello_world.py</cite>](/Script%20Examples/Python/hello_world.py) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/python/personal/</span></code>
+- copy [‘/Script Examples/Javascript/HelloWorld.js’](/Script%20Examples/Javascript/HelloWorld.js) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/javascript/personal/</span></code>)
+- copy [‘/Script Examples/Groovy/HelloWorld.groovy’](/Script%20Examples/Groovy/HelloWorld.groovy) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/groovy/personal/</span></code>)</p></li>
+<li><p>Start openHAB and watch the logs for errors and the entries from the Hello World script.
+This script will make a log entry every 10s, and should be deleted after installation has been verified.</p></li>
+<li><p>Review the language specific helper library documentation:
+- [Groovy](Groovy/README.md)
+- [Javascript](Javascript/README.md)
+- [Jython (Python)](Python/README.md)</p></li>
+<li><p>Ask questions on the <a class="reference external" href="https://community.openhab.org/tags/jsr223">openHAB forum</a> and tag posts with <code class="docutils literal notranslate"><span class="pre">jsr223</span></code>. Report issues <a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/issues">here</a>, but please don’t hesitate to update the documentation and code.
+Just like openHAB, this repository is community driven!</p></li>
+</ol>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<ol class="arabic simple">
+<li><p>The <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> is still in development, so it is recommended to use the latest snapshot or milestone release of openHAB.</p></li>
+<li><p>Use the <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html">Karaf logging</a> commands to enable debug logging for automation:
+<code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">org.openhab.core.automation</span></code>
+Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
+For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to changed this to <cite>org.eclipse.smarthome.automation</cite>.</p></li>
+<li><p>Enable debug logging for jsr223:
+<cite>log:set DEBUG jsr223</cite>
+This is the default logger used in the examples and the helper libraries.</p></li>
+<li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB JSR223 Scripting</a> and the language specific documentation found as links on that page.</p></li>
+<li><p>Install the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> add-on.</p></li>
+<li><p>Shut down openHAB.</p></li>
+<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a> and, using the openHAB account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into:
+- <code class="docutils literal notranslate"><span class="pre">/etc/openhab2/</span></code> (package repository OH install, like openHABian)
+- <code class="docutils literal notranslate"><span class="pre">/opt/openhab2/conf/</span></code> (default manual OH install).
+This will create a directory structure, as described in [File Locations](#File-Locations).
+This will contain all of the Core files for each language, including the startup delay scripts that ensure OH has started completely before loading other scripts.
+If you do not plan to use all of the languages, you may want to remove the directories for them under <cite>/automation/jsr223/</cite> and <cite>/automation/lib/</cite>.</p></li>
+<li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
+For example, in <code class="docutils literal notranslate"><span class="pre">\automation\lib\python\</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.py.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.py</span></code>.
+These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
+<li><p>For Jython, follow the steps in the [Getting Started](Python/Getting-Started.md#additional-setup-for-jython). For Groovy, follow the steps in the [Getting Started](Groovy/README.md#additional-setup-for-groovy). When complete, come back here.</p></li>
+<li><p>Copy the Hello World example script for the language(s) that you are using to the <code class="docutils literal notranslate"><span class="pre">jsr223</span></code> directory:
+- copy [<cite>/Script Examples/Python/hello_world.py</cite>](/Script%20Examples/Python/hello_world.py) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/python/personal/</span></code>
+- copy [‘/Script Examples/Javascript/HelloWorld.js’](/Script%20Examples/Javascript/HelloWorld.js) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/javascript/personal/</span></code>)
+- copy [‘/Script Examples/Groovy/HelloWorld.groovy’](/Script%20Examples/Groovy/HelloWorld.groovy) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/groovy/personal/</span></code>)</p></li>
+<li><p>Start openHAB and watch the logs for errors and the entries from the Hello World script.
+This script will make a log entry every 10s, and should be deleted after installation has been verified.</p></li>
+<li><p>Review the language specific helper library documentation:
+- [Groovy](Groovy/README.md)
+- [Javascript](Javascript/README.md)
+- [Jython (Python)](Python/README.md)</p></li>
+<li><p>Ask questions on the <a class="reference external" href="https://community.openhab.org/tags/jsr223">openHAB forum</a> and tag posts with <code class="docutils literal notranslate"><span class="pre">jsr223</span></code>. Report issues <a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/issues">here</a>, but please don’t hesitate to update the documentation and code.
+Just like openHAB, this repository is community driven!</p></li>
+</ol>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<ol class="arabic simple">
+<li><p>The <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> is still in development, so it is recommended to use the latest snapshot or milestone release of openHAB.</p></li>
+<li><p>Use the <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html">Karaf logging</a> commands to enable debug logging for automation:
+<code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">org.openhab.core.automation</span></code>
+Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
+For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to changed this to <cite>org.eclipse.smarthome.automation</cite>.</p></li>
+<li><p>Enable debug logging for jsr223:
+<cite>log:set DEBUG jsr223</cite>
+This is the default logger used in the examples and the helper libraries.</p></li>
+<li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB JSR223 Scripting</a> and the language specific documentation found as links on that page.</p></li>
+<li><p>Install the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> add-on.</p></li>
+<li><p>Shut down openHAB.</p></li>
+<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a> and, using the openHAB account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into:
+- <code class="docutils literal notranslate"><span class="pre">/etc/openhab2/</span></code> (package repository OH install, like openHABian)
+- <code class="docutils literal notranslate"><span class="pre">/opt/openhab2/conf/</span></code> (default manual OH install).
+This will create a directory structure, as described in [File Locations](#File-Locations).
+This will contain all of the Core files for each language, including the startup delay scripts that ensure OH has started completely before loading other scripts.
+If you do not plan to use all of the languages, you may want to remove the directories for them under <cite>/automation/jsr223/</cite> and <cite>/automation/lib/</cite>.</p></li>
+<li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
+For example, in <code class="docutils literal notranslate"><span class="pre">\automation\lib\python\</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.py.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.py</span></code>.
+These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
+<li><p>For Jython, follow the steps in the [Getting Started](Python/Getting-Started.md#additional-setup-for-jython). For Groovy, follow the steps in the [Getting Started](Groovy/README.md#additional-setup-for-groovy). When complete, come back here.</p></li>
+<li><p>Copy the Hello World example script for the language(s) that you are using to the <code class="docutils literal notranslate"><span class="pre">jsr223</span></code> directory:
+- copy [<cite>/Script Examples/Python/hello_world.py</cite>](/Script%20Examples/Python/hello_world.py) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/python/personal/</span></code>
+- copy [‘/Script Examples/Javascript/HelloWorld.js’](/Script%20Examples/Javascript/HelloWorld.js) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/javascript/personal/</span></code>)
+- copy [‘/Script Examples/Groovy/HelloWorld.groovy’](/Script%20Examples/Groovy/HelloWorld.groovy) to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/groovy/personal/</span></code>)</p></li>
+<li><p>Start openHAB and watch the logs for errors and the entries from the Hello World script.
+This script will make a log entry every 10s, and should be deleted after installation has been verified.</p></li>
+<li><p>Review the language specific helper library documentation:
+- [Groovy](Groovy/README.md)
+- [Javascript](Javascript/README.md)
+- [Jython (Python)](Python/README.md)</p></li>
+<li><p>Ask questions on the <a class="reference external" href="https://community.openhab.org/tags/jsr223">openHAB forum</a> and tag posts with <code class="docutils literal notranslate"><span class="pre">jsr223</span></code>. Report issues <a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/issues">here</a>, but please don’t hesitate to update the documentation and code.
+Just like openHAB, this repository is community driven!</p></li>
+</ol>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="Index.html" class="btn btn-neutral float-left" title="Helper Libraries for openHAB Scripted Automation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2019 Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

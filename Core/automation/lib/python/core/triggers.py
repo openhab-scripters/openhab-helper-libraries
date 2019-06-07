@@ -40,7 +40,7 @@ from core.log import logging, LOG_PREFIX
 
 from org.quartz.CronExpression import isValidExpression
 
-log = logging.getLogger(LOG_PREFIX + ".core.triggers")
+log = logging.getLogger("{}.core.triggers".format(LOG_PREFIX))
 
 class ItemStateUpdateTrigger(Trigger):
     """Builds an Item State Update trigger object to be used when creating a

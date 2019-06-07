@@ -1,0 +1,417 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Date &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../Index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick Start.html">Quick Start Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Languages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="file:///home/mike/git/openhab/openhab-helper-libraries/docs/Python/Index.html">Python</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../Index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../Index.html">Docs</a> &raquo;</li>
+        
+      <li>Date</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Python/Core Modules/Date.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-core.date">
+<span id="date"></span><h1>Date<a class="headerlink" href="#module-core.date" title="Permalink to this headline">¶</a></h1>
+<p>Date/time utilities for converting between the several different types used by openHAB.</p>
+<p>It can also format any of these types for sending to an openHAB Item using
+<code class="docutils literal notranslate"><span class="pre">format_date(value)</span></code>, which will return the date as a string in the correct format.</p>
+<div class="line-block">
+<div class="line">There are also some conveniece functions for determining the span between two datetimes.
+<code class="docutils literal notranslate"><span class="pre">days_between</span></code>, <code class="docutils literal notranslate"><span class="pre">hours_between</span></code>, <code class="docutils literal notranslate"><span class="pre">minutes_between</span></code>, and <code class="docutils literal notranslate"><span class="pre">seconds_between</span></code>
+will return the number of whole units of each unit of time between the two datetimes
+passed. They will return negative numbers if <code class="docutils literal notranslate"><span class="pre">value_from</span></code> is after <code class="docutils literal notranslate"><span class="pre">value_to</span></code>.</div>
+<div class="line">See <a class="reference external" href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html">java.time.temporal.ChronoUnit</a>
+if you want more information.</div>
+</div>
+<p>This package accepts any of the following DateTime types:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">java</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">ZonedDateTime</span>
+<span class="n">java</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">LocalDateTime</span>
+<span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">Calendar</span>
+<span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">Date</span>
+<span class="n">org</span><span class="o">.</span><span class="n">joda</span><span class="o">.</span><span class="n">DateTime</span>
+<span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="p">(</span><span class="n">Python</span><span class="p">)</span>
+<span class="n">org</span><span class="o">.</span><span class="n">eclipse</span><span class="o">.</span><span class="n">smarthome</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">DateTimeType</span>
+<span class="n">org</span><span class="o">.</span><span class="n">openhab</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">DateTimeType</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="core.date.format_date">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">format_date</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">format_string=&quot;yyyy-MM-dd'T'HH:mm:ss.SSxx&quot;</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.format_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of <code class="docutils literal notranslate"><span class="pre">value</span></code> formatted according to <code class="docutils literal notranslate"><span class="pre">format_string</span></code>.</p>
+<p>This function can be used when updating items in openHAB or to format any
+DateTime value for output.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sendCommand</span><span class="p">(</span><span class="s2">&quot;item_name&quot;</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">format_date</span><span class="p">(</span><span class="n">date_value</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – any known DateTime value.</p></li>
+<li><p><strong>format_string</strong> (<em>string</em>) – pattern to format <code class="docutils literal notranslate"><span class="pre">value</span></code> with.
+See <a class="reference external" href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">java.time.format.DateTimeFormatter</a>
+for format string tokens.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.days_between">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">days_between</code><span class="sig-paren">(</span><em class="sig-param">value_from</em>, <em class="sig-param">value_to</em>, <em class="sig-param">calendar_days=False</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.days_between" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns number of whole days between value_from and value_to. Setting
+calendar_days=True will provide the number of calendar days, rather than
+24 hour intervals.
+Accepts any date type used by this module</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.hours_between">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">hours_between</code><span class="sig-paren">(</span><em class="sig-param">value_from</em>, <em class="sig-param">value_to</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.hours_between" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">int</span></code> of whole hours between <code class="docutils literal notranslate"><span class="pre">value_from</span></code> and <code class="docutils literal notranslate"><span class="pre">value_to</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.minutes_between">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">minutes_between</code><span class="sig-paren">(</span><em class="sig-param">value_from</em>, <em class="sig-param">value_to</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.minutes_between" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">int</span></code> of whole minutes between <code class="docutils literal notranslate"><span class="pre">value_from</span></code> and <code class="docutils literal notranslate"><span class="pre">value_to</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.seconds_between">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">seconds_between</code><span class="sig-paren">(</span><em class="sig-param">value_from</em>, <em class="sig-param">value_to</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.seconds_between" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">int</span></code> of whole seconds between <code class="docutils literal notranslate"><span class="pre">value_from</span></code> and <code class="docutils literal notranslate"><span class="pre">value_to</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.to_java_zoneddatetime">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">to_java_zoneddatetime</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.to_java_zoneddatetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts any known DateTime type to a <code class="docutils literal notranslate"><span class="pre">java.time.ZonedDateTime</span></code> type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – any known DateTime value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><div class="line-block">
+<div class="line">A <code class="docutils literal notranslate"><span class="pre">java.time.ZonedDateTime</span></code> representing <code class="docutils literal notranslate"><span class="pre">value</span></code>.</div>
+<div class="line">If <code class="docutils literal notranslate"><span class="pre">value</span></code> does not have timezone information, the system default
+will be used.</div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – type of <code class="docutils literal notranslate"><span class="pre">value</span></code> is not recognized by this package.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.to_java_calendar">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">to_java_calendar</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.to_java_calendar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts any known DateTime type to a <code class="docutils literal notranslate"><span class="pre">java.util.calendar</span></code> type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – any known DateTime value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><div class="line-block">
+<div class="line">A <code class="docutils literal notranslate"><span class="pre">java.util.calendar</span></code> representing <code class="docutils literal notranslate"><span class="pre">value</span></code>.</div>
+<div class="line">If <code class="docutils literal notranslate"><span class="pre">value</span></code> does not have timezone information, the system default
+will be used.</div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – type of <code class="docutils literal notranslate"><span class="pre">value</span></code> is not recognized by this package.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.to_python_datetime">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">to_python_datetime</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.to_python_datetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts any known DateTime type to a Python <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code> type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – any known DateTime value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><div class="line-block">
+<div class="line">A Python <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code> representing <code class="docutils literal notranslate"><span class="pre">value</span></code>.</div>
+<div class="line">If <code class="docutils literal notranslate"><span class="pre">value</span></code> does not have timezone information, the system default
+will be used.</div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – type of <code class="docutils literal notranslate"><span class="pre">value</span></code> is not recognized by this package.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.to_joda_datetime">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">to_joda_datetime</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.to_joda_datetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts any known DateTime type to a <code class="docutils literal notranslate"><span class="pre">org.joda.time.DateTime</span></code> type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – any known DateTime value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><div class="line-block">
+<div class="line">An <code class="docutils literal notranslate"><span class="pre">org.joda.time.DateTime</span></code> representing <code class="docutils literal notranslate"><span class="pre">value</span></code>.</div>
+<div class="line">If <code class="docutils literal notranslate"><span class="pre">value</span></code> does not have timezone information, the system default
+will be used.</div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – type of <code class="docutils literal notranslate"><span class="pre">value</span></code> is not recognized by this package.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="core.date.pythonTimezone">
+<em class="property">class </em><code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">pythonTimezone</code><span class="sig-paren">(</span><em class="sig-param">offset=0</em>, <em class="sig-param">name=''</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.pythonTimezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.tzinfo</span></code></p>
+<p>Python tzinfo with <code class="docutils literal notranslate"><span class="pre">offset</span></code> in minutes and name <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset</strong> (<em>int</em>) – timezone offset from UTC in minutes.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – display name of this instance.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="core.date.pythonTimezone.utcoffset">
+<code class="sig-name descname">utcoffset</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.pythonTimezone.utcoffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>datetime -&gt; timedelta showing offset from UTC, negative values indicating West of UTC</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.date.pythonTimezone.tzname">
+<code class="sig-name descname">tzname</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.pythonTimezone.tzname" title="Permalink to this definition">¶</a></dt>
+<dd><p>datetime -&gt; string name of time zone.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.date.pythonTimezone.dst">
+<code class="sig-name descname">dst</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.pythonTimezone.dst" title="Permalink to this definition">¶</a></dt>
+<dd><p>datetime -&gt; DST offset in minutes east of UTC.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.toJTime">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">toJTime</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.toJTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="docutils literal notranslate"><span class="pre">to_java_zoneddatetime</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.toJCal">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">toJCal</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.toJCal" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="docutils literal notranslate"><span class="pre">to_java_calendar</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.toPyDT">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">toPyDT</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.toPyDT" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="docutils literal notranslate"><span class="pre">to_python_datetime</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.date.toJodaDT">
+<code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">toJodaDT</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.toJodaDT" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="docutils literal notranslate"><span class="pre">to_joda_datetime</span></code>.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2019 Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

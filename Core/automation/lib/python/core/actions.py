@@ -10,7 +10,7 @@ _module = sys.modules[__name__]
 
 for s in oh1_actions + oh2_actions:
     action_class = s.actionClass
-    name = action_class.simpleName
+    name = str(action_class.simpleName)
     setattr(_module, name, action_class)
     __all__.append(name)
 
@@ -30,6 +30,7 @@ except:
 static_imports = [Exec, HTTP, LogAction, Ping]
 
 for s in static_imports:
-    name = s.simpleName
+    name = str(s.simpleName)
     setattr(_module, name, s)
     __all__.append(name)
+

@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Triggers &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../Index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick Start.html">Quick Start Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Languages</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="file:///home/mike/git/openhab/openhab-helper-libraries/docs/Python/Index.html">Python</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../Index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../Index.html">Docs</a> &raquo;</li>
+        
+      <li>Triggers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Python/How Tos/Triggers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="triggers">
+<h1>Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>The following is a list of available triggers. Any text in square brackets
+(<code class="docutils literal notranslate"><span class="pre">[]</span></code>) indicates it is optional, and any text in CAPITAL LETTERS should
+be replaced with a value specific to your use case.</p>
+</div></blockquote>
+<div class="section" id="item-item-name-changed-from-state-to-state">
+<h2><code class="docutils literal notranslate"><span class="pre">&quot;Item</span> <span class="pre">ITEM_NAME</span> <span class="pre">changed</span> <span class="pre">[from</span> <span class="pre">STATE]</span> <span class="pre">[to</span> <span class="pre">STATE]&quot;</span></code><a class="headerlink" href="#item-item-name-changed-from-state-to-state" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&quot;Item</span> <span class="pre">ITEM_NAME</span> <span class="pre">received</span> <span class="pre">update</span> <span class="pre">[STATE]&quot;</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&quot;Item</span> <span class="pre">ITEM_NAME</span> <span class="pre">received</span> <span class="pre">command</span> <span class="pre">[COMMAND]&quot;</span></code></div>
+</div>
+</div></blockquote>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python
+from core.rules import rule
+from core.triggers import when</p>
+<p>&#64;rule(“This is the name of a test rule”, tags=[“Tag 1”, “Tag 2”])
+&#64;when(“Item Test_Switch_1 received command OFF”)
+&#64;when(“Item Test_Switch_2 received update ON”)
+&#64;when(“Item gMotion_Sensors changed to ON”)
+&#64;when(“Member of gMotion_Sensors changed to OFF”)
+&#64;when(“Descendent of gContact_Sensors changed to ON”)# Similar to ‘Member of’, but will create a trigger for each non-group sibling Item (think group_item.allMembers())
+&#64;when(“Thing kodi:kodi:familyroom changed”)# ThingStatusInfo (from &lt;status&gt; to &lt;status&gt;) cannot currently be used in triggers
+&#64;when(“Channel astro:sun:local:eclipse#event triggered START”)
+&#64;when(“System started”)# ‘System shuts down’ cannot currently be used as a trigger, and ‘System started’ needs to be updated to work with Automation API updates
+&#64;when(“Time cron 55 55 5 * * ?”)
+def testFunction(event):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if items[“Test_Switch_1”] == OnOffType.ON:</dt><dd><p>events.postUpdate(“Test_String_1”, “The test rule has been executed!”)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2019 Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

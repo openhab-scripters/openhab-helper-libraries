@@ -19,7 +19,7 @@ ItemChannelLinkRegistry = osgi.get_service(
         "org.eclipse.smarthome.core.thing.link.ItemChannelLinkRegistry"
     )
 
-log = logging.getLogger(LOG_PREFIX + ".core.links")
+log = logging.getLogger("{}.core.links".format(LOG_PREFIX))
 
 __all__ = ["add_link", "remove_link"]
 
