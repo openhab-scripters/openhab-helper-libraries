@@ -4,6 +4,8 @@ scope.scriptExtension.importPreset(None)
 import inspect
 import json
 import uuid
+import re
+from shlex import split
 
 import java.util
 from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
@@ -42,7 +44,10 @@ log = logging.getLogger(LOG_PREFIX + ".core.triggers")
 
 class ItemStateUpdateTrigger(Trigger):
     def __init__(self, itemName, state=None, triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
+        if triggerName is None:
+            triggerName = uuid.uuid1().hex
+        else:
+            triggerName = "{}-{}".format(triggerName, uuid.uuid1().hex)
         config = { "itemName": itemName }
         if state is not None:
             config["state"] = state
@@ -50,7 +55,10 @@ class ItemStateUpdateTrigger(Trigger):
 
 class ItemStateChangeTrigger(Trigger):
     def __init__(self, itemName, previousState=None, state=None, triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
+        if triggerName is None:
+            triggerName = uuid.uuid1().hex
+        else:
+            triggerName = "{}-{}".format(triggerName, uuid.uuid1().hex)
         config = { "itemName": itemName }
         if state is not None:
             config["state"] = state
@@ -60,7 +68,10 @@ class ItemStateChangeTrigger(Trigger):
 
 class ItemCommandTrigger(Trigger):
     def __init__(self, itemName, command=None, triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
+        if triggerName is None:
+            triggerName = uuid.uuid1().hex
+        else:
+            triggerName = "{}-{}".format(triggerName, uuid.uuid1().hex)
         config = { "itemName": itemName }
         if command is not None:
             config["command"] = command
@@ -68,7 +79,10 @@ class ItemCommandTrigger(Trigger):
 
 class ChannelEventTrigger(Trigger):
     def __init__(self, channelUID, event=None, triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
+        if triggerName is None:
+            triggerName = uuid.uuid1().hex
+        else:
+            triggerName = "{}-{}".format(triggerName, uuid.uuid1().hex)
         config = { "channelUID": channelUID }
         if event is not None:
             config["event"] = event
@@ -76,7 +90,10 @@ class ChannelEventTrigger(Trigger):
 
 class GenericEventTrigger(Trigger):
     def __init__(self, eventSource, eventTypes, eventTopic="smarthome/*", triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
+        if triggerName is None:
+            triggerName = uuid.uuid1().hex
+        else:
+            triggerName = "{}-{}".format(triggerName, uuid.uuid1().hex)
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
             "eventTopic": eventTopic,
             "eventSource": "smarthome/{}/".format(eventSource),
@@ -92,7 +109,10 @@ GROUP_CHANGE = "GroupItemStateChangedEvent"
 '''
 class ItemEventTrigger(Trigger):
     def __init__(self, eventSource, eventTypes, eventTopic="smarthome/items/*", triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
+        if triggerName is None:
+            triggerName = uuid.uuid1().hex
+        else:
+            triggerName = "{}-{}".format(triggerName, uuid.uuid1().hex)
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
             "eventTopic": eventTopic,
             "eventSource": "smarthome/items/{}/".format(eventSource),
@@ -109,7 +129,10 @@ Thing event types:
 '''
 class ThingEventTrigger(Trigger):
     def __init__(self, thingUID, eventTypes, eventTopic="smarthome/things/*", triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
+        if triggerName is None:
+            triggerName = uuid.uuid1().hex
+        else:
+            triggerName = "{}-{}".format(triggerName, uuid.uuid1().hex)
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
             "eventTopic": eventTopic,
             "eventSource": "smarthome/things/{}/".format(thingUID),
@@ -123,7 +146,10 @@ EVERY_HOUR = "0 0 * * * ?"
 
 class CronTrigger(Trigger):
     def __init__(self, cronExpression, triggerName=None):
-        triggerName = triggerName or uuid.uuid1().hex
+        if triggerName is None:
+            triggerName = uuid.uuid1().hex
+        else:
+            triggerName = "{}-{}".format(triggerName, uuid.uuid1().hex)
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("timer.GenericCronTrigger").withConfiguration(Configuration({"cronExpression": cronExpression})).build()
 
 class StartupTrigger(Trigger):
@@ -160,18 +186,24 @@ class ItemUpdatedTrigger(ItemRegistryTrigger):
 
 class DirectoryEventTrigger(Trigger):
     def __init__(self, path, event_kinds=[ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY], watch_subdirectories=False):
-        triggerId = type(self).__name__ + "-" + uuid.uuid1().hex
+        trigger_name = "{}-{}".format(type(self).__name__, uuid.uuid1().hex)
         config = {
             'path': path,
             'event_kinds': str(event_kinds),
             'watch_subdirectories': watch_subdirectories,
         }
-        self.trigger = TriggerBuilder.create().withId(triggerId).withTypeUID(core.DIRECTORY_TRIGGER_MODULE_ID).withConfiguration(Configuration(config)).build()
+        self.trigger = TriggerBuilder.create().withId(trigger_name).withTypeUID(core.DIRECTORY_TRIGGER_MODULE_ID).withConfiguration(Configuration(config)).build()
 
 # Function decorator trigger support
 
 def when(target, target_type=None, trigger_type=None, old_state=None, new_state=None, event_types=None, trigger_name=None):
     try:
+        def convert_trigger_name(trigger_name):
+            valid_characters = re.compile("[^A-Za-z0-9_-]")
+            trigger_name = valid_characters.sub("_", trigger_name)
+            trigger_name = re.sub(r"__+", "_", trigger_name)
+            return trigger_name
+        
         def item_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
@@ -184,7 +216,14 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             else:
                 group_members = [ item ]
             for member in group_members:
-                trigger_name = "Item-{}-{}{}{}{}".format(member.name, trigger_type.replace(" ","-"), "-from-{}".format(old_state) if old_state is not None else "", "-to-" if new_state is not None and trigger_type == "changed" else "", new_state if new_state is not None else "")
+                trigger_name = "Item-{}-{}{}{}{}{}".format(
+                    member.name,
+                    trigger_type.replace(" ","-"),
+                    "-from-{}".format(old_state) if old_state is not None else "",
+                    "-to-" if new_state is not None and trigger_type == "changed" else "",
+                    "-" if trigger_type == "received update" and new_state is not None else "",
+                    new_state if new_state is not None else "")
+                trigger_name = convert_trigger_name(trigger_name)
                 if trigger_type == "received update":
                     function.triggers.append(ItemStateUpdateTrigger(member.name, state=new_state, triggerName=trigger_name).trigger)
                 elif trigger_type == "received command":
@@ -197,7 +236,6 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         def cron_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
-            trigger_name = "Cron-{}-{}".format(function.__name__, uuid.uuid1().hex)
             function.triggers.append(CronTrigger(trigger_type, triggerName=trigger_name).trigger)
             log.debug("when: Created cron_trigger: [{}]".format(trigger_name))
             return function
@@ -229,12 +267,13 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         
         trigger_target = None
         if isValidExpression(target):
+            # a simple cron target was used, so add a default target_type and trigger_target (Time cron XXXXX)
             target_type = "Time"
             trigger_target = "cron"
             trigger_type = target
+            trigger_name = "Time-cron-{}".format(target)
         else:
-            trigger_name = trigger_name or (target.replace(":","_").replace("#","_").replace(" ","-"))
-            inputList = target.split(" ")
+            inputList = split(target)
             if len(inputList) > 1:
                 # target_type target [trigger_type] [from] [old_state] [to] [new_state]
                 while len(inputList) > 0:
@@ -299,13 +338,16 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                         elif len(inputList) > 0:# there are no more possible combinations, but there is more data
                             raise ValueError("when: \"{}\" could not be parsed. \"{}\" is invalid for \"{} {} {}\"".format(target, inputList, target_type, trigger_target, trigger_type))
 
-            else:# a simple Item target was used, so add a default target_type and trigger_type (Item XXXXX changed)
+            else:
+                # a simple Item target was used, so add a default target_type and trigger_type (Item XXXXX changed)
                 if target_type is None:
                     target_type = "Item"
                 if trigger_target is None:
                     trigger_target = target
                 if trigger_type is None:
                     trigger_type = "changed"
+
+            trigger_name = convert_trigger_name(trigger_name or target)
 
         # validate the inputs, and if anything isn't populated correctly throw an exception
         if target_type is None or target_type not in ["Item", "Member of", "Descendent of", "Thing", "Channel", "System", "Time"]:
