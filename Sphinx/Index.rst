@@ -2,46 +2,75 @@
 Helper Libraries for openHAB Scripted Automation
 ************************************************
 
+.. admonition:: **UNDER CONSTRUCTION**
 
-.. tabs::
+    The openHAB Scripters (formerly OH Jython Scripters) organization and this repository have both recently had name changes, and there has been a directory restructuring to support more languages. 
+    Javascript libraries are now included, but they require testing and are likely to have frequent updates as the functionality of the Jython libraries are added to them. 
+    Please report any issues that you find! 
 
-    .. code-tab:: py
+    If you have local repositories, you'll need to update them to point to the `new location`_.
 
-        import sys
+The main purpose of the helper libraries is to provide a layer of abstraction to simplify the interaction of scripts with the openHAB Automation API.
+These libraries can be used with `openHAB`_ (2.4M3, S1319, or newer) and the `Next-Generation Rule Engine`_. 
+The one exception is that custom module handlers, including the StartupTrigger, DirectoryTrigger, and OsgiEventTrigger in the JythonHLs, require S1566 or newer.
 
-    .. code-tab:: js
+.. toctree::
+    :caption: Getting Started
+    :maxdepth: 3
 
-        import sys;
-
-    .. code-tab:: groovy
-
-        import sys;
-
-.. tabs::
-
-    .. code-tab:: py
-
-        import sys
-
-    .. code-tab:: js
-
-        import sys;
-
-    .. code-tab:: groovy
-
-        import sys;
+    Getting Started/Installation/Installation
+    Getting Started/File Locations
+    Getting Started/First Steps
 
 
 .. toctree::
+    :caption: How To's
     :maxdepth: 2
 
-    Quick Start.rst
+    How Tos/Rules.rst
+    How Tos/Triggers.rst
+    How Tos/Logging.rst
 
 
 .. toctree::
-    :caption: Languages
-    :maxdepth: 0
+    :caption: Design Patterns
+    :maxdepth: 2
 
-    Python <file:///home/mike/git/openhab/openhab-helper-libraries/docs/Python/Index.html>
-    Javascript/index.rst
-    Groovy/index.rst
+
+.. toctree::
+    :caption: Core Modules
+    :maxdepth: 2
+    :glob:
+
+    Core Modules/Rules.rst
+    Core Modules/Triggers.rst
+    Core Modules/Log.rst
+    Core Modules/Actions.rst
+    Core Modules/*
+
+
+.. toctree::
+    :caption: Community Modules
+    :glob:
+
+    Community/*
+
+
+.. toctree::
+    :caption: Contributing
+    :maxdepth: 2
+
+    Contributing/Writing Docs
+    Contributing/Coding Guidelines
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+.. _openHAB: https://www.openhab.org
+.. _Next-Generation Rule Engine: https://www.openhab.org/docs/configuration/rules-ng.html
+.. _new location: https://help.github.com/en/articles/changing-a-remotes-url

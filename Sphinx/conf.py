@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('./../Community'))
 
 project = 'openHAB Helper Libraries'
 author = 'Michael Murton'
-copyright = 'Copyright (c) 2019 Contributors to the openHAB Scripters project'
+copyright = '2019, Contributors to the openHAB Scripters project'
 version = 'latest'
 
 

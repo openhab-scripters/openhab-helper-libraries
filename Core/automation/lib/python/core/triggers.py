@@ -43,22 +43,20 @@ from org.quartz.CronExpression import isValidExpression
 log = logging.getLogger("{}.core.triggers".format(LOG_PREFIX))
 
 class ItemStateUpdateTrigger(Trigger):
-    """Builds an Item State Update trigger object to be used when creating a
-    Rule.
+    """Builds an ItemStateUpdateTrigger Module to be used when creating a Rule.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these
-    simplified trigger builders.
+    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
 
-            MyRule.triggers = [ ItemStateUpdateTrigger("MyItem", "ON", "MyItem_received_update_ON").trigger, ]
+            MyRule.triggers = [ ItemStateUpdateTrigger("MyItem", "ON", "MyItem_received_update_ON").trigger ]
             MyRule.triggers.append( ItemStateUpdateTrigger("MyOtherItem").trigger )
 
     Args:
-        itemName (str): Name of item to watch for updates.
-        state (str): Trigger only when updated TO this state.
-        triggerName (str): Name of this trigger.
+        itemName (str): Name of item to watch for updates
+        state (str): Trigger only when updated TO this state
+        triggerName (str): Name of this trigger
 
     Attributes:
         trigger (Trigger): Trigger object to be added to a Rule.
@@ -74,11 +72,9 @@ class ItemStateUpdateTrigger(Trigger):
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateUpdateTrigger").withConfiguration(Configuration(config)).build()
 
 class ItemStateChangeTrigger(Trigger):
-    """Builds an Item State Change trigger object to be used when creating a
-    Rule.
+    """Builds an ItemStateChangeTrigger Module to be used when creating a Rule.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these
-    simplified trigger builders.
+    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
@@ -87,13 +83,13 @@ class ItemStateChangeTrigger(Trigger):
             MyRule.triggers.append( ItemStateChangeTrigger("MyOtherItem").trigger )
 
     Args:
-        itemName (str): Name of item to watch for changes.
-        previousState (str): Trigger only when changing FROM this state.
-        state (str): Trigger only when changing TO this state.
-        triggerName (str): Name of this trigger.
+        itemName (str): Name of item to watch for changes
+        previousState (str): Trigger only when changing FROM this state
+        state (str): Trigger only when changing TO this state
+        triggerName (str): Name of this trigger
 
     Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
+        trigger (Trigger): Trigger object to be added to a Rule
     """
     def __init__(self, itemName, previousState=None, state=None, triggerName=None):
         if triggerName is None:
@@ -108,25 +104,23 @@ class ItemStateChangeTrigger(Trigger):
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateChangeTrigger").withConfiguration(Configuration(config)).build()
 
 class ItemCommandTrigger(Trigger):
-    """Builds an Item received Command trigger object to be used when creating a
-    Rule.
+    """Builds an ItemCommandTrigger Module to be used when creating a Rule.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these
-    simplified trigger builders.
+    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
 
-            MyRule.triggers = [ ItemCommandTrigger("MyItem", "ON", "MyItem_received_command_ON").trigger, ]
+            MyRule.triggers = [ ItemCommandTrigger("MyItem", "ON", "MyItem_received_command_ON").trigger ]
             MyRule.triggers.append( ItemCommandTrigger("MyOtherItem").trigger )
 
     Args:
-        itemName (str): Name of item to watch for commands.
-        command (str): Trigger only when this command is received.
-        triggerName (str): Name of this trigger.
+        itemName (str): Name of item to watch for commands
+        command (str): Trigger only when this command is received
+        triggerName (str): Name of this trigger
 
     Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
+        trigger (Trigger): Trigger object to be added to a Rule
     """
     def __init__(self, itemName, command=None, triggerName=None):
         if triggerName is None:
@@ -139,11 +133,9 @@ class ItemCommandTrigger(Trigger):
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemCommandTrigger").withConfiguration(Configuration(config)).build()
 
 class ChannelEventTrigger(Trigger):
-    """Builds an Channel Trigger trigger object to be used when creating a
-    Rule.
+    """Builds an ChannelEventTrigger Module to be used when creating a Rule.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these
-    simplified trigger builders.
+    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
@@ -152,9 +144,9 @@ class ChannelEventTrigger(Trigger):
             MyRule.triggers.append( ChannelEventTrigger("binding:segment:segment").trigger )
 
     Args:
-        channelUID (str): Channel to watch for trigger events.
-        event (str): Trigger only when channel triggers this event.
-        triggerName (str): Name of this trigger.
+        channelUID (str): Channel to watch for trigger events
+        event (str): Trigger only when Channel triggers this event
+        triggerName (str): Name of this trigger
 
     Attributes:
         trigger (Trigger): Trigger object to be added to a Rule.
@@ -280,8 +272,7 @@ class DirectoryEventTrigger(Trigger):
 def when(target, target_type=None, trigger_type=None, old_state=None, new_state=None, event_types=None, trigger_name=None):
     """openHAB DSL style trigger decorator.
 
-    See :ref:`How Tos/Rules:Decorators` for a full description of how to use
-    this decorator.
+    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
@@ -290,22 +281,20 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             @when("Item Test_Switch_2 received update ON")
             @when("Item gMotion_Sensors changed to ON")
             @when("Member of gMotion_Sensors changed to OFF")
-            @when("Descendent of gContact_Sensors changed to ON") # Similar to "Member of", but will create a trigger for each non-group sibling Item (think group_item.allMembers())
+            @when("Descendent of gContact_Sensors changed to ON") # Similar to "Member of", but will create a trigger for each non-group sibling Item (similar to group_item.allMembers())
             @when("Thing kodi:kodi:familyroom changed") # ThingStatusInfo (from <status> to <status>) cannot currently be used in triggers
             @when("Channel astro:sun:local:eclipse#event triggered START")
-            @when("System started") # "System shuts down" cannot currently be used as a trigger, and "System started" needs to be updated to work with Automation API updates
+            @when("System started") # 'System started' requires S1566 or newer, and 'System shuts down' is not available
             @when("Time cron 55 55 5 * * ?")
 
     Args:
-        target (str): Trigger expression to parse.
-        target_type (str): Target type ("Item", "Channel", etc).
-        trigger_type (str): Event type ("changed", "received command", etc).
-        old_state (str): "From" state for "Item changed" events.
-        new_state (str): New state for "changed to", "Item/ received
-            update/command", and "Channel triggered" triggers.
-        event_types (str): unused.
-        trigger_name (str): Name to assign to this trigger. Will be generated
-            from ``target`` if not provided.
+        target (str): Trigger expression to parse
+        target_type (str): Target type ("Item", "Channel", etc.)
+        trigger_type (str): Trigger type ("changed", "received command", etc.)
+        old_state (str): Old state for "Item changed from" events
+        new_state (str): New state for "changed to", "Item received update/command", and "Channel triggered" events
+        event_types (str): Event type for GenericEventTrigger (keeps backwards compatibility with earlier versions)
+        trigger_name (str): Name to assign to this trigger
     """
 
     try:
