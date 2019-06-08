@@ -16,11 +16,12 @@ The one exception is that custom module handlers, including the StartupTrigger, 
 
 .. toctree::
     :caption: Getting Started
+    :includehidden:
     :maxdepth: 3
 
-    Getting Started/Installation/Installation
-    Getting Started/File Locations
-    Getting Started/First Steps
+    Getting Started/Installation/Installation.rst
+    Getting Started/File Locations.rst
+    Getting Started/First Steps.rst
 
 
 .. toctree::
@@ -54,6 +55,15 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     :glob:
 
     Community/*
+
+
+.. toctree::
+    :caption: Language Specific
+    :maxdepth: 2
+    :glob:
+
+    Language Specific/Python.rst
+    Language Specific/*
 
 
 .. toctree::

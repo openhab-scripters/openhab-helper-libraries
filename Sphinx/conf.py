@@ -10,11 +10,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-sys.path.insert(0, os.path.abspath('./../Core/automation/lib/python'))
-sys.path.insert(0, os.path.abspath('./../Community'))
-
+import os, sys
+sys.path.append(os.path.abspath('./imports/automation/lib/python'))
+sys.path.append(os.path.abspath('./imports/automation/jsr223/python'))
 
 # -- Project information -----------------------------------------------------
 

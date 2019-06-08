@@ -2,6 +2,12 @@
 Installation
 ************
 
+.. toctree::
+    :hidden:
+    :maxdepth: 0
+
+    Docker.rst
+
 .. # define a hard line break for HTML
 .. |br| raw:: html
 
@@ -135,10 +141,10 @@ Installation
         #.  |step10|
 
 
-Docker
-======
+.. Docker
+.. ======
 
-There are also instructions for installation in a :doc:`Docker` container.
+.. There are also instructions for installation in a :doc:`Docker` container.
 
 
 Check out the :doc:`../First Steps` page for what to do next.
