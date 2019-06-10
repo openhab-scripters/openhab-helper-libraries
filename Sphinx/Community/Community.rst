@@ -27,3 +27,10 @@ This script automates the process of deleting all Z-Wave Things and then redisco
 This script will parse all Alexa voice commands, and if they match the text in the rule, it will send a command to an Item linked to that Alexa device's TTS Channel. 
 For example, you can ask Alexa "Are the doors locked?", and the device that was asked will respond with "all doors are locked" or a list of the unlocked doors. 
 Additional phrases can be added.
+
+
+.. toctree::
+    :maxdepth: 2
+    :glob:
+
+    Packages/*

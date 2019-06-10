@@ -53,10 +53,10 @@ This will allow for things like accessing the itemRegistry:
 
 
 Module Locations
-===============+
+================
 
 One of the benefits of Jython over the openHAB rule DSL scripts is that you can use the full power of Python packages and modules to structure your code into reusable components. 
-After folloing the installation steps, these modules will be located in ``/automation/lib/python/``.
+After following the installation steps, these modules will be located in ``/automation/lib/python/``.
 They can be located anywhere, but the Python path must be configured to find them.
 There are several ways to do this: 
 

@@ -31,7 +31,7 @@ master_doc = 'Index'
 highlight_language = 'python'
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'igor'
+pygments_style = 'fruity'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom

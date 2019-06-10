@@ -2,7 +2,7 @@
 Rules
 *****
 
-One of the primary use cases for JSR223 scripting in openHAB is to define rules for the `Next-Generation Rule Engine`_ using the `Automation API`_. 
+One of the primary use cases for JSR223 scripting in openHAB is to define rules for the `Next-Generation Rule Engine`_ using the `Automation API`_.
 The rule engine structures rules with *Modules* (Triggers, Conditions, Actions).
 Modules are further broken down into *ModuleTypes* with cooresponding *ModuleHandlers*.
 Scripted rules can use ModuleTypes that are already present in openHAB, and also define new ones that can be used outside of the scripting language that defined it, including rules created in the UI.
@@ -10,8 +10,8 @@ Scripted rules can use ModuleTypes that are already present in openHAB, and also
 .. _Next-Generation Rule Engine: https://www.openhab.org/docs/configuration/rules-ng.html
 .. _Automation API: http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api
 
-In increasing order of complexity, rules can be written using the :ref:`How Tos/Rules:Decorators`, :ref:`How Tos/Rules:Extensions`, or the :ref:`How Tos/Rules:Raw API`.
-The details for all of these methods are included here for reference, but the section on :ref:`How Tos/Rules:Decorators` should be all that is needed for creating your rules.
+In increasing order of complexity, rules can be written using the :ref:`Guides/Rules:Decorators`, :ref:`Guides/Rules:Extensions`, or the :ref:`Guides/Rules:Raw API`.
+The details for all of these methods are included here for reference, but the section on :ref:`Guides/Rules:Decorators` should be all that is needed for creating your rules.
 The decorators are abstractions (simplifications) of the extensions, which are abstractions of the raw API.
 
 .. warning::
@@ -22,9 +22,9 @@ The decorators are abstractions (simplifications) of the extensions, which are a
 Decorators
 ==========
 
-The easiest way to write rules, and the most familiar if you have used the openHAB rules DSL, is using the decorators provided by this library. 
-Function decorators are part of the Python language and allow you to modify a function, to "decorate" it, using another function. 
-The libraries provide a decorator called ``rule`` for defining rules and another called ``when`` for adding triggers to rules. 
+The easiest way to write rules, and the most familiar if you have used the openHAB rules DSL, is using the decorators provided by this library.
+Function decorators are part of the Python language and allow you to modify a function, to "decorate" it, using another function.
+The libraries provide a decorator called ``rule`` for defining rules and another called ``when`` for adding triggers to rules.
 This section will show you how to define rules and triggers, and it will also compare their usage with the syntax of the rules DSL to help with migration.
 
 
@@ -39,14 +39,14 @@ Imports
 
         .. group-tab:: Python
 
-            .. code-block:: python
+            .. code-block::
 
                 from core.rules import rule
                 from core.triggers import when
 
-        .. group-tab:: Javascript
+        .. group-tab:: JavaScript
 
-            Decorators have not yet been created for the Javascript helper libraries.
+            Decorators have not yet been created for the JavaScript helper libraries.
 
         .. group-tab:: Groovy
 
@@ -62,19 +62,19 @@ Imports
 
     The first step to creating a decorated rule is to give it a name that is unique in your openHAB configuration, and optionally a description and tags:
     The optional ``description`` allows for more detail about what a rule does and is displayed in the UI.
-    The ``tags`` list is also optional, and useful for categorizing rules to simplifying searches. 
+    The ``tags`` list is also optional, and useful for categorizing rules to simplifying searches.
 
     .. tabs::
 
         .. group-tab:: Python
-    
+
             .. code-block:: python
 
                 @rule("Rule Name", description="Optional Rule Description", tag=["Tag 1", "Tag 2"])
 
-        .. group-tab:: Javascript
+        .. group-tab:: JavaScript
 
-            Decorators have not yet been created for the Javascript helper libraries.
+            Decorators have not yet been created for the JavaScript helper libraries.
 
         .. group-tab:: Groovy
 
@@ -91,24 +91,24 @@ Imports
 @when
 -----
 
-    Next we need to add triggers to the rule using the ``when`` decorator. 
+    Next we need to add triggers to the rule using the ``when`` decorator.
     You may add as many or as few triggers as you want.
-    Technically, you don't have to add any, but your rule will never be triggered if you don't. 
-    ``@when`` must always follow ``@rule``, when writing rules. 
+    Technically, you don't have to add any, but your rule will never be triggered if you don't.
+    ``@when`` must always follow ``@rule``, when writing rules.
     The syntax for ``when`` is quite simple:
 
     .. tabs::
 
         .. group-tab:: Python
-    
-            .. code-block:: python
-            
+
+            .. code-block::
+
                 @rule("Rule Name", description="Optional Rule Description", tag=["Tag 1", "Tag 2"])
                 @when("Item my_item changed to ON")
 
-        .. group-tab:: Javascript
+        .. group-tab:: JavaScript
 
-            Decorators have not yet been created for the Javascript helper libraries.
+            Decorators have not yet been created for the JavaScript helper libraries.
 
         .. group-tab:: Groovy
 
@@ -123,35 +123,35 @@ Imports
                     Item my_item changed to ON
 
     The full list of triggers and details on each one can be found on the
-    :doc:`../How Tos/Triggers` page.
+    :doc:`../Guides/Triggers` page.
 
 
 Function
 --------
 
     Finally the last piece is the actual code of your rule, which is a function.
-    The name of this function must be unique within the file it is in. 
+    The name of this function must be unique within the file it is in.
     It must be able to accept one positional argument, which will always be ``event`` in this documentation.
 
     The rule decorator adds some helpful attributes to the function.
     The rule UID is useful when enabling/disabling rules, ``my_rule_function.UID``.
     A logger is also provided for each rule, ``my_rule_function.log.info("Log message")``, and it will use the logger ``<core.logging.LOG_PREFIX>.Rule_Name``.
-    More information on logging can be found on the :doc:`../How Tos/Logging` page.
+    More information on logging can be found on the :doc:`../Guides/Logging` page.
 
     .. tabs::
 
         .. group-tab:: Python
 
-            .. code-block:: python
-            
+            .. code-block::
+
                 @rule("Rule Name", description="Optional Rule Description", tag=["Tag 1", "Tag 2"])
                 @when("Item my_item changed to ON")
                 def my_rule_function(event):
-                    # your Python code here
+                    my_rule_function.log.info("My rule has been executed")
 
-        .. group-tab:: Javascript
+        .. group-tab:: JavaScript
 
-            Decorators have not yet been created for the Javascript helper libraries.
+            Decorators have not yet been created for the JavaScript helper libraries.
 
         .. group-tab:: Groovy
 

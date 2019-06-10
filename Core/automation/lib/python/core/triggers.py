@@ -45,7 +45,7 @@ log = logging.getLogger("{}.core.triggers".format(LOG_PREFIX))
 class ItemStateUpdateTrigger(Trigger):
     """Builds an ItemStateUpdateTrigger Module to be used when creating a Rule.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
@@ -74,7 +74,7 @@ class ItemStateUpdateTrigger(Trigger):
 class ItemStateChangeTrigger(Trigger):
     """Builds an ItemStateChangeTrigger Module to be used when creating a Rule.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
@@ -106,7 +106,7 @@ class ItemStateChangeTrigger(Trigger):
 class ItemCommandTrigger(Trigger):
     """Builds an ItemCommandTrigger Module to be used when creating a Rule.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
@@ -135,7 +135,7 @@ class ItemCommandTrigger(Trigger):
 class ChannelEventTrigger(Trigger):
     """Builds an ChannelEventTrigger Module to be used when creating a Rule.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
@@ -272,7 +272,7 @@ class DirectoryEventTrigger(Trigger):
 def when(target, target_type=None, trigger_type=None, old_state=None, new_state=None, event_types=None, trigger_name=None):
     """openHAB DSL style trigger decorator.
 
-    See :ref:`How Tos/Rules:Extensions` for examples of how to use these extensions
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions
 
     Examples:
         .. code-block::
@@ -281,7 +281,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             @when("Item Test_Switch_2 received update ON")
             @when("Item gMotion_Sensors changed to ON")
             @when("Member of gMotion_Sensors changed to OFF")
-            @when("Descendent of gContact_Sensors changed to ON") # Similar to "Member of", but will create a trigger for each non-group sibling Item (similar to group_item.allMembers())
+            @when("Descendent of gContact_Sensors changed to OPEN") # Similar to 'Member of', but creates a trigger for each non-group sibling Item (think group_item.allMembers())
             @when("Thing kodi:kodi:familyroom changed") # ThingStatusInfo (from <status> to <status>) cannot currently be used in triggers
             @when("Channel astro:sun:local:eclipse#event triggered START")
             @when("System started") # 'System started' requires S1566 or newer, and 'System shuts down' is not available

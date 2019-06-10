@@ -42,7 +42,7 @@ First Steps
                     helloWorldDecoratorCron.log.info("This is a 'hello world!' from a Jython rule (decorator): Cron")
 
         The ``.info`` part is the log level. 
-        More information on these can be found in :doc:`../How Tos/Logging`.
+        More information on these can be found in :doc:`../Guides/Logging`.
 
         Now lets dig in to the good stuff... the decorators! 
         Decorators are basically just functions that modify other functions, but Python lets us put them on a single line starting with ``@`` above the function we want to "decorate". 
@@ -77,7 +77,7 @@ First Steps
                 @when("Time cron 0/10 * * * * ?")
 
         Put all of these concepts together and we have a rule that prints to the *info* log once every 10 seconds. 
-        Head over to :doc:`../How Tos/Rules` to learn more about writing your own rules.
+        Head over to :doc:`../Guides/Rules` to learn more about writing your own rules.
 
     .. group-tab:: Javascript
 

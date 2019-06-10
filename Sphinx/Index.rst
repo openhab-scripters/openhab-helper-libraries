@@ -4,20 +4,20 @@ Helper Libraries for openHAB Scripted Automation
 
 .. admonition:: **UNDER CONSTRUCTION**
 
-    The openHAB Scripters (formerly OH Jython Scripters) organization and this repository have both recently had name changes, and there has been a directory restructuring to support more languages. 
-    Javascript libraries are now included, but they require testing and are likely to have frequent updates as the functionality of the Jython libraries are added to them. 
-    Please report any issues that you find! 
+    The openHAB Scripters (formerly OH Jython Scripters) organization and this repository have both recently had name changes, and there has been a directory restructuring to support more languages.
+    Javascript libraries are now included, but they require testing and are likely to have frequent updates as the functionality of the Jython libraries are added to them.
+    Please report any issues that you find!
 
     If you have local repositories, you'll need to update them to point to the `new location`_.
 
 The main purpose of the helper libraries is to provide a layer of abstraction to simplify the interaction of scripts with the openHAB Automation API.
-These libraries can be used with `openHAB`_ (2.4M3, S1319, or newer) and the `Next-Generation Rule Engine`_. 
+These libraries can be used with `openHAB`_ (2.4M3, S1319, or newer) and the `Next-Generation Rule Engine`_.
 The one exception is that custom module handlers, including the StartupTrigger, DirectoryTrigger, and OsgiEventTrigger in the JythonHLs, require S1566 or newer.
 
 .. toctree::
     :caption: Getting Started
     :includehidden:
-    :maxdepth: 3
+    :maxdepth: 2
 
     Getting Started/Installation/Installation.rst
     Getting Started/File Locations.rst
@@ -25,36 +25,26 @@ The one exception is that custom module handlers, including the StartupTrigger, 
 
 
 .. toctree::
-    :caption: How To's
+    :caption: Guides
     :maxdepth: 2
 
-    How Tos/Rules.rst
-    How Tos/Triggers.rst
-    How Tos/Logging.rst
+    Guides/Rules.rst
+    Guides/Triggers.rst
+    Guides/Logging.rst
+    Guides/But How Do I.rst
+
+
+.. toctree::
+    :caption: Packages
+    :maxdepth: 2
+
+    Core/Core.rst
+    Community/Community.rst
 
 
 .. toctree::
     :caption: Design Patterns
     :maxdepth: 2
-
-
-.. toctree::
-    :caption: Core Modules
-    :maxdepth: 2
-    :glob:
-
-    Core Modules/Rules.rst
-    Core Modules/Triggers.rst
-    Core Modules/Log.rst
-    Core Modules/Actions.rst
-    Core Modules/*
-
-
-.. toctree::
-    :caption: Community Modules
-    :glob:
-
-    Community/*
 
 
 .. toctree::
@@ -70,8 +60,8 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     :caption: Contributing
     :maxdepth: 2
 
-    Contributing/Writing Docs
     Contributing/Coding Guidelines
+    Contributing/Writing Docs
 
 
 Indices and tables

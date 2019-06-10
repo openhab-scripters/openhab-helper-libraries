@@ -45,7 +45,7 @@ class _FunctionRule(scope.SimpleRule):
 def rule(name=None, description=None, tags=None):
     """openHAB DSL style rule decorator.
 
-    See :ref:`How Tos/Rules:Decorators` for a full description of how to use
+    See :ref:`Guides/Rules:Decorators` for a full description of how to use
     this decorator.
 
     Examples:
@@ -102,7 +102,7 @@ def addRule(rule):
     """Adds ``rule`` to openHAB's ``ruleRegistry``.
 
     This is a wrapper of ``automationManager.addRule()`` that does not require
-    any additional imports. See :ref:`How Tos/Rules:Extensions` for examples of
+    any additional imports. See :ref:`Guides/Rules:Extensions` for examples of
     how to use this function.
 
     Args:
