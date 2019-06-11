@@ -1,3 +1,8 @@
+"""
+Shows an example of using the `core.actions` module to access an Action.
+Requires the Astro action.
+"""
+
 from core.actions import Astro
 from core.log import logging, LOG_PREFIX
 from java.util import Date

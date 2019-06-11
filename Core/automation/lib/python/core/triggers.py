@@ -1,3 +1,42 @@
+"""
+This module includes trigger subclasses and function decorators to simplify Jython rule definitions.
+
+
+Trigger classes for wrapping Automation API (see [Using Jython extensions](Defining-Rules.md#using-jython-extensions)):
+
+* *ItemStateChangeTrigger*
+* *ItemStateUpdateTrigger*
+* *ItemCommandTrigger*
+* *ItemEventTrigger* (based on "core.GenericEventTrigger")
+* *CronTrigger*
+* *StartupTrigger* - fires when rule is activated (implemented in Jython)
+* *DirectoryEventTrigger* - fires when directory contents change (Jython, see related component for more info)
+* *ItemAddedTrigger* - fires when rule is added to the RuleRegistry (implemented in Jython)
+* *ItemRemovedTrigger* - fires when rule is removed from the RuleRegistry (implemented in Jython)
+* *ItemUpdatedTrigger* - fires when rule is updated in the RuleRegistry (implemented in Jython, not a state update!)
+* *ChannelEventTrigger* - fires when a Channel gets an event e.g. from the Astro Binding
+
+
+Trigger function decorator (see the `core.rules` module for the [rule decorator](#module-corerules) that is used in conjunction with the trigger decorator):
+
+* *@when("Item Test_Switch_1 received command OFF")*
+* *@when("Item Test_Switch_2 received update ON")*
+* *@when("Member of gMotion_Sensors changed to OFF")*
+* *@when("Descendent of gContact_Sensors changed to ON")*
+* *@when("Thing kodi:kodi:familyroom changed")* ``Thing statuses cannot currently be used in triggers``
+* *@when("Channel astro:sun:local:eclipse#event triggered START")*
+* *@when("System started")* ``'System started' requires S1566 or newer, and 'System shuts down' is not available``
+* *@when("55 55 5 * * ?")*
+
+
+As a workaround for 'System started', add the rule function directly to the script. 
+Here is an example that can be used with the function from the hello_world.py example script...
+
+.. code-block:: python
+
+    helloWorldCronDecorators(None)
+"""
+
 from core.jsr223 import scope
 scope.scriptExtension.importPreset(None)
 

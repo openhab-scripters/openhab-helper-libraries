@@ -1,3 +1,7 @@
+"""
+This script adds a ThingProvider.
+"""
+
 scriptExtension.importPreset(None)
 
 provider_class = None

@@ -1,3 +1,7 @@
+"""
+This example shows two methods of using timers in rules.
+"""
+
 from core.rules import rule
 from core.triggers import when
 

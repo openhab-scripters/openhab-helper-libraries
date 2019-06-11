@@ -1,3 +1,8 @@
+"""
+This script defines a Command extension to the OSGI console. 
+The example Command prints some Jython platform details to the console output.
+"""
+
 import platform
 
 from core.osgi import register_service, unregister_service

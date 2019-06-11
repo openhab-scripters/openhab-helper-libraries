@@ -1,4 +1,9 @@
-# NOTE: Requires JythonItemProvider component
+"""
+This module allows runtime creation and removal of items.
+It will also remove any links from an Item before it is removed.
+This module requires the JythonItemProvder and JythonItemChannelLinkProvider component scripts.
+"""
+
 from core.jsr223 import scope
 scope.scriptExtension.importPreset(None)
 

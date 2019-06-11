@@ -1,3 +1,8 @@
+"""
+This script defines a transformation service (identified by "JYTHON") that will process a value using a Jython script. 
+This is similar to the Javascript transformation service.
+"""
+
 scriptExtension.importPreset(None)
 
 transformation_class = None

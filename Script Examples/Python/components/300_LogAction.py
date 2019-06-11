@@ -1,3 +1,7 @@
+"""
+This is a simple rule action that will log a message to the openHAB log file.
+"""
+
 from org.slf4j import Logger, LoggerFactory
 
 scriptExtension.importPreset("RuleSupport")

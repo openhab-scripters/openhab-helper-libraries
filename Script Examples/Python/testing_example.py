@@ -1,5 +1,5 @@
 """
-This example demonstrates logging, rue and trigger decorator, and the test runner.
+Examples of unit testing.
 
 Required Items:
     Number TestNumber1

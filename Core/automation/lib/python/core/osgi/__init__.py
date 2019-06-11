@@ -1,3 +1,7 @@
+"""
+Provides utility function for retrieving, registering and removing OSGI services.
+"""
+
 from core.jsr223.scope import scriptExtension
 from org.osgi.framework import FrameworkUtil
 

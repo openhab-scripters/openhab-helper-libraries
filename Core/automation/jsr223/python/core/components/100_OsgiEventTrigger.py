@@ -1,3 +1,7 @@
+"""
+This rule trigger responds to events on the OSGI EventAdmin event bus.
+"""
+
 scriptExtension.importPreset(None)
 
 import java.util

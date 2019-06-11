@@ -1,4 +1,7 @@
-# Requires 100_DirectoryTrigger.py component
+"""
+Example of a rule that watches for files created in a specified directory.
+Requires 100_DirectoryTrigger.py component.
+"""
 
 from core.triggers import DirectoryEventTrigger, ENTRY_CREATE     
 from core.rules import rule

@@ -1,3 +1,7 @@
+"""
+This script adds a BindingInfoProvider.
+"""
+
 scriptExtension.importPreset(None)
 
 from distutils.log import info

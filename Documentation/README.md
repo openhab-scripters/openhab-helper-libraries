@@ -17,4 +17,5 @@ The one exception is that custom module handlers, including the StartupTrigger, 
 
 A previous version for Jython that is compatible with earlier versions of openHAB, but with reduced functionality, has been archived to [this branch](https://github.com/OH-Jython-Scripters/openhab2-jython/tree/original_(%3C%3D2.3)).
 
+
 These works are based on the original contributions of Steve Bate, for which we are very thankful!  :vulcan_salute: 

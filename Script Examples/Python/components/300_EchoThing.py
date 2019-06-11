@@ -1,12 +1,16 @@
 """
-This is a very experimental Thing implementation. It writes values from its input channel
-to the state of the items linked to the output channel. It requires several other components:
+This is a very experimental Thing binding and handler implemented in Jython.
+At the time of this writing, it requires a small change to the openHAB source code for it to work.
+This simple Thing will write state updates on its input Channel to Items' states linked to the output Channel.
+
+Requires several other components:
 
     * JythonThingTypeProvider
     * JythonBindingInfoProvider
     
 Note: there are load ordering issues that will need to be resolved.
 """
+
 scriptExtension.importPreset(None)
 
 try:

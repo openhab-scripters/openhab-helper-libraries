@@ -1,3 +1,10 @@
+"""
+The rules module contains some utility functions and a decorator that can:
+
+    1) convert a Jython class into a `SimpleRule`, 
+    2) decorate the trigger decorator (@when) to create a `SimpleRule`.
+"""
+
 from inspect import isclass
 from java.util import UUID
 
@@ -102,8 +109,12 @@ def addRule(rule):
     """Adds ``rule`` to openHAB's ``ruleRegistry``.
 
     This is a wrapper of ``automationManager.addRule()`` that does not require
-    any additional imports. See :ref:`Guides/Rules:Extensions` for examples of
-    how to use this function.
+    any additional imports. The `addRule` function is similar to the 
+    `automationManager.addRule` function, except that it can be safely used in
+    modules (versus scripts). Since the `automationManager` is different for
+    every script scope, the `core.rules.addRule` function looks up the
+    automation manager for each call. See :ref:`Guides/Rules:Extensions` for
+    examples of how to use this function.
 
     Args:
         rule (Rule): A rule to add to openHAB.

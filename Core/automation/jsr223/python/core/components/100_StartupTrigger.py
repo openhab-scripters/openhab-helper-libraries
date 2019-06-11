@@ -1,3 +1,7 @@
+"""
+Defines a rule trigger that triggers a rule when the script loads, including system startup.
+"""
+
 scriptExtension.importPreset(None)
 
 import traceback

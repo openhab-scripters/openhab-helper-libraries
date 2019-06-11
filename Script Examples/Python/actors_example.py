@@ -1,3 +1,8 @@
+"""
+This script shows an example of using the Pykka actors library.
+The Pykka library must be in the Java classpath.
+"""
+
 import re
 import collections
 import json

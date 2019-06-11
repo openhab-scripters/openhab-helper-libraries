@@ -1,6 +1,8 @@
-# This example demonstrates using the rule registry, getting a rule's status, enabling/disabling
-# rules, and manually running a rule. This will require a rule with a "Test tag" tag. Tags can
-# be set in rule constructors (self.tags = ["tag1", "tag2"]), or in the rule decorator.
+"""
+This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags, enable and disable rule instances dynamically, and manually fire rules with specified inputs.
+Requires a rule with a "Test tag" tag.
+Tags can be set in the rule decorator or rule constructors (self.tags = ["tag1", "tag2"]).
+"""
 
 import time
 

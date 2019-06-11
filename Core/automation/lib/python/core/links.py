@@ -1,4 +1,8 @@
-# NOTE: Requires JythonItemChannelLinkProvider component
+"""
+This module allows runtime creation and removal of links.
+This module requires the JythonItemChannelLinkProvider component script.
+"""
+
 from core.jsr223 import scope
 scope.scriptExtension.importPreset(None)
 

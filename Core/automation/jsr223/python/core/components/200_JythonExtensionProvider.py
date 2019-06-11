@@ -1,3 +1,7 @@
+"""
+This component implements the openHAB extension provider interfaces and can be used to provide symbols to a script namespace.
+"""
+
 ScriptExtensionProvider = None
 
 import collections
