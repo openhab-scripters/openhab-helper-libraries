@@ -1,5 +1,6 @@
 """
-This script adds an ItemChannelLinkProvider, so that Links can be added and removed at runtime.
+This script adds an ItemChannelLinkProvider, so that Links can be added and
+removed at runtime.
 """
 
 scriptExtension.importPreset(None)

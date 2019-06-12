@@ -1,6 +1,6 @@
 """
-This trigger can respond to file system changes.
-For example, you could watch a directory for new files and then process them.
+This trigger can respond to file system changes. For example, you could watch a
+directory for new files and then process them.
 """
 
 scriptExtension.importPreset(None)

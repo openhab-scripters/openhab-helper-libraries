@@ -2,81 +2,8 @@
 But How Do I...?
 ****************
 
-Single line comment
--------------------
-
-.. tabs::
-
-    .. group-tab:: Python
-
-        .. code-block::
-
-            # this is a single line comment
-
-    .. group-tab:: JavaScript
-
-        .. code-block:: JavaScript
-
-            // this is a single line comment
-
-    .. group-tab:: Groovy
-
-        .. code-block:: Groovy
-
-            // this is a single line comment
-
-    .. group-tab:: Rules DSL
-
-        .. code-block:: java
-
-            // this is a single line comment
-
-
-Multiline comment
------------------
-
-.. tabs::
-
-    .. group-tab:: Python
-
-        .. code-block::
-
-            '''
-            this is
-            a multiline
-            comment
-            '''
-
-    .. group-tab:: JavaScript
-
-        .. code-block:: JavaScript
-
-            /*
-            this is
-            a multiline
-            comment
-            */
-
-    .. group-tab:: Groovy
-
-        .. code-block:: Groovy
-
-            /*
-            this is
-            a multiline
-            comment
-            */
-
-    .. group-tab:: Rules DSL
-
-        .. code-block:: java
-
-            /*
-            this is
-            a multiline
-            comment
-            */
-
+Items
+=====
 
 Get an Item
 -----------
@@ -410,67 +337,6 @@ Stop a rule if the triggering Item's state is NULL or UNDEF
             }
 
 
-Use org.joda.time.DateTime
---------------------------
-
-.. tabs::
-
-    .. group-tab:: Python
-
-        .. code-block::
-
-            from org.joda.time import DateTime
-            start = DateTime.now()
-
-    .. group-tab:: JavaScript
-
-        .. code-block:: JavaScript
-
-            var DateTime = Java.type("org.joda.time.DateTime");
-            start = DateTime.now()
-
-    .. group-tab:: Groovy
-
-        .. code-block:: Groovy
-
-            import org.joda.time.DateTime
-            start = DateTime.now()
-
-    .. group-tab:: Rules DSL
-
-        .. code-block:: java
-
-            now
-
-
-Use a timer
------------
-
-.. tabs::
-
-    .. group-tab:: Python
-
-        See the `timer_example.py <https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Script%20Examples/Python/timer_example.py>`_ in the Script Examples for examples of using both Python `threading.Timer <https://docs.python.org/2/library/threading.html#timer-objects>`_ and the openHAB `createTimer Action <https://www.openhab.org/docs/configuration/actions.html#timers>`_.
-
-    .. group-tab:: JavaScript
-
-        .. code-block:: JavaScript
-
-            TODO
-
-    .. group-tab:: Groovy
-
-        .. code-block:: Groovy
-
-            TODO
-
-    .. group-tab:: Rules DSL
-
-        .. code-block:: java
-
-            TODO
-
-
 Convert a value to a state for comparison
 -----------------------------------------
 
@@ -539,35 +405,8 @@ Convert DecimalType to an integer or float for arithmetic
             TODO
 
 
-Pause a thread
---------------
-
-.. tabs::
-
-    .. group-tab:: Python
-
-        .. code-block::
-
-            from time import sleep
-            sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
-
-    .. group-tab:: JavaScript
-
-        .. code-block:: JavaScript
-
-            TODO
-
-    .. group-tab:: Groovy
-
-        .. code-block:: Groovy
-
-            TODO
-
-    .. group-tab:: Rules DSL
-
-        .. code-block:: java
-
-            Thread::sleep(5000)// the unit is milliseconds
+Groups
+======
 
 
 Get the members or all members of a Group
@@ -737,7 +576,6 @@ Get first 5 Items from a filtered list of Group members
             TODO
 
 
-
 Get a sorted list of Group members matching a condition
 -------------------------------------------------------
 
@@ -770,8 +608,6 @@ Get a sorted list of Group members matching a condition
             TODO
 
 
-
-
 Get a list of values mapped from the members of a Group
 -------------------------------------------------------
 
@@ -802,7 +638,6 @@ Get a list of values mapped from the members of a Group
         .. code-block:: java
 
             TODO
-
 
 
 Perform an arithmetic reduction of values from members of a Group
@@ -838,7 +673,6 @@ Perform an arithmetic reduction of values from members of a Group
             TODO
 
 
-
 Example with several functions using Group members
 --------------------------------------------------
 
@@ -871,33 +705,84 @@ Example with several functions using Group members
             TODO
 
 
-Read/Add/Remove Item metadata
------------------------------
+Miscellaneous
+=============
+
+
+Single line comment
+-------------------
 
 .. tabs::
 
     .. group-tab:: Python
 
-            https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
+        .. code-block::
+
+            # this is a single line comment
 
     .. group-tab:: JavaScript
 
         .. code-block:: JavaScript
 
-            TODO
+            // this is a single line comment
 
     .. group-tab:: Groovy
 
         .. code-block:: Groovy
 
-            TODO
+            // this is a single line comment
 
     .. group-tab:: Rules DSL
 
         .. code-block:: java
 
-            Metadata can be added and removed, but not read
+            // this is a single line comment
 
+
+Multiline comment
+-----------------
+
+.. tabs::
+
+    .. group-tab:: Python
+
+        .. code-block::
+
+            '''
+            this is
+            a multiline
+            comment
+            '''
+
+    .. group-tab:: JavaScript
+
+        .. code-block:: JavaScript
+
+            /*
+            this is
+            a multiline
+            comment
+            */
+
+    .. group-tab:: Groovy
+
+        .. code-block:: Groovy
+
+            /*
+            this is
+            a multiline
+            comment
+            */
+
+    .. group-tab:: Rules DSL
+
+        .. code-block:: java
+
+            /*
+            this is
+            a multiline
+            comment
+            */
 
 View the names of an object's attributes
 ----------------------------------------
@@ -921,7 +806,8 @@ View the names of an object's attributes
 
         .. code-block:: Groovy
 
-            TODO
+            // replace `object` with the object you'd like to introspect
+            object.properties.each{log.warn("object: " + it)}
 
     .. group-tab:: Rules DSL
 
@@ -1099,23 +985,14 @@ Enable/disable a Thing
             TODO
 
 
-`Persistence extensions <https://www.openhab.org/docs/configuration/persistence.html#persistence-extensions-in-scripts-and-rules>`_
------------------------------------------------------------------------------------------------------------------------------------
-
-Others not listed are similar
+Read/Add/Remove Item metadata
+-----------------------------
 
 .. tabs::
 
     .. group-tab:: Python
 
-        .. code-block::
-
-            from core.actions import PersistenceExtensions
-            PersistenceExtensions.previousState(ir.getItem("Weather_SolarRadiation"), True).state
-
-            from org.joda.time import DateTime
-            PersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1))
-            PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state
+            https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
 
     .. group-tab:: JavaScript
 
@@ -1133,117 +1010,81 @@ Others not listed are similar
 
         .. code-block:: java
 
-            TODO
+            Metadata can be added and removed, but not read
 
 
-Use other `Core & Cloud Actions <https://www.openhab.org/docs/configuration/actions.html#core-actions>`_
---------------------------------------------------------------------------------------------------------
-
-In order to avoid namespace conflicts with the ``actions`` object provided in the default scope, don't do ``import core.actions``.
-
-For ScriptExecution, see :ref:`Guides/But How Do I:Use a timer`.
-For LogAction, see :doc:`Logging`.
-
-.. tabs::
-
-    .. group-tab:: Python
-
-        .. code-block::
-
-            from core.actions import Exec
-            Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
-
-            from core.actions import HTTP
-            HTTP.sendHttpPutRequest("someURL.com, "application/json", '{"this": "that"}')
-
-            from core.actions import Ping
-            if Ping.checkVitality("10.5.5.5", 0, 5000):
-                log.info("Server is online")
-            else:
-                log.info("Server is offline")
-
-            from core.actions import Audio
-            Audio.playSound("doorbell.mp3")# using the default audiosink
-            Audio.playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
-            Audio.playStream("http://myAudioServer/myAudioFile.mp3")# using the default audiosink
-            Audio.playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")# specifying an audiosink
-
-            from core.actions import NotificationAction
-            NotificationAction.sendNotification("someone@someDomain.com","This is the message")
-            NotificationAction.sendBroadcastNotification("This is the message")
-            NotificationAction.sendLogNotification("This is the message")
-
-            from core.actions import Transformation
-            Transformation.transform("JSONPATH", "$.test", test)
-
-            from core.actions import Voice
-            Voice.say("This will be said")
-
-            from core.actions import Things
-            Things.getThingStatusInfo("zwave:device:c5155aa4:node5")
-
-    .. group-tab:: JavaScript
-
-        .. code-block:: JavaScript
-
-            TODO
-
-    .. group-tab:: Groovy
-
-        .. code-block:: Groovy
-
-            TODO
-
-    .. group-tab:: Rules DSL
-
-        .. code-block:: java
-
-            TODO
-
-
-
-Use an Addon/Bundle Action
+Use org.joda.time.DateTime
 --------------------------
 
- The binding or Action must be installed.
+.. tabs::
+
+    .. group-tab:: Python
+
+        .. code-block::
+
+            from org.joda.time import DateTime
+            start = DateTime.now()
+
+    .. group-tab:: JavaScript
+
+        .. code-block:: JavaScript
+
+            var DateTime = Java.type("org.joda.time.DateTime");
+            start = DateTime.now()
+
+    .. group-tab:: Groovy
+
+        .. code-block:: Groovy
+
+            import org.joda.time.DateTime
+            start = DateTime.now()
+
+    .. group-tab:: Rules DSL
+
+        .. code-block:: java
+
+            now
+
+
+Pause a thread
+--------------
 
 .. tabs::
 
     .. group-tab:: Python
 
-        `Telegram <https://www.openhab.org/addons/actions/telegram/#telegram-actions>`_
-        
         .. code-block::
 
-            from core.actions import Telegram
-            Telegram.sendTelegram("MyBot", "Test")
+            from time import sleep
+            sleep(5)# the unit is seconds, so use 0.5 for 500 milliseconds
 
-        `Mail <https://www.openhab.org/addons/actions/mail/#mail-actions>`_
+    .. group-tab:: JavaScript
 
-        .. code-block::
+        .. code-block:: JavaScript
 
-            from core.actions import Mail
-            Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the message")
+            TODO
 
-        `Astro <https://www.openhab.org/addons/actions/astro/#astro-actions>`_
+    .. group-tab:: Groovy
 
-        .. code-block::
+        .. code-block:: Groovy
 
-            from core.actions import Astro
-            from core.log import logging, LOG_PREFIX
-            from java.util import Date
+            TODO
 
-            log = logging.getLogger(LOG_PREFIX + ".astro_test")
+    .. group-tab:: Rules DSL
 
-            # Use the Astro action class to get the sunset start time.
-            log.info("Sunrise: {}".format(Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time))
+        .. code-block:: java
 
-        `MQTT2 <https://www.openhab.org/addons/bindings/mqtt/>`_
+            Thread::sleep(5000)// the unit is milliseconds
 
-        .. code-block::
 
-            # no import needed
-            actions.get("mqtt", "mqtt:systemBroker:embedded-mqtt-broker").publishMQTT("test/system/started", "true");
+Use a timer
+-----------
+
+.. tabs::
+
+    .. group-tab:: Python
+
+        See the `timer_example.py <https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Script%20Examples/Python/timer_example.py>`_ in the Script Examples for examples of using both Python `threading.Timer <https://docs.python.org/2/library/threading.html#timer-objects>`_ and the openHAB `createTimer Action <https://www.openhab.org/docs/configuration/actions.html#timers>`_.
 
     .. group-tab:: JavaScript
 

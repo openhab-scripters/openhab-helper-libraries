@@ -228,8 +228,8 @@ System Started
 
                 System started
 
-    For builds prior to snapshot S1566, you can run rules on openHAB start or file reload by calling the rule.
-    You should create a function at the end of file called ``scriptLoaded`` and put the calls to your rules in that.
+    For builds prior to snapshot S1566, which cannot use the StartupTrigger, you can run rules on openHAB start and file reload by calling the rule function directly.
+    You should create a function at the end of file called ``scriptLoaded`` and put the calls to your rules in that function.
     Here is an example of how to do that:
 
     .. tabs::
@@ -245,7 +245,7 @@ System Started
 
 
                 def scriptLoaded(id):
-                    # call rule when this file is loaded
+                    # call rule function when this file is loaded
                     my_rule_function(None)
 
         .. group-tab:: JavaScript
@@ -290,7 +290,7 @@ System Shuts Down
 
                 System shuts down
 
-    There is a workaround to run a rule when the script file gets unloaded, similar to the startup workaround:
+    There is a workaround to run a rule when the script file gets unloaded, similar to the StartupTrigger workaround:
 
     .. tabs::
 

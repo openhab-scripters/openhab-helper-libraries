@@ -1,7 +1,7 @@
 """
-Provides an OSGI EventAdmin event monitor and rule trigger.
-This can trigger off any OSGI event (including ESH events).
-*Rule manager events are filtered to avoid circular loops in the rule execution.*
+Provides an OSGI EventAdmin event monitor and rule trigger. This can trigger off
+any OSGI event (including ESH events). **Rule manager events are filtered to
+avoid circular loops in the rule execution.**
 
 .. code-block::
     class ExampleRule(SimpleRule):
@@ -11,7 +11,6 @@ This can trigger off any OSGI event (including ESH events).
         def execute(self, module, inputs):
             event = inputs['event']
             # do something with event
-
 """
 
 from core.jsr223 import scope

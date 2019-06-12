@@ -31,8 +31,14 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     Guides/Rules.rst
     Guides/Triggers.rst
     Guides/Logging.rst
+    Guides/Actions.rst
     Guides/Event Object Attributes.rst
     Guides/But How Do I.rst
+
+
+.. toctree::
+    :caption: Script Examples
+    :maxdepth: 2
 
 
 .. toctree::
@@ -53,7 +59,6 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     :maxdepth: 2
     :glob:
 
-    Language Specific/Python.rst
     Language Specific/*
 
 

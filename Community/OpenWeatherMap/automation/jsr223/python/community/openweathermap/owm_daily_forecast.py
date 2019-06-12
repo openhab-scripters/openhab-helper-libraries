@@ -423,4 +423,5 @@ def addOWMItems():
 
         addOWMItemsToGroups(None)
 
-addOWMItems()
+def scriptLoaded():
+    addOWMItems()

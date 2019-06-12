@@ -1,5 +1,6 @@
 """
-This script adds an ItemProvider, so that Items can be added and removed at runtime.
+This script adds an ItemProvider, so that Items can be added and removed at
+runtime.
 """
 
 scriptExtension.importPreset(None)

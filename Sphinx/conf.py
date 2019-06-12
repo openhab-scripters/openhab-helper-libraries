@@ -11,13 +11,13 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os, sys
-sys.path.append(os.path.abspath('./imports/automation/lib/python'))
-sys.path.append(os.path.abspath('./imports/automation/jsr223/python'))
+sys.path.append(os.path.abspath('./imports/lib/python'))
+sys.path.append(os.path.abspath('./imports/jsr223/python'))
 
 # -- Project information -----------------------------------------------------
 
 project = 'openHAB Helper Libraries'
-author = 'Michael Murton'
+author = 'Contributors to the openHAB Scripters project'
 copyright = '2019, Contributors to the openHAB Scripters project'
 version = 'latest'
 
@@ -31,7 +31,7 @@ master_doc = 'Index'
 highlight_language = 'python'
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'vs'
+pygments_style = 'vscode'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -76,7 +76,7 @@ autodoc_default_options = {
 }
 
 # base modules that should be mock'd
-autodoc_mock_imports = ['org', 'java', 'configuration']
+autodoc_mock_imports = ['org', 'java', 'configuration', 'scriptExtension']
 
 
 # -- Mock --------------------------------------------------------------------

@@ -1,4 +1,4 @@
 Esper
 +++++
 
-.. automodule:: community.esper
+.. automodule:: scripts.community.esper.components

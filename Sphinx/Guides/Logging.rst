@@ -38,10 +38,10 @@ Rule Decorator
             Decorators have not yet been created for the Groovy helper libraries.
 
 
-`core.log`
-==========
+core.log
+========
 
-    It is also possible to create a logger using the ``core.log`` module to be used by all functions in a script or library.
+    It is also possible to create a logger using the ``core.log`` library to be used by all functions in a script or library.
 
     .. tabs::
 
@@ -88,9 +88,9 @@ Log Action
                 from core.actions import LogAction
 
                 LogAction.logInfo("EXAMPLE", "Example info log [{}]", 5 + 5)
-                LogAction.logWarn("EXAMPLE", "Example warning log [{}]", 5 + 5")
-                LogAction.logError("EXAMPLE", "Example error log [{}]", 5 + 5")
-                LogAction.logDebug("EXAMPLE", "Example debug log [{}]", 5 + 5")
+                LogAction.logWarn("EXAMPLE", "Example warning log [{}]", 5 + 5)
+                LogAction.logError("EXAMPLE", "Example error log [{}]", 5 + 5)
+                LogAction.logDebug("EXAMPLE", "Example debug log [{}]", 5 + 5)
 
         .. group-tab:: JavaScript
 

@@ -1,8 +1,9 @@
 """
-This module discovers action services registered from OH1 or OH2 bundles or add-ons.
-The specific actions that are available will depend on which add-ons are installed.
-Each action class is exposed as an attribute of the ``core.actions`` module.
-The action methods are static methods on those classes (don't try to create instances of the action classes).
+This module discovers action services registered from OH1 or OH2 bundles or
+add-ons. The specific actions that are available will depend on which add-ons
+are installed. Each action class is exposed as an attribute of the
+``core.actions`` module. The action methods are static methods on those classes
+(don't try to create instances of the action classes).
 """
 
 import sys

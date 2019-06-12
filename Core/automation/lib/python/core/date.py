@@ -1,15 +1,15 @@
 """
-Date/time utilities for converting between the several different types used by openHAB.
-
-It can also format any of these types for sending to an openHAB Item using
-``format_date(value)``, which will return the date as a string in the correct format.
-
-| There are also some conveniece functions for determining the span between two datetimes.
-  ``days_between``, ``hours_between``, ``minutes_between``, and ``seconds_between``
-  will return the number of whole units of each unit of time between the two datetimes
-  passed. They will return negative numbers if ``value_from`` is after ``value_to``.
-| See `java.time.temporal.ChronoUnit <https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html>`_
-  if you want more information.
+Date/time utilities for converting between the several different types used by
+openHAB. It can also format any of these types for sending to an openHAB Item
+using ``format_date(value)``, which will return the date as a string in the 
+correct format. There are also some conveniece functions for determining the
+span between two datetimes. ``days_between``, ``hours_between``,
+``minutes_between``, and ``seconds_between`` will return the number of whole
+units of each unit of time between the two datetimes passed. They will return
+negative numbers if ``value_from`` is after ``value_to``. See 
+`java.time.temporal.ChronoUnit
+<https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html>`_
+if you want more information.
 
 This package accepts any of the following DateTime types:
 

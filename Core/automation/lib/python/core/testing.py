@@ -1,7 +1,8 @@
 """
-One of the challenges of openHAB rule development is verifying that rules are behaving correctly and haven't broken as the code evolves.
-This module supports running automated tests within a runtime context.
-To run tests directly from scripts:
+One of the challenges of openHAB rule development is verifying that rules are
+behaving correctly and haven't broken as the code evolves. This module supports
+running automated tests within a runtime context. To run tests directly from
+scripts:
 
 .. code-block::
 
@@ -14,8 +15,8 @@ To run tests directly from scripts:
 
     run_test(MyTest) 
 
-This module also defines a rule class, `TestRunner`.
-When a switch item is turned on, it will run a testcase and store the test results in a string item.
+This module also defines a rule class, `TestRunner`. When a switch item is
+turned on, it will run a testcase and store the test results in a string item.
 """
 
 from __future__ import absolute_import
