@@ -206,7 +206,7 @@ class IdeAlarmZone(object):
         Gets all open sensor objects for the zone
         - mins Integer 0-9999 Number of minutes that the sensor must have been
             updated within. A value of 0 will return sensor devices who are
-            currently open. 
+            currently open.
         - armingMode A sensor is regarded to be open only in the context of an
             arming mode. Defaults to the zones current arming mode.
         - isArming Boolean. In an arming scenario we don't want to include

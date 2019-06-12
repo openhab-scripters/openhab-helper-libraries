@@ -31,7 +31,7 @@ master_doc = 'Index'
 highlight_language = 'python'
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'fruity'
+pygments_style = 'vs'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -125,3 +125,31 @@ html_static_path = ['_static']
 
 # HTML page/tab icon
 #html_favicon = '_static/favicon.ico'
+
+# Disable "View Page Source" header link
+html_show_sourcelink = False
+
+# RTD Theme options
+html_theme_options = {
+    'canonical_url': '',
+    'logo_only': False,
+    'display_version': True,
+    'prev_next_buttons_location': None,
+    'style_external_links': True,
+    'style_nav_header_background': None,
+    # Toc options
+    'collapse_navigation': True,
+    'sticky_navigation': False,
+    'navigation_depth': 4,
+    'includehidden': True,
+    'titles_only': False
+}
+html_context = {
+    # Enable the "Edit in GitHub link within the header of each page.
+    'display_github': True,
+    # Set the following variables to generate the resulting github URL for each page. 
+    # Format Template: https://{{ github_host|default("github.com") }}/{{ github_user }}/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ suffix }}
+    'github_user': 'openhab-scripters',
+    'github_repo': 'openhab-helper-libraries',
+    'github_version': 'master/' 
+}

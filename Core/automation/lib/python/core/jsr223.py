@@ -1,5 +1,5 @@
 """
-One of the challenges of scripted automation with Jython is that modules imported into scripts do not have direct access to the JSR223 scope types and objects. 
+One of the challenges of scripted automation with Jython is that modules imported into scripts do not have direct access to the JSR223 scope types and objects.
 This module allows imported modules to access that data.
 
 .. code-block::

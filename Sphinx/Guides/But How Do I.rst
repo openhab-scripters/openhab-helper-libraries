@@ -379,7 +379,7 @@ Stop a rule if the triggering Item's state is NULL or UNDEF
 
         .. code-block::
 
-            if items[event.itemName].class == UnDefType:
+            if isinstance(items[event.itemName].class, UnDefType):
                 return
             # do stuff
 
@@ -450,7 +450,7 @@ Use a timer
 
     .. group-tab:: Python
 
-        See the `timer_example.py <https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Script%20Examples/Python/timer_example.py>` in the Script Examples for examples of using both Python `threading.Timer <https://docs.python.org/2/library/threading.html#timer-objects>` and the openHAB `createTimer Action <https://www.openhab.org/docs/configuration/actions.html#timers>`.
+        See the `timer_example.py <https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Script%20Examples/Python/timer_example.py>`_ in the Script Examples for examples of using both Python `threading.Timer <https://docs.python.org/2/library/threading.html#timer-objects>`_ and the openHAB `createTimer Action <https://www.openhab.org/docs/configuration/actions.html#timers>`_.
 
     .. group-tab:: JavaScript
 
@@ -1099,8 +1099,8 @@ Enable/disable a Thing
             TODO
 
 
-`Persistence extensions <https://www.openhab.org/docs/configuration/persistence.html#persistence-extensions-in-scripts-and-rules>`
-----------------------------------------------------------------------------------------------------------------------------------
+`Persistence extensions <https://www.openhab.org/docs/configuration/persistence.html#persistence-extensions-in-scripts-and-rules>`_
+-----------------------------------------------------------------------------------------------------------------------------------
 
 Others not listed are similar
 
@@ -1136,12 +1136,12 @@ Others not listed are similar
             TODO
 
 
-Use other `Core & Cloud Actions <https://www.openhab.org/docs/configuration/actions.html#core-actions>`
--------------------------------------------------------------------------------------------------------
+Use other `Core & Cloud Actions <https://www.openhab.org/docs/configuration/actions.html#core-actions>`_
+--------------------------------------------------------------------------------------------------------
 
 In order to avoid namespace conflicts with the ``actions`` object provided in the default scope, don't do ``import core.actions``.
 
-For ScriptExecution, see :ref:`use-a-timer`.
+For ScriptExecution, see :ref:`Guides/But How Do I:Use a timer`.
 For LogAction, see :doc:`Logging`.
 
 .. tabs::
@@ -1211,21 +1211,21 @@ Use an Addon/Bundle Action
 
     .. group-tab:: Python
 
-        `Telegram <https://www.openhab.org/addons/actions/telegram/#telegram-actions>`
+        `Telegram <https://www.openhab.org/addons/actions/telegram/#telegram-actions>`_
         
         .. code-block::
 
             from core.actions import Telegram
             Telegram.sendTelegram("MyBot", "Test")
 
-        `Mail <https://www.openhab.org/addons/actions/mail/#mail-actions>`
+        `Mail <https://www.openhab.org/addons/actions/mail/#mail-actions>`_
 
         .. code-block::
 
             from core.actions import Mail
             Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the message")
 
-        `Astro <https://www.openhab.org/addons/actions/astro/#astro-actions>`
+        `Astro <https://www.openhab.org/addons/actions/astro/#astro-actions>`_
 
         .. code-block::
 
@@ -1238,7 +1238,7 @@ Use an Addon/Bundle Action
             # Use the Astro action class to get the sunset start time.
             log.info("Sunrise: {}".format(Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time))
 
-        `MQTT2 <https://www.openhab.org/addons/bindings/mqtt/>`
+        `MQTT2 <https://www.openhab.org/addons/bindings/mqtt/>`_
 
         .. code-block::
 

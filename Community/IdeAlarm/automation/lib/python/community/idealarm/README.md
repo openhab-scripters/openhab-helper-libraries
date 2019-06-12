@@ -11,7 +11,7 @@ IdeAlarm currently works with openHAB 2.3 only. ideAlarm is currently awaiting t
 ## Stage of development
 This software should be considered to be in it's early stage of development. It is working without any known issues in a couple of installations. We are currently looking for people interested to contribute to this project. Please join the OH-Jython-Scripters team if you feel that you can contribute in any way. We need testers, developers, and native english speakers to give the [Wiki](https://github.com/OH-Jython-Scripters/ideAlarm/wiki) an overhaul.
 
-In case you decide to install and try this software in it's current state, you should already have some skills when it comes to openHAB, Jython scripting and the Linux environment. 
+In case you decide to install and try this software in it's current state, you should already have some skills when it comes to openHAB, Jython scripting and the Linux environment.
 
 ## openHAB Jython Scripting on Slack
 OH-Jython-Scripters now has a Slack channel! It will help us to make sense of our work, and drive our efforts in Jython scripting forward. So if you are just curious, got questions, need support or just like to hang around, do not hesitate, join [**openHAB Jython Scripting on Slack**](https://join.slack.com/t/besynnerlig/shared_invite/enQtMzI3NzIyNTAzMjM1LTdmOGRhOTAwMmIwZWQ0MTNiZTU0MTY0MDk3OTVkYmYxYjE4NDE4MjcxMjg1YzAzNTJmZDM3NzJkYWU2ZDkwZmY) <--- Click link!

@@ -1,6 +1,6 @@
 """
-Provides an OSGI EventAdmin event monitor and rule trigger. 
-This can trigger off any OSGI event (including ESH events). 
+Provides an OSGI EventAdmin event monitor and rule trigger.
+This can trigger off any OSGI event (including ESH events).
 *Rule manager events are filtered to avoid circular loops in the rule execution.*
 
 .. code-block::

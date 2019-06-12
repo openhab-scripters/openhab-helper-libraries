@@ -10,11 +10,11 @@ Scripted rules can use ModuleTypes that are already present in openHAB, and also
 .. _Next-Generation Rule Engine: https://www.openhab.org/docs/configuration/rules-ng.html
 .. _Automation API: http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api
 
-When a script is loaded, it is provided with a *JSR223 scope* that `predefines a number of variables <https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required>`. 
-These include the most commonly used core types and values from openHAB (e.g., State, Command, OnOffType, etc.). 
+When a script is loaded, it is provided with a *JSR223 scope* that `predefines a number of variables <https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required>`.
+These include the most commonly used core types and values from openHAB (e.g., State, Command, OnOffType, etc.).
 This means you don't need an import statement to load them.
 
-For defining rules, additional symbols must be defined. 
+For defining rules, additional symbols must be defined.
 Rather than using an import, these additional symbols (`presets <https://www.openhab.org/docs/configuration/jsr223.html#predefined-script-variables-all-jsr223-languages>`) are imported using:
 
 .. code-block::
@@ -23,14 +23,14 @@ Rather than using an import, these additional symbols (`presets <https://www.ope
     scriptExtension.importPreset("RuleSupport")
     scriptExtension.importPreset("RuleFactories")
 
-The ``scriptExtension`` instance is provided as one of the default scope variables. 
+The ``scriptExtension`` instance is provided as one of the default scope variables.
 The ``RuleSimple`` preset defines the ``SimpleRule`` base class.  
-This base class implements a rule with a single custom Action associated with the ``execute`` function. 
+This base class implements a rule with a single custom Action associated with the ``execute`` function.
 The list of rule triggers are provided by the triggers attribute of the rule instance.
-The triggers in these examples is an instance of the ``Trigger`` class. 
+The triggers in these examples is an instance of the ``Trigger`` class.
 The constructor arguments define the trigger, the trigger type string, and a configuration.
-The ``events`` variable is part of the default scope and supports access to the event bus (posting updates and sending commands). 
-Finally, to register the rule with the rule engine, it must be added to the ``ruleRegistry``. 
+The ``events`` variable is part of the default scope and supports access to the event bus (posting updates and sending commands).
+Finally, to register the rule with the rule engine, it must be added to the ``ruleRegistry``.
 This will cause the triggers to be activated and the rule will fire.
 
 In increasing order of complexity, rules can be written using the :ref:`Guides/Rules:Decorators`, :ref:`Guides/Rules:Extensions`, or the :ref:`Guides/Rules:Raw API`.

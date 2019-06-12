@@ -1,7 +1,7 @@
 '''
-This module bridges the `Python standard ``logging`` module <https://docs.python.org/2/library/logging.html>` with openHAB logging. 
+This module bridges the `Python standard ``logging`` module <https://docs.python.org/2/library/logging.html>` with openHAB logging.
 The ``configuration`` module also provides a `LOG_PREFIX` variable, which is used as the default logger.
-This is used throughout the core modules and scripts, including the ``log`` module. 
+This is used throughout the core modules and scripts, including the ``log`` module.
 LOG_PREFIX can be modified based on personal preference.
 
 If openHAB Cloud Connector is installed, exceptions will be sent as a notification.

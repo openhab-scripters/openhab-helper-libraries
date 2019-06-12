@@ -116,9 +116,9 @@ Log Action
             .. code-block:: Java
 
                 logInfo("EXAMPLE", "Example info log [{}]", 5 + 5)
-                logWarn("EXAMPLE", "Example warning log [{}]", 5 + 5")
-                logError("EXAMPLE", "Example error log [{}]", 5 + 5")
-                logDebug("EXAMPLE", "Example debug log [{}]", 5 + 5")
+                logWarn("EXAMPLE", "Example warning log [{}]", 5 + 5)
+                logError("EXAMPLE", "Example error log [{}]", 5 + 5)
+                logDebug("EXAMPLE", "Example debug log [{}]", 5 + 5)
 
 
 SLF4J

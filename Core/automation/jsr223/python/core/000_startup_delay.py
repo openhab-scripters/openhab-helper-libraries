@@ -1,5 +1,5 @@
 """
-This script is designed to delay the loading of other scripts until openHAB is completely started. 
+This script is designed to delay the loading of other scripts until openHAB is completely started.
 """
 
 from time import sleep

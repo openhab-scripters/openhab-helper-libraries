@@ -23,7 +23,7 @@ Docker
 
             .. note::
 
-                The last ``mv`` is to move the automation directory into the conf directory that's mounted in openHAB at ``/openhab/conf/``. 
+                The last ``mv`` is to move the automation directory into the conf directory that's mounted in openHAB at ``/openhab/conf/``.
                 If you already have an `automation` directory, manually move over the individual directories.
 
         #.  Next, get and install the actual Jython binary:
@@ -57,7 +57,7 @@ Docker
                 environment:
                 EXTRA_JAVA_OPTS: "-Xbootclasspath/a:/openhab/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/openhab/conf/automation/jython -Dpython.path=/openhab/conf/automation/lib/python"
 
-        #.  Restart openHAB. 
+        #.  Restart openHAB.
             You should see something such as this in the logs:
 
             .. code-block:: bash
@@ -72,8 +72,8 @@ Docker
 
         Building image from Dockerfile
 
-        In the `/Docker/Python/` directory, there is an example Dockerfile which will add Jython support to the given container version. 
-        It includes a script to enable the `Next-Generation Rule Engine`_ in the addons.cfg and adds necessary entries to ``EXTRA_JAVA_OPTS`` (including setting python.path to ``/openhab/conf/automation/lib/python/``). 
+        In the `/Docker/Python/` directory, there is an example Dockerfile which will add Jython support to the given container version.
+        It includes a script to enable the `Next-Generation Rule Engine`_ in the addons.cfg and adds necessary entries to ``EXTRA_JAVA_OPTS`` (including setting python.path to ``/openhab/conf/automation/lib/python/``).
         As a user, you only need to add Python scripts and rules to your ``/conf/automation/jsr223/python/personal/`` volume.
 
         To build a container with jython, simply run

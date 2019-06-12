@@ -1,5 +1,5 @@
 """
-This script defines a Command extension to the OSGI console. 
+This script defines a Command extension to the OSGI console.
 The example Command prints some Jython platform details to the console output.
 """
 
