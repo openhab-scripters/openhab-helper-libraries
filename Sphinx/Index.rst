@@ -37,29 +37,29 @@ The one exception is that custom module handlers, including the StartupTrigger, 
 
 
 .. toctree::
-    :caption: Script Examples
-    :maxdepth: 2
-
-
-.. toctree::
-    :caption: Packages
-    :maxdepth: 2
-
-    Core/Core.rst
-    Community/Community.rst
-
-
-.. toctree::
     :caption: Design Patterns
     :maxdepth: 2
 
 
 .. toctree::
-    :caption: Language Specific
+    :caption: Script Examples
     :maxdepth: 2
-    :glob:
 
-    Language Specific/*
+
+.. toctree::
+    :caption: Python
+    :maxdepth: 2
+
+    Python/Reference.rst
+    Python/Core.rst
+    Python/Community.rst
+
+
+.. toctree::
+    :caption: JavaScript
+    :maxdepth: 2
+
+    JavaScript/Reference.rst
 
 
 .. toctree::

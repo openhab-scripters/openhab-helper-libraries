@@ -7,11 +7,20 @@ Information on the classes and functions is available in the following pages:
 
 
 .. toctree::
+    :caption: Component Scripts
     :maxdepth: 2
     :glob:
 
-    Modules/Rules.rst
-    Modules/Triggers.rst
-    Modules/Log.rst
-    Modules/Actions.rst
-    Modules/*
+    Core/Scripts/*
+
+
+.. toctree::
+    :caption: Modules
+    :maxdepth: 2
+    :glob:
+
+    Core/Modules/Rules.rst
+    Core/Modules/Triggers.rst
+    Core/Modules/Log.rst
+    Core/Modules/Actions.rst
+    Core/Modules/*

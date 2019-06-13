@@ -1,6 +1,6 @@
-******
-Python
-******
+*********
+Reference
+*********
 
 ``/automation/lib/javascript/core/utils.js`` contains more simplifying and helping functions.
 

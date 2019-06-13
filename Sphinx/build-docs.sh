@@ -22,8 +22,8 @@ rm -R "$OUTPUT_DIR"
 
 # remove old links
 echo "Removing import temp files and links..."
-find "$IMPORTS_DIR/$TEMP_LIB" -type l -exec unlink {} \;
-rm -R "$IMPORTS_DIR"
+find "$IMPORTS_DIR/$TEMP_LIB" -type l -exec unlink {} \; 2>/dev/null
+rm -R "$IMPORTS_DIR" 2>/dev/null
 
 # create folders
 echo "Creating import temp folders"
@@ -49,7 +49,7 @@ for DIRNAME in $(find "$COMMUNITY_DIR" -maxdepth 1 -type d 2>/dev/null); do
                 fi
             done
         fi
-        
+
         if [ -d "$DIRNAME/$AUTOMATION_JSR/$COMMUNITY" ]; then
             for PACKAGE in $(find "$DIRNAME/$AUTOMATION_JSR/$COMMUNITY" -maxdepth 1 -type d 2>/dev/null); do
                 if [ "$PACKAGE" != "$DIRNAME/$AUTOMATION_JSR/$COMMUNITY" ]; then
@@ -69,7 +69,8 @@ for DIRNAME in $(find "$IMPORTS_DIR/$TEMP_JSR/$COMMUNITY" -type d 2>/dev/null); 
 done
 
 # link vscode_style to /.venv/lib/python3.7/site-packages/pygments/styles
-ln -rs ./_styles/vscode.py ../.venv/lib/python3.7/site-packages/pygments/styles/vscode.py
+STYLE_LINK="$(find "$SCRIPT_DIR/../.venv/lib" -type d -name "pygments")/styles/vscode.py"
+ln -rs "$SCRIPT_DIR/_styles/vscode.py" "$STYLE_LINK"
 
 # run Sphinx
 echo
@@ -83,7 +84,7 @@ echo "Sphinx Build finished"
 echo "Removing import temp files and links..."
 find "$IMPORTS_DIR/$TEMP_LIB" -type l -exec unlink {} \;
 rm -R "$IMPORTS_DIR"
-unlink ../.venv/lib/python3.7/site-packages/pygments/styles/vscode.py
+unlink "$STYLE_LINK"
 
 echo
 echo "Finished building documentation"

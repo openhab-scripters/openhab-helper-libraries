@@ -7,7 +7,7 @@ Triggers
     Any text in ``CAPITAL LETTERS`` should be replaced with a value specific to your use case, and anything in square brackets (``[]``) is optional.
 
     If you are looking for more information on these triggers as :ref:`Guides/Rules:Extensions`,
-    it can be found in the Core :doc:`../Core/Modules/Triggers` documentation.
+    it can be found in the Core Triggers documentation for the language of your choice.
 
 
 Items and Groups

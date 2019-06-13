@@ -1,6 +1,6 @@
-***********************
-Community Contributions
-***********************
+*********
+Community
+*********
 
 Community submitted packages, modules and scripts provide additional functionality, on top of what is found in the `core` package and scripts.
 When choosing to use a solution submitted by the community, the files will need to be copied to the proper directories.
@@ -33,4 +33,4 @@ Additional phrases can be added.
     :maxdepth: 2
     :glob:
 
-    Packages/*
+    Community/*

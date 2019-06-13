@@ -1,6 +1,6 @@
-******
-Python
-******
+*********
+Reference
+*********
 
 Suggested reading
 =================

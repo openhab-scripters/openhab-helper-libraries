@@ -1,5 +1,9 @@
-'''
-PURPOSE:
+"""
+:Author: Scott Rushworth
+
+Purpose
+=======
+
 This rule will create and link the ~600 Items and groups needed to get daily
 forecasts from the OWM binding using a free API key. It will also install the
 Scale transformation service, if it is not already installed. There is also a
@@ -22,59 +26,69 @@ Group labels will be updated to reflect the name of the day, and Item labels
 will be updated to show the time of the forecast, based on the time provided in
 the Forecast_Timestamp_XX Item.
 
-gWeather
-    gOpenWeatherMap
-        gCurrent
-        gForecast_X
-            gForecast_Temperature_X
-            gForecast_Pressure_X
-            gForecast_Humidity_X
-            gForecast_WindSpeed_X
-            gForecast_WindDirection_X
-            gForecast_Cloudiness_X
-            gForecast_RainVolume_X
-            gForecast_SnowVolume_X
+.. code-block:: text
 
-REQUIRES:
-    OpenWeatherMap binding
-    OpenWeatherMap Account Thing, configured with a free API key
-    OpenWeatherMap Weather and Forecast Thing, configured with
-        'Number of Hours' set to 120 and 'Number of Days' set to 0. The hours
-        could be less (this is maxed out for a free API key), but you'll need
-        to adjust the script.
-    All OWM Items should be removed before using rule
-    The SCALE transformation service is required, but it will be installed for
-        you. If you manually editted the 'transformation' line in addons.cfg,
-        be sure to add it there, or it will uninstall next OH update or cache
-        clearing.
+    gWeather
+        gOpenWeatherMap
+            gCurrent
+            gForecast_X
+                gForecast_Temperature_X
+                gForecast_Pressure_X
+                gForecast_Humidity_X
+                gForecast_WindSpeed_X
+                gForecast_WindDirection_X
+                gForecast_Cloudiness_X
+                gForecast_RainVolume_X
+                gForecast_SnowVolume_X
 
-KNOWN ISSUES:
-ArithmeticGroupFunction.Avg does not properly average angles. An ESH issue has
-    been opened for this... https://github.com/eclipse/smarthome/issues/6792.
-I noticed the units for the Cloudiness and Humidity groups display as 'one',
-    but the Items display properly as '%'.
+Requires
+========
 
-01/11/19: Corrected an issue where the Items were not linking.
-01/12/19: Removed Forecast_Temperature_X, and added Forecast_Temperature_High_X
-    and Forecast_Temperature_Low_X
-01/16/19: Restructured how the rule is created
-01/16/19: Fixed SCALE transformation install
-01/16/19: Fixed Item existence check
-01/16/19: Changed to using values of Timestamp Items for calculating the number
-    of remaining forecasts, and the Item label times
-01/16/19: Added group label changes to reflect current day of week
-01/16/19: Changed Item label to use time from Timestamp Items
-01/16/19: Added IconID
-01/16/19: Added manual group aggregation for Condition, ConditionID, Icon,
-    IconID, and WindDirection
-01/18/19: Fixed issue with Items not being added to groups properly
-01/18/19: Added a NULL check when manually setting group aggregation values
-01/20/19: Fixed improper log entry after SCALE transform has been installed
-02/04/19: Added check to make sure a Thing with ThingUID
-    'openweathermap:forecast-and-weather' exists and is ONLINE
-02/06/19: Added verification that the forecastHours and forecastDays are
-    configured properly in the Thing
-'''
+    * OpenWeatherMap binding
+    * OpenWeatherMap Account Thing, configured with a free API key
+    * OpenWeatherMap Weather and Forecast Thing, configured with 'Number of
+      Hours' set to 120 and 'Number of Days' set to 0. The hours could be less
+      (this is maxed out for a free API key), but you'll need to adjust the
+      script.
+    * All OWM Items should be removed before using rule
+    * The SCALE transformation service is required, but it will be installed
+      for you. If you manually editted the 'transformation' line in addons.cfg,
+      be sure to add it there, or it will uninstall next OH update or cache
+      clearing.
+
+Known Issues
+============
+
+* ArithmeticGroupFunction.Avg does not properly average angles. An ESH issue
+  has been opened for this... https://github.com/eclipse/smarthome/issues/6792.
+  I noticed the units for the Cloudiness and Humidity groups display as 'one',
+  but the Items display properly as '%'.
+
+Change Log
+==========
+
+| 01/11/19: Corrected an issue where the Items were not linking.
+| 01/12/19: Removed Forecast_Temperature_X, and added Forecast_Temperature_High_X
+  and Forecast_Temperature_Low_X
+| 01/16/19: Restructured how the rule is created
+| 01/16/19: Fixed SCALE transformation install
+| 01/16/19: Fixed Item existence check
+| 01/16/19: Changed to using values of Timestamp Items for calculating the number
+  of remaining forecasts, and the Item label times
+| 01/16/19: Added group label changes to reflect current day of week
+| 01/16/19: Changed Item label to use time from Timestamp Items
+| 01/16/19: Added IconID
+| 01/16/19: Added manual group aggregation for Condition, ConditionID, Icon,
+  IconID, and WindDirection
+| 01/18/19: Fixed issue with Items not being added to groups properly
+| 01/18/19: Added a NULL check when manually setting group aggregation values
+| 01/20/19: Fixed improper log entry after SCALE transform has been installed
+| 02/04/19: Added check to make sure a Thing with ThingUID
+  'openweathermap:forecast-and-weather' exists and is ONLINE
+| 02/06/19: Added verification that the forecastHours and forecastDays are
+  configured properly in the Thing
+"""
+
 from core.log import logging, LOG_PREFIX, log_traceback
 
 @log_traceback

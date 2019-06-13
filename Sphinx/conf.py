@@ -76,7 +76,7 @@ autodoc_default_options = {
 }
 
 # base modules that should be mock'd
-autodoc_mock_imports = ['org', 'java', 'configuration', 'scriptExtension']
+autodoc_mock_imports = ['org', 'java', 'configuration']
 
 
 # -- Mock --------------------------------------------------------------------
