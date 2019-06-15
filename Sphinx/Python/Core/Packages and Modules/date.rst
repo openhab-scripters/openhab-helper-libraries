@@ -1,4 +1,4 @@
-Date
+date
 ----
 
 .. automodule:: core.date

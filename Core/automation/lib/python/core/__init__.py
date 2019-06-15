@@ -14,23 +14,14 @@ that will outlive script reloads.
     This patch will be applied when any module in the `core` package is loaded.
 """
 
-try:
-    # if this check fails we assume we are in Jython
-    # if this check passes we assume we are in Python building docs
-    # this is needed to avoid errors with autodoc iterating over all methods
-    # and erroring with the attribute-getter below
-    import mock
+from core.jsr223.scope import items
 
-except:
+#
+# Add an attribute-resolver to the items map
+#
 
-    from core.jsr223.scope import items
+def _item_getattr(self, name):
+    return self[name]
 
-    #
-    # Add an attribute-resolver to the items map
-    #
-
-    def _item_getattr(self, name):
-        return self[name]
-
-    if items:# this check prevents errors if no Items have been created yet
-        type(items).__getattr__ = _item_getattr.__get__(items, type(items))
+if items:# this check prevents errors if no Items have been created yet
+    type(items).__getattr__ = _item_getattr.__get__(items, type(items))

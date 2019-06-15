@@ -15,7 +15,7 @@ except:
 import core
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".core.StartupTrigger")
+log = logging.getLogger("{}.core.StartupTrigger".format(LOG_PREFIX))
 
 scriptExtension.importPreset("RuleSimple")
 scriptExtension.importPreset("RuleSupport")
@@ -25,12 +25,12 @@ class _StartupTriggerHandlerFactory(TriggerHandlerFactory):
     class Handler(TriggerHandler):
         def __init__(self, trigger):
             self.trigger = trigger
-            
+
         def setCallback(self, callback):
-            from threading import Timer 
+            from threading import Timer
             startTimer = Timer(1, lambda: callback.triggered(self.trigger, {'startup': True}))
             startTimer.start()
-            
+
         def dispose(self):
             pass
 

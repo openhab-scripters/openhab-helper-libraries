@@ -29,15 +29,15 @@ try:
 except:
     core.JythonTransformationService = None
     import traceback
-    logging.getLogger(LOG_PREFIX + ".core.JythonTransformationService").error(traceback.format_exc())
+    logging.getLogger("{}.core.JythonTransformationService".format(LOG_PREFIX)).error(traceback.format_exc())
 
 def scriptLoaded(id):
     if core.JythonTransformationService is not None:
         core.osgi.register_service(core.JythonTransformationService, [transformation_class], {'smarthome.transform': 'JYTHON'})
-        logging.getLogger(LOG_PREFIX + ".core.JythonTransformationService.scriptLoaded").debug("Registered service")
+        logging.getLogger("{}.core.JythonTransformationService.scriptLoaded".format(LOG_PREFIX)).debug("Registered service")
 
 def scriptUnloaded():
     if core.JythonTransformationService is not None:
         core.osgi.unregister_service(core.JythonTransformationService)
         core.JythonTransformationService = None
-        logging.getLogger(LOG_PREFIX + ".core.JythonTransformationService.scriptUnloaded").debug("Unregistered service")
+        logging.getLogger("{}.core.JythonTransformationService.scriptUnloaded".format(LOG_PREFIX)).debug("Unregistered service")

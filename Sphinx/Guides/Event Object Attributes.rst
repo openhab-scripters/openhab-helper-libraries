@@ -10,7 +10,7 @@ Rather than digging through the code to look up the attributes available in a pa
 Here is a table of the attributes available in ``event`` objects (or ``inputs['event']``, if using aaw API or extensions), including a comparison to the Rules DSL implicit variables:
 
 +--------------------------+--------------------------+-------------------------------+----------------------------------+-----------------------------------------------+
-| Rules DSL                | JSR223                   | @when Trigger(s)              | Event Object(s)                  | Description                                   |
+| Rules DSL Equivalent     | Scripted Automation      | @when Trigger(s)              | Event Object(s)                  | Description                                   |
 +==========================+==========================+===============================+==================================+===============================================+
 | ``triggeringItem.name``  | ``event.itemName``       | | "received update"           | | `ItemStateEvent`_              | | Name of Item that triggered event (String)  |
 |                          |                          | | "changed"                   | | `ItemStateChangedEvent`_       |                                               |

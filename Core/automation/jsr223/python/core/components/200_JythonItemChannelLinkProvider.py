@@ -53,15 +53,15 @@ try:
 except:
     core.JythonItemChannelLinkProvider = None
     import traceback
-    logging.getLogger(LOG_PREFIX + ".core.JythonItemChannelLinkProvider").warn(traceback.format_exc())
+    logging.getLogger("{}.core.JythonItemChannelLinkProvider".format(LOG_PREFIX)).warn(traceback.format_exc())
 
 def scriptLoaded(id):
     if core.JythonItemChannelLinkProvider is not None:
         core.osgi.register_service(core.JythonItemChannelLinkProvider, [provider_class])
-        logging.getLogger(LOG_PREFIX + ".core.JythonItemChannelLinkProvider.scriptLoaded").debug("Registered service")
+        logging.getLogger("{}.core.JythonItemChannelLinkProvider.scriptLoaded".format(LOG_PREFIX)).debug("Registered service")
 
 def scriptUnloaded():
     if core.JythonItemChannelLinkProvider is not None:
         core.osgi.unregister_service(core.JythonItemChannelLinkProvider)
         core.JythonItemChannelLinkProvider = None
-        logging.getLogger(LOG_PREFIX + ".core.JythonItemChannelLinkProvider.scriptUnloaded").debug("Unregistered service")
+        logging.getLogger("{}.core.JythonItemChannelLinkProvider.scriptUnloaded".format(LOG_PREFIX)).debug("Unregistered service")

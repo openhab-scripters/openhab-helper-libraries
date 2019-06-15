@@ -1,4 +1,4 @@
-Triggers
+triggers
 --------
 
 .. automodule:: core.triggers

@@ -1,25 +1,18 @@
-'''
-This is a community script distributed together with with Jython scripting for openHAB 2.x
-https://github.com/OH-Jython-Scripters/openhab2-jython
+"""
+This is a community script distributed together with Jython scripting for openHAB 2.x https://github.com/openhab-scripters/openhab-helper-libraries. To run, this script should be placed into the ``\automation\jsr223\community\`` directory. Even better is to create a symbolic link from ``\automation\jsr223\community\weatherStationUploader.py`` to ``Community\WeatherStationUploader\automation\jsr223\community\weatherStationUploader.py``.
 
-To run, this script should be placed into the automation\jsr223\community folder. Even better
-is to create a symbolic link from automation\jsr223\community\weatherStationUploader.py
-to Community\WeatherStationUploader\automation\jsr223\community\weatherStationUploader.py 
+You will also need to insert the example configuration entries found in ``Community\WeatherStationUploader\automation\lib\python\configuration.py.example`` into your openHab2-jython configuration file e.g. ``automation\lib\python\configuration.py``. After doing that, edit the configuration data to suit your needs.
 
-You will also need to insert the example configuration entries found in
-Community\WeatherStationUploader\automation\lib\python\configuration.py.example into your
-openHab2-jython configuration file e.g. automation\lib\python\configuration.py
-After doing that, edit the configuration data to suit your needs.
-
-This script is dependent of an external library named meteocalc.
-To install and use meteocalc, please have a look at : https://pypi.org/project/meteocalc/
+This script is dependent of an external library named meteocalc. To install and use meteocalc, please have a look at : `<https://pypi.org/project/meteocalc/>`.
 
 Example installation command:
-sudo pip install meteocalc && sudo ln -s /usr/local/lib/python2.7/dist-packages/meteocalc meteocalc
-Edit classutils.py, change line 5 to: PYTHON2 = 2#sys.version_info.major
-You should also add the directory /usr/local/lib/python2.7/dist-packages to the -Dpython.path in the EXTRA_JAVA_OPTS environment variable
-typically found in /etc/default/openhab2 or if you have made a manual OH installation it can be set in /opt/openhab2/start.sh
-'''
+
+.. code-block::
+
+    sudo pip install meteocalc && sudo ln -s /usr/local/lib/python2.7/dist-packages/meteocalc meteocalc
+
+Edit ``classutils.py``, change line 5 to ``PYTHON2 = 2#sys.version_info.major``. You should also add the directory ``/usr/local/lib/python2.7/dist-packages`` to the ``-Dpython.path`` in the EXTRA_JAVA_OPTS environment variable, typically found in ``/etc/default/openhab2``, or if you have made a manual OH installation it can be set in ``/opt/openhab2/start.sh``.
+"""
 
 __version__ = '4.0.0'
 __version_info__ = tuple([ int(num) for num in __version__.split('.')])
@@ -147,7 +140,7 @@ def weatherStationUploader(event):
         sensorName = getTheSensor('pressurembar')
         if sensorName is not None:
             _mbar = getItemValue(sensorName, 0)
-            if ((_mbar < 1070) and (_mbar > 920)): 
+            if ((_mbar < 1070) and (_mbar > 920)):
                 pressure = str(mbar_to_inches_mercury(_mbar))
 
         rainin = None

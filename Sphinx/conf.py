@@ -78,7 +78,6 @@ autodoc_default_options = {
 # base modules that should be mock'd
 autodoc_mock_imports = ['org', 'java', 'configuration']
 
-
 # -- Mock --------------------------------------------------------------------
 
 # allows autodoc to import modules that import things that Sphinx can't import
@@ -91,11 +90,21 @@ import mock
 MOCK_MODULES = [
     'core.jsr223.scope',
     'core.JythonItemProvider',
-    'core.JythonItemChannelLinkProvider'
+    'core.JythonItemChannelLinkProvider',
+    'TriggerHandlerFactory',
+    'scriptExtension',
+    'core.rules_mock',
+    'core.triggers_mock',
+    'core.actions_mock',
+    'core.date_mock',
+    'personal.idealarm',
+    'com.espertech.esper.client',
+    'meteocalc',
+    'urllib2',
+    'StringIO'
 ]
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
-
 
 # -- Options for autosectionlabel --------------------------------------------
 
@@ -147,9 +156,9 @@ html_theme_options = {
 html_context = {
     # Enable the "Edit in GitHub link within the header of each page.
     'display_github': True,
-    # Set the following variables to generate the resulting github URL for each page. 
+    # Set the following variables to generate the resulting github URL for each page.
     # Format Template: https://{{ github_host|default("github.com") }}/{{ github_user }}/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ suffix }}
     'github_user': 'openhab-scripters',
     'github_repo': 'openhab-helper-libraries',
-    'github_version': 'master/' 
+    'github_version': 'master/'
 }

@@ -20,7 +20,7 @@ except:
 import core
 from core.log import logging, log_traceback, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".core.DirectoryEventTrigger")
+log = logging.getLogger("{}.core.DirectoryEventTrigger".format(LOG_PREFIX))
 
 scriptExtension.importPreset("RuleSimple")
 scriptExtension.importPreset("RuleSupport")
@@ -32,13 +32,13 @@ class JythonDirectoryWatcher(AbstractWatchService):
         self.event_kinds = event_kinds
         self.watch_subdirectories = watch_subdirectories
         self.callback = None
-        
+
     def getWatchEventKinds(self, path):
         return self.event_kinds
-    
+
     def watchSubDirectories(self):
         return self.watch_subdirectories
-    
+
     @log_traceback
     def processWatchEvent(self, event, kind, path):
         if self.callback is not None:
@@ -57,36 +57,36 @@ class _DirectoryEventTriggerHandlerFactory(TriggerHandlerFactory):
                 watch_subdirectories=config.get('watch_subdirectories'))
             self.watcher.callback = self.handle_directory_event
             self.watcher.activate()
-            
+
         def setRuleEngineCallback(self, rule_engine_callback):
             self.rule_engine_callback = rule_engine_callback
-          
-        @log_traceback  
+
+        @log_traceback
         def handle_directory_event(self, event, kind, path):
             self.rule_engine_callback.triggered(self.trigger, {
                 'event': event,
                 'kind': kind,
                 'path': path
             })
-            
+
         def dispose(self):
             self.watcher.deactivate()
             self.watcher = None
-        
+
     def get(self, trigger):
         return _DirectoryEventTriggerHandlerFactory.Handler(trigger)
-    
+
 core.DIRECTORY_TRIGGER_MODULE_ID = "jsr223.DirectoryTrigger"
 
 def scriptLoaded(*args):
     automationManager.addTriggerHandler(
-        core.DIRECTORY_TRIGGER_MODULE_ID, 
+        core.DIRECTORY_TRIGGER_MODULE_ID,
         _DirectoryEventTriggerHandlerFactory())
     log.info("TriggerHandler added [{}]".format(core.DIRECTORY_TRIGGER_MODULE_ID))
 
     automationManager.addTriggerType(TriggerType(
         core.DIRECTORY_TRIGGER_MODULE_ID, None,
-        "a directory change event is detected.", 
+        "a directory change event is detected.",
         "Triggers when a directory change event is detected.",
         None, Visibility.VISIBLE, None))
     log.info("TriggerType added [{}]".format(core.DIRECTORY_TRIGGER_MODULE_ID))

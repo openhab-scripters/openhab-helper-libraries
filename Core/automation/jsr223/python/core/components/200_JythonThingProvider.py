@@ -21,25 +21,25 @@ try:
         def __init__(self):
             self.things = []
             self.listeners = []
-            
+
         def addProviderChangeListener(self, listener): # ProviderChangeListener
             self.listeners.append(listener)
 
         def removeProviderChangeListener(self, listener):
             if listener in self.listeners:
                 self.listeners.remove(listener)
-        
+
         def add(self, thing):
             self.things.append(thing)
             for listener in self.listeners:
                 listener.added(self, thing)
-                
+
         def remove(self, thing):
             if thing in self.things:
                 self.things.remove(thing)
                 for listener in self.listeners:
                     listener.removed(self, thing)
-                
+
         def update(self, thing):
             for listener in self.listeners:
                 listener.updated(self, thing)
@@ -51,15 +51,15 @@ try:
 except:
     core.JythonThingProvider = None
     import traceback
-    logging.getLogger(LOG_PREFIX + ".core.JythonThingProvider").error(traceback.format_exc())
+    logging.getLogger("{}.core.JythonThingProvider".format(LOG_PREFIX)).error(traceback.format_exc())
 
 def scriptLoaded(id):
     if core.JythonThingProvider is not None:
         core.osgi.register_service(core.JythonThingProvider, [provider_class])
-        logging.getLogger(LOG_PREFIX + ".core.JythonThingProvider.scriptLoaded").debug("Registered service")
-    
+        logging.getLogger("{}.core.JythonThingProvider.scriptLoaded".format(LOG_PREFIX)).debug("Registered service")
+
 def scriptUnloaded():
     if core.JythonThingProvider is not None:
         core.osgi.unregister_service(core.JythonThingProvider)
         core.JythonThingProvider = None
-        logging.getLogger(LOG_PREFIX + ".core.JythonThingProvider.scriptUnloaded").debug("Unregistered service")
+        logging.getLogger("{}.core.JythonThingProvider.scriptUnloaded".format(LOG_PREFIX)).debug("Unregistered service")

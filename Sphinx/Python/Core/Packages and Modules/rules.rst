@@ -1,4 +1,4 @@
-Rules
+rules
 -----
 
 .. automodule:: core.rules

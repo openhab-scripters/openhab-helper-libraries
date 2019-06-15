@@ -1,4 +1,4 @@
-Log
+log
 ----
 
 .. automodule:: core.log

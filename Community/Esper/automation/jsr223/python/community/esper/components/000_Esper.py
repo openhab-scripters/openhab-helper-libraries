@@ -1,3 +1,7 @@
+"""
+Component script for Esper
+"""
+
 scriptExtension.importPreset(None)
 
 import json
@@ -8,7 +12,7 @@ import core
 from core.osgi.events import OsgiEventAdmin
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".community.esper")
+log = logging.getLogger("{}.community.esper".format(LOG_PREFIX))
 
 from java.lang import String, Double, Object
 from java.util import Date

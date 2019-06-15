@@ -7,7 +7,7 @@ from time import sleep
 
 from org.slf4j import Logger, LoggerFactory
 
-log = LoggerFactory.getLogger("org.eclipse.smarthome.automation.jsr223.jython.startup_delay")
+log = LoggerFactory.getLogger("jsr223.jython.core.startup_delay")
 log.info("Checking for initialized context")
 
 while True:

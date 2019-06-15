@@ -232,7 +232,7 @@ Get the received command
 Send a command to an Item
 -------------------------
 
-`more options <https://www.openhab.org/docs/configuration/jsr223.html#events-operations>`
+`More details <https://www.openhab.org/docs/configuration/jsr223.html#events-operations>`_
 
 .. tabs::
 
@@ -241,18 +241,24 @@ Send a command to an Item
         .. code-block::
 
             events.sendCommand("Test_SwitchItem", "ON")
+            # or
+            events.sendCommand(ir.getItem("Test_SwitchItem"), ON)
 
     .. group-tab:: JavaScript
 
         .. code-block:: JavaScript
 
             events.sendCommand("Test_SwitchItem", "ON")
+            // or
+            events.sendCommand(ir.getItem("Test_SwitchItem"), ON)
 
     .. group-tab:: Groovy
 
         .. code-block:: Groovy
 
             events.sendCommand("Test_SwitchItem", "ON")
+            // or
+            events.sendCommand(ir.getItem("Test_SwitchItem"), ON)
 
     .. group-tab:: Rules DSL
 
@@ -266,7 +272,7 @@ Send a command to an Item
 Send an update to an Item
 -------------------------
 
-`more options <https://www.openhab.org/docs/configuration/jsr223.html#events-operations>`
+`More details <https://www.openhab.org/docs/configuration/jsr223.html#events-operations>`_
 
 .. tabs::
 
@@ -306,7 +312,7 @@ Stop a rule if the triggering Item's state is NULL or UNDEF
 
         .. code-block::
 
-            if isinstance(items[event.itemName].class, UnDefType):
+            if isinstance(items[event.itemName], UnDefType):
                 return
             # do stuff
 
@@ -651,7 +657,7 @@ Perform an arithmetic reduction of values from members of a Group
 
         .. code-block::
 
-            # the state.add(state) is a method of QuantityType
+            # to use the add() method, the states must be of type QuantityType (`Units of Measure <https://www.openhab.org/docs/concepts/units-of-measurement.html>`_)
             weekly_rainfall = reduce(lambda sum, x: sum.add(x), map(lambda rain: rain.state, ir.getItem("gRainWeeklyForecast").members))
 
     .. group-tab:: JavaScript
@@ -784,6 +790,7 @@ Multiline comment
             comment
             */
 
+
 View the names of an object's attributes
 ----------------------------------------
 
@@ -814,7 +821,6 @@ View the names of an object's attributes
         .. code-block:: java
 
             Not possible
-
 
 
 View all symbols in a context

@@ -5,17 +5,18 @@ runtime.
 
 scriptExtension.importPreset(None)
 
+import core
+from core import osgi
+from core.log import logging, LOG_PREFIX
+
 provider_class = None
+
 try:
     from org.openhab.core.items import ItemProvider
     provider_class = "org.openhab.core.items.ItemProvider"
 except:
     from org.eclipse.smarthome.core.items import ItemProvider
     provider_class = "org.eclipse.smarthome.core.items.ItemProvider"
-
-import core
-from core import osgi
-from core.log import logging, LOG_PREFIX
 
 try:
     class JythonItemProvider(ItemProvider):
@@ -57,15 +58,20 @@ try:
 except:
     core.JythonItemProvider = None
     import traceback
-    logging.getLogger(LOG_PREFIX + ".core.JythonItemProvider").error(traceback.format_exc())
+    logging.getLogger(
+        "{}.core.JythonItemProvider".format(LOG_PREFIX)).error(traceback.format_exc())
+
 
 def scriptLoaded(id):
     if core.JythonItemProvider is not None:
         core.osgi.register_service(core.JythonItemProvider, [provider_class])
-        logging.getLogger(LOG_PREFIX + ".core.JythonItemProvider.scriptLoaded").debug("Registered service")
+        logging.getLogger(
+            "{}.core.JythonItemProvider.scriptLoaded".format(LOG_PREFIX)).debug("Registered service")
+
 
 def scriptUnloaded():
     if core.JythonItemProvider is not None:
         core.osgi.unregister_service(core.JythonItemProvider)
         core.JythonItemProvider = None
-        logging.getLogger(LOG_PREFIX + ".core.JythonItemProvider.scriptUnloaded").debug("Unregistered service")
+        logging.getLogger(
+            "{}.core.JythonItemProvider.scriptUnloaded".format(LOG_PREFIX)).debug("Unregistered service")

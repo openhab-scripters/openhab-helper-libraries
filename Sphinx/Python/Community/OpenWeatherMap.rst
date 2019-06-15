@@ -2,7 +2,7 @@
 OpenWeatherMap
 **************
 
-``own_daily_forecast.py``
--------------------------
+Scripts
+-------
 
 .. automodule:: scripts.community.openweathermap.owm_daily_forecast

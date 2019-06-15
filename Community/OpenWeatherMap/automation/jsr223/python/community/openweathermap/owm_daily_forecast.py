@@ -1,10 +1,10 @@
 """
-:Author: Scott Rushworth
+:Author: `Scott Rushworth <https://github.com/openhab-5iver>`_
 
 Purpose
 =======
 
-This rule will create and link the ~600 Items and groups needed to get daily
+This rule will create and link the ~700 Items and groups needed to get daily
 forecasts from the OWM binding using a free API key. It will also install the
 Scale transformation service, if it is not already installed. There is also a
 function that was used for testing purposes, which can be used to remove all
@@ -44,17 +44,15 @@ the Forecast_Timestamp_XX Item.
 Requires
 ========
 
-    * OpenWeatherMap binding
-    * OpenWeatherMap Account Thing, configured with a free API key
-    * OpenWeatherMap Weather and Forecast Thing, configured with 'Number of
-      Hours' set to 120 and 'Number of Days' set to 0. The hours could be less
-      (this is maxed out for a free API key), but you'll need to adjust the
-      script.
-    * All OWM Items should be removed before using rule
-    * The SCALE transformation service is required, but it will be installed
-      for you. If you manually editted the 'transformation' line in addons.cfg,
-      be sure to add it there, or it will uninstall next OH update or cache
-      clearing.
+* OpenWeatherMap binding
+* OpenWeatherMap Account Thing, configured with a free API key
+* OpenWeatherMap Weather and Forecast Thing, configured with 'Number of Hours'
+  set to 120 and 'Number of Days' set to 0. The hours could be less (this is
+  maxed out for a free API key), but you'll need to adjust the script.
+* All OWM Items should be removed before using rule
+* The SCALE transformation service is required, but it will be installed for
+  you. If you manually editted the 'transformation' line in addons.cfg, be
+  sure to add it there, or it will uninstall next OH update or cache clearing.
 
 Known Issues
 ============
@@ -105,7 +103,7 @@ def removeOWMItems():
         if "Forecast_" in item.name or "Current_" in item.name:
             removeOWMItems.log.debug("removeOWMItems: [{}]".format(item))
             remove_item(item)
-    '''    
+    '''
 #removeOWMItems()
 
 def addOWMItems():
@@ -408,7 +406,7 @@ def addOWMItems():
 
                 ir.getItem("gForecast_Cloudiness_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Cloudiness_{:02d}".format(3 * index)))
                 ir.getItem("Forecast_Cloudiness_{:02d}".format(3 * index)).setLabel("Forecast ({}): Cloudiness [%d %unit%]".format(labelTime))
-                
+
                 ir.getItem("gForecast_RainVolume_{}".format(groupIndex)).addMember(ir.getItem("Forecast_RainVolume_{:02d}".format(3 * index)))
                 ir.getItem("Forecast_RainVolume_{:02d}".format(3 * index)).setLabel("Forecast ({}): Rain volume [%.1f %unit%]".format(labelTime))
 
@@ -432,7 +430,7 @@ def addOWMItems():
                 if len(windDirectionItemStates) > 0:
                     windDirectionAvg = reduce(lambda x, y: (((x + y) / 2) if y - x < 180 else (x + y + 360) / 2) % 360, windDirectionItemStates)
                     events.postUpdate("gForecast_WindDirection_" + str(index), str(windDirectionAvg))
-            
+
             addOWMItemsToGroups.log.debug("Updated groups and Items")
 
         addOWMItemsToGroups(None)

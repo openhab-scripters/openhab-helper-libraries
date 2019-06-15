@@ -1,4 +1,4 @@
-Items
+items
 -----
 
 .. automodule:: core.items

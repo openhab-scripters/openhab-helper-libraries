@@ -2,7 +2,18 @@
 Esper
 *****
 
-.. toctree::
-    :maxdepth: 2
+Scripts
+=======
 
-    Esper/000_Esper.rst
+    .. automodule:: scripts.community.esper.components.000_Esper
+
+
+Packages and Modules
+====================
+
+`esper.py`
+----------
+
+    .. automodule:: community.esper
+
+.. Esper/000_Esper.rst

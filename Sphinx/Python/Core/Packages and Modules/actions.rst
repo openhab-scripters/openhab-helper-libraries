@@ -1,4 +1,4 @@
-Actions
+actions
 -------
 
 .. automodule:: core.actions

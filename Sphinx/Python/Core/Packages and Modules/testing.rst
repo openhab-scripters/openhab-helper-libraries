@@ -1,4 +1,4 @@
-Testing
+testing
 -------
 
 .. automodule:: core.testing

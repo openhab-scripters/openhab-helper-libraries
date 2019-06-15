@@ -22,33 +22,33 @@ try:
     class JythonBindingInfoProvider(BindingInfoProvider):
         def __init__(self):
             self.binding_infos = {}
-            
+
         def getBindingInfo(self, id, locale):
             return self.binding_infos.get(id, None)
-        
+
         def getBindingInfos(self, locale):
             return set(self.binding_infos.values())
 
         def add(self, info):
             self.binding_infos[info.id] = info
-            
+
         def remove(self, info):
             if info.id in self.binding_infos:
                 del self.binding_infos[info.id]
-                
+
     core.JythonBindingInfoProvider = JythonBindingInfoProvider()
 except:
     core.JythonBindingInfoProvider = None
     import traceback
-    logging.getLogger(LOG_PREFIX + ".core.JythonBindingInfoProvider").warn(traceback.format_exc())
+    logging.getLogger(LOG_PREFIX + ".core.JythonBindingInfoProvider".format(LOG_PREFIX)).warn(traceback.format_exc())
 
 def scriptLoaded(id):
     if core.JythonBindingInfoProvider is not None:
         core.osgi.register_service(core.JythonBindingInfoProvider, [provider_class])
-        logging.getLogger(LOG_PREFIX + ".core.JythonBindingInfoProvider.scriptLoaded").debug("Registered service")
-    
+        logging.getLogger("{}.core.JythonBindingInfoProvider.scriptLoaded".format(LOG_PREFIX)).debug("Registered service")
+
 def scriptUnloaded():
     if core.JythonBindingInfoProvider is not None:
         core.osgi.unregister_service(core.JythonBindingInfoProvider)
         core.JythonBindingInfoProvider = None
-        logging.getLogger(LOG_PREFIX + ".core.JythonBindingInfoProvider.scriptUnloaded").debug("Unregistered service")
+        logging.getLogger("{}.core.JythonBindingInfoProvider.scriptUnloaded".format(LOG_PREFIX)).debug("Unregistered service")

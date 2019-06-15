@@ -2,25 +2,39 @@
 Core
 ****
 
-The Core package in this library contains the code that makes using the openHAB Automation API easy and familiar.
+The Core package contains code that makes using the openHAB Automation API easy and familiar.
 Information on the classes and functions is available in the following pages:
 
 
+Packages and Modules
+--------------------
+
 .. toctree::
-    :caption: Component Scripts
     :maxdepth: 2
     :glob:
 
-    Core/Scripts/*
+    Core/Packages and Modules/osgi.rst
+    Core/Packages and Modules/rules.rst
+    Core/Packages and Modules/triggers.rst
+    Core/Packages and Modules/log.rst
+    Core/Packages and Modules/actions.rst
+    Core/Packages and Modules/*
 
+
+Component Scripts
+-----------------
 
 .. toctree::
-    :caption: Modules
     :maxdepth: 2
     :glob:
 
-    Core/Modules/Rules.rst
-    Core/Modules/Triggers.rst
-    Core/Modules/Log.rst
-    Core/Modules/Actions.rst
-    Core/Modules/*
+    Core/Component Scripts/*
+
+
+Scripts
+-------
+
+.. toctree::
+    :maxdepth: 0
+
+    Core/Scripts/000_startup_delay.rst

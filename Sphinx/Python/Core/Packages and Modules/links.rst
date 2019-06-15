@@ -1,4 +1,4 @@
-Links
+links
 -----
 
 .. automodule:: core.links

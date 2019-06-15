@@ -1,5 +1,5 @@
 """
-Provides utility function for retrieving, registering and removing OSGI
+Provides utility functions for retrieving, registering and removing OSGi
 services.
 """
 
@@ -16,13 +16,13 @@ def get_service(class_or_name):
         classname = class_or_name.getName() if isinstance(class_or_name, type) else class_or_name
         ref = bundle_context.getServiceReference(classname)
         return bundle_context.getService(ref) if ref else None
-    
+
 def find_services(class_name, filter):
     if bundle_context:
         refs = bundle_context.getAllServiceReferences(class_name, filter)
         if refs:
             return [bundle_context.getService(ref) for ref in refs]
-    
+
 def register_service(service, interface_names, properties=None):
     if properties:
         import java.util
@@ -34,7 +34,7 @@ def register_service(service, interface_names, properties=None):
     for name in interface_names:
         registered_services[name] = (service, reg)
     return reg
-        
+
 def unregister_service(service):
     keys = registered_services.keys()
     for key in keys:

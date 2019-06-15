@@ -29,7 +29,7 @@ def smsEncode(my_str):
 
     for i in range(0,len(gsmChars)):
         my_str = my_str.replace(utf8Chars[i],gsmChars[i])
-    return my_str 
+    return my_str
 
 def require_auth(func):
     """
@@ -90,7 +90,7 @@ class Clickatell(object):
             self.has_authed = True
             return True
         else:
-            raise ClickatellAuthenticationError, ': '.join(result)
+            raise ClickatellAuthenticationError(': '.join(result))
 
     @require_auth
     def getbalance(self, url='https://api.clickatell.com/http/getbalance'):
@@ -151,7 +151,7 @@ class Clickatell(object):
         """
         Send a mesage via the Clickatell API server
         Takes a message in the following format:
-        
+
         message = {
             'to': 'to_msisdn',
             'text': 'This is a test message',
@@ -167,7 +167,7 @@ class Clickatell(object):
                 print "Message was not sent"
         """
         if not (message.has_key('to') or message.has_key('text')):
-            raise ClickatellError, "A message must have a 'to' and a 'text' value"
+            raise ClickatellError("A message must have a 'to' and a 'text' value")
 
         message['text'] = smsEncode(message['text'])
 
@@ -214,7 +214,7 @@ class Clickatell(object):
                 data = urllib2.urlopen(url, urllib.urlencode(post))
             else:
                 data = urllib2.urlopen(url, post)
-        except urllib2.URLError, v:
-            raise ClickatellError, v
+        except urllib2.URLError(v):
+            raise ClickatellError(v)
 
         return data.read().split(": ")
