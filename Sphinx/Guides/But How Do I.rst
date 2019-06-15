@@ -894,7 +894,7 @@ Enable or disable a rule by UID
         .. code-block::
 
             from core import osgi
-            ruleEngine = osgi.get_service("org.eclipse.smarthome.automation.RuleManager")
+            ruleEngine = osgi.get_service("org.openhab.core.automation.RuleManager") or osgi.get_service("org.eclipse.smarthome.automation.RuleManager")
             ruleEngine.setEnabled(ruleUID, True)# enable rule
             ruleEngine.setEnabled(ruleUID, False)# disable rule
 
@@ -961,7 +961,7 @@ Enable/disable a Thing
         .. code-block::
 
             from core.log import logging, LOG_PREFIX
-            log = logging.getLogger(LOG_PREFIX + ".TEST")
+            log = logging.getLogger("{}.TEST".format(LOG_PREFIX))
             from org.eclipse.smarthome.core.thing import ThingUID
             from core import osgi
 
@@ -1109,3 +1109,14 @@ Use a timer
         .. code-block:: java
 
             TODO
+
+Use Logging
+-----------
+
+See :ref:`Guides/Logging:Logging`.
+
+
+Use Actions
+-----------
+
+See :ref:`Guides/Actions:Actions`.

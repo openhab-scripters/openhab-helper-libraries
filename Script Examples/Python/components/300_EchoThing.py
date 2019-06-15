@@ -1,13 +1,14 @@
 """
 This is a very experimental Thing binding and handler implemented in Jython.
-At the time of this writing, it requires a small change to the openHAB source code for it to work.
-This simple Thing will write state updates on its input Channel to Items' states linked to the output Channel.
+At the time of this writing, it requires a small change to the openHAB source
+code for it to work. This simple Thing will write state updates on its input
+Channel to Items' states linked to the output Channel.
 
 Requires several other components:
 
     * JythonThingTypeProvider
     * JythonBindingInfoProvider
-    
+
 Note: there are load ordering issues that will need to be resolved.
 """
 
@@ -76,7 +77,7 @@ class EchoThingHandlerFactory(ThingHandlerFactory):
                 return EchoThingHandler(thing)
         except:
             import traceback
-            print traceback.format_exc()
+            print(traceback.format_exc())
 
     def createThing(self, thingTypeUID, configuration, thingUID, bridgeUID):
         try:
@@ -90,15 +91,15 @@ class EchoThingHandlerFactory(ThingHandlerFactory):
             return thing
         except:
             import traceback
-            print traceback.format_exc()
-    
+            print(traceback.format_exc())
+
     def registerHandler(self, thing):
         log.debug('registerHandler: %s', thing)
         return self.createHandler(thing)
-    
+
     def unregisterHandler(self, thing):
         log.debug('unregisterHandler: %s', thing)
-    
+
     def removeThing(self, thingUID):
         log.debug('removeThing: %s', thingUID)
 
@@ -109,18 +110,18 @@ class EchoThingHandlerFactory(ThingHandlerFactory):
 #
 
 #input_channel_type = ChannelType(
-#    input_channel_type_uid, False,  "String",  "Echo Input Item", 
+#    input_channel_type_uid, False,  "String",  "Echo Input Item",
 #    "Input item who's value will be echoed", None, None, None, None)
- 
+
 #output_channel_type = ChannelType(
-#    output_channel_type_uid, False,  "String",  "Echo Output Item", 
+#    output_channel_type_uid, False,  "String",  "Echo Output Item",
 #    "Output item to receive echoed", None, None, None, None)
 
 core.JythonThingTypeProvider.add(
     ThingType(
-        THING_TYPE_UID, [], "Jython Echo", "Echos input channel to output channel", True, 
+        THING_TYPE_UID, [], "Jython Echo", "Echos input channel to output channel", True,
         [
-            ChannelDefinition(INPUT_CHANNEL_NAME, ChannelTypeUID(BINDING_ID, INPUT_CHANNEL_NAME), None, None, None), 
+            ChannelDefinition(INPUT_CHANNEL_NAME, ChannelTypeUID(BINDING_ID, INPUT_CHANNEL_NAME), None, None, None),
             ChannelDefinition(OUTPUT_CHANNEL_NAME, ChannelTypeUID(BINDING_ID, OUTPUT_CHANNEL_NAME), None, None, None)
         ], [], {}, None
     )
@@ -132,7 +133,7 @@ core.JythonThingTypeProvider.add(
 
 core.JythonBindingInfoProvider.add(
     BindingInfo(
-        BINDING_ID, "Jython Binding", "Experimental binding written in Jython", 
+        BINDING_ID, "Jython Binding", "Experimental binding written in Jython",
         None, None, None
     )
 )

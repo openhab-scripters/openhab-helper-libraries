@@ -92,8 +92,14 @@ MOCK_MODULES = [
     'core.jsr223.scope',
     'core.JythonItemProvider',
     'core.JythonItemChannelLinkProvider',
+    'core.JythonExtensionProvider',
     'TriggerHandlerFactory',
-    'scriptExtension',
+    'ActionHandler',
+    'ActionType',
+    'Visibility',
+    'ConfigDescriptionParameter',
+    'ConfigDescriptionParameterBuilder',
+    'automationManager',
     'core.rules_mock',
     'core.triggers_mock',
     'core.actions_mock',
@@ -102,7 +108,8 @@ MOCK_MODULES = [
     'com.espertech.esper.client',
     'meteocalc',
     'urllib2',
-    'StringIO'
+    'StringIO',
+    'scriptExtension'
 ]
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()

@@ -2,11 +2,10 @@
 Actions
 *******
 
+.. warning:: In order to avoid namespace conflicts with the ``actions`` object provided in the default scope, don't use ``import core.actions``.
 
 Use `Core & Cloud Actions <https://www.openhab.org/docs/configuration/actions.html#core-actions>`_
 --------------------------------------------------------------------------------------------------------
-
-In order to avoid namespace conflicts with the ``actions`` object provided in the default scope, don't do ``import core.actions``.
 
 For ScriptExecution, see :ref:`Guides/But How Do I:Use a timer`.
 For LogAction, see :doc:`Logging`.
@@ -115,7 +114,7 @@ Use an Addon/Bundle Action
     .. group-tab:: Python
 
         `Telegram <https://www.openhab.org/addons/actions/telegram/#telegram-actions>`_
-        
+
         .. code-block::
 
             from core.actions import Telegram
@@ -136,7 +135,7 @@ Use an Addon/Bundle Action
             from core.log import logging, LOG_PREFIX
             from java.util import Date
 
-            log = logging.getLogger(LOG_PREFIX + ".astro_test")
+            log = logging.getLogger("{}.astro_test".format(LOG_PREFIX))
 
             # Use the Astro action class to get the sunset start time.
             log.info("Sunrise: {}".format(Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time))

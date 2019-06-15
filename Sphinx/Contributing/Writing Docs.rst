@@ -258,7 +258,7 @@ Virtual Environment
 
     .. code-block:: bash
 
-      (.venv) $ pip3 install sphinx mock
+      (.venv) $ pip3 install sphinx mock sphinx-tabs
 
 Building
 --------
@@ -272,14 +272,14 @@ Building
 
       $ source .venv/bin/activate
 
-    Then run Sphinx build:
+    Then run the Sphinx build script:
 
     .. code-block:: bash
 
-      (.venv) $ sphinx-build -a Sphinx/ docs/
+      (.venv) $ Sphinx/build_docs.sh
 
     This should produce some output and end with ``build succeeded.``
-    
+
     If the build produces any errors, they must be fixed before your pull
     request can be merged. If you are seeing any Import Errors, see the next
     section. If you are seeing other errors and are not able to resolve them,
@@ -347,16 +347,16 @@ Lists
         and can span multiple lines
 
       #. This is also a numbered list
-         
+
          #. With a nested item
 
     1. This is a numbered list
-      
+
     * This is a bullet
       and can span multiple lines
 
     #. This is also a numbered list
-       
+
        #. With a nested item
 
 Codeblocks

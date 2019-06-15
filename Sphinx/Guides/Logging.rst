@@ -57,9 +57,9 @@ core.log
                 logging.error("Logging example from root logger [ERROR]: [{}]".format(5 + 5))
                 logging.critical("Logging example from root logger [TRACE]: [{}]".format(5 + 5))
 
-                logging.getLogger(LOG_PREFIX + ".test_logging_script").info("Logging example from logger, using text appended to LOG_PREFIX: [{}]".format(5 + 5))
+                logging.getLogger("{}.test_logging_script".format(LOG_PREFIX)).info("Logging example from logger, using text appended to LOG_PREFIX: [{}]".format(5 + 5))
 
-                log = logging.getLogger(LOG_PREFIX + ".test_logging_script")
+                log = logging.getLogger("{}.test_logging_script".format(LOG_PREFIX))
                 log.info("Logging example from logger, using text appended to LOG_PREFIX: [{}]".format(5 + 5))
 
         .. group-tab:: JavaScript
@@ -135,7 +135,7 @@ SLF4J
 
                 from org.slf4j import LoggerFactory
                 from configuration import LOG_PREFIX
-                log = LoggerFactory.getLogger(LOG_PREFIX + ".EXAMPLE")
+                log = LoggerFactory.getLogger("{}.EXAMPLE".format(LOG_PREFIX))
 
                 log.info("Example info log [{}]", 5 + 5)
                 log.warn("Example warning log [{}]", 5 + 5)

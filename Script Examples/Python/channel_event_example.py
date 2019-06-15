@@ -1,5 +1,5 @@
 """
-This script has several examples of rules triggered by Channel events.
+This script displays an example of a rule triggered by Channel events.
 """
 
 # Example Channel event rule (decorators) [description and tags are optional]
@@ -10,56 +10,3 @@ from core.rules import rule
 @when("Channel astro:sun:local:set#event triggered START")
 def channelEventExampleDecorators(event):
     channelEventExampleDecorators.log.info("Sunset triggered")
-
-'''
-# Example Channel event rule (extension with rule decorator)
-from core.triggers import ChannelEventTrigger
-from core.rules import rule
-
-@rule("Example Channel event rule (extension with rule decorator)")
-class channelEventExampleExtensionWithRuleDecorator(object):
-
-    def __init__(self):
-        self.triggers = [ ChannelEventTrigger("astro:sun:local:set#event", triggerName="Example_Channel_event_trigger", event="START") ]
-
-    def execute(self, modules, inputs):
-        self.log.info('Sunset triggered')
-'''
-'''
-# Example Channel event rule (extensions)
-from core.triggers import ChannelEventTrigger
-scriptExtension.importPreset("RuleSimple")
-scriptExtension.importPreset("RuleSupport")
-
-class channelEventExampleExtension(SimpleRule):
-
-    def __init__(self):
-        self.triggers = [ ChannelEventTrigger("astro:sun:local:set#event", triggerName="Example_Channel_event_trigger", event="START") ]
-        self.name = "Example Channel event rule (extension)"
-
-    def execute(self, modules, inputs):
-        self.log.info('Sunset triggered')
-
-automationManager.addRule(channelEventExampleExtension())
-'''
-'''
-# Example Channel event rule (raw API)
-scriptExtension.importPreset("RuleSimple")
-scriptExtension.importPreset("RuleSupport")
-
-class channelEventExampleRawAPI(SimpleRule):
-
-    def __init__(self):
-        triggerName = "Example_Channel_event_trigger"
-        config = {
-            "channelUID": "astro:sun:local:set#event",
-            "event": "START"
-        }
-        self.triggers = [ TriggerBuilder.create().withId(triggerName).withTypeUID("core.ChannelEventTrigger").withConfiguration(Configuration(config)).build() ]
-        self.name = "Example Channel event rule (raw API)"
-
-    def execute(self,modules,inputs):
-        self.log.info('Sunset triggered')
-
-automationManager.addRule(channelEventExampleRawAPI())
-'''

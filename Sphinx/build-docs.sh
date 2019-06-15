@@ -13,14 +13,17 @@ IMPORTS_DIR="$SCRIPT_DIR/imports"
 OUTPUT_DIR="$SCRIPT_DIR/../docs"
 CORE_DIR="$SCRIPT_DIR/../Core"
 COMMUNITY_DIR="$SCRIPT_DIR/../Community"
+EXAMPLES_DIR="$SCRIPT_DIR/../Script Examples/Python"
+DESIGN_PATTERNS_DIR="$SCRIPT_DIR/../Design Patterns"
+
 AUTOMATION_LIB="automation/lib/python"
 TEMP_LIB="lib/python"
 AUTOMATION_JSR="automation/jsr223/python"
 TEMP_JSR="jsr223/python/scripts"
+
 COMMUNITY="community"
 CORE="core"
-EXAMPLES_DIR="$SCRIPT_DIR/../Script Examples"
-TEMP_EXAMPLES="examples"
+EXAMPLES="examples"
 
 # remove old docs output
 if [[ -d $OUTPUT_DIR ]]; then
@@ -40,18 +43,32 @@ mkdir -p "$IMPORTS_DIR/$TEMP_LIB/$CORE"
 mkdir -p "$IMPORTS_DIR/$TEMP_LIB/$COMMUNITY"
 mkdir -p "$IMPORTS_DIR/$TEMP_JSR/$CORE"
 mkdir -p "$IMPORTS_DIR/$TEMP_JSR/$COMMUNITY"
-mkdir -p "$IMPORTS_DIR/$TEMP_EXAMPLES"
+mkdir -p "$IMPORTS_DIR/$TEMP_JSR/$EXAMPLES"
 
-# copy Core files
+# Copy /Core/
 echo "Copying /Core directories to temp /import/ directory..."
 rsync -a --protect-args "$CORE_DIR/$AUTOMATION_LIB/" "$IMPORTS_DIR/$TEMP_LIB"
 rsync -a --protect-args "$CORE_DIR/$AUTOMATION_JSR/" "$IMPORTS_DIR/$TEMP_JSR"
 
-# copy Script Examples
-echo "Copying /Examples directories to temp /import/ directory..."
-rsync -a --protect-args "$EXAMPLES_DIR/" "$IMPORTS_DIR/$TEMP_EXAMPLES"
+# Copy /Script Examples/
+echo "Copying /Script Examples to temp /import/ directory..."
+rsync -a --protect-args "$EXAMPLES_DIR/" "$IMPORTS_DIR/$TEMP_JSR/$EXAMPLES"
 
-# iter all toplevel folders in Community/
+# Iterate all toplevel folders in /Design Patterns/
+echo "Copying /Design Patterns directories to temp /import/ directory..."
+for DIRNAME in $(find "$DESIGN_PATTERNS_DIR" -maxdepth 1 -type d 2>/dev/null); do
+    #echo $DIRNAME
+    if [ "$DIRNAME" != "$DESIGN_PATTERNS_DIR" ]; then
+        if [ -d "$DIRNAME/$AUTOMATION_JSR/personal" ]; then
+            for MODULE in $(find "$DIRNAME/$AUTOMATION_JSR/personal" -maxdepth 1 -type f 2>/dev/null); do
+                rsync -a --protect-args "$MODULE" "$IMPORTS_DIR/$TEMP_JSR/$EXAMPLES/$(basename $MODULE)"
+                echo "  Found design pattern folder '$(basename $MODULE)' in '$DIRNAME/$AUTOMATION_JSR/personal'"
+            done
+        fi
+    fi
+done
+
+# Iterate all toplevel folders in /Community/
 echo "Copying /Community directories to temp /import/ directory..."
 for DIRNAME in $(find "$COMMUNITY_DIR" -maxdepth 1 -type d 2>/dev/null); do
     #echo $DIRNAME
@@ -61,8 +78,6 @@ for DIRNAME in $(find "$COMMUNITY_DIR" -maxdepth 1 -type d 2>/dev/null); do
                 if [ "$PACKAGE" != "$DIRNAME/$AUTOMATION_LIB/$COMMUNITY" ]; then
                     rsync -a --protect-args "$PACKAGE/" "$IMPORTS_DIR/$TEMP_LIB/$COMMUNITY/$(basename $PACKAGE)/"
                     echo "  Found package '$(basename $PACKAGE)' in '$DIRNAME/$AUTOMATION_LIB/$COMMUNITY'"
-
-                    # if we have packages inside packages in the future, another loop will be needed
                 fi
             done
         fi
@@ -81,11 +96,14 @@ done
 # Adding imports for things used in default scope for all scripts
 echo "Removing 'scriptExtension.importPreset(None)' in scripts..."
 for FILENAME in $(find "$IMPORTS_DIR/$TEMP_JSR" -type f 2>/dev/null); do
-    # clear out startup_delay script
-    if [[ $FILENAME =~ "000_startup_delay" ]]; then
+    sed -i -e 's/^scriptExtension.importPreset/import mock\nimport core\ncore.JythonThingTypeProvider = mock.Mock()\ncore.JythonBindingInfoProvider = mock.Mock()\nimport Visibility\nimport TriggerHandlerFactory\nimport ActionHandler\nimport ActionType\nimport ConfigDescriptionParameter\nimport ConfigDescriptionParameterBuilder\nimport automationManager\nimport scriptExtension\nscriptExtension.importPreset/' $FILENAME
+done
+
+# Clear everything but the docstrings in scripts with errors that cannot be resolved
+echo "Clearing contents of scripts with errors that cannot be resolved..."
+for FILENAME in $(find "$IMPORTS_DIR" -type f 2>/dev/null); do
+    if [[ $FILENAME =~ "000_startup_delay" || $FILENAME =~ "rule_registry_example" ]]; then
         sed -i '/^$/q' $FILENAME
-    else
-        sed -i -e 's/^scriptExtension.importPreset(None)/import TriggerHandlerFactory\nimport scriptExtension\n#scriptExtension.importPreset(None)/' $FILENAME
     fi
 done
 
@@ -101,14 +119,14 @@ for FILENAME in $(find "$IMPORTS_DIR" -type f 2>/dev/null); do
     fi
 done
 
-# put __init__.py files in every folder that has scripts to make them importable
-echo "Creating '__init__.py' files for scripts..."
+# Add __init__.py files to all directries containing core and community scripts to make them importable
+echo "Creating '__init__.py' files for core and community scripts..."
 for DIRNAME in $(find "$IMPORTS_DIR/$TEMP_JSR" -type d 2>/dev/null); do
     touch "$DIRNAME/__init__.py"
 done
 
-# put __init__.py files in every folder for Python Script Examples to make them importable
-echo "Creating '__init__.py' files for examples..."
+# Add __init__.py files to all directries containing script examples to make them importable
+echo "Creating '__init__.py' files for script examples..."
 for DIRNAME in $(find "$IMPORTS_DIR/$TEMP_EXAMPLES/Python" -type d 2>/dev/null); do
     touch "$DIRNAME/__init__.py"
 done
@@ -127,7 +145,7 @@ echo "Sphinx Build finished"
 
 # remove import temps
 echo "Removing import temp files and links..."
-#rm -R "$IMPORTS_DIR"
+rm -R "$IMPORTS_DIR"
 unlink "$STYLE_LINK"
 
 IFS=$SAVEIFS
