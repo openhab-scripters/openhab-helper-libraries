@@ -33,17 +33,8 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     Guides/Logging.rst
     Guides/Actions.rst
     Guides/Event Object Attributes.rst
+    Examples/Examples.rst
     Guides/But How Do I.rst
-
-
-.. toctree::
-    :caption: Design Patterns
-    :maxdepth: 2
-
-
-.. toctree::
-    :caption: Script Examples
-    :maxdepth: 2
 
 
 .. toctree::

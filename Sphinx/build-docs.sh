@@ -19,6 +19,8 @@ AUTOMATION_JSR="automation/jsr223/python"
 TEMP_JSR="jsr223/python/scripts"
 COMMUNITY="community"
 CORE="core"
+EXAMPLES_DIR="$SCRIPT_DIR/../Script Examples"
+TEMP_EXAMPLES="examples"
 
 # remove old docs output
 if [[ -d $OUTPUT_DIR ]]; then
@@ -36,14 +38,18 @@ fi
 echo "Creating temp /import/ directory structure..."
 mkdir -p "$IMPORTS_DIR/$TEMP_LIB/$CORE"
 mkdir -p "$IMPORTS_DIR/$TEMP_LIB/$COMMUNITY"
-
 mkdir -p "$IMPORTS_DIR/$TEMP_JSR/$CORE"
 mkdir -p "$IMPORTS_DIR/$TEMP_JSR/$COMMUNITY"
+mkdir -p "$IMPORTS_DIR/$TEMP_EXAMPLES"
 
 # copy Core files
 echo "Copying /Core directories to temp /import/ directory..."
 rsync -a --protect-args "$CORE_DIR/$AUTOMATION_LIB/" "$IMPORTS_DIR/$TEMP_LIB"
 rsync -a --protect-args "$CORE_DIR/$AUTOMATION_JSR/" "$IMPORTS_DIR/$TEMP_JSR"
+
+# copy Script Examples
+echo "Copying /Examples directories to temp /import/ directory..."
+rsync -a --protect-args "$EXAMPLES_DIR/" "$IMPORTS_DIR/$TEMP_EXAMPLES"
 
 # iter all toplevel folders in Community/
 echo "Copying /Community directories to temp /import/ directory..."
@@ -101,6 +107,12 @@ for DIRNAME in $(find "$IMPORTS_DIR/$TEMP_JSR" -type d 2>/dev/null); do
     touch "$DIRNAME/__init__.py"
 done
 
+# put __init__.py files in every folder for Python Script Examples to make them importable
+echo "Creating '__init__.py' files for examples..."
+for DIRNAME in $(find "$IMPORTS_DIR/$TEMP_EXAMPLES/Python" -type d 2>/dev/null); do
+    touch "$DIRNAME/__init__.py"
+done
+
 # link vscode_style to /.venv/lib/python3.7/site-packages/pygments/styles
 STYLE_LINK="$(find "$SCRIPT_DIR/../.venv/lib" -type d -name "pygments")/styles/vscode.py"
 ln -rs "$SCRIPT_DIR/_styles/vscode.py" "$STYLE_LINK"
@@ -115,7 +127,7 @@ echo "Sphinx Build finished"
 
 # remove import temps
 echo "Removing import temp files and links..."
-rm -R "$IMPORTS_DIR"
+#rm -R "$IMPORTS_DIR"
 unlink "$STYLE_LINK"
 
 IFS=$SAVEIFS

@@ -8,6 +8,8 @@ Installation
 
     Docker.rst
 
+Instructions for installation in a Docker container are available :doc:`here <Docker>`.
+
 .. # define a hard line break for HTML
 .. |br| raw:: html
 
@@ -139,12 +141,6 @@ Installation
         #.  |step9|
         #.  Review the Groovy helper library documentation.
         #.  |step10|
-
-
-.. Docker
-.. ======
-
-.. There are also instructions for installation in a :doc:`Docker` container.
 
 
 Check out the :doc:`../First Steps` page for what to do next.

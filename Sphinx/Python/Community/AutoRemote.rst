@@ -1,6 +1,6 @@
-***********
-AutomRemote
-***********
+**********
+AutoRemote
+**********
 
 
 Packages and Modules

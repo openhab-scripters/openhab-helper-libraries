@@ -13,6 +13,7 @@
 import os, sys
 sys.path.append(os.path.abspath('./imports/lib/python'))
 sys.path.append(os.path.abspath('./imports/jsr223/python'))
+sys.path.append(os.path.abspath('./imports/examples/Python'))
 
 # -- Project information -----------------------------------------------------
 
