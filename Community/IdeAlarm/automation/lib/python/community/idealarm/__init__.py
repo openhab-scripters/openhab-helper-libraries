@@ -32,10 +32,10 @@ import weakref # Using this to prevent problems with garbage collection
 from org.joda.time import DateTime
 
 from core.jsr223 import scope
-from core.date_mock import format_date
+from core.date import format_date
 from core.log import logging, LOG_PREFIX
 from core.utils import getItemValue, postUpdateCheckFirst, sendCommandCheckFirst, kw
-from core.actions_mock import PersistenceExtensions
+from core.actions import PersistenceExtensions
 from configuration import idealarm_configuration, customDateTimeFormats, customGroupNames
 from personal.idealarm import custom
 
