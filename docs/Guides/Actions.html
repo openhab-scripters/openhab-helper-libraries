@@ -1,0 +1,454 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Actions &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Event Object Attributes" href="Event Object Attributes.html" />
+    <link rel="prev" title="Logging" href="Logging.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../Index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">Logging</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Actions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#use-core-cloud-actions">Use Core &amp; Cloud Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Persistence extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-an-addon-bundle-action">Use an Addon/Bundle Action</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Index.html">Docs</a> &raquo;</li>
+        
+      <li>Actions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="actions">
+<h1>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In order to avoid namespace conflicts with the <code class="docutils literal notranslate"><span class="pre">actions</span></code> object provided in the default scope, don’t use <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">core.actions</span></code>.</p>
+</div>
+<div class="section" id="use-core-cloud-actions">
+<h2>Use <a class="reference external" href="https://www.openhab.org/docs/configuration/actions.html#core-actions">Core &amp; Cloud Actions</a><a class="headerlink" href="#use-core-cloud-actions" title="Permalink to this headline">¶</a></h2>
+<p>For ScriptExecution, see <a class="reference internal" href="But How Do I.html#use-a-timer"><span class="std std-ref">Use a timer</span></a>.
+For LogAction, see <a class="reference internal" href="Logging.html"><span class="doc">Logging</span></a>.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Exec</span>
+<span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name&quot;</span><span class="p">,</span><span class="mi">5000</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">HTTP</span>
+<span class="n">HTTP</span><span class="o">.</span><span class="n">sendHttpPutRequest</span><span class="p">(</span><span class="s2">&quot;someURL.com, &quot;</span><span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="s2">&quot;, &#39;{&quot;</span><span class="n">this</span><span class="s2">&quot;: &quot;</span><span class="n">that</span><span class="s2">&quot;}&#39;)</span>
+
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Ping</span>
+<span class="k">if</span> <span class="n">Ping</span><span class="o">.</span><span class="n">checkVitality</span><span class="p">(</span><span class="s2">&quot;10.5.5.5&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5000</span><span class="p">):</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Server is online&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Server is offline&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Audio</span>
+<span class="n">Audio</span><span class="o">.</span><span class="n">playSound</span><span class="p">(</span><span class="s2">&quot;doorbell.mp3&quot;</span><span class="p">)</span><span class="c1"># using the default audiosink</span>
+<span class="n">Audio</span><span class="o">.</span><span class="n">playSound</span><span class="p">(</span><span class="s2">&quot;my:audio:sink&quot;</span><span class="p">,</span> <span class="s2">&quot;doorbell.mp3&quot;</span><span class="p">)</span><span class="c1"># specifying an audiosink</span>
+<span class="n">Audio</span><span class="o">.</span><span class="n">playStream</span><span class="p">(</span><span class="s2">&quot;http://myAudioServer/myAudioFile.mp3&quot;</span><span class="p">)</span><span class="c1"># using the default audiosink</span>
+<span class="n">Audio</span><span class="o">.</span><span class="n">playStream</span><span class="p">(</span><span class="s2">&quot;my:audio:sink&quot;</span><span class="p">,</span> <span class="s2">&quot;http://myAudioServer/myAudioFile.mp3&quot;</span><span class="p">)</span><span class="c1"># specifying an audiosink</span>
+
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">NotificationAction</span>
+<span class="n">NotificationAction</span><span class="o">.</span><span class="n">sendNotification</span><span class="p">(</span><span class="s2">&quot;someone@someDomain.com&quot;</span><span class="p">,</span><span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
+<span class="n">NotificationAction</span><span class="o">.</span><span class="n">sendBroadcastNotification</span><span class="p">(</span><span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
+<span class="n">NotificationAction</span><span class="o">.</span><span class="n">sendLogNotification</span><span class="p">(</span><span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Transformation</span>
+<span class="n">Transformation</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;JSONPATH&quot;</span><span class="p">,</span> <span class="s2">&quot;$.test&quot;</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Voice</span>
+<span class="n">Voice</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="s2">&quot;This will be said&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Things</span>
+<span class="n">Things</span><span class="o">.</span><span class="n">getThingStatusInfo</span><span class="p">(</span><span class="s2">&quot;zwave:device:c5155aa4:node5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2><a class="reference external" href="https://www.openhab.org/docs/configuration/persistence.html#persistence-extensions-in-scripts-and-rules">Persistence extensions</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Others not listed are similar</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">PersistenceExtensions</span>
+<span class="n">PersistenceExtensions</span><span class="o">.</span><span class="n">previousState</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;Weather_SolarRadiation&quot;</span><span class="p">),</span> <span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">state</span>
+
+<span class="kn">from</span> <span class="nn">org.joda.time</span> <span class="kn">import</span> <span class="n">DateTime</span>
+<span class="n">PersistenceExtensions</span><span class="o">.</span><span class="n">changedSince</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;Weather_SolarRadiation&quot;</span><span class="p">),</span> <span class="n">DateTime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minusHours</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">PersistenceExtensions</span><span class="o">.</span><span class="n">maximumSince</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;Weather_SolarRadiation&quot;</span><span class="p">),</span> <span class="n">DateTime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">minusHours</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">state</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="use-an-addon-bundle-action">
+<h2>Use an Addon/Bundle Action<a class="headerlink" href="#use-an-addon-bundle-action" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The binding or Action must be installed.</p>
+</div></blockquote>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p><a class="reference external" href="https://www.openhab.org/addons/actions/telegram/#telegram-actions">Telegram</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Telegram</span>
+<span class="n">Telegram</span><span class="o">.</span><span class="n">sendTelegram</span><span class="p">(</span><span class="s2">&quot;MyBot&quot;</span><span class="p">,</span> <span class="s2">&quot;Test&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.openhab.org/addons/actions/mail/#mail-actions">Mail</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Mail</span>
+<span class="n">Mail</span><span class="o">.</span><span class="n">sendMail</span><span class="p">(</span><span class="s2">&quot;someone@someDomain.com&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the subject&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.openhab.org/addons/actions/astro/#astro-actions">Astro</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Astro</span>
+<span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
+<span class="kn">from</span> <span class="nn">java.util</span> <span class="kn">import</span> <span class="n">Date</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.astro_test&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
+
+<span class="c1"># Use the Astro action class to get the sunset start time.</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sunrise: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Astro</span><span class="o">.</span><span class="n">getAstroSunsetStart</span><span class="p">(</span><span class="n">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="mf">38.897096</span><span class="p">,</span> <span class="o">-</span><span class="mf">77.036545</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.openhab.org/addons/bindings/mqtt/">MQTT2</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># no import needed</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mqtt&quot;</span><span class="p">,</span> <span class="s2">&quot;mqtt:systemBroker:embedded-mqtt-broker&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">publishMQTT</span><span class="p">(</span><span class="s2">&quot;test/system/started&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Guides/Actions" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

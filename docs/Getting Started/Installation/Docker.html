@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Docker &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../../_static/sphinx_tabs/tabs.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx_tabs/tabs.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="File Locations" href="../File Locations.html" />
+    <link rel="prev" title="Installation" href="Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../Index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="Installation.html">Installation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../Index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../Index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="Installation.html">Installation</a> &raquo;</li>
+        
+      <li>Docker</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="docker">
+<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>Javascript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>This guide is written for openHAB v2.4, at the time of writing, it was Build #1390. To get this build, run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">openhab/openhab:2.4.0-snapshot-amd64-debian</span></code>.
+Once you have openHAB installed and running, you can install Jython as follows (these are the steps I figured out after some trial and error).</p>
+<p>Installation</p>
+<ol class="arabic">
+<li><p>Install the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> (in Paper UI, go to Add-ons &gt; Misc, find Rule Engine (Experimental), and click “INSTALL”.
+Once installed, Jython and the helper libraries can be installed into openHAB.</p></li>
+<li><p>Get the files for openhab2-jython:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget https://github.com/OH-Jython-Scripters/openhab2-jython/archive/master.zip
+unzip master.zip
+mv openhab2-jython-master/automation conf/
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The last <code class="docutils literal notranslate"><span class="pre">mv</span></code> is to move the automation directory into the conf directory that’s mounted in openHAB at <code class="docutils literal notranslate"><span class="pre">/openhab/conf/</span></code>.
+If you already have an <cite>automation</cite> directory, manually move over the individual directories.</p>
+</div>
+</li>
+<li><p>Next, get and install the actual Jython binary:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl http://search.maven.org/remotecontent?filepath<span class="o">=</span>org/python/jython-standalone/2.7.0/jython-standalone-2.7.0.jar -o jython-standalone-2.7.0.jar
+mkdir conf/automation/jython
+mv jython-standalone-2.7.0.jar conf/automation/jython/
+</pre></div>
+</div>
+<p>Again, the <code class="docutils literal notranslate"><span class="pre">conf</span></code> directory above is the directory that’s mounted in openHAB.</p>
+</li>
+<li><p>Finally, copy over the <code class="docutils literal notranslate"><span class="pre">hello_world.py</span></code> script so we can see things happening in the logs.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp openhab2-jython-master/Script<span class="se">\ </span>Examples/Python/hello_world.py conf/automation/jsr223/python/personal
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Docker Environment</p>
+<ol class="arabic">
+<li><p>When starting the docker container, include the environment variable as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-e <span class="s2">&quot;EXTRA_JAVA_OPTS=-Xbootclasspath/a:/openhab/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/openhab/conf/automation/jython -Dpython.path=/openhab/conf/automation/lib/python&quot;</span>
+</pre></div>
+</div>
+<p>Or, if you are using a compose file, include this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>environment:
+EXTRA_JAVA_OPTS: <span class="s2">&quot;-Xbootclasspath/a:/openhab/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/openhab/conf/automation/jython -Dpython.path=/openhab/conf/automation/lib/python&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Restart openHAB.
+You should see something such as this in the logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2018</span>-10-17 <span class="m">02</span>:18:06.704 <span class="o">[</span>INFO <span class="o">]</span> <span class="o">[</span>.internal.GenericScriptEngineFactory<span class="o">]</span> - Activated scripting support <span class="k">for</span> python
+</pre></div>
+</div>
+</li>
+<li><p>After a minute or two, this should appear in the logs every 10 seconds or so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2018</span>-10-17 <span class="m">02</span>:24:40.077 <span class="o">[</span>INFO <span class="o">]</span> <span class="o">[</span>eclipse.smarthome.model.script.Rules<span class="o">]</span> - JSR223: This is a <span class="s1">&#39;hello world!&#39;</span> from a Jython rule <span class="o">(</span>decorator<span class="o">)</span>: Cron
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Building image from Dockerfile</p>
+<p>In the <cite>/Docker/Python/</cite> directory, there is an example Dockerfile which will add Jython support to the given container version.
+It includes a script to enable the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> in the addons.cfg and adds necessary entries to <code class="docutils literal notranslate"><span class="pre">EXTRA_JAVA_OPTS</span></code> (including setting python.path to <code class="docutils literal notranslate"><span class="pre">/openhab/conf/automation/lib/python/</span></code>).
+As a user, you only need to add Python scripts and rules to your <code class="docutils literal notranslate"><span class="pre">/conf/automation/jsr223/python/personal/</span></code> volume.</p>
+<p>To build a container with jython, simply run</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build --build-arg <span class="nv">OPENHAB_VERSION</span><span class="o">=</span><span class="m">2</span>.4.0.M6-amd64-debian .
+</pre></div>
+</div>
+</div></blockquote>
+<p>Jython will be installed in <code class="docutils literal notranslate"><span class="pre">/opt/jython</span></code>.
+The installation directory, as well as Jython version, can be set with build args (see the <cite>/Docker/Python/Dockerfile</cite>).</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<p>No documentation for a Javascript Docker installation has been prepared.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>No documentation for a Javascript Docker installation has been prepared.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Getting Started/Installation/Docker" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

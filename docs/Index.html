@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Helper Libraries for openHAB Scripted Automation &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="Getting Started/Installation/Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Helper Libraries for openHAB Scripted Automation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="helper-libraries-for-openhab-scripted-automation">
+<h1>Helper Libraries for openHAB Scripted Automation<a class="headerlink" href="#helper-libraries-for-openhab-scripted-automation" title="Permalink to this headline">¶</a></h1>
+<div class="admonition-under-construction admonition">
+<p class="admonition-title"><strong>UNDER CONSTRUCTION</strong></p>
+<p>The openHAB Scripters (formerly OH Jython Scripters) organization and this repository have both recently had name changes, and there has been a directory restructuring to support more languages.
+Javascript libraries are now included, but they require testing and are likely to have frequent updates as the functionality of the Jython libraries are added to them.
+Please report any issues that you find!</p>
+<p>If you have local repositories, you’ll need to update them to point to the <a class="reference external" href="https://help.github.com/en/articles/changing-a-remotes-url">new location</a>.</p>
+</div>
+<p>The main purpose of the helper libraries is to provide a layer of abstraction to simplify the interaction of scripts with the openHAB Automation API.
+These libraries can be used with <a class="reference external" href="https://www.openhab.org">openHAB</a> (2.4M3, S1319, or newer) and the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a>.
+The one exception is that custom module handlers, including the StartupTrigger, DirectoryTrigger, and OsgiEventTrigger in the JythonHLs, require S1566 or newer.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/Installation/Installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Getting Started/Installation/Docker.html">Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Rules.html">Rules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Rules.html#decorators">Decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Rules.html#extensions">Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Rules.html#raw-api">Raw API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Triggers.html">Triggers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Triggers.html#items-and-groups">Items and Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Triggers.html#channel-event">Channel Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Triggers.html#thing-event">Thing Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Triggers.html#cron">Cron</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Triggers.html#system-started">System Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Triggers.html#system-shuts-down">System Shuts Down</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Logging.html">Logging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Logging.html#rule-decorator">Rule Decorator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Logging.html#core-log">core.log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Logging.html#log-action">Log Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Logging.html#slf4j">SLF4J</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Actions.html">Actions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Actions.html#use-core-cloud-actions">Use Core &amp; Cloud Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Actions.html#id1">Persistence extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/Actions.html#use-an-addon-bundle-action">Use an Addon/Bundle Action</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples/Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Hello World.html">Hello World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Design Patterns/Design Patterns.html">Design Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Component Scripts/Component Scripts.html">Component Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Action Example.html">Action Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Channel Event Example.html">Channel Event Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Directory Watcher Example.html">Directory Watcher Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Extension Provider Usage Example.html">Extension Provider Usage Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Rule Registry Example.html">Rule Registry Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Testing Example.html">Testing Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/Timer Example.html">Timer Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/But How Do I.html">But How Do I…?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Guides/But How Do I.html#items">Items</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/But How Do I.html#groups">Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Guides/But How Do I.html#miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Python/Reference.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Python/Reference.html#suggested-reading">Suggested reading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Reference.html#modifying-reloading-modules">Modifying/Reloading Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Reference.html#custom-modules">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Reference.html#module-locations">Module Locations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Python/Core.html">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Python/Core.html#packages-and-modules">Packages and Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Core.html#component-scripts">Component Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Core.html#scripts">Scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Python/Community.html">Community</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/Alexa Speak and Respond.html">Alexa Speak and Respond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/AutoRemote.html">AutoRemote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/ClickaTell.html">ClickaTell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/IdeAlarm.html">IdeAlarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/OpenWeatherMap.html">OpenWeatherMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/Sonos.html">Sonos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Python/Community/WeatherStationUploader.html">WeatherStationUploader</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="JavaScript/Reference.html">Reference</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Contributing/Writing Docs.html">Writing Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Contributing/Writing Docs.html#python-docstrings">Python docstrings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Contributing/Writing Docs.html#adding-documentation-for-modules">Adding Documentation for Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Contributing/Writing Docs.html#building-the-docs">Building the Docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Contributing/Writing Docs.html#formatting">Formatting</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Index" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
