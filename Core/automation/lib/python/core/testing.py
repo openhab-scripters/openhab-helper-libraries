@@ -1,3 +1,24 @@
+"""
+One of the challenges of openHAB rule development is verifying that rules are
+behaving correctly and haven't broken as the code evolves. This module supports
+running automated tests within a runtime context. To run tests directly from
+scripts:
+
+.. code-block::
+
+    import unittest # standard Python library
+    from core.testing import run_test
+
+    class MyTest(unittest.TestCase):
+        def test_something(self):
+            "Some test code..."
+
+    run_test(MyTest) 
+
+This module also defines a rule class, `TestRunner`. When a switch item is
+turned on, it will run a testcase and store the test results in a string item.
+"""
+
 from __future__ import absolute_import
 
 import unittest

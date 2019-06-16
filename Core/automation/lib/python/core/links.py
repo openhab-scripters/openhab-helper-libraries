@@ -1,4 +1,8 @@
-# NOTE: Requires JythonItemChannelLinkProvider component
+"""
+This module allows runtime creation and removal of links. This module requires
+the JythonItemChannelLinkProvider component script.
+"""
+
 from core.jsr223 import scope
 scope.scriptExtension.importPreset(None)
 
@@ -19,7 +23,7 @@ ItemChannelLinkRegistry = osgi.get_service(
         "org.eclipse.smarthome.core.thing.link.ItemChannelLinkRegistry"
     )
 
-log = logging.getLogger(LOG_PREFIX + ".core.links")
+log = logging.getLogger("{}.core.links".format(LOG_PREFIX))
 
 __all__ = ["add_link", "remove_link"]
 

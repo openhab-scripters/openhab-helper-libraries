@@ -15,7 +15,7 @@ ESPER_LIBS = [
 ]
 
 for lib in ESPER_LIBS:
-    print lib
+    print(lib)
     sys.path.append(lib)
 
 def initialize_log4j():
@@ -24,14 +24,14 @@ def initialize_log4j():
             ConsoleAppender, Level, Logger, PatternLayout
         )
         rootLogger = Logger.getRootLogger()
-        print dir(rootLogger)
+        print(dir(rootLogger))
         rootLogger.level = Level.DEBUG
         layout = PatternLayout("%d{ISO8601} [%t] %-5p %c %x - %m%n")
         appender = ConsoleAppender(layout)
         rootLogger.addAppender(appender)
     except:
         import traceback
-        print traceback.format_exc()
+        print(traceback.format_exc())
 
 from java.lang import Thread, ClassLoader
 from java.net import URLClassLoader, URL
@@ -39,4 +39,3 @@ from java.net import URLClassLoader, URL
 esperClassLoader = URLClassLoader(
     [URL("file:"+lib) for lib in ESPER_LIBS],
     ClassLoader.getSystemClassLoader())
-

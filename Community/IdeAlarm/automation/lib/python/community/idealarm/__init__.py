@@ -1,3 +1,32 @@
+"""
+***************
+ideAlarm v3.0.1
+***************
+
+Multi Zone Home Alarm Script for openHAB jsr223 jython
+
+Stage of development
+--------------------
+
+This software should be considered to be in it's early stage of development. It is working without any known issues in a couple of installations. We are currently looking for people interested to contribute to this project. Please join the OH-Jython-Scripters team if you feel that you can contribute in any way. We need testers, developers, and native english speakers to give the `Wiki <https://github.com/OH-Jython-Scripters/ideAlarm/wiki>`_ an overhaul.
+
+In case you decide to install and try this software in it's current state, you should already have some skills when it comes to openHAB, Jython scripting and the Linux environment.
+
+About
+-----
+
+The name ideAlarm comes from merging the two words ideal and alarm. ideAlarm is written in Jython and runs on openHAB 2. Your home is your castle. Keeping it safe and secure is a top priority of many homeowners. With ideAlarm, you can easily set up your own DIY Home Security System using the sensors that you already have in openHAB.
+
+Get started!
+------------
+
+Wiki with installation instructions: https://github.com/OH-Jython-Scripters/ideAlarm/wiki
+
+Disclaimer
+----------
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
 import weakref # Using this to prevent problems with garbage collection
 
 from org.joda.time import DateTime
@@ -10,7 +39,7 @@ from core.actions import PersistenceExtensions
 from configuration import idealarm_configuration, customDateTimeFormats, customGroupNames
 from personal.idealarm import custom
 
-log = logging.getLogger(LOG_PREFIX + '.community.ideAlarm')
+log = logging.getLogger('{}.community.ideAlarm'.format(LOG_PREFIX))
 ZONESTATUS = {'NORMAL': 0, 'ALERT': 1, 'ERROR': 2, 'TRIPPED': 3, 'ARMING': 4}
 ARMINGMODE = {'DISARMED': 0, 'ARMED_HOME': 1, 'ARMED_AWAY': 2}
 
@@ -204,13 +233,9 @@ class IdeAlarmZone(object):
     def getOpenSensors(self, mins=0, armingMode=None, isArming=False):
         '''
         Gets all open sensor objects for the zone
-        - mins Integer 0-9999 Number of minutes that the sensor must have been
-            updated within. A value of 0 will return sensor devices who are
-            currently open. 
-        - armingMode A sensor is regarded to be open only in the context of an
-            arming mode. Defaults to the zones current arming mode.
-        - isArming Boolean. In an arming scenario we don't want to include
-            sensors that are set not to warn when arming.
+        * mins Integer 0-9999 Number of minutes that the sensor must have been updated within. A value of 0 will return sensor devices who are currently open.
+        * armingMode A sensor is regarded to be open only in the context of an arming mode. Defaults to the zones current arming mode.
+        * isArming Boolean. In an arming scenario we don't want to include sensors that are set not to warn when arming.
 
         returns a list with open sensor objects.
         '''
@@ -354,14 +379,14 @@ class IdeAlarm(object):
         Initialise the IdeAlarm class
 
         Expects:
-         - Nothing really...
+
+        * Nothing really...
         '''
         self.__version__ = '4.0.0'
         self.__version_info__ = tuple([ int(num) for num in self.__version__.split('.')])
         self.log = logging.getLogger("{}.IdeAlarm V{}".format(LOG_PREFIX, self.__version__))
-
         self.alarmTestMode = idealarm_configuration['ALARM_TEST_MODE']
-        self.loggingLevel = idealarm_configuration['LOGGING_LEVEL']
+        self.loggingLevel = idealarm_configuration['LOGGING_LEVEL'] or 'INFO'
         self.log.setLevel(self.loggingLevel)
         self.nagIntervalMinutes = idealarm_configuration['NAG_INTERVAL_MINUTES']
         self.timeCreated = DateTime.now()

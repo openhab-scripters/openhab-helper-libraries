@@ -1,3 +1,8 @@
+"""
+This script shows an example of using the Pykka actors library.
+The Pykka library must be in the Java classpath.
+"""
+
 import re
 import collections
 import json
@@ -8,7 +13,7 @@ from core.osgi.events import OsgiEventAdmin, log_event, event_dict
 from org.osgi.framework import Filter
 
 from core.log import logging, LOG_PREFIX
-openhab_log = logging.getLogger(LOG_PREFIX + ".ActorExample")
+openhab_log = logging.getLogger("{}.actors_example".format(LOG_PREFIX))
 
 from org.python.modules.sre import PatternObject
 
@@ -17,30 +22,30 @@ pykka.ActorRegistry.stop_all()
 class LogActor(pykka.ThreadingActor):
     def __init__(self):
         pykka.ThreadingActor.__init__(self)
-        
+
     def on_receive(self, message):
         openhab_log.info(message.get('message'))
-  
+
 logger_ref = LogActor.start()
 
 def log(fmt, *args):
     logger_ref.tell({'message': fmt.format(*args)})
-      
+
 class OpenhabDispatcher(pykka.ThreadingActor):
     def __init__(self):
         pykka.ThreadingActor.__init__(self)
         self._subscriptions = collections.defaultdict(list)
-        
+
     def subscribe(self, subscriber, filter):
         self._subscriptions[filter].append(subscriber)
-    
+
     def unsubscribe(self, subscriber, filter=None):
         if filter:
             self._subscriptions[filter].remove(subscriber)
         else:
             for subs in self._subscriptions.values():
                 subs.remove(subscriber)
-        
+
     def on_receive(self, message):
         log('on_receive {}'.format(message))
         if message.get('message_type') == 'osgi_event':
@@ -68,17 +73,17 @@ class DictFilter(Filter):
             elif value != other_value:
                 return False
         return True
-       
+
     def __repr__(self):
         return "{}${}".format(type(self).__name__, self._properties)
-    
+
 class ItemEventFilter(DictFilter):
     def __init__(self, item_name, topic_suffix):
         properties = {'type': type(self).__name__.replace("Filter", "")}
         if item_name:
             properties['topic'] = "smarthome/items/{}/{}".format(item_name, topic_suffix)
         DictFilter.__init__(self, properties)
-    
+
 class ItemStateEventFilter(ItemEventFilter):
     def __init__(self, item_name=None):
         ItemEventFilter.__init__(self, item_name, "state")
@@ -90,20 +95,20 @@ class ItemStateChangedEventFilter(ItemEventFilter):
 class ItemCommandEventFilter(ItemEventFilter):
     def __init__(self, item_name=None):
         ItemEventFilter.__init__(self, item_name, "command")
-                
+
 class EchoActor(pykka.ThreadingActor):
     def __init__(self, input_item_name, output_item_name):
         pykka.ThreadingActor.__init__(self)
         self.output_item_name = output_item_name
         filter = ItemStateChangedEventFilter(input_item_name)
         OpenhabDispatcher.INSTANCE.subscribe(self.actor_ref, filter)
-        
+
     def on_receive(self, message):
         log("EchoActor {} {}".foirmat(id(self), message))
         payload = json.loads(message.get('payload'))
         value = payload.get('value')
         events.postUpdate(self.output_item_name, value)
-    
+
 echo_actor = EchoActor.start("EchoInput", "EchoOutput")
 
 previous_event = None
@@ -123,6 +128,6 @@ def scriptLoaded(*args):
     except:
         import traceback
         print traceback.format_exc()
- 
+
 def scriptUnloaded():
     OsgiEventAdmin.remove_listener(handle_event)

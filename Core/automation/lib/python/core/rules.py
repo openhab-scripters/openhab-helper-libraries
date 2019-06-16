@@ -1,3 +1,10 @@
+"""
+The rules module contains some utility functions and a decorator that can:
+
+    1) convert a Jython class into a `SimpleRule`, 
+    2) decorate the trigger decorator (@when) to create a `SimpleRule`.
+"""
+
 from inspect import isclass
 from java.util import UUID
 
@@ -43,6 +50,24 @@ class _FunctionRule(scope.SimpleRule):
             self.callback.log.error(traceback.format_exc())
 
 def rule(name=None, description=None, tags=None):
+    """openHAB DSL style rule decorator.
+
+    See :ref:`Guides/Rules:Decorators` for a full description of how to use
+    this decorator.
+
+    Examples:
+        .. code-block::
+
+          @rule('name', 'description', ['tag1', 'tag2'])
+          @rule('name', tags=['tag1', 'tag2'])
+          @rule('name')
+
+    Args:
+        name (str): Display name of the rule.
+        description (str): Description of the rule.
+        tags (list[str]): List of tags.
+    """
+
     def rule_decorator(object):
         if isclass(object):
             clazz = object
@@ -81,5 +106,18 @@ def rule(name=None, description=None, tags=None):
     return rule_decorator
 
 def addRule(rule):
+    """Adds ``rule`` to openHAB's ``ruleRegistry``.
+
+    This is a wrapper of ``automationManager.addRule()`` that does not require
+    any additional imports. The `addRule` function is similar to the 
+    `automationManager.addRule` function, except that it can be safely used in
+    modules (versus scripts). Since the `automationManager` is different for
+    every script scope, the `core.rules.addRule` function looks up the
+    automation manager for each call. See :ref:`Guides/Rules:Extensions` for
+    examples of how to use this function.
+
+    Args:
+        rule (Rule): A rule to add to openHAB.
+    """
     logging.getLogger(LOG_PREFIX + ".core.rules").debug("Added rule [{}]".format(rule.name))
     return get_automation_manager().addRule(rule)

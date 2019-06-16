@@ -1,3 +1,7 @@
+"""
+Utilities
+"""
+
 import random
 import time
 
@@ -13,7 +17,7 @@ from core.actions import PersistenceExtensions
 from org.joda.time import DateTime
 from org.joda.time.format import DateTimeFormat
 
-log = logging.getLogger(LOG_PREFIX + '.core.utils')
+log = logging.getLogger('{}.core.utils'.format(LOG_PREFIX))
 
 def kw(dict, search):
     '''Get key by value in dictionary'''
@@ -104,7 +108,7 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
     '''
     compareValue = None
     item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
-    
+
     if sendACommand:
         compareValue = TypeParser.parseCommand(item.acceptedCommandTypes, str(newValue))
     else:

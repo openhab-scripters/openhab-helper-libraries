@@ -15,7 +15,7 @@ REQUIRES:
     String    FamilyRoom_Dot_LastVoiceCommand    "Famiy Room: Last Voice Command [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand"}
     String    FamilyRoom_Dot_TTS    "Family Room: TTS [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
 
-The getLockStates function can be removed or replaced. It uses a group (gSecurity) that contains all of my outer doors. 
+The getLockStates function can be removed or replaced. It uses a group (gSecurity) that contains all of my outer doors.
 '''
 from core.triggers import when
 from core.rules import rule

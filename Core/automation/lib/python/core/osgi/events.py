@@ -1,3 +1,19 @@
+"""
+This module provides an OSGi EventAdmin event monitor and rule trigger. This
+can trigger off any OSGi event (including ESH events). Rule manager events are
+filtered to avoid circular loops in the rule execution.
+
+.. code-block::
+
+    class ExampleRule(SimpleRule):
+        def __init__(self):
+            self.triggers = [ core.osgi.events.OsgiEventTrigger() ]
+
+        def execute(self, module, inputs):
+            event = inputs['event']
+            # do something with event
+"""
+
 from core.jsr223 import scope
 scope.scriptExtension.importPreset(None)
 
@@ -13,7 +29,7 @@ import core
 from core.osgi import bundle_context
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger(LOG_PREFIX + ".core.osgi.events")
+log = logging.getLogger("{}.core.osgi.events".format(LOG_PREFIX))
 
 scope.scriptExtension.importPreset("RuleSupport")
 
@@ -30,7 +46,7 @@ def hashtable(*key_values):
 class OsgiEventAdmin(object):
     _event_handler = None
     _event_listeners = []
-    
+
     # Singleton
     class OsgiEventHandler(EventHandler):
         def __init__(self):
@@ -39,7 +55,7 @@ class OsgiEventAdmin(object):
                 EventHandler, self, hashtable((EventConstants.EVENT_TOPIC, ["*"])))
             self.log.info("Registered openHAB OSGI event listener service")
             self.log.debug("Registration: [{}]".format(self.registration))
-            
+
         def handleEvent(self, event):
             self.log.debug("Handling event: [{}]".format(event))
             for listener in OsgiEventAdmin._event_listeners:
@@ -47,7 +63,7 @@ class OsgiEventAdmin(object):
                     listener(event)
                 except:
                     self.log.error("Listener failed: [{}]".format(traceback.format_exc()))
-        
+
         def dispose(self):
             self.registration.unregister()
 
@@ -58,7 +74,7 @@ class OsgiEventAdmin(object):
         if len(cls._event_listeners) == 1:
             if cls._event_handler is None:
                 cls._event_handler = cls.OsgiEventHandler()
-            
+
     @classmethod
     def remove_listener(cls, listener):
         cls.log.debug("Removing listener: [{}]".format(listener))
@@ -70,7 +86,7 @@ class OsgiEventAdmin(object):
                 cls._event_handler.dispose()
                 cls._event_handler = None
 
-    
+
 # The OH / JSR223 design does not allow trigger handlers to access
 # the original trigger instance. The trigger information is copied into a
 # RuntimeTrigger and then provided to the trigger handler. Therefore, there
@@ -90,13 +106,13 @@ class OsgiEventTrigger(scope.Trigger):
         scope.Trigger.__init__(self, triggerId, core.OSGI_TRIGGER_ID, config)
         global osgi_triggers
         osgi_triggers[self.id] = self
-        
+
     def event_filter(self, event):
         return self.filter(event)
-    
+
     def event_transformer(self, event):
         return event
-    
+
 def log_event(event):
     log.info("OSGI event: [{} ({})]".format(event, type(event).__name__))
     if isinstance(event, dict):
@@ -107,6 +123,6 @@ def log_event(event):
         for name in event.propertyNames:
             value = event.getProperty(name)
             log.info("  '{}': {} ({})".format(name, value, type(value)))
-        
+
 def event_dict(event):
     return { key: event.getProperty(key) for key in event.getPropertyNames() }

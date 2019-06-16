@@ -1,3 +1,50 @@
+"""
+This module includes trigger subclasses and function decorators to simplify 
+Jython rule definitions.
+
+Trigger classes for wrapping Automation API (see :ref:`Guides/Rules:Extensions`
+for more details):
+
+* **ItemStateChangeTrigger**
+* **ItemStateUpdateTrigger**
+* **ItemCommandTrigger**
+* **ItemEventTrigger** (based on "core.GenericEventTrigger")
+* **CronTrigger**
+* **StartupTrigger** - fires when rule is activated (implemented in Jython)
+* **DirectoryEventTrigger** - fires when directory contents change (Jython, see
+  related component for more info)
+* **ItemAddedTrigger** - fires when rule is added to the RuleRegistry
+  (implemented in Jython)
+* **ItemRemovedTrigger** - fires when rule is removed from the RuleRegistry
+  (implemented in Jython)
+* **ItemUpdatedTrigger** - fires when rule is updated in the RuleRegistry
+  (implemented in Jython, not a state update!)
+* **ChannelEventTrigger** - fires when a Channel gets an event e.g. from the
+  Astro Binding
+
+Trigger function decorator (see :ref:`Guides/Rules:Decorators` for more
+details):
+
+.. code-block::
+
+    @when("Item Test_Switch_1 received command OFF")
+    @when("Item Test_Switch_2 received update ON")
+    @when("Member of gMotion_Sensors changed to OFF")
+    @when("Descendent of gContact_Sensors changed to ON")
+    @when("Thing kodi:kodi:familyroom changed") #Thing statuses cannot currently be used in triggers
+    @when("Channel astro:sun:local:eclipse#event triggered START")
+    @when("System started") #'System started' requires S1566 or newer, and 'System shuts down' is not available
+    @when("55 55 5 * * ?")
+
+As a workaround for 'System started', add the rule function directly to the
+script. Here is an example that can be used with the function from the
+hello_world.py example script...
+
+.. code-block:: python
+
+    helloWorldCronDecorators(None)
+"""
+
 from core.jsr223 import scope
 scope.scriptExtension.importPreset(None)
 
@@ -40,9 +87,28 @@ from core.log import logging, LOG_PREFIX
 
 from org.quartz.CronExpression import isValidExpression
 
-log = logging.getLogger(LOG_PREFIX + ".core.triggers")
+log = logging.getLogger("{}.core.triggers".format(LOG_PREFIX))
 
 class ItemStateUpdateTrigger(Trigger):
+    """Builds an ItemStateUpdateTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these 
+    extensions
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemStateUpdateTrigger("MyItem", "ON", "MyItem_received_update_ON").trigger]
+            MyRule.triggers.append(ItemStateUpdateTrigger("MyOtherItem").trigger)
+
+    Args:
+        itemName (str): Name of item to watch for updates
+        state (str): Trigger only when updated TO this state
+        triggerName (str): Name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule.
+    """
     def __init__(self, itemName, state=None, triggerName=None):
         if triggerName is None:
             triggerName = uuid.uuid1().hex
@@ -54,6 +120,26 @@ class ItemStateUpdateTrigger(Trigger):
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateUpdateTrigger").withConfiguration(Configuration(config)).build()
 
 class ItemStateChangeTrigger(Trigger):
+    """Builds an ItemStateChangeTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these
+    extensions
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemStateChangeTrigger("MyItem", "OFF", "ON", "MyItem_changed_from_OFF_to_ON").trigger]
+            MyRule.triggers.append(ItemStateChangeTrigger("MyOtherItem").trigger)
+
+    Args:
+        itemName (str): Name of item to watch for changes
+        previousState (str): Trigger only when changing FROM this state
+        state (str): Trigger only when changing TO this state
+        triggerName (str): Name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
     def __init__(self, itemName, previousState=None, state=None, triggerName=None):
         if triggerName is None:
             triggerName = uuid.uuid1().hex
@@ -67,6 +153,25 @@ class ItemStateChangeTrigger(Trigger):
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateChangeTrigger").withConfiguration(Configuration(config)).build()
 
 class ItemCommandTrigger(Trigger):
+    """Builds an ItemCommandTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these
+    extensions
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemCommandTrigger("MyItem", "ON", "MyItem_received_command_ON").trigger]
+            MyRule.triggers.append(ItemCommandTrigger("MyOtherItem").trigger)
+
+    Args:
+        itemName (str): Name of item to watch for commands
+        command (str): Trigger only when this command is received
+        triggerName (str): Name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
     def __init__(self, itemName, command=None, triggerName=None):
         if triggerName is None:
             triggerName = uuid.uuid1().hex
@@ -78,6 +183,25 @@ class ItemCommandTrigger(Trigger):
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemCommandTrigger").withConfiguration(Configuration(config)).build()
 
 class ChannelEventTrigger(Trigger):
+    """Builds an ChannelEventTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these
+    extensions
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ChannelEventTrigger("binding:segment:segment", "MyEvent", "Channel_binding-segment-segment_MyEvent").trigger]
+            MyRule.triggers.append( ChannelEventTrigger("binding:segment:segment").trigger)
+
+    Args:
+        channelUID (str): Channel to watch for trigger events
+        event (str): Trigger only when Channel triggers this event
+        triggerName (str): Name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule.
+    """
     def __init__(self, channelUID, event=None, triggerName=None):
         if triggerName is None:
             triggerName = uuid.uuid1().hex
@@ -197,6 +321,34 @@ class DirectoryEventTrigger(Trigger):
 # Function decorator trigger support
 
 def when(target, target_type=None, trigger_type=None, old_state=None, new_state=None, event_types=None, trigger_name=None):
+    """openHAB DSL style trigger decorator.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these
+    extensions
+
+    Examples:
+        .. code-block::
+
+            @when("Item Test_Switch_1 received command OFF")
+            @when("Item Test_Switch_2 received update ON")
+            @when("Item gMotion_Sensors changed to ON")
+            @when("Member of gMotion_Sensors changed to OFF")
+            @when("Descendent of gContact_Sensors changed to OPEN") # Similar to 'Member of', but creates a trigger for each non-group sibling Item (think group_item.allMembers())
+            @when("Thing kodi:kodi:familyroom changed") # ThingStatusInfo (from <status> to <status>) cannot currently be used in triggers
+            @when("Channel astro:sun:local:eclipse#event triggered START")
+            @when("System started") # 'System started' requires S1566 or newer, and 'System shuts down' is not available
+            @when("Time cron 55 55 5 * * ?")
+
+    Args:
+        target (str): Trigger expression to parse
+        target_type (str): Target type ("Item", "Channel", etc.)
+        trigger_type (str): Trigger type ("changed", "received command", etc.)
+        old_state (str): Old state for "Item changed from" events
+        new_state (str): New state for "changed to", "Item received update/command", and "Channel triggered" events
+        event_types (str): Event type for GenericEventTrigger (keeps backwards compatibility with earlier versions)
+        trigger_name (str): Name to assign to this trigger
+    """
+
     try:
         def convert_trigger_name(trigger_name):
             valid_characters = re.compile("[^A-Za-z0-9_-]")

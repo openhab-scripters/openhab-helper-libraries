@@ -1,3 +1,19 @@
+"""
+This module (really a Python package) patches the default scope ``items``
+object, so that Items can be accessed as if they were attributes (rather than a
+dictionary). It can also be used as a module for registering global variables
+that will outlive script reloads.
+
+.. code-block::
+
+    import core
+
+    print items.TestString1
+
+.. note::
+    This patch will be applied when any module in the `core` package is loaded.
+"""
+
 from core.jsr223.scope import items
 
 #
