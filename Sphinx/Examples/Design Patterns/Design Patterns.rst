@@ -7,3 +7,6 @@ Design Patterns
     :glob:
 
     *
+
+.. literalinclude::
+    :lines: 19-
