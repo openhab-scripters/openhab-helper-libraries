@@ -2,17 +2,18 @@
 PURPOSE
 -------
 
-This example rule will adjust a StringItem named 'Mode' based on the time of day.
-If the 'Mode' Item is manually changed to something that is not included the
-time_of_day OrderedDict in the ``configuration.py``, such as 'Party', the Mode
-will not be updated automatically and will need to be manually changed back to
-a 'Mode' included in the OD.
+This example rule will adjust a StringItem named 'Mode' based on the time of
+day. If the 'Mode' Item is manually changed to something that is not included
+the time_of_day OrderedDict in the ``configuration.py``, such as 'Party', the
+Mode will not be updated automatically and will need to be manually changed
+back to a 'Mode' included in the OD.
 
 REQUIRES
 --------
 
 * a 'Mode' StringItem ``String Mode "Mode [%s]" <house>``
-* the time_of_day OrderedDict added to ``configuration.py`` and polulated with times for your modes
+* the time_of_day OrderedDict added to ``configuration.py`` and populated with
+times for your modes
 """
 
 from core.rules import rule

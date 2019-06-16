@@ -2,16 +2,15 @@
 Date/time utilities for converting between the several different types used by
 openHAB. It can also format any of these types for sending to an openHAB Item
 using ``format_date(value)``, which will return the date as a string in the 
-correct format. There are also some conveniece functions for determining the
+correct format. There are also some convenience functions for determining the
 span between two datetimes. ``days_between``, ``hours_between``,
 ``minutes_between``, and ``seconds_between`` will return the number of whole
 units of each unit of time between the two datetimes passed. They will return
-negative numbers if ``value_from`` is after ``value_to``. See 
-`java.time.temporal.ChronoUnit
-<https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html>`_
+negative numbers if ``value_from`` is after ``value_to``. See
+`java.time.temporal.ChronoUnit <https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html>`_
 if you want more information.
 
-This package accepts any of the following DateTime types:
+This module accepts any of the following DateTime types:
 
 .. code-block::
 
@@ -54,7 +53,7 @@ __all__ = ["ZonedDateTime", "format_date",
 def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
     """Returns string of ``value`` formatted according to ``format_string``.
 
-    This function can be used when updating items in openHAB or to format any
+    This function can be used when updating Items in openHAB or to format any
     DateTime value for output.
 
     Examples:
