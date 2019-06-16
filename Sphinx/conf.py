@@ -26,7 +26,7 @@ version = 'latest'
 # -- General configuration ---------------------------------------------------
 
 # Master document file, must contain 'toctree' directive
-master_doc = 'Index'
+master_doc = 'index'
 
 # Default code-block language highlighting to use
 highlight_language = 'python'
