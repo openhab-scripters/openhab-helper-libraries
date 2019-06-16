@@ -169,5 +169,6 @@ html_context = {
     'github_user': 'openhab-scripters',
     'github_repo': 'openhab-helper-libraries',
     'github_version': 'master/',
-    'conf_py_path': 'Sphinx/'
+    'conf_py_path': 'Sphinx/',
+    'suffix': '.rst'
 }
