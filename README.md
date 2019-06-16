@@ -9,7 +9,7 @@ Please report any issues that you find!
 >If you have local repositories, you'll need to [update them to point to the new location](https://help.github.com/en/articles/changing-a-remotes-url).
 >***
 
-The documentation is now located at https://openhab-scripters.github.io/openhab-helper-libraries/.
+The documentation is now located at https://openhab-scripters.github.io/openhab-helper-libraries/index.html.
 
 The main purpose of the helper libraries is to provide a layer of abstraction to simplify the interaction of scripts with the openHAB Automation API.
 These libraries can be used with [openHAB](http://openhab.org/) (2.4M3, S1319, or newer) and the new rule engine. 
