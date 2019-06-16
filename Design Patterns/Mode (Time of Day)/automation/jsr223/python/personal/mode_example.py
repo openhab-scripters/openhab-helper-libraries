@@ -12,8 +12,7 @@ REQUIRES
 --------
 
 * a 'Mode' StringItem ``String Mode "Mode [%s]" <house>``
-* the time_of_day OrderedDict added to ``configuration.py`` and populated with
-times for your modes
+* the time_of_day OrderedDict added to ``configuration.py`` and populated with times for your modes
 """
 
 from core.rules import rule
