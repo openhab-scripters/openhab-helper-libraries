@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>OpenWeatherMap &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sonos" href="Sonos.html" />
+    <link rel="prev" title="IdeAlarm" href="IdeAlarm.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../Index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Core.html">Core</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Community.html">Community</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Alexa Speak and Respond.html">Alexa Speak and Respond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutoRemote.html">AutoRemote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ClickaTell.html">ClickaTell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IdeAlarm.html">IdeAlarm</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OpenWeatherMap</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-scripts.community.openweathermap.owm_daily_forecast">Scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#purpose">Purpose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#requires">Requires</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#known-issues">Known Issues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#change-log">Change Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Sonos.html">Sonos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WeatherStationUploader.html">WeatherStationUploader</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../Index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../Index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../Community.html">Community</a> &raquo;</li>
+        
+      <li>OpenWeatherMap</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="openweathermap">
+<h1>OpenWeatherMap<a class="headerlink" href="#openweathermap" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-scripts.community.openweathermap.owm_daily_forecast">
+<span id="scripts"></span><h2>Scripts<a class="headerlink" href="#module-scripts.community.openweathermap.owm_daily_forecast" title="Permalink to this headline">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://github.com/openhab-5iver">Scott Rushworth</a></p>
+</dd>
+</dl>
+<div class="section" id="purpose">
+<h3>Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h3>
+<p>This rule will create and link the ~700 Items and groups needed to get daily
+forecasts from the OWM binding using a free API key. It will also install the
+Scale transformation service, if it is not already installed. There is also a
+function that was used for testing purposes, which can be used to remove all
+the Items and groups. As the day progresses, there will be fewer hourly
+forecasts included in the gForecast_1 group.</p>
+<p>You may want to comment out several groups and Items that you do not plan on
+using, but the Forecast_Timestamp Items are required for the script to function. The
+rule will also run when the script file is saved, or OH is restarted, so that
+you don’t have to wait for the trigger for the Item states to be populated.</p>
+<p>The rule will arrange Items into the following group structure for days(X) 1-5.
+gForecast_1 contains the forecast Items for the rest of the current day, and
+the current Items, since at some time there won’t be any more forecasts left in
+the day. The other groups contain Items for subsequent days. The rule is set
+to trigger every time the binding pulls in new values.</p>
+<p>Group labels will be updated to reflect the name of the day, and Item labels
+will be updated to show the time of the forecast, based on the time provided in
+the Forecast_Timestamp_XX Item.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>gWeather
+    gOpenWeatherMap
+        gCurrent
+        gForecast_X
+            gForecast_Temperature_X
+            gForecast_Pressure_X
+            gForecast_Humidity_X
+            gForecast_WindSpeed_X
+            gForecast_WindDirection_X
+            gForecast_Cloudiness_X
+            gForecast_RainVolume_X
+            gForecast_SnowVolume_X
+</pre></div>
+</div>
+</div>
+<div class="section" id="requires">
+<h3>Requires<a class="headerlink" href="#requires" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>OpenWeatherMap binding</p></li>
+<li><p>OpenWeatherMap Account Thing, configured with a free API key</p></li>
+<li><p>OpenWeatherMap Weather and Forecast Thing, configured with ‘Number of Hours’
+set to 120 and ‘Number of Days’ set to 0. The hours could be less (this is
+maxed out for a free API key), but you’ll need to adjust the script.</p></li>
+<li><p>All OWM Items should be removed before using rule</p></li>
+<li><p>The SCALE transformation service is required, but it will be installed for
+you. If you manually editted the ‘transformation’ line in addons.cfg, be
+sure to add it there, or it will uninstall next OH update or cache clearing.</p></li>
+</ul>
+</div>
+<div class="section" id="known-issues">
+<h3>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>ArithmeticGroupFunction.Avg does not properly average angles. An ESH issue
+has been opened for this… <a class="reference external" href="https://github.com/eclipse/smarthome/issues/6792">https://github.com/eclipse/smarthome/issues/6792</a>.
+I noticed the units for the Cloudiness and Humidity groups display as ‘one’,
+but the Items display properly as ‘%’.</p></li>
+</ul>
+</div>
+<div class="section" id="change-log">
+<h3>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">01/11/19: Corrected an issue where the Items were not linking.</div>
+<div class="line">01/12/19: Removed Forecast_Temperature_X, and added Forecast_Temperature_High_X
+and Forecast_Temperature_Low_X</div>
+<div class="line">01/16/19: Restructured how the rule is created</div>
+<div class="line">01/16/19: Fixed SCALE transformation install</div>
+<div class="line">01/16/19: Fixed Item existence check</div>
+<div class="line">01/16/19: Changed to using values of Timestamp Items for calculating the number
+of remaining forecasts, and the Item label times</div>
+<div class="line">01/16/19: Added group label changes to reflect current day of week</div>
+<div class="line">01/16/19: Changed Item label to use time from Timestamp Items</div>
+<div class="line">01/16/19: Added IconID</div>
+<div class="line">01/16/19: Added manual group aggregation for Condition, ConditionID, Icon,
+IconID, and WindDirection</div>
+<div class="line">01/18/19: Fixed issue with Items not being added to groups properly</div>
+<div class="line">01/18/19: Added a NULL check when manually setting group aggregation values</div>
+<div class="line">01/20/19: Fixed improper log entry after SCALE transform has been installed</div>
+<div class="line">02/04/19: Added check to make sure a Thing with ThingUID
+‘openweathermap:forecast-and-weather’ exists and is ONLINE</div>
+<div class="line">02/06/19: Added verification that the forecastHours and forecastDays are
+configured properly in the Thing</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Python/Community/OpenWeatherMap" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

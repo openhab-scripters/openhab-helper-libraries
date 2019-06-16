@@ -1,0 +1,1953 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>But How Do I…? &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reference" href="../Python/Reference.html" />
+    <link rel="prev" title="Timer Example" href="../Examples/Timer Example.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../Index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">But How Do I…?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#items">Items</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get-an-item">Get an Item</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-state-of-an-item">Get the state of an Item</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-triggering-item">Get the triggering Item</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-triggering-item-s-name">Get the triggering Item’s name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-triggering-item-s-state">Get the triggering Item’s state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-triggeringitem-s-previous-state">Get the triggeringItem’s previous state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-received-command">Get the received command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#send-a-command-to-an-item">Send a command to an Item</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#send-an-update-to-an-item">Send an update to an Item</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stop-a-rule-if-the-triggering-item-s-state-is-null-or-undef">Stop a rule if the triggering Item’s state is NULL or UNDEF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#convert-a-value-to-a-state-for-comparison">Convert a value to a state for comparison</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#convert-decimaltype-to-an-integer-or-float-for-arithmetic">Convert DecimalType to an integer or float for arithmetic</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#groups">Groups</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-members-or-all-members-of-a-group">Get the members or all members of a Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iterate-over-members-of-a-group">Iterate over members of a Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filter-members-of-a-group">Filter members of a group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-first-item-in-a-filtered-list-of-group-members">Get the first Item in a filtered list of Group members</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-first-5-items-from-a-filtered-list-of-group-members">Get first 5 Items from a filtered list of Group members</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-a-sorted-list-of-group-members-matching-a-condition">Get a sorted list of Group members matching a condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-a-list-of-values-mapped-from-the-members-of-a-group">Get a list of values mapped from the members of a Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#perform-an-arithmetic-reduction-of-values-from-members-of-a-group">Perform an arithmetic reduction of values from members of a Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-with-several-functions-using-group-members">Example with several functions using Group members</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellaneous">Miscellaneous</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#single-line-comment">Single line comment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiline-comment">Multiline comment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-the-names-of-an-object-s-attributes">View the names of an object’s attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-all-symbols-in-a-context">View all symbols in a context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-the-uid-of-a-rule-by-name">Get the UID of a rule by name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-or-disable-a-rule-by-uid">Enable or disable a rule by UID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-a-rule-by-uid">Run a rule by UID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-disable-a-thing">Enable/disable a Thing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-add-remove-item-metadata">Read/Add/Remove Item metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-org-joda-time-datetime">Use org.joda.time.DateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pause-a-thread">Pause a thread</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-a-timer">Use a timer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-logging">Use Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-actions">Use Actions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Index.html">Docs</a> &raquo;</li>
+        
+      <li>But How Do I…?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="but-how-do-i">
+<h1>But How Do I…?<a class="headerlink" href="#but-how-do-i" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="items">
+<h2>Items<a class="headerlink" href="#items" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get-an-item">
+<h3>Get an Item<a class="headerlink" href="#get-an-item" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;My_Item&quot;</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;My_Item&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">itemRegistry</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;My_Item&quot;</span><span class="p">)</span>
+<span class="c1">// or</span>
+<span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;My_Item&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">itemRegistry</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;My_Item&quot;</span><span class="o">)</span>
+<span class="c1">// or</span>
+<span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;My_Item&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">My_Item</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-state-of-an-item">
+<h3>Get the state of an Item<a class="headerlink" href="#get-the-state-of-an-item" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;My_Item&quot;</span><span class="p">]</span>
+<span class="c1"># or after importing anything within the ``core`` package</span>
+<span class="n">items</span><span class="o">.</span><span class="n">My_Item</span>
+<span class="c1"># or</span>
+<span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;My_Item&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">state</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">items</span><span class="p">[</span><span class="s2">&quot;My_Item&quot;</span><span class="p">]</span>
+<span class="c1">// or</span>
+<span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;My_Item&quot;</span><span class="p">).</span><span class="nx">state</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">items</span><span class="o">[</span><span class="s2">&quot;My_Item&quot;</span><span class="o">]</span>
+<span class="c1">// or</span>
+<span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;My_Item&quot;</span><span class="o">).</span><span class="na">state</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">My_Item</span><span class="o">.</span><span class="na">state</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-triggering-item">
+<h3>Get the triggering Item<a class="headerlink" href="#get-the-triggering-item" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemName</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">itemName</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="n">event</span><span class="o">.</span><span class="na">itemName</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-triggering-item-s-name">
+<h3>Get the triggering Item’s name<a class="headerlink" href="#get-the-triggering-item-s-name" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span><span class="o">.</span><span class="n">itemName</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">event</span><span class="p">.</span><span class="nx">itemName</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">event</span><span class="o">.</span><span class="na">itemName</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span><span class="o">.</span><span class="na">name</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-triggering-item-s-state">
+<h3>Get the triggering Item’s state<a class="headerlink" href="#get-the-triggering-item-s-state" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span><span class="o">.</span><span class="n">itemState</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">event</span><span class="p">.</span><span class="nx">itemState</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">event</span><span class="o">.</span><span class="na">itemState</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span><span class="o">.</span><span class="na">state</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-triggeringitem-s-previous-state">
+<h3>Get the triggeringItem’s previous state<a class="headerlink" href="#get-the-triggeringitem-s-previous-state" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">event</span><span class="p">.</span><span class="nx">oldItemState</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">event</span><span class="o">.</span><span class="na">oldItemState</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">previousState</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-received-command">
+<h3>Get the received command<a class="headerlink" href="#get-the-received-command" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span><span class="o">.</span><span class="n">itemCommand</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">event</span><span class="p">.</span><span class="nx">itemCommand</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">event</span><span class="o">.</span><span class="na">itemCommand</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">receivedCommand</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="send-a-command-to-an-item">
+<h3>Send a command to an Item<a class="headerlink" href="#send-a-command-to-an-item" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html#events-operations">More details</a></p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="p">),</span> <span class="n">ON</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">events</span><span class="p">.</span><span class="nx">sendCommand</span><span class="p">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+<span class="c1">// or</span>
+<span class="nx">events</span><span class="p">.</span><span class="nx">sendCommand</span><span class="p">(</span><span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="p">),</span> <span class="nx">ON</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">events</span><span class="o">.</span><span class="na">sendCommand</span><span class="o">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="o">,</span> <span class="s2">&quot;ON&quot;</span><span class="o">)</span>
+<span class="c1">// or</span>
+<span class="n">events</span><span class="o">.</span><span class="na">sendCommand</span><span class="o">(</span><span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="o">),</span> <span class="n">ON</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Test_SwitchItem</span><span class="o">.</span><span class="na">sendCommand</span><span class="o">(</span><span class="n">ON</span><span class="o">)</span>
+<span class="c1">// or</span>
+<span class="n">sendCommand</span><span class="o">(</span><span class="s">&quot;Test_SwitchItem&quot;</span><span class="o">,</span> <span class="s">&quot;ON&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="send-an-update-to-an-item">
+<h3>Send an update to an Item<a class="headerlink" href="#send-an-update-to-an-item" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html#events-operations">More details</a></p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">events</span><span class="o">.</span><span class="n">postUpdate</span><span class="p">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">events</span><span class="p">.</span><span class="nx">postUpdate</span><span class="p">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">events</span><span class="o">.</span><span class="na">postUpdate</span><span class="o">(</span><span class="s2">&quot;Test_SwitchItem&quot;</span><span class="o">,</span> <span class="s2">&quot;ON&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Test_SwitchItem</span><span class="o">.</span><span class="na">postUpdate</span><span class="o">(</span><span class="n">ON</span><span class="o">)</span>
+<span class="c1">// or</span>
+<span class="n">postUpdate</span><span class="o">(</span><span class="s">&quot;Test_SwitchItem&quot;</span><span class="o">,</span> <span class="s">&quot;ON&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="stop-a-rule-if-the-triggering-item-s-state-is-null-or-undef">
+<h3>Stop a rule if the triggering Item’s state is NULL or UNDEF<a class="headerlink" href="#stop-a-rule-if-the-triggering-item-s-state-is-null-or-undef" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">itemName</span><span class="p">],</span> <span class="n">UnDefType</span><span class="p">):</span>
+    <span class="k">return</span>
+<span class="c1"># do stuff</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="nx">items</span><span class="p">[</span><span class="nx">event</span><span class="p">.</span><span class="nx">itemName</span><span class="p">].</span><span class="kr">class</span> <span class="o">==</span> <span class="nx">UnDefType</span><span class="p">.</span><span class="kr">class</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// do stuff</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">(</span><span class="n">triggeringItem</span><span class="o">.</span><span class="na">state</span> <span class="o">==</span> <span class="n">NULL</span> <span class="o">||</span> <span class="n">triggeringItem</span><span class="o">.</span><span class="na">state</span> <span class="o">==</span> <span class="n">UNDEF</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="c1">// do stuff</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="convert-a-value-to-a-state-for-comparison">
+<h3>Convert a value to a state for comparison<a class="headerlink" href="#convert-a-value-to-a-state-for-comparison" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;String_Item&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">StringType</span><span class="p">(</span><span class="s2">&quot;test string&quot;</span><span class="p">)</span>
+<span class="n">items</span><span class="p">[</span><span class="s2">&quot;Number_Item&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">DecimalType</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">items</span><span class="p">[</span><span class="s2">&quot;Temperature_Item&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">QuantityType</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;55 °F&quot;</span><span class="p">)</span>
+<span class="n">event</span><span class="o">.</span><span class="n">itemState</span> <span class="o">&lt;=</span> <span class="n">DecimalType</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span><span class="o">.</span><span class="n">intValue</span><span class="p">()</span> <span class="o">+</span> <span class="mi">60</span><span class="p">)</span>
+<span class="n">event</span><span class="o">.</span><span class="n">itemState</span> <span class="o">&lt;=</span> <span class="n">DecimalType</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span><span class="o">.</span><span class="n">doubleValue</span><span class="p">()</span> <span class="o">+</span> <span class="mi">60</span><span class="p">)</span>
+<span class="n">event</span><span class="o">.</span><span class="n">itemState</span> <span class="o">&lt;=</span> <span class="n">DecimalType</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span><span class="o">.</span><span class="n">floatValue</span><span class="p">()</span> <span class="o">+</span> <span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="convert-decimaltype-to-an-integer-or-float-for-arithmetic">
+<h3>Convert DecimalType to an integer or float for arithmetic<a class="headerlink" href="#convert-decimaltype-to-an-integer-or-float-for-arithmetic" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;Number_Item1&quot;</span><span class="p">]))</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;Number_Item2&quot;</span><span class="p">]))</span> <span class="o">&gt;</span> <span class="mi">5</span>
+<span class="n">items</span><span class="p">[</span><span class="s2">&quot;Number_Item1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">intValue</span><span class="p">()</span> <span class="o">+</span> <span class="n">items</span><span class="p">[</span><span class="s2">&quot;Number_Item2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">intValue</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">5</span>
+<span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;Number_Item&quot;</span><span class="p">]))</span> <span class="o">+</span> <span class="mf">5.5555</span> <span class="o">&gt;</span> <span class="mf">55.555</span>
+<span class="n">items</span><span class="p">[</span><span class="s2">&quot;Number_Item&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">floatValue</span><span class="p">()</span> <span class="o">+</span> <span class="mf">5.5555</span> <span class="o">&gt;</span> <span class="mf">55.555</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="groups">
+<h2>Groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get-the-members-or-all-members-of-a-group">
+<h3>Get the members or all members of a Group<a class="headerlink" href="#get-the-members-or-all-members-of-a-group" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span>
+
+<span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">allMembers</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">).</span><span class="nx">members</span>
+
+<span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">).</span><span class="nx">allMembers</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;gTest&quot;</span><span class="o">).</span><span class="na">members</span>
+
+<span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;gTest&quot;</span><span class="o">).</span><span class="na">allMembers</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">gTest</span><span class="o">.</span><span class="na">members</span>
+
+<span class="n">gTest</span><span class="o">.</span><span class="na">allMembers</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="iterate-over-members-of-a-group">
+<h3>Iterate over members of a Group<a class="headerlink" href="#iterate-over-members-of-a-group" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
+    <span class="c1"># do stuff</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">gTest</span><span class="o">.</span><span class="na">members</span><span class="o">.</span><span class="na">forEach</span><span class="o">[</span><span class="n">item</span> <span class="o">|</span>
+    <span class="c1">// do stuff</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="filter-members-of-a-group">
+<h3>Filter members of a group<a class="headerlink" href="#filter-members-of-a-group" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>Returns a list of Items, not a GroupItem</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">listOfMembers</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="p">,</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<p>Returns a GrouptItem</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">listOfMembers</span> <span class="o">=</span> <span class="n">gTest</span><span class="o">.</span><span class="na">members</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">GenericItem</span> <span class="n">item</span> <span class="o">|</span> <span class="n">item</span><span class="o">.</span><span class="na">state</span> <span class="o">==</span> <span class="n">ON</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-first-item-in-a-filtered-list-of-group-members">
+<h3>Get the first Item in a filtered list of Group members<a class="headerlink" href="#get-the-first-item-in-a-filtered-list-of-group-members" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_item</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="p">,</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">myItem</span> <span class="o">=</span> <span class="n">gTest</span><span class="o">.</span><span class="na">members</span><span class="o">.</span><span class="na">findFirst</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="na">state</span> <span class="o">==</span> <span class="n">ON</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-first-5-items-from-a-filtered-list-of-group-members">
+<h3>Get first 5 Items from a filtered list of Group members<a class="headerlink" href="#get-first-5-items-from-a-filtered-list-of-group-members" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>Returns a list of Items</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_items</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">OFF</span><span class="p">,</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-a-sorted-list-of-group-members-matching-a-condition">
+<h3>Get a sorted list of Group members matching a condition<a class="headerlink" href="#get-a-sorted-list-of-group-members-matching-a-condition" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>Returns a list of Items</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sorted_battery_level</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">battery</span> <span class="k">for</span> <span class="n">battery</span> <span class="ow">in</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gBattery&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getMembers</span><span class="p">()</span> <span class="k">if</span> <span class="n">battery</span><span class="o">.</span><span class="n">state</span> <span class="o">&lt;</span> <span class="n">DecimalType</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">battery</span><span class="p">:</span> <span class="n">battery</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-a-list-of-values-mapped-from-the-members-of-a-group">
+<h3>Get a list of values mapped from the members of a Group<a class="headerlink" href="#get-a-list-of-values-mapped-from-the-members-of-a-group" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>Returns a list of strings</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">battery_levels</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">lowBattery</span><span class="p">:</span> <span class="s2">&quot;{}: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lowBattery</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">lowBattery</span><span class="o">.</span><span class="n">state</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span><span class="p">),</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gBattery&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="perform-an-arithmetic-reduction-of-values-from-members-of-a-group">
+<h3>Perform an arithmetic reduction of values from members of a Group<a class="headerlink" href="#perform-an-arithmetic-reduction-of-values-from-members-of-a-group" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>Returns a value</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to use the add() method, the states must be of type QuantityType (`Units of Measure &lt;https://www.openhab.org/docs/concepts/units-of-measurement.html&gt;`_)</span>
+<span class="n">weekly_rainfall</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">rain</span><span class="p">:</span> <span class="n">rain</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gRainWeeklyForecast&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="example-with-several-functions-using-group-members">
+<h3>Example with several functions using Group members<a class="headerlink" href="#example-with-several-functions-using-group-members" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>Returns a string</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lowBatteryMessage</span> <span class="o">=</span> <span class="s2">&quot;Warning! Low battery alert:</span><span class="se">\n\n</span><span class="s2">{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">lowBattery</span><span class="p">:</span> <span class="s2">&quot;{}: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lowBattery</span><span class="o">.</span><span class="n">label</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">lowBattery</span><span class="o">.</span><span class="n">state</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span><span class="p">),</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">battery</span> <span class="k">for</span> <span class="n">battery</span> <span class="ow">in</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gBattery&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getMembers</span><span class="p">()</span> <span class="k">if</span> <span class="n">battery</span><span class="o">.</span><span class="n">state</span> <span class="o">&lt;</span> <span class="n">DecimalType</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">battery</span><span class="p">:</span> <span class="n">battery</span><span class="o">.</span><span class="n">state</span><span class="p">))))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-line-comment">
+<h3>Single line comment<a class="headerlink" href="#single-line-comment" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># this is a single line comment</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="c1">// this is a single line comment</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="c1">// this is a single line comment</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// this is a single line comment</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="multiline-comment">
+<h3>Multiline comment<a class="headerlink" href="#multiline-comment" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">this is</span>
+<span class="sd">a multiline</span>
+<span class="sd">comment</span>
+<span class="sd">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm">this is</span>
+<span class="cm">a multiline</span>
+<span class="cm">comment</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm">this is</span>
+<span class="cm">a multiline</span>
+<span class="cm">comment</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm">this is</span>
+<span class="cm">a multiline</span>
+<span class="cm">comment</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="view-the-names-of-an-object-s-attributes">
+<h3>View the names of an object’s attributes<a class="headerlink" href="#view-the-names-of-an-object-s-attributes" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># replace `object` with the object you&#39;d like to introspect</span>
+<span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;dir(object)=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="nb">object</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="c1">// replace `object` with the object you&#39;d like to introspect</span>
+<span class="n">object</span><span class="o">.</span><span class="na">properties</span><span class="o">.</span><span class="na">each</span><span class="o">{</span><span class="n">log</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s2">&quot;object: &quot;</span> <span class="o">+</span> <span class="n">it</span><span class="o">)}</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="view-all-symbols-in-a-context">
+<h3>View all symbols in a context<a class="headerlink" href="#view-all-symbols-in-a-context" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;dir()=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">dir</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">Not</span> <span class="nx">possible</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-the-uid-of-a-rule-by-name">
+<h3>Get the UID of a rule by name<a class="headerlink" href="#get-the-uid-of-a-rule-by-name" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSupport&quot;</span><span class="p">)</span>
+<span class="n">ruleUID</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">rule</span><span class="p">:</span> <span class="n">rule</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;This is the name of my rule&quot;</span><span class="p">,</span> <span class="n">rules</span><span class="o">.</span><span class="n">getAll</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">UID</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="enable-or-disable-a-rule-by-uid">
+<h3>Enable or disable a rule by UID<a class="headerlink" href="#enable-or-disable-a-rule-by-uid" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">osgi</span>
+<span class="n">ruleEngine</span> <span class="o">=</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.openhab.core.automation.RuleManager&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.automation.RuleManager&quot;</span><span class="p">)</span>
+<span class="n">ruleEngine</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">ruleUID</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span><span class="c1"># enable rule</span>
+<span class="n">ruleEngine</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">ruleUID</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span><span class="c1"># disable rule</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="run-a-rule-by-uid">
+<h3>Run a rule by UID<a class="headerlink" href="#run-a-rule-by-uid" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">osgi</span>
+<span class="n">rule_engine</span> <span class="o">=</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.automation.RuleManager&quot;</span><span class="p">)</span>
+<span class="n">ruleEngine</span><span class="o">.</span><span class="n">runNow</span><span class="p">(</span><span class="n">ruleFunction</span><span class="o">.</span><span class="n">UID</span><span class="p">)</span>
+<span class="n">consider_conditions</span> <span class="o">=</span> <span class="bp">True</span><span class="c1"># consider the rule&#39;s Conditions</span>
+<span class="n">ruleEngine</span><span class="o">.</span><span class="n">runNow</span><span class="p">(</span><span class="n">ruleFunction</span><span class="o">.</span><span class="n">UID</span><span class="p">,</span> <span class="n">considerConditions</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;EXAMPLE&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="enable-disable-a-thing">
+<h3>Enable/disable a Thing<a class="headerlink" href="#enable-disable-a-thing" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.TEST&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
+<span class="kn">from</span> <span class="nn">org.eclipse.smarthome.core.thing</span> <span class="kn">import</span> <span class="n">ThingUID</span>
+<span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">osgi</span>
+
+<span class="n">thing_manager</span> <span class="o">=</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.core.thing.ThingManager&quot;</span><span class="p">)</span>
+<span class="n">kodi_thing</span> <span class="o">=</span> <span class="n">things</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ThingUID</span><span class="p">(</span><span class="s2">&quot;kodi:kodi:familyroom&quot;</span><span class="p">))</span>
+<span class="n">thing_manager</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">ThingUID</span><span class="p">(</span><span class="s2">&quot;kodi:kodi:familyroom&quot;</span><span class="p">),</span> <span class="bp">False</span><span class="p">)</span><span class="c1"># disable Thing</span>
+<span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Disabled: isEnabled [{}], statusInfo [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kodi_thing</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">(),</span> <span class="n">kodi_thing</span><span class="o">.</span><span class="n">statusInfo</span><span class="p">))</span>
+<span class="n">thing_manager</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">ThingUID</span><span class="p">(</span><span class="s2">&quot;kodi:kodi:familyroom&quot;</span><span class="p">),</span> <span class="bp">True</span><span class="p">)</span><span class="c1"># enable Thing</span>
+<span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Enabled: isEnabled [{}], statusInfo [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kodi_thing</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">(),</span> <span class="n">kodi_thing</span><span class="o">.</span><span class="n">statusInfo</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="read-add-remove-item-metadata">
+<h3>Read/Add/Remove Item metadata<a class="headerlink" href="#read-add-remove-item-metadata" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p><a class="reference external" href="https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868">https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868</a></p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Metadata</span> <span class="n">can</span> <span class="n">be</span> <span class="n">added</span> <span class="n">and</span> <span class="n">removed</span><span class="o">,</span> <span class="n">but</span> <span class="n">not</span> <span class="n">read</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="use-org-joda-time-datetime">
+<h3>Use org.joda.time.DateTime<a class="headerlink" href="#use-org-joda-time-datetime" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">org.joda.time</span> <span class="kn">import</span> <span class="n">DateTime</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">DateTime</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s2">&quot;org.joda.time.DateTime&quot;</span><span class="p">);</span>
+<span class="nx">start</span> <span class="o">=</span> <span class="nx">DateTime</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.joda.time.DateTime</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="na">now</span><span class="o">()</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">now</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="pause-a-thread">
+<h3>Pause a thread<a class="headerlink" href="#pause-a-thread" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="c1"># the unit is seconds, so use 0.5 for 500 milliseconds</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nl">Thread:</span><span class="o">:</span><span class="n">sleep</span><span class="o">(</span><span class="mi">5000</span><span class="o">)</span><span class="c1">// the unit is milliseconds</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="use-a-timer">
+<h3>Use a timer<a class="headerlink" href="#use-a-timer" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>See the <a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Script%20Examples/Python/timer_example.py">timer_example.py</a> in the Script Examples for examples of using both Python <a class="reference external" href="https://docs.python.org/2/library/threading.html#timer-objects">threading.Timer</a> and the openHAB <a class="reference external" href="https://www.openhab.org/docs/configuration/actions.html#timers">createTimer Action</a>.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="use-logging">
+<h3>Use Logging<a class="headerlink" href="#use-logging" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="Logging.html#logging"><span class="std std-ref">Logging</span></a>.</p>
+</div>
+<div class="section" id="use-actions">
+<h3>Use Actions<a class="headerlink" href="#use-actions" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="Actions.html#actions"><span class="std std-ref">Actions</span></a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Guides/But How Do I" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

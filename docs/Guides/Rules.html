@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Rules &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Triggers" href="Triggers.html" />
+    <link rel="prev" title="First Steps" href="../Getting Started/First Steps.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../Index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#decorators">Decorators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#imports">Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rule">&#64;rule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when">&#64;when</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function">Function</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#extensions">Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raw-api">Raw API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../Index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../Index.html">Docs</a> &raquo;</li>
+        
+      <li>Rules</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rules">
+<h1>Rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h1>
+<p>One of the primary use cases for JSR223 scripting in openHAB is to define rules for the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> using the <a class="reference external" href="http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api">Automation API</a>.
+The rule engine structures rules with <em>Modules</em> (Triggers, Conditions, Actions).
+Modules are further broken down into <em>ModuleTypes</em> with cooresponding <em>ModuleHandlers</em>.
+Scripted rules can use ModuleTypes that are already present in openHAB, and also define new ones that can be used outside of the scripting language that defined it, including rules created in the UI.</p>
+<p>When a script is loaded, it is provided with a <em>JSR223 scope</em> that <cite>predefines a number of variables &lt;https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required&gt;</cite>.
+These include the most commonly used core types and values from openHAB (e.g., State, Command, OnOffType, etc.).
+This means you don’t need an import statement to load them.</p>
+<p>For defining rules, additional symbols must be defined.
+Rather than using an import, these additional symbols (<cite>presets &lt;https://www.openhab.org/docs/configuration/jsr223.html#predefined-script-variables-all-jsr223-languages&gt;</cite>) are imported using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSimple&quot;</span><span class="p">)</span>
+<span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSupport&quot;</span><span class="p">)</span>
+<span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleFactories&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">scriptExtension</span></code> instance is provided as one of the default scope variables.
+The <code class="docutils literal notranslate"><span class="pre">RuleSimple</span></code> preset defines the <code class="docutils literal notranslate"><span class="pre">SimpleRule</span></code> base class.
+This base class implements a rule with a single custom Action associated with the <code class="docutils literal notranslate"><span class="pre">execute</span></code> function.
+The list of rule triggers are provided by the triggers attribute of the rule instance.
+The triggers in these examples is an instance of the <code class="docutils literal notranslate"><span class="pre">Trigger</span></code> class.
+The constructor arguments define the trigger, the trigger type string, and a configuration.
+The <code class="docutils literal notranslate"><span class="pre">events</span></code> variable is part of the default scope and supports access to the event bus (posting updates and sending commands).
+Finally, to register the rule with the rule engine, it must be added to the <code class="docutils literal notranslate"><span class="pre">ruleRegistry</span></code>.
+This will cause the triggers to be activated and the rule will fire.</p>
+<p>In increasing order of complexity, rules can be written using the <a class="reference internal" href="#decorators"><span class="std std-ref">Decorators</span></a>, <a class="reference internal" href="#extensions"><span class="std std-ref">Extensions</span></a>, or the <a class="reference internal" href="#raw-api"><span class="std std-ref">Raw API</span></a>.
+The details for all of these methods are included here for reference, but the section on <a class="reference internal" href="#decorators"><span class="std std-ref">Decorators</span></a> should be all that is needed for creating your rules.
+The decorators are abstractions (simplifications) of the extensions, which are abstractions of the raw API.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Take care in your choice of object names used in your rules, so as not to use one that is already included in the <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required">default scope</a>.</p>
+</div>
+<div class="section" id="decorators">
+<h2>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to write rules, and the most familiar if you have used the openHAB rules DSL, is using the decorators provided by this library.
+<cite>Decorators &lt;https://wiki.python.org/moin/PythonDecorators&gt;</cite> are part of the Python language and allow you to modify, or “decorate”, a function, method or class.
+The libraries provide a decorator called <code class="docutils literal notranslate"><span class="pre">rule</span></code> for defining rules and another called <code class="docutils literal notranslate"><span class="pre">when</span></code> for adding triggers to rules.
+This section will show you how to define rules and triggers, and it will also compare their usage with the syntax of the rules DSL to help with migration.</p>
+<div class="section" id="imports">
+<h3>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>When writing rules with the decorators, you must import the decorator functions.
+This only needs to be done once at the top of each script you will be using them in.
+Two simple lines at the top of your file will accomplish this:</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<p>The rules DSL does not require imports for creating rules or triggers.</p>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="rule">
+<h3>&#64;rule<a class="headerlink" href="#rule" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>The first step to creating a decorated rule is to give it a name that is unique in your openHAB configuration, and optionally a description and tags:
+The optional <code class="docutils literal notranslate"><span class="pre">description</span></code> allows for more detail about what a rule does and is displayed in the UI.
+The <code class="docutils literal notranslate"><span class="pre">tags</span></code> list is also optional, and useful for categorizing rules to simplifying searches.
+The decorator adds a log attribute based on the name of the decorated class or function, but <code class="docutils literal notranslate"><span class="pre">self.log</span></code> can be overridden in a constructor (see :ref::<cite>Extensions</cite>).
+A UID attribute is also added, which makes it easier to get the rule object once it has been created.
+This can be used to enable/disable the rule.
+Finally, the decorator wraps the function or classes’ <code class="docutils literal notranslate"><span class="pre">execute</span></code> function in a wrapper that will print nicer stack trace information, if an exception is thrown.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="s">&quot;Rule Name&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="when">
+<h3>&#64;when<a class="headerlink" href="#when" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Next, we’ll add triggers to the rule using the <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator.
+You may add as many or as few triggers as you want.
+The syntax for <code class="docutils literal notranslate"><span class="pre">when</span></code> is quite simple, and has been made with functionality similar to the rules DSL:</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 0/10 * * * * ?&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received update&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="s">&quot;Rule Name&quot;</span>
+<span class="n">when</span>
+    <span class="n">Item</span> <span class="n">my_item</span> <span class="n">changed</span> <span class="n">to</span> <span class="n">ON</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The full list of triggers and details on each one can be found on the
+<a class="reference internal" href="Triggers.html"><span class="doc">Triggers</span></a> page.</p>
+</div></blockquote>
+</div>
+<div class="section" id="function">
+<h3>Function<a class="headerlink" href="#function" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Finally the last piece is the actual code of your rule, which is a function.
+The name of this function must be unique within the file it is in.
+It must be able to accept one positional argument, which will always be <code class="docutils literal notranslate"><span class="pre">event</span></code> in this documentation.</p>
+<p>The rule decorator adds some helpful attributes to the function.
+The rule UID is useful when enabling/disabling rules, <code class="docutils literal notranslate"><span class="pre">my_rule_function.UID</span></code>.
+A logger is also provided for each rule, <code class="docutils literal notranslate"><span class="pre">my_rule_function.log.info(&quot;Log</span> <span class="pre">message&quot;)</span></code>, and it will use the logger <code class="docutils literal notranslate"><span class="pre">&lt;core.logging.LOG_PREFIX&gt;.Rule_Name</span></code>.
+More information on logging can be found on the <a class="reference internal" href="Logging.html"><span class="doc">Logging</span></a> page.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 0/10 * * * * ?&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received update&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_rule_function</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">my_rule_function</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="s">&quot;Rule Name&quot;</span>
+<span class="n">when</span>
+    <span class="n">Item</span> <span class="n">my_item</span> <span class="n">changed</span> <span class="n">to</span> <span class="n">ON</span>
+<span class="n">then</span>
+    <span class="c1">// your DSL code here</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="extensions">
+<h2>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The following example shows how the rule decorator is used to decorate a class.
+The <code class="docutils literal notranslate"><span class="pre">rule</span></code> decorator adds the SimpleRule base class and will call <code class="docutils literal notranslate"><span class="pre">getEventTriggers</span></code> to get the triggers, or you can define a constructor and set <code class="docutils literal notranslate"><span class="pre">self.triggers</span></code> to your list of triggers (commented out in the example).
+As we get closer to the raw API, you can appeciate the amount of complexity that is removed by using the decorators.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Trigger names must be unique within the scope of a rule instance, and can only contain alphanumeric characters, hythens, and underscores (no spaces)… <code class="docutils literal notranslate"><span class="pre">[A-Za-z0-9_-]</span></code>.</p>
+</div>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">StartupTrigger</span><span class="p">,</span> <span class="n">CronTrigger</span><span class="p">,</span> <span class="n">ItemStateUpdateTrigger</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Jython Hello World (CronTrigger extension with rule decorator)&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is an example rule using a CronTrigger extension and rule decorator&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Example rule tag&quot;</span><span class="p">])</span>
+<span class="k">class</span> <span class="nc">ExampleExtensionRule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1">#def __init__(self):</span>
+    <span class="c1">#    self.triggers = [StartupTrigger().trigger,</span>
+    <span class="c1">#                     CronTrigger(&quot;0/10 * * * * ?&quot;).trigger,</span>
+    <span class="c1">#                     ItemStateUpdateTrigger(&quot;Test_Switch_1&quot;).trigger]</span>
+
+    <span class="k">def</span> <span class="nf">getEventTriggers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">StartupTrigger</span><span class="p">()</span><span class="o">.</span><span class="n">trigger</span><span class="p">,</span>
+                <span class="n">CronTrigger</span><span class="p">(</span><span class="s2">&quot;0/10 * * * * ?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">,</span>
+                <span class="n">ItemStateUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;Test_Switch_1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators and Extensions have not yet been created for the Groovy helper libraries.</p>
+</div>
+</div>
+<p>The following example shows how to create a rule using an extension without the rule decorator.
+Note the use of the scriptExtensions, which were not needed with the decorators.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">StartupTrigger</span><span class="p">,</span> <span class="n">CronTrigger</span><span class="p">,</span> <span class="n">ItemStateUpdateTrigger</span>
+<span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
+
+<span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSupport&quot;</span><span class="p">)</span>
+<span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSimple&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">CronTriggerExtension</span><span class="p">(</span><span class="n">SimpleRule</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">StartupTrigger</span><span class="p">()</span><span class="o">.</span><span class="n">trigger</span><span class="p">,</span>
+                         <span class="n">CronTrigger</span><span class="p">(</span><span class="s2">&quot;0/10 * * * * ?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">,</span>
+                         <span class="n">ItemStateUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;Test_Switch_1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Jython Hello World (CronTrigger extension)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;This is an example Jython rule using a CronTrigger extension&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot;Example rule tag&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.Hello World (CronTrigger extension)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+
+<span class="n">automationManager</span><span class="o">.</span><span class="n">addRule</span><span class="p">(</span><span class="n">CronTriggerExtension</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="n">var</span> <span class="n">OPENHAB_CONF</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">&quot;java.lang.System&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENHAB_CONF&quot;</span><span class="p">);</span>
+<span class="n">load</span><span class="p">(</span><span class="n">OPENHAB_CONF</span><span class="o">+</span><span class="s1">&#39;/automation/lib/javascript/core/rules.js&#39;</span><span class="p">);</span>
+<span class="n">var</span> <span class="n">me</span> <span class="o">=</span> <span class="s2">&quot;HelloWorld.js&quot;</span><span class="p">;</span>
+
+<span class="n">JSRule</span><span class="p">({</span>
+    <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Javascript Hello World (GenericCronTrigger raw API with JS helper libraries)&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="p">:</span> <span class="s2">&quot;This is an example Jython cron rule using the raw API&quot;</span><span class="p">,</span>
+    <span class="n">triggers</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">TimerTrigger</span><span class="p">(</span><span class="s2">&quot;0/10 * * * * ?&quot;</span><span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">execute</span><span class="p">:</span> <span class="n">function</span><span class="p">(</span> <span class="n">module</span><span class="p">,</span> <span class="n">inputs</span><span class="p">){</span>
+        <span class="n">logInfo</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Extensions have not yet been created for the Groovy helper libraries.</p>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="raw-api">
+<h2>Raw API<a class="headerlink" href="#raw-api" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The following example shows how to create a rule and triggers using the raw API without any support from the helper libraries.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">org.slf4j</span> <span class="kn">import</span> <span class="n">LoggerFactory</span>
+
+<span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSupport&quot;</span><span class="p">)</span>
+<span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSimple&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">GenericCronTriggerRawAPI</span><span class="p">(</span><span class="n">SimpleRule</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">TriggerBuilder</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+                    <span class="o">.</span><span class="n">withId</span><span class="p">(</span><span class="s2">&quot;Hello_World_Cron_Trigger&quot;</span><span class="p">)</span><span class="c1"># no spaces allowed in trigger ID</span>
+                    <span class="o">.</span><span class="n">withTypeUID</span><span class="p">(</span><span class="s2">&quot;timer.GenericCronTrigger&quot;</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">withConfiguration</span><span class="p">(</span>
+                        <span class="n">Configuration</span><span class="p">({</span>
+                            <span class="s2">&quot;cronExpression&quot;</span><span class="p">:</span> <span class="s2">&quot;0/10 * * * * ?&quot;</span>
+                        <span class="p">}))</span><span class="o">.</span><span class="n">build</span><span class="p">(),</span>
+            <span class="n">TriggerBuilder</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+                    <span class="o">.</span><span class="n">withId</span><span class="p">(</span><span class="s2">&quot;Hello_World_Item_State_Trigger&quot;</span><span class="p">)</span><span class="c1"># no spaces allowed in trigger ID</span>
+                    <span class="o">.</span><span class="n">withTypeUID</span><span class="p">(</span><span class="s2">&quot;timer.GenericCronTrigger&quot;</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">withConfiguration</span><span class="p">(</span>
+                        <span class="n">Configuration</span><span class="p">({</span>
+                            <span class="s2">&quot;itemName&quot;</span><span class="p">:</span> <span class="s2">&quot;Test_Switch_1&quot;</span>
+                        <span class="p">}))</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Jython Hello World (GenericCronTrigger raw API)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;This is an example Jython cron rule using the raw API&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot;Example rule tag&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;jsr223.jython.Hello World (GenericCronTrigger raw API)&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+
+<span class="n">automationManager</span><span class="o">.</span><span class="n">addRule</span><span class="p">(</span><span class="n">GenericCronTriggerRawAPI</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="nx">scriptExtension</span><span class="p">.</span><span class="nx">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSupport&quot;</span><span class="p">);</span>
+<span class="nx">scriptExtension</span><span class="p">.</span><span class="nx">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSimple&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">sRule</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SimpleRule</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">log</span><span class="o">:</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s2">&quot;org.slf4j.LoggerFactory&quot;</span><span class="p">).</span><span class="nx">getLogger</span><span class="p">(</span><span class="s2">&quot;jsr223.javascript.example&quot;</span><span class="p">),</span>
+    <span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">inputs</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">sRule</span><span class="p">.</span><span class="nx">setTriggers</span><span class="p">([</span>
+    <span class="nx">TriggerBuilder</span><span class="p">.</span><span class="nx">create</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">withId</span><span class="p">(</span><span class="s2">&quot;aTimerTrigger&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">withTypeUID</span><span class="p">(</span><span class="s2">&quot;timer.GenericCronTrigger&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">withConfiguration</span><span class="p">(</span>
+            <span class="k">new</span> <span class="nx">Configuration</span><span class="p">({</span>
+                <span class="s2">&quot;cronExpression&quot;</span><span class="o">:</span> <span class="s2">&quot;0/10 * * * * ?&quot;</span>
+            <span class="p">})).</span><span class="nx">build</span><span class="p">()</span>
+    <span class="p">]);</span>
+
+<span class="nx">sRule</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;JavaScript Hello World example (raw API)&quot;</span><span class="p">;</span>
+<span class="nx">sRule</span><span class="p">.</span><span class="nx">description</span> <span class="o">=</span> <span class="s2">&quot;This is an example Hello World rule using the raw API&quot;</span><span class="p">;</span>
+<span class="nx">automationManager</span><span class="p">.</span><span class="nx">addRule</span><span class="p">(</span><span class="nx">sRule</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span>
+
+<span class="kt">def</span> <span class="n">log</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s2">&quot;jsr223.groovy&quot;</span><span class="o">)</span>
+
+<span class="kn">import</span> <span class="nn">org.openhab.core.automation.Action</span>
+<span class="kn">import</span> <span class="nn">org.openhab.core.automation.module.script.rulesupport.shared.simple.SimpleRule</span>
+<span class="kn">import</span> <span class="nn">org.eclipse.smarthome.config.core.Configuration</span>
+
+<span class="n">scriptExtension</span><span class="o">.</span><span class="na">importPreset</span><span class="o">(</span><span class="s2">&quot;RuleSupport&quot;</span><span class="o">)</span>
+
+<span class="kt">def</span> <span class="n">rawAPIRule</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleRule</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Groovy Hello World (GenericCronTrigger raw API)&quot;</span>
+    <span class="n">Object</span> <span class="nf">execute</span><span class="o">(</span><span class="n">Action</span> <span class="n">module</span><span class="o">,</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">inputs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">rawAPIRule</span><span class="o">.</span><span class="na">setTriggers</span><span class="o">([</span>
+    <span class="n">TriggerBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">withId</span><span class="o">(</span><span class="s2">&quot;aTimerTrigger&quot;</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">withTypeUID</span><span class="o">(</span><span class="s2">&quot;timer.GenericCronTrigger&quot;</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">withConfiguration</span><span class="o">(</span><span class="k">new</span> <span class="n">Configuration</span><span class="o">([</span><span class="nl">cronExpression:</span> <span class="s2">&quot;0/10 * * * * ?&quot;</span><span class="o">]))</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">()</span>
+    <span class="o">])</span>
+
+<span class="n">automationManager</span><span class="o">.</span><span class="na">addRule</span><span class="o">(</span><span class="n">rawAPIRule</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Guides/Rules" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
