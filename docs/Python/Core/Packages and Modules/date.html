@@ -200,14 +200,14 @@
 <p>Date/time utilities for converting between the several different types used by
 openHAB. It can also format any of these types for sending to an openHAB Item
 using <code class="docutils literal notranslate"><span class="pre">format_date(value)</span></code>, which will return the date as a string in the
-correct format. There are also some conveniece functions for determining the
+correct format. There are also some convenience functions for determining the
 span between two datetimes. <code class="docutils literal notranslate"><span class="pre">days_between</span></code>, <code class="docutils literal notranslate"><span class="pre">hours_between</span></code>,
 <code class="docutils literal notranslate"><span class="pre">minutes_between</span></code>, and <code class="docutils literal notranslate"><span class="pre">seconds_between</span></code> will return the number of whole
 units of each unit of time between the two datetimes passed. They will return
 negative numbers if <code class="docutils literal notranslate"><span class="pre">value_from</span></code> is after <code class="docutils literal notranslate"><span class="pre">value_to</span></code>. See
 <a class="reference external" href="https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html">java.time.temporal.ChronoUnit</a>
 if you want more information.</p>
-<p>This package accepts any of the following DateTime types:</p>
+<p>This module accepts any of the following DateTime types:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">java</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">ZonedDateTime</span>
 <span class="n">java</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">LocalDateTime</span>
 <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">Calendar</span>
@@ -222,7 +222,7 @@ if you want more information.</p>
 <dt id="core.date.format_date">
 <code class="sig-prename descclassname">core.date.</code><code class="sig-name descname">format_date</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">format_string=&quot;yyyy-MM-dd'T'HH:mm:ss.SSxx&quot;</em><span class="sig-paren">)</span><a class="headerlink" href="#core.date.format_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns string of <code class="docutils literal notranslate"><span class="pre">value</span></code> formatted according to <code class="docutils literal notranslate"><span class="pre">format_string</span></code>.</p>
-<p>This function can be used when updating items in openHAB or to format any
+<p>This function can be used when updating Items in openHAB or to format any
 DateTime value for output.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sendCommand</span><span class="p">(</span><span class="s2">&quot;item_name&quot;</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">format_date</span><span class="p">(</span><span class="n">date_value</span><span class="p">))</span>
