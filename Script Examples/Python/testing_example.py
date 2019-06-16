@@ -37,4 +37,5 @@ class MyUnitTest(unittest.TestCase):
 # status can be used to take actions like sending notifications
 # results are a JSON formatted string (will probably change to return Python dict instead)
 
-print(run_test(MyUnitTest))
+def scriptLoaded():
+    print(run_test(MyUnitTest))
