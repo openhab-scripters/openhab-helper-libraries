@@ -197,13 +197,13 @@
 <h1>Rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h1>
 <p>One of the primary use cases for JSR223 scripting in openHAB is to define rules for the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> using the <a class="reference external" href="http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api">Automation API</a>.
 The rule engine structures rules with <em>Modules</em> (Triggers, Conditions, Actions).
-Modules are further broken down into <em>ModuleTypes</em> with cooresponding <em>ModuleHandlers</em>.
+Modules are further broken down into <em>ModuleTypes</em> with corresponding <em>ModuleHandlers</em>.
 Scripted rules can use ModuleTypes that are already present in openHAB, and also define new ones that can be used outside of the scripting language that defined it, including rules created in the UI.</p>
-<p>When a script is loaded, it is provided with a <em>JSR223 scope</em> that <cite>predefines a number of variables &lt;https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required&gt;</cite>.
+<p>When a script is loaded, it is provided with a <em>JSR223 scope</em> that <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required">predefines a number of variables</a>.
 These include the most commonly used core types and values from openHAB (e.g., State, Command, OnOffType, etc.).
 This means you don’t need an import statement to load them.</p>
 <p>For defining rules, additional symbols must be defined.
-Rather than using an import, these additional symbols (<cite>presets &lt;https://www.openhab.org/docs/configuration/jsr223.html#predefined-script-variables-all-jsr223-languages&gt;</cite>) are imported using:</p>
+Rather than using an import, these additional symbols (<a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html#predefined-script-variables-all-jsr223-languages">presets</a>) are imported using:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSimple&quot;</span><span class="p">)</span>
 <span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSupport&quot;</span><span class="p">)</span>
 <span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleFactories&quot;</span><span class="p">)</span>
@@ -228,7 +228,7 @@ The decorators are abstractions (simplifications) of the extensions, which are a
 <div class="section" id="decorators">
 <h2>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h2>
 <p>The easiest way to write rules, and the most familiar if you have used the openHAB rules DSL, is using the decorators provided by this library.
-<cite>Decorators &lt;https://wiki.python.org/moin/PythonDecorators&gt;</cite> are part of the Python language and allow you to modify, or “decorate”, a function, method or class.
+<cite>Decorators &lt;https://wiki.python.org/moin/PythonDecorators&gt;_</cite> are part of the Python language and allow you to modify, or “decorate”, a function, method or class.
 The libraries provide a decorator called <code class="docutils literal notranslate"><span class="pre">rule</span></code> for defining rules and another called <code class="docutils literal notranslate"><span class="pre">when</span></code> for adding triggers to rules.
 This section will show you how to define rules and triggers, and it will also compare their usage with the syntax of the rules DSL to help with migration.</p>
 <div class="section" id="imports">
