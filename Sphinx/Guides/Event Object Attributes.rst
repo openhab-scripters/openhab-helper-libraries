@@ -7,7 +7,7 @@ The specific data depends on the event type.
 For example, the ``event`` object returned by the `ItemStateChangedEvent <https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java>`_ event type has ``itemName``, ``itemState``, and ``oldItemState`` attributes. The ``StartupTrigger`` and ``GenericCronTrigger`` do not provide any ``event`` objects.
 Rather than digging through the code to look up the attributes available in a particular ``event`` object, you can add a log entry inside the function and then trigger the rule (:ref:`Guides/But How Do I:View the names of an object's attributes`).
 
-Here is a table of the attributes available in ``event`` objects (or ``inputs['event']``, if using aaw API or extensions), including a comparison to the Rules DSL implicit variables:
+Here is a table of the attributes available in ``event`` objects (or ``inputs['event']``, if using raw API or extensions), including a comparison to the Rules DSL implicit variables:
 
 +--------------------------+--------------------------+-------------------------------+----------------------------------+-----------------------------------------------+
 | Rules DSL Equivalent     | Scripted Automation      | @when Trigger(s)              | Event Object(s)                  | Description                                   |
@@ -72,10 +72,12 @@ Here is a table of the attributes available in ``event`` objects (or ``inputs['e
 .. _ItemCommandEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemCommandEvent.java
 .. _ItemStatePredictedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java
 .. _GroupItemStateChangedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java
-.. _ItemAddedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemAddedEvent.java), [ItemRemovedEvent](https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemRemovedEvent.java
+.. _ItemAddedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemAddedEvent.java
+.. _ItemRemovedEvent: (https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemRemovedEvent.java
 .. _ItemUpdatedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemUpdatedEvent.java
 .. _ChannelTriggeredEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ChannelTriggeredEvent.java
-.. _ThingAddedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingAddedEvent.java), [ThingRemovedEvent](https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingRemovedEvent.java
+.. _ThingAddedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingAddedEvent.java
+.. _ThingRemovedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingRemovedEvent.java
 .. _ThingUpdatedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingUpdatedEvent.java
 .. _ThingStatusInfoEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java
 .. _ThingStatusInfoChangedEvent: https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java
