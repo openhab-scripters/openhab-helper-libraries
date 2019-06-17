@@ -17,10 +17,10 @@ For LogAction, see :doc:`Logging`.
         .. code-block::
 
             from core.actions import Exec
-            Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name",5000)
+            Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://host.example.com",5000)
 
             from core.actions import HTTP
-            HTTP.sendHttpPutRequest("someURL.com, "application/json", '{"this": "that"}')
+            HTTP.sendHttpPutRequest("someURL.example.com, "application/json", '{"this": "that"}')
 
             from core.actions import Ping
             if Ping.checkVitality("10.5.5.5", 0, 5000):
@@ -31,11 +31,11 @@ For LogAction, see :doc:`Logging`.
             from core.actions import Audio
             Audio.playSound("doorbell.mp3")# using the default audiosink
             Audio.playSound("my:audio:sink", "doorbell.mp3")# specifying an audiosink
-            Audio.playStream("http://myAudioServer/myAudioFile.mp3")# using the default audiosink
-            Audio.playStream("my:audio:sink", "http://myAudioServer/myAudioFile.mp3")# specifying an audiosink
+            Audio.playStream("http://myAudioServer.example.com/myAudioFile.mp3")# using the default audiosink
+            Audio.playStream("my:audio:sink", "http://myAudioServer.example.com/myAudioFile.mp3")# specifying an audiosink
 
             from core.actions import NotificationAction
-            NotificationAction.sendNotification("someone@someDomain.com","This is the message")
+            NotificationAction.sendNotification("someone@example.com","This is the message")
             NotificationAction.sendBroadcastNotification("This is the message")
             NotificationAction.sendLogNotification("This is the message")
 
@@ -125,7 +125,7 @@ Use an Addon/Bundle Action
         .. code-block::
 
             from core.actions import Mail
-            Mail.sendMail("someone@someDomain.com", "This is the subject", "This is the message")
+            Mail.sendMail("someone@example.com", "This is the subject", "This is the message")
 
         `Astro <https://www.openhab.org/addons/actions/astro/#astro-actions>`_
 
