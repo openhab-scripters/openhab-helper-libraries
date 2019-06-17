@@ -222,10 +222,10 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Exec</span>
-<span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://some.host.name&quot;</span><span class="p">,</span><span class="mi">5000</span><span class="p">)</span>
+<span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://host.example.com&quot;</span><span class="p">,</span><span class="mi">5000</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">HTTP</span>
-<span class="n">HTTP</span><span class="o">.</span><span class="n">sendHttpPutRequest</span><span class="p">(</span><span class="s2">&quot;someURL.com, &quot;</span><span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="s2">&quot;, &#39;{&quot;</span><span class="n">this</span><span class="s2">&quot;: &quot;</span><span class="n">that</span><span class="s2">&quot;}&#39;)</span>
+<span class="n">HTTP</span><span class="o">.</span><span class="n">sendHttpPutRequest</span><span class="p">(</span><span class="s2">&quot;someURL.example.com, &quot;</span><span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="s2">&quot;, &#39;{&quot;</span><span class="n">this</span><span class="s2">&quot;: &quot;</span><span class="n">that</span><span class="s2">&quot;}&#39;)</span>
 
 <span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Ping</span>
 <span class="k">if</span> <span class="n">Ping</span><span class="o">.</span><span class="n">checkVitality</span><span class="p">(</span><span class="s2">&quot;10.5.5.5&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5000</span><span class="p">):</span>
@@ -236,11 +236,11 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 <span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Audio</span>
 <span class="n">Audio</span><span class="o">.</span><span class="n">playSound</span><span class="p">(</span><span class="s2">&quot;doorbell.mp3&quot;</span><span class="p">)</span><span class="c1"># using the default audiosink</span>
 <span class="n">Audio</span><span class="o">.</span><span class="n">playSound</span><span class="p">(</span><span class="s2">&quot;my:audio:sink&quot;</span><span class="p">,</span> <span class="s2">&quot;doorbell.mp3&quot;</span><span class="p">)</span><span class="c1"># specifying an audiosink</span>
-<span class="n">Audio</span><span class="o">.</span><span class="n">playStream</span><span class="p">(</span><span class="s2">&quot;http://myAudioServer/myAudioFile.mp3&quot;</span><span class="p">)</span><span class="c1"># using the default audiosink</span>
-<span class="n">Audio</span><span class="o">.</span><span class="n">playStream</span><span class="p">(</span><span class="s2">&quot;my:audio:sink&quot;</span><span class="p">,</span> <span class="s2">&quot;http://myAudioServer/myAudioFile.mp3&quot;</span><span class="p">)</span><span class="c1"># specifying an audiosink</span>
+<span class="n">Audio</span><span class="o">.</span><span class="n">playStream</span><span class="p">(</span><span class="s2">&quot;http://myAudioServer.example.com/myAudioFile.mp3&quot;</span><span class="p">)</span><span class="c1"># using the default audiosink</span>
+<span class="n">Audio</span><span class="o">.</span><span class="n">playStream</span><span class="p">(</span><span class="s2">&quot;my:audio:sink&quot;</span><span class="p">,</span> <span class="s2">&quot;http://myAudioServer.example.com/myAudioFile.mp3&quot;</span><span class="p">)</span><span class="c1"># specifying an audiosink</span>
 
 <span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">NotificationAction</span>
-<span class="n">NotificationAction</span><span class="o">.</span><span class="n">sendNotification</span><span class="p">(</span><span class="s2">&quot;someone@someDomain.com&quot;</span><span class="p">,</span><span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
+<span class="n">NotificationAction</span><span class="o">.</span><span class="n">sendNotification</span><span class="p">(</span><span class="s2">&quot;someone@example.com&quot;</span><span class="p">,</span><span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
 <span class="n">NotificationAction</span><span class="o">.</span><span class="n">sendBroadcastNotification</span><span class="p">(</span><span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
 <span class="n">NotificationAction</span><span class="o">.</span><span class="n">sendLogNotification</span><span class="p">(</span><span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
 
@@ -361,7 +361,7 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 </div>
 <p><a class="reference external" href="https://www.openhab.org/addons/actions/mail/#mail-actions">Mail</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Mail</span>
-<span class="n">Mail</span><span class="o">.</span><span class="n">sendMail</span><span class="p">(</span><span class="s2">&quot;someone@someDomain.com&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the subject&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
+<span class="n">Mail</span><span class="o">.</span><span class="n">sendMail</span><span class="p">(</span><span class="s2">&quot;someone@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the subject&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the message&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="https://www.openhab.org/addons/actions/astro/#astro-actions">Astro</a></p>

@@ -182,7 +182,7 @@
 The specific data depends on the event type.
 For example, the <code class="docutils literal notranslate"><span class="pre">event</span></code> object returned by the <a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java">ItemStateChangedEvent</a> event type has <code class="docutils literal notranslate"><span class="pre">itemName</span></code>, <code class="docutils literal notranslate"><span class="pre">itemState</span></code>, and <code class="docutils literal notranslate"><span class="pre">oldItemState</span></code> attributes. The <code class="docutils literal notranslate"><span class="pre">StartupTrigger</span></code> and <code class="docutils literal notranslate"><span class="pre">GenericCronTrigger</span></code> do not provide any <code class="docutils literal notranslate"><span class="pre">event</span></code> objects.
 Rather than digging through the code to look up the attributes available in a particular <code class="docutils literal notranslate"><span class="pre">event</span></code> object, you can add a log entry inside the function and then trigger the rule (<a class="reference internal" href="But How Do I.html#view-the-names-of-an-object-s-attributes"><span class="std std-ref">View the names of an object’s attributes</span></a>).</p>
-<p>Here is a table of the attributes available in <code class="docutils literal notranslate"><span class="pre">event</span></code> objects (or <code class="docutils literal notranslate"><span class="pre">inputs['event']</span></code>, if using aaw API or extensions), including a comparison to the Rules DSL implicit variables:</p>
+<p>Here is a table of the attributes available in <code class="docutils literal notranslate"><span class="pre">event</span></code> objects (or <code class="docutils literal notranslate"><span class="pre">inputs['event']</span></code>, if using raw API or extensions), including a comparison to the Rules DSL implicit variables:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 16%" />
@@ -357,7 +357,7 @@ Rather than digging through the code to look up the attributes available in a pa
 </div>
 </td>
 <td><div class="line-block">
-<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemAddedEvent.java),[ItemRemovedEvent](https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemRemovedEvent.java">ItemAddedEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemAddedEvent.java">ItemAddedEvent</a></div>
 </div>
 </td>
 <td><div class="line-block">
@@ -431,7 +431,7 @@ Rather than digging through the code to look up the attributes available in a pa
 </div>
 </td>
 <td><div class="line-block">
-<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingAddedEvent.java),[ThingRemovedEvent](https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingRemovedEvent.java">ThingAddedEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingAddedEvent.java">ThingAddedEvent</a></div>
 </div>
 </td>
 <td><div class="line-block">

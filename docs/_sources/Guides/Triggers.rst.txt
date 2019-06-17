@@ -161,7 +161,7 @@ Cron
 ====
 
     Cron triggers can be used to trigger rules at specific times.
-    There are a few built-in expressions, their use is shown in the examples.
+    There are a few built-in expressions; their use is shown in the examples.
     Several tools are available to help with composing cron expressions such as `CronMaker`_ or `FreeFormatter`_.
     More information can be found in the `openHAB documentation`_.
 
