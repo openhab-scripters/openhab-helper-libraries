@@ -6,7 +6,7 @@ The helper libraries provide several ways to produce log output in openHAB.
 This can be useful for providing information or error messages from your scripts to help diagnose issues.
 In some of the following examples, the logger can be modified to wherever you want the log to go.
 The default logger used in the modules and scripts is 'jsr223.<language name>', which is pulled from the value assigned to the LOG_PREFIX variable in the configuration library.
-If this is modified, be sure to `configure your logging <https://www.openhab.org/docs/administration/logging.html#logging-in-openhab>` to include the logger chosen.
+If this is modified, be sure to `configure your logging <https://www.openhab.org/docs/administration/logging.html#logging-in-openhab>`_ to include the logger chosen.
 
 
 Rule Decorator
