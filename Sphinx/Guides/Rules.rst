@@ -4,18 +4,18 @@ Rules
 
 One of the primary use cases for JSR223 scripting in openHAB is to define rules for the `Next-Generation Rule Engine`_ using the `Automation API`_.
 The rule engine structures rules with *Modules* (Triggers, Conditions, Actions).
-Modules are further broken down into *ModuleTypes* with cooresponding *ModuleHandlers*.
+Modules are further broken down into *ModuleTypes* with corresponding *ModuleHandlers*.
 Scripted rules can use ModuleTypes that are already present in openHAB, and also define new ones that can be used outside of the scripting language that defined it, including rules created in the UI.
 
 .. _Next-Generation Rule Engine: https://www.openhab.org/docs/configuration/rules-ng.html
 .. _Automation API: http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api
 
-When a script is loaded, it is provided with a *JSR223 scope* that `predefines a number of variables <https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required>`.
+When a script is loaded, it is provided with a *JSR223 scope* that `predefines a number of variables <https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required>`_.
 These include the most commonly used core types and values from openHAB (e.g., State, Command, OnOffType, etc.).
 This means you don't need an import statement to load them.
 
 For defining rules, additional symbols must be defined.
-Rather than using an import, these additional symbols (`presets <https://www.openhab.org/docs/configuration/jsr223.html#predefined-script-variables-all-jsr223-languages>`) are imported using:
+Rather than using an import, these additional symbols (`presets <https://www.openhab.org/docs/configuration/jsr223.html#predefined-script-variables-all-jsr223-languages>`_) are imported using:
 
 .. code-block::
 
@@ -46,7 +46,7 @@ Decorators
 ==========
 
 The easiest way to write rules, and the most familiar if you have used the openHAB rules DSL, is using the decorators provided by this library.
-`Decorators <https://wiki.python.org/moin/PythonDecorators>` are part of the Python language and allow you to modify, or "decorate", a function, method or class.
+`Decorators <https://wiki.python.org/moin/PythonDecorators>_` are part of the Python language and allow you to modify, or "decorate", a function, method or class.
 The libraries provide a decorator called ``rule`` for defining rules and another called ``when`` for adding triggers to rules.
 This section will show you how to define rules and triggers, and it will also compare their usage with the syntax of the rules DSL to help with migration.
 
