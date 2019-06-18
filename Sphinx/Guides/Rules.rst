@@ -299,6 +299,10 @@ Raw API
 
     The following example shows how to create a rule and triggers using the raw API without any support from the helper libraries.
 
+    .. note::
+
+        Trigger names must be unique within the scope of a rule instance, and can only contain alphanumeric characters, hythens, and underscores (no spaces)... ``[A-Za-z0-9_-]``.
+
     .. tabs::
 
         .. group-tab:: Python
@@ -314,14 +318,14 @@ Raw API
                     def __init__(self):
                         self.triggers = [
                             TriggerBuilder.create()
-                                    .withId("Hello_World_Cron_Trigger")# no spaces allowed in trigger ID
+                                    .withId("Hello_World_Cron_Trigger")
                                     .withTypeUID("timer.GenericCronTrigger")
                                     .withConfiguration(
                                         Configuration({
                                             "cronExpression": "0/10 * * * * ?"
                                         })).build(),
                             TriggerBuilder.create()
-                                    .withId("Hello_World_Item_State_Trigger")# no spaces allowed in trigger ID
+                                    .withId("Hello_World_Item_State_Trigger")
                                     .withTypeUID("timer.GenericCronTrigger")
                                     .withConfiguration(
                                         Configuration({
