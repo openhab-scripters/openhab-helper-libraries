@@ -461,5 +461,5 @@ def addOWMItems():
         import traceback
         addOWMItems.log.error(traceback.format_exc())
 
-def scriptLoaded():
+def scriptLoaded(id):
     addOWMItems()
