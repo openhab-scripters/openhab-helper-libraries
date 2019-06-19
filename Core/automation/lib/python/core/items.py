@@ -8,7 +8,7 @@ from core.jsr223 import scope
 scope.scriptExtension.importPreset(None)
 
 import core
-from core import osgi, JythonItemProvider
+from core import osgi
 from core.log import logging, LOG_PREFIX
 from core.links import remove_all_links
 
@@ -49,33 +49,29 @@ def add_item(item_or_item_name, item_type=None, category=None, groups=None, labe
                                                     .withTags(set(tags))\
                                                     .build()
 
-        JythonItemProvider.add(item)
         ManagedItemProvider.add(item)
         log.debug("Item added: [{}]".format(item))
+        return item
     except:
         import traceback
         log.error(traceback.format_exc())
         return None
-    else:
-        return item
 
 def remove_item(item_or_item_name):
     try:
-        item = item_or_item_name
-        if isinstance(item, basestring):
-            if scope.itemRegistry.getItems(item) == []:
-                raise Exception("\"{}\" is not in the ItemRegistry".format(item))
-            else:
-                item = scope.ir.getItem(item_or_item_name)
-        elif not hasattr(item_or_item_name, 'name'):
-            raise Exception("\"{}\" is not a string or Item".format(item_or_item_name))
-        
-        if scope.itemRegistry.getItems(item.name) == []:
-            raise Exception("\"{}\" is not in the ItemRegistry".format(item.name))
-        remove_all_links(item)
-        JythonItemProvider.remove(item)
+        item = remove_all_links(item_or_item_name)
+        if item is None:
+            log.debug("Item cannot be removed because it does not exist in the ItemRegistry: [{}]".format(item.name))
+            return None
+
         ManagedItemProvider.remove(item.name)
-        log.debug("Item removed: [{}]".format(item))
+        if scope.itemRegistry.getItems(item.name) == []:
+            log.debug("Item removed: [{}]".format(item.name))
+            return item
+        else:
+            log.warn("Failed to remove Item from the ItemRegistry: [{}]".format(item.name))
+            return None
     except:
         import traceback
         log.error(traceback.format_exc())
+        return None

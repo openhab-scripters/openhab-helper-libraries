@@ -10,6 +10,11 @@ try:
 except:
     from org.openhab.core.types import TypeParser
 
+try:
+    from org.openhab.core.thing import ChannelUID
+except:
+    from org.eclipse.smarthome.core.thing import ChannelUID
+
 from core.log import logging, LOG_PREFIX
 from core.jsr223 import scope
 from core.actions import PersistenceExtensions
@@ -132,3 +137,33 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
 def sendCommandCheckFirst(itemName, newValue, floatPrecision=None):
     ''' See postUpdateCheckFirst '''
     return postUpdateCheckFirst(itemName, newValue, sendACommand=True, floatPrecision=floatPrecision)
+
+def validate_item(item_or_item_name):# returns Item or None
+    item = item_or_item_name
+    if isinstance(item, basestring):
+        if scope.itemRegistry.getItems(item) == []:
+            log.warn("[{}] is not in the ItemRegistry".format(item))
+            return None
+        else:
+            item = scope.itemRegistry.getItem(item_or_item_name)
+    elif not hasattr(item_or_item_name, 'name'):
+        log.warn("[{}] is not a string or Item".format(item))
+        return None
+
+    if scope.itemRegistry.getItems(item.name) == []:
+        log.warn("[{}] is not in the ItemRegistry".format(item.name))
+        return None
+
+    return item
+
+def validate_channel_uid(channel_uid_or_string):# returns ChannelUID or None
+    channel_uid = channel_uid_or_string
+    if isinstance(channel_uid_or_string, basestring):
+        channel_uid = ChannelUID(channel_uid_or_string)
+    elif not isinstance(channel_uid_or_string, ChannelUID):
+        log.warn("[{}] is not a string or ChannelUID".format(channel_uid_or_string))
+        return None
+    if scope.things.getChannel(channel_uid) is None:
+        log.warn("[{}] is not a valid Channel".format(channel_uid))
+        return None
+    return channel_uid
