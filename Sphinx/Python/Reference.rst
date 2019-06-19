@@ -9,6 +9,20 @@ Suggested reading
 * https://wiki.python.org/moin/BeginnersGuide
 * https://docs.python.org/2/
 
+Scripts vs. Modules
+===================
+
+It's important to understand the distinction between Jython ``scripts`` and ``modules`` in regards to openhab scripted automation.
+A Jython script is loaded by the `javax.script` script engine manager (formerly known as JSR223) that is integrated into the Next-Generation Rule Engine within openHAB Core.
+Each time a script file is loaded, openHAB creates an execution context for that script.
+When the file is modified, openHAB will destroy the old script context and create a new one.
+This means any objects (variables, classes, etc.) previously defined in the script will be lost when the script is reloaded.
+
+A Jython module is loaded by Jython itself through the standard Python `import` directive and uses `sys.path`.
+The normal Python module loading behavior applies.
+This means the module is normally loaded only once, and is not reloaded when the module source code changes.
+
+
 Modifying/Reloading Modules
 ===========================
 
