@@ -1,17 +1,85 @@
 """
-This is a community script distributed together with Jython scripting for openHAB 2.x https://github.com/openhab-scripters/openhab-helper-libraries. To run, this script should be placed into the ``\automation\jsr223\community\`` directory. Even better is to create a symbolic link from ``\automation\jsr223\community\weatherStationUploader.py`` to ``Community\WeatherStationUploader\automation\jsr223\community\weatherStationUploader.py``.
+:Author: `besynnerlig <https://github.com/besynnerlig>`_
+:Version: **4.0.0**
 
-You will also need to insert the example configuration entries found in ``Community\WeatherStationUploader\automation\lib\python\configuration.py.example`` into your openHab2-jython configuration file e.g. ``automation\lib\python\configuration.py``. After doing that, edit the configuration data to suit your needs.
+Share your openHAB weather sensors data with the world!  It’s fun, rewarding,
+and can help others planning out their day or weekend!
 
-This script is dependent of an external library named meteocalc. To install and use meteocalc, please have a look at : `<https://pypi.org/project/meteocalc/>`.
 
-Example installation command:
+About
+-----
 
-.. code-block::
+This software is distributed as a community submission to the
+`openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_. 
+WeatherStationUploader enables personal weather station owners to UPLOAD
+weather data in real time to Weather Underground.
 
-    sudo pip install meteocalc && sudo ln -s /usr/local/lib/python2.7/dist-packages/meteocalc meteocalc
 
-Edit ``classutils.py``, change line 5 to ``PYTHON2 = 2#sys.version_info.major``. You should also add the directory ``/usr/local/lib/python2.7/dist-packages`` to the ``-Dpython.path`` in the EXTRA_JAVA_OPTS environment variable, typically found in ``/etc/default/openhab2``, or if you have made a manual OH installation it can be set in ``/opt/openhab2/start.sh``.
+Prerequisites
+-------------
+
+The `meteocalc library <https://pypi.org/project/meteocalc/>`_ is used for
+some calculations in the script. It must be installed and accessible from
+within the openHAB jsr223 environment. This is an example of how it can be
+done on an Ubuntu installation. It might look different on your system.
+
+#. Run ``sudo pip install meteocalc``.
+#. openHAB and Jython must be configured to find your downloaded python 
+   libraries. There are several ways to do this. One way is to add a 
+   ``-Dpython.path=mypath1:mypath2`` to ``/etc/default/openhab2``. For
+   example, ``-Dpython.path=/etc/openhab2/automation/lib/python:/usr/local/lib/python2.7/dist-packages``.
+   You can also modify the ``sys.path`` list in a Jython script that loads
+   early. Or, as an alternative, you can create a symlink like
+   ``sudo ln -s /usr/local/lib/python2.7/dist-packages/meteocalc /etc/openhab2/automation/lib/python/meteocalc``
+   In this example, the directory ``/etc/openhab2/automation/lib/python`` is
+   already defined as openHAB's python library search path.
+#. Edit classutils.py and change line 5 to ``PYTHON2 = 2#sys.version_info.major``.
+
+
+Installation
+------------
+
+After the prerequisites are met:
+
+* Register a new PWS (Personal Weather Station) at `Weather Underground <https://www.wunderground.com/personal-weather-station/signup>`_.
+  Note your station ID and station password.
+* Follow the instruction for how to `install a community submitted package <https://openhab-scripters.github.io/openhab-helper-libraries/Getting%20Started/Installation/Installation.html>`_.
+* Edit the configuration dictionary ``weatherStationUploader_configuration``
+  that you've previously inserted into the openhab-helper-libraries
+  configuration file. Make sure that the Weather Underground station ID and
+  password are set to match the credentials that you were given when
+  registering your PWS.
+* Reload the openhab-helper-libraries configuration as described in `Modifying/Reloading Modules <https://openhab-scripters.github.io/openhab-helper-libraries/Python/Reference.html#modifying-reloading-modules>`_.
+* Watch the openHAB debug output for any errors or warnings.
+
+
+Release Notices
+---------------
+
+Below are important instructions if you are **upgrading** weatherStationUploader from a previous version.
+If you are creating a new installation, you can ignore what follows.
+
+**PLEASE MAKE SURE THAT YOU GO THROUGH ALL STEPS BELOW WHERE IT SAYS "BREAKING CHANGE"... DON'T SKIP ANY VERSION**
+
+**Version 4.0.0**
+    * **BREAKING CHANGE**: The script is now distributed as a part of
+      `openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_.
+      If lucid had been previously installed, it should be completely removed. 
+
+
+.. admonition:: **Disclaimer**
+
+    THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+    EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+    TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 """
 
 __version__ = '4.0.0'

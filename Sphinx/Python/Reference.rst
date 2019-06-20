@@ -23,8 +23,8 @@ The normal Python module loading behavior applies.
 This means the module is normally loaded only once, and is not reloaded when the module source code changes.
 
 
-Modifying/Reloading Modules
-===========================
+Modifying and Reloading Modules
+===============================
 
 Changes to a module will not take effect until all other modules and scripts that have imported it have been reloaded.
 Restarting openHAB will remedy this, but another option is to use the reload() function:
