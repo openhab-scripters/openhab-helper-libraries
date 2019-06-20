@@ -87,7 +87,7 @@
             
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
 </ul>
@@ -105,7 +105,8 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#suggested-reading">Suggested reading</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#modifying-reloading-modules">Modifying/Reloading Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scripts-vs-modules">Scripts vs. Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modifying-and-reloading-modules">Modifying and Reloading Modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#custom-modules">Custom Modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-locations">Module Locations</a></li>
 </ul>
@@ -192,8 +193,19 @@
 <li><p><a class="reference external" href="https://docs.python.org/2/">https://docs.python.org/2/</a></p></li>
 </ul>
 </div>
-<div class="section" id="modifying-reloading-modules">
-<h2>Modifying/Reloading Modules<a class="headerlink" href="#modifying-reloading-modules" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scripts-vs-modules">
+<h2>Scripts vs. Modules<a class="headerlink" href="#scripts-vs-modules" title="Permalink to this headline">¶</a></h2>
+<p>It’s important to understand the distinction between Jython <code class="docutils literal notranslate"><span class="pre">scripts</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code> in regards to openhab scripted automation.
+A Jython script is loaded by the <cite>javax.script</cite> script engine manager (formerly known as JSR223) that is integrated into the Next-Generation Rule Engine within openHAB Core.
+Each time a script file is loaded, openHAB creates an execution context for that script.
+When the file is modified, openHAB will destroy the old script context and create a new one.
+This means any objects (variables, classes, etc.) previously defined in the script will be lost when the script is reloaded.</p>
+<p>A Jython module is loaded by Jython itself through the standard Python <cite>import</cite> directive and uses <cite>sys.path</cite>.
+The normal Python module loading behavior applies.
+This means the module is normally loaded only once, and is not reloaded when the module source code changes.</p>
+</div>
+<div class="section" id="modifying-and-reloading-modules">
+<h2>Modifying and Reloading Modules<a class="headerlink" href="#modifying-and-reloading-modules" title="Permalink to this headline">¶</a></h2>
 <p>Changes to a module will not take effect until all other modules and scripts that have imported it have been reloaded.
 Restarting openHAB will remedy this, but another option is to use the reload() function:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">myModule</span>

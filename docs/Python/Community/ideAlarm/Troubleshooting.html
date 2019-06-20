@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ideAlarm Troubleshooting and FAQ &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Links" href="Links.html" />
+    <link rel="prev" title="Uninstall ideAlarm" href="Uninstall.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Core.html">Core</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Community.html">Community</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Alexa Speak and Respond.html">Alexa Speak and Respond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../AutoRemote.html">AutoRemote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ClickaTell.html">ClickaTell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../OpenWeatherMap.html">OpenWeatherMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Sonos.html">Sonos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../WeatherStationUploader.html">WeatherStationUploader</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../ideAlarm.html">ideAlarm</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../ideAlarm.html#about">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ideAlarm.html#release-notices">Release Notices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Key Concepts.html">ideAlarm Key Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Glossary.html">ideAlarm Glossary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Configuration.html">ideAlarm Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Then What.html">Then what?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Arm Disarm.html">Arming and Disarming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Event Helpers.html">ideAlarm Event Helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="API.html">ideAlarm API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Updating.html">Updating ideAlarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Uninstall.html">Uninstall ideAlarm</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ideAlarm Troubleshooting and FAQ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Links.html">Links</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../Community.html">Community</a> &raquo;</li>
+        
+          <li><a href="../ideAlarm.html">ideAlarm</a> &raquo;</li>
+        
+      <li>ideAlarm Troubleshooting and FAQ</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="idealarm-troubleshooting-and-faq">
+<h1>ideAlarm Troubleshooting and FAQ<a class="headerlink" href="#idealarm-troubleshooting-and-faq" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><cite>ideAlarm Troubleshooting and FAQ &lt;ideAlarm Troubleshooting and FAQ&gt;</cite></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#table-of-contents"><span class="std std-ref">Table of Contents</span></a></p></li>
+<li><p><a class="reference internal" href="#faq"><span class="std std-ref">FAQ</span></a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting"><span class="std std-ref">Troubleshooting</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="faq">
+<h3>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h3>
+<p><strong>How do I reset the alarm Zone status after an alert?</strong></p>
+<p>Just toggle one of the 2 arming mode toggle switches that you have defined for your alarm zone.
+That will disarm the zone and it will also reset the zone’s status to “Normal”.
+Sirens will be switched off automatically.</p>
+<p><strong>Will I get discount on my home insurance if I use ideAlarm?</strong></p>
+<p>No.
+IdeAlarm will never be graded and as such won’t meet the requirements of home insurance companies.
+It won’t allow to become a professionally monitored security system.
+On the other hand, you don’t have to pay for monthly monitoring to a surveillance company.
+No expenses for maintenance contracts.</p>
+<p><strong>How can I improve the security of ideAlarm</strong></p>
+<p>Get an UPS to your openHAB hardware.
+An intruder might cut or simply turn off the mains power.</p>
+<p><strong>I believe I’ve found a bug</strong></p>
+<p>Please open an issue.
+In order to be able to help you and to give you the best support, please include the following information:</p>
+<ul class="simple">
+<li><p>Copy the text from your configuration file.
+Use a code block, please.</p></li>
+<li><p>Set the logging level to DEBUG.</p></li>
+<li><p>Make the error occur and copy the relevant text from the openHAB log to your issue report.
+Use a code block, please.</p></li>
+<li><p>If relevant, describe how to reproduce the problem reported.</p></li>
+</ul>
+</div>
+<div class="section" id="troubleshooting">
+<h3>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Check that other openhab-helper-libraries jsr223 jython scripts runs fine.
+There are simple <a class="reference internal" href="../../../Examples/Examples.html#examples"><span class="std std-ref">example scripts</span></a> that that you can try out.</p></li>
+<li><p>Check that you have the latest version of openhab-helper-libraries.
+If you just upgraded from an earlier version, check again that you made the necessary steps according to the <a class="reference internal" href="../ideAlarm.html#release-notices"><span class="std std-ref">Release Notices</span></a>.</p></li>
+<li><p>Check your openhab-helper-libraries configuration file and make sure that it’s valid python syntax.</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Community/ideAlarm/Troubleshooting.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

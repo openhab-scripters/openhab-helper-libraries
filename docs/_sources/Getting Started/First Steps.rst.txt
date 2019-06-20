@@ -6,7 +6,7 @@ First Steps
 
     .. group-tab:: Python
 
-        If you have made it to this page you should have entries from the ``hello_world.py`` script appearing in your openHAB log.
+        If you have made it to this page, you should have entries from the ``hello_world.py`` script appearing in your openHAB log.
         Let's take a closer look at what is making that happen.
         Here is the rule from ``hello_world.py``:
 
@@ -15,10 +15,10 @@ First Steps
                 from core.rules import rule
                 from core.triggers import when
 
-                @rule("Hello World cron rule (decorator)", description="This is an example rule that demonstrates using a cron rule with decorators", tags=["Test tag", "Hello World"])# [description and tags are optional]
+                @rule("Jython Hello World (cron decorators)", description="This is an example cron triggered rule using decorators", tags=["Test tag", "Hello World"])# [description and tags are optional]
                 @when("Time cron 0/10 * * * * ?")
-                def helloWorldDecoratorCron(event):
-                    helloWorldDecoratorCron.log.info("This is a 'hello world!' from a Jython rule (decorator): Cron")
+                def hello_world_cron_decorators(event):
+                    hello_world_cron_decorators.log.info("Hello World!")
             
         It is written using the decorators provided by this library.
         This is by far the easiest way to write rules, and has been modelled after the syntax of the openHAB DSL to ease migration.
@@ -28,7 +28,7 @@ First Steps
 
             .. code-block:: python
 
-                def helloWorldDecoratorCron(event):
+                def hello_world_cron_decorators(event):
                     # your code here
 
         You can name this function almost anything you want, but it must be unique in the file it is in.
@@ -38,8 +38,8 @@ First Steps
 
             .. code-block:: python
 
-                def helloWorldDecoratorCron(event):
-                    helloWorldDecoratorCron.log.info("This is a 'hello world!' from a Jython rule (decorator): Cron")
+                def hello_world_cron_decorators(event):
+                    hello_world_cron_decorators.log.info("This is a 'hello world!' from a Jython rule (decorator): Cron")
 
         The ``.info`` part is the log level.
         More information on these can be found in :doc:`../Guides/Logging`.
@@ -63,7 +63,7 @@ First Steps
             .. code-block:: python
 
                 @rule("My Rule Name", description="My Rule Description", tags=["Test tag", "Hello World"])
-                def helloWorldDecoratorCron(event):
+                def hello_world_cron_decorators(event):
                     # your code here
 
         Now the rule above is written correctly, but it will never run because we haven't told openHAB what should trigger the rule.

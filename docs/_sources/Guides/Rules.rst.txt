@@ -46,7 +46,7 @@ Decorators
 ==========
 
 The easiest way to write rules, and the most familiar if you have used the openHAB rules DSL, is using the decorators provided by this library.
-`Decorators <https://wiki.python.org/moin/PythonDecorators>_` are part of the Python language and allow you to modify, or "decorate", a function, method or class.
+`Decorators <https://wiki.python.org/moin/PythonDecorators>`_ are part of the Python language and allow you to modify, or "decorate", a function, method or class.
 The libraries provide a decorator called ``rule`` for defining rules and another called ``when`` for adding triggers to rules.
 This section will show you how to define rules and triggers, and it will also compare their usage with the syntax of the rules DSL to help with migration.
 
@@ -299,6 +299,10 @@ Raw API
 
     The following example shows how to create a rule and triggers using the raw API without any support from the helper libraries.
 
+    .. note::
+
+        Trigger names must be unique within the scope of a rule instance, and can only contain alphanumeric characters, hythens, and underscores (no spaces)... ``[A-Za-z0-9_-]``.
+
     .. tabs::
 
         .. group-tab:: Python
@@ -314,14 +318,14 @@ Raw API
                     def __init__(self):
                         self.triggers = [
                             TriggerBuilder.create()
-                                    .withId("Hello_World_Cron_Trigger")# no spaces allowed in trigger ID
+                                    .withId("Hello_World_Cron_Trigger")
                                     .withTypeUID("timer.GenericCronTrigger")
                                     .withConfiguration(
                                         Configuration({
                                             "cronExpression": "0/10 * * * * ?"
                                         })).build(),
                             TriggerBuilder.create()
-                                    .withId("Hello_World_Item_State_Trigger")# no spaces allowed in trigger ID
+                                    .withId("Hello_World_Item_State_Trigger")
                                     .withTypeUID("timer.GenericCronTrigger")
                                     .withConfiguration(
                                         Configuration({

@@ -93,7 +93,7 @@
             
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
 </ul>
@@ -228,7 +228,7 @@ The decorators are abstractions (simplifications) of the extensions, which are a
 <div class="section" id="decorators">
 <h2>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h2>
 <p>The easiest way to write rules, and the most familiar if you have used the openHAB rules DSL, is using the decorators provided by this library.
-<cite>Decorators &lt;https://wiki.python.org/moin/PythonDecorators&gt;_</cite> are part of the Python language and allow you to modify, or “decorate”, a function, method or class.
+<a class="reference external" href="https://wiki.python.org/moin/PythonDecorators">Decorators</a> are part of the Python language and allow you to modify, or “decorate”, a function, method or class.
 The libraries provide a decorator called <code class="docutils literal notranslate"><span class="pre">rule</span></code> for defining rules and another called <code class="docutils literal notranslate"><span class="pre">when</span></code> for adding triggers to rules.
 This section will show you how to define rules and triggers, and it will also compare their usage with the syntax of the rules DSL to help with migration.</p>
 <div class="section" id="imports">
@@ -576,6 +576,10 @@ Note the use of the scriptExtensions, which were not needed with the decorators.
 <h2>Raw API<a class="headerlink" href="#raw-api" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>The following example shows how to create a rule and triggers using the raw API without any support from the helper libraries.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Trigger names must be unique within the scope of a rule instance, and can only contain alphanumeric characters, hythens, and underscores (no spaces)… <code class="docutils literal notranslate"><span class="pre">[A-Za-z0-9_-]</span></code>.</p>
+</div>
 <div class="sphinx-tabs docutils container">
 <div class="ui top attached tabular menu sphinx-menu docutils container">
 <div class="active item sphinx-data-tab-UHl0aG9u docutils container">
@@ -604,14 +608,14 @@ Note the use of the scriptExtensions, which were not needed with the decorators.
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">TriggerBuilder</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-                    <span class="o">.</span><span class="n">withId</span><span class="p">(</span><span class="s2">&quot;Hello_World_Cron_Trigger&quot;</span><span class="p">)</span><span class="c1"># no spaces allowed in trigger ID</span>
+                    <span class="o">.</span><span class="n">withId</span><span class="p">(</span><span class="s2">&quot;Hello_World_Cron_Trigger&quot;</span><span class="p">)</span>
                     <span class="o">.</span><span class="n">withTypeUID</span><span class="p">(</span><span class="s2">&quot;timer.GenericCronTrigger&quot;</span><span class="p">)</span>
                     <span class="o">.</span><span class="n">withConfiguration</span><span class="p">(</span>
                         <span class="n">Configuration</span><span class="p">({</span>
                             <span class="s2">&quot;cronExpression&quot;</span><span class="p">:</span> <span class="s2">&quot;0/10 * * * * ?&quot;</span>
                         <span class="p">}))</span><span class="o">.</span><span class="n">build</span><span class="p">(),</span>
             <span class="n">TriggerBuilder</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-                    <span class="o">.</span><span class="n">withId</span><span class="p">(</span><span class="s2">&quot;Hello_World_Item_State_Trigger&quot;</span><span class="p">)</span><span class="c1"># no spaces allowed in trigger ID</span>
+                    <span class="o">.</span><span class="n">withId</span><span class="p">(</span><span class="s2">&quot;Hello_World_Item_State_Trigger&quot;</span><span class="p">)</span>
                     <span class="o">.</span><span class="n">withTypeUID</span><span class="p">(</span><span class="s2">&quot;timer.GenericCronTrigger&quot;</span><span class="p">)</span>
                     <span class="o">.</span><span class="n">withConfiguration</span><span class="p">(</span>
                         <span class="n">Configuration</span><span class="p">({</span>
