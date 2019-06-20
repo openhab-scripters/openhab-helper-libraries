@@ -1,31 +1,66 @@
 """
-***************
-ideAlarm v3.0.1
-***************
+:Author: `besynnerlig <https://github.com/besynnerlig>`_
+:Version: **4.0.0**
 
-Multi Zone Home Alarm Script for openHAB jsr223 jython
+Multi Zone Home Alarm package for openHAB. This software is distributed as a
+community submission to the `openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_. 
 
-Stage of development
---------------------
-
-This software should be considered to be in it's early stage of development. It is working without any known issues in a couple of installations. We are currently looking for people interested to contribute to this project. Please join the OH-Jython-Scripters team if you feel that you can contribute in any way. We need testers, developers, and native english speakers to give the `Wiki <https://github.com/OH-Jython-Scripters/ideAlarm/wiki>`_ an overhaul.
-
-In case you decide to install and try this software in it's current state, you should already have some skills when it comes to openHAB, Jython scripting and the Linux environment.
 
 About
 -----
 
-The name ideAlarm comes from merging the two words ideal and alarm. ideAlarm is written in Jython and runs on openHAB 2. Your home is your castle. Keeping it safe and secure is a top priority of many homeowners. With ideAlarm, you can easily set up your own DIY Home Security System using the sensors that you already have in openHAB.
+The name ideAlarm comes from merging the two words ideal and alarm. Your home
+is your castle. Keeping it safe and secure is a top priority of many
+homeowners. With ideAlarm, you can easily set up your own DIY Home Security
+System using the sensors that you already have in openHAB.
 
-Get started!
-------------
 
-Wiki with installation instructions: https://github.com/OH-Jython-Scripters/ideAlarm/wiki
+Release Notices
+---------------
 
-Disclaimer
-----------
+Below are important instructions if you are **upgrading** weatherStationUploader from a previous version.
+If you are creating a new installation, you can ignore what follows.
 
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**PLEASE MAKE SURE THAT YOU GO THROUGH ALL STEPS BELOW WHERE IT SAYS "BREAKING CHANGE"... DON'T SKIP ANY VERSION**
+
+    **Version 4.0.0**
+        **BREAKING CHANGE**: The script is now distributed as a part of
+        `openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_.
+        If lucid had been previously installed, it should be completely removed. 
+
+    **Version 3.0.0**
+        **BREAKING CHANGE** ideAlarm requires at least `lucid V 1.0.0 <https://github.com/OH-Jython-Scripters/lucid>`_.
+
+        **BREAKING CHANGE** if you are using a `custom helper functions script for various alarm events <https://github.com/OH-Jython-Scripters/ideAlarm/wiki/Event-Helpers#custom-helper-functions-for-various-alarm-events>`_ you should revise it so that it's working with the new version of lucid. 
+        Please have a look at the `lucid release notices <https://github.com/OH-Jython-Scripters/lucid/blob/master/RELEASE_NOTICES_PLEASE_READ.md>`_ and optionally look at the `example event helpers script <https://github.com/OH-Jython-Scripters/ideAlarm/blob/master/automation/lib/python/idealarm/custom_verbose_example.py>`_.
+
+    **Version 2.0.0**
+        **BREAKING CHANGE** ideAlarm new dependency: `lucid, an openHAB 2.x jsr223 Jython helper library <https://github.com/OH-Jython-Scripters/lucid>`_.
+        Review that you've setup the item groups correctly as `described in wiki <https://github.com/OH-Jython-Scripters/ideAlarm/wiki/First-Installation#define-item-groups-needed-for-persistence>`_.
+        Removed dependency of `openhab2-jython <https://github.com/OH-Jython-Scripters/openhab2-jython>`_. (All openhab2-jython functionality that's needed is now found in `lucid <https://github.com/OH-Jython-Scripters/lucid>`_)
+        Removed dependency of `mylib <https://github.com/OH-Jython-Scripters/mylib/>`_ (All mylib functionality that's needed is now found in `lucid <https://github.com/OH-Jython-Scripters/lucid>`_)
+
+    **Version 1.0.0**
+        Added version info string to logging.
+        Added ideAlarm function `__version__()`
+
+    **Version 0.9.0**
+        Initial version.
+
+
+.. admonition:: **Disclaimer**
+
+    THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+    EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+    TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+    LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 """
 import weakref # Using this to prevent problems with garbage collection
 

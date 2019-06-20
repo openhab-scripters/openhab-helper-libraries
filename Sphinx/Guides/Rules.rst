@@ -46,7 +46,7 @@ Decorators
 ==========
 
 The easiest way to write rules, and the most familiar if you have used the openHAB rules DSL, is using the decorators provided by this library.
-`Decorators <https://wiki.python.org/moin/PythonDecorators>_` are part of the Python language and allow you to modify, or "decorate", a function, method or class.
+`Decorators <https://wiki.python.org/moin/PythonDecorators>`_ are part of the Python language and allow you to modify, or "decorate", a function, method or class.
 The libraries provide a decorator called ``rule`` for defining rules and another called ``when`` for adding triggers to rules.
 This section will show you how to define rules and triggers, and it will also compare their usage with the syntax of the rules DSL to help with migration.
 
