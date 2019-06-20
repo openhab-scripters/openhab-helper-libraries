@@ -93,7 +93,7 @@
             
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="File Locations.html">File Locations</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">First Steps</a></li>
 </ul>
@@ -203,17 +203,17 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
-<p>If you have made it to this page you should have entries from the <code class="docutils literal notranslate"><span class="pre">hello_world.py</span></code> script appearing in your openHAB log.
+<p>If you have made it to this page, you should have entries from the <code class="docutils literal notranslate"><span class="pre">hello_world.py</span></code> script appearing in your openHAB log.
 Let’s take a closer look at what is making that happen.
 Here is the rule from <code class="docutils literal notranslate"><span class="pre">hello_world.py</span></code>:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
 <span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
 
-<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Hello World cron rule (decorator)&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is an example rule that demonstrates using a cron rule with decorators&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Test tag&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">])</span><span class="c1"># [description and tags are optional]</span>
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Jython Hello World (cron decorators)&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is an example cron triggered rule using decorators&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Test tag&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">])</span><span class="c1"># [description and tags are optional]</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 0/10 * * * * ?&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">helloWorldDecoratorCron</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-    <span class="n">helloWorldDecoratorCron</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;This is a &#39;hello world!&#39; from a Jython rule (decorator): Cron&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello_world_cron_decorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">hello_world_cron_decorators</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -223,7 +223,7 @@ Here we will take a closer look at what is happening.
 Lets start with the python code to be executed when the rule triggers.
 This needs to be written as a function with one argument:</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">helloWorldDecoratorCron</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello_world_cron_decorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="c1"># your code here</span>
 </pre></div>
 </div>
@@ -233,8 +233,8 @@ The code you write in the function is entirely python.
 The <code class="docutils literal notranslate"><span class="pre">rule</span></code> decorator provides your rule function with a built-in logger to make things easy.
 It is an attribute of your function and is accessed using <code class="docutils literal notranslate"><span class="pre">myFunctionName.log</span></code> followed by <code class="docutils literal notranslate"><span class="pre">.level</span></code> to indicate the logging level, and finally <code class="docutils literal notranslate"><span class="pre">('My</span> <span class="pre">log</span> <span class="pre">message')</span></code> like so:</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">helloWorldDecoratorCron</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-    <span class="n">helloWorldDecoratorCron</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;This is a &#39;hello world!&#39; from a Jython rule (decorator): Cron&quot;</span><span class="p">)</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello_world_cron_decorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">hello_world_cron_decorators</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;This is a &#39;hello world!&#39; from a Jython rule (decorator): Cron&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -257,7 +257,7 @@ This name must be unique in your openHAB instance and will be used as the displa
 Optionally, you can also provide a longer description of what your rule does and a list of tags that can be used to categorize and help search for rules in Paper UI.</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;My Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;My Rule Description&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Test tag&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">helloWorldDecoratorCron</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hello_world_cron_decorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="c1"># your code here</span>
 </pre></div>
 </div>

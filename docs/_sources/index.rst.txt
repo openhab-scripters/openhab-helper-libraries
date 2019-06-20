@@ -19,7 +19,7 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     :includehidden:
     :maxdepth: 2
 
-    Getting Started/Installation/Installation.rst
+    Getting Started/Installation.rst
     Getting Started/File Locations.rst
     Getting Started/First Steps.rst
 

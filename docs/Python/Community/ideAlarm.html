@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>IdeAlarm &mdash; openHAB Helper Libraries  documentation</title>
+  <title>ideAlarm &mdash; openHAB Helper Libraries  documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="OpenWeatherMap" href="OpenWeatherMap.html" />
-    <link rel="prev" title="Esper" href="Esper.html" /> 
+    <link rel="next" title="ideAlarm Key Concepts" href="ideAlarm/Key Concepts.html" />
+    <link rel="prev" title="WeatherStationUploader" href="WeatherStationUploader.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,7 +87,7 @@
             
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/Installation/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/First Steps.html">First Steps</a></li>
 </ul>
@@ -111,17 +111,26 @@
 <li class="toctree-l2"><a class="reference internal" href="ClickaTell.html">ClickaTell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Esper.html">Esper</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">IdeAlarm</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-scripts.community.idealarm.idealarm">Scripts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-community.idealarm">Packages and Modules</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#idealarm-v3-0-1">ideAlarm v3.0.1</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="OpenWeatherMap.html">OpenWeatherMap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Sonos.html">Sonos</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WeatherStationUploader.html">WeatherStationUploader</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ideAlarm</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#about">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#release-notices">Release Notices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Key Concepts.html">ideAlarm Key Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Glossary.html">ideAlarm Glossary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Installation.html">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Configuration.html">ideAlarm Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Then What.html">Then what?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Arm Disarm.html">Arming and Disarming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Event Helpers.html">ideAlarm Event Helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/API.html">ideAlarm API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Updating.html">Updating ideAlarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Uninstall.html">Uninstall ideAlarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Troubleshooting.html">ideAlarm Troubleshooting and FAQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ideAlarm/Links.html">Links</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -181,7 +190,7 @@
         
           <li><a href="../Community.html">Community</a> &raquo;</li>
         
-      <li>IdeAlarm</li>
+      <li>ideAlarm</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -196,32 +205,65 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="idealarm">
-<h1>IdeAlarm<a class="headerlink" href="#idealarm" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-scripts.community.idealarm.idealarm">
-<span id="scripts"></span><h2>Scripts<a class="headerlink" href="#module-scripts.community.idealarm.idealarm" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-community.idealarm">
-<span id="packages-and-modules"></span><h2>Packages and Modules<a class="headerlink" href="#module-community.idealarm" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="idealarm-v3-0-1">
-<h3>ideAlarm v3.0.1<a class="headerlink" href="#idealarm-v3-0-1" title="Permalink to this headline">¶</a></h3>
-<p>Multi Zone Home Alarm Script for openHAB jsr223 jython</p>
-<div class="section" id="stage-of-development">
-<h4>Stage of development<a class="headerlink" href="#stage-of-development" title="Permalink to this headline">¶</a></h4>
-<p>This software should be considered to be in it’s early stage of development. It is working without any known issues in a couple of installations. We are currently looking for people interested to contribute to this project. Please join the OH-Jython-Scripters team if you feel that you can contribute in any way. We need testers, developers, and native english speakers to give the <a class="reference external" href="https://github.com/OH-Jython-Scripters/ideAlarm/wiki">Wiki</a> an overhaul.</p>
-<p>In case you decide to install and try this software in it’s current state, you should already have some skills when it comes to openHAB, Jython scripting and the Linux environment.</p>
-</div>
+  <div class="section" id="module-community.idealarm">
+<span id="idealarm"></span><h1>ideAlarm<a class="headerlink" href="#module-community.idealarm" title="Permalink to this headline">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Author</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://github.com/besynnerlig">besynnerlig</a></p>
+</dd>
+<dt class="field-even">Version</dt>
+<dd class="field-even"><p><strong>4.0.0</strong></p>
+</dd>
+</dl>
+<p>Multi Zone Home Alarm package for openHAB. This software is distributed as a
+community submission to the <a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries">openhab-helper-libraries</a>.</p>
 <div class="section" id="about">
-<h4>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h4>
-<p>The name ideAlarm comes from merging the two words ideal and alarm. ideAlarm is written in Jython and runs on openHAB 2. Your home is your castle. Keeping it safe and secure is a top priority of many homeowners. With ideAlarm, you can easily set up your own DIY Home Security System using the sensors that you already have in openHAB.</p>
+<h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
+<p>The name ideAlarm comes from merging the two words ideal and alarm. Your home
+is your castle. Keeping it safe and secure is a top priority of many
+homeowners. With ideAlarm, you can easily set up your own DIY Home Security
+System using the sensors that you already have in openHAB.</p>
 </div>
-<div class="section" id="get-started">
-<h4>Get started!<a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h4>
-<p>Wiki with installation instructions: <a class="reference external" href="https://github.com/OH-Jython-Scripters/ideAlarm/wiki">https://github.com/OH-Jython-Scripters/ideAlarm/wiki</a></p>
+<div class="section" id="release-notices">
+<h2>Release Notices<a class="headerlink" href="#release-notices" title="Permalink to this headline">¶</a></h2>
+<p>Below are important instructions if you are <strong>upgrading</strong> weatherStationUploader from a previous version.
+If you are creating a new installation, you can ignore what follows.</p>
+<p><strong>PLEASE MAKE SURE THAT YOU GO THROUGH ALL STEPS BELOW WHERE IT SAYS “BREAKING CHANGE”… DON’T SKIP ANY VERSION</strong></p>
+<blockquote>
+<div><dl>
+<dt><strong>Version 4.0.0</strong></dt><dd><p><strong>BREAKING CHANGE</strong>: The script is now distributed as a part of
+<a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries">openhab-helper-libraries</a>.
+If lucid had been previously installed, it should be completely removed.</p>
+</dd>
+<dt><strong>Version 3.0.0</strong></dt><dd><p><strong>BREAKING CHANGE</strong> ideAlarm requires at least <a class="reference external" href="https://github.com/OH-Jython-Scripters/lucid">lucid V 1.0.0</a>.</p>
+<p><strong>BREAKING CHANGE</strong> if you are using a <a class="reference external" href="https://github.com/OH-Jython-Scripters/ideAlarm/wiki/Event-Helpers#custom-helper-functions-for-various-alarm-events">custom helper functions script for various alarm events</a> you should revise it so that it’s working with the new version of lucid.
+Please have a look at the <a class="reference external" href="https://github.com/OH-Jython-Scripters/lucid/blob/master/RELEASE_NOTICES_PLEASE_READ.md">lucid release notices</a> and optionally look at the <a class="reference external" href="https://github.com/OH-Jython-Scripters/ideAlarm/blob/master/automation/lib/python/idealarm/custom_verbose_example.py">example event helpers script</a>.</p>
+</dd>
+<dt><strong>Version 2.0.0</strong></dt><dd><p><strong>BREAKING CHANGE</strong> ideAlarm new dependency: <a class="reference external" href="https://github.com/OH-Jython-Scripters/lucid">lucid, an openHAB 2.x jsr223 Jython helper library</a>.
+Review that you’ve setup the item groups correctly as <a class="reference external" href="https://github.com/OH-Jython-Scripters/ideAlarm/wiki/First-Installation#define-item-groups-needed-for-persistence">described in wiki</a>.
+Removed dependency of <a class="reference external" href="https://github.com/OH-Jython-Scripters/openhab2-jython">openhab2-jython</a>. (All openhab2-jython functionality that’s needed is now found in <a class="reference external" href="https://github.com/OH-Jython-Scripters/lucid">lucid</a>)
+Removed dependency of <a class="reference external" href="https://github.com/OH-Jython-Scripters/mylib/">mylib</a> (All mylib functionality that’s needed is now found in <a class="reference external" href="https://github.com/OH-Jython-Scripters/lucid">lucid</a>)</p>
+</dd>
+<dt><strong>Version 1.0.0</strong></dt><dd><p>Added version info string to logging.
+Added ideAlarm function <cite>__version__()</cite></p>
+</dd>
+<dt><strong>Version 0.9.0</strong></dt><dd><p>Initial version.</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="admonition-disclaimer admonition">
+<p class="admonition-title"><strong>Disclaimer</strong></p>
+<p>THIS SOFTWARE IS PROVIDED BY THE AUTHOR “AS IS” AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 </div>
-<div class="section" id="disclaimer">
-<h4>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h4>
-<p>THIS SOFTWARE IS PROVIDED BY THE AUTHOR “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 <dl class="function">
 <dt id="community.idealarm.isActive">
 <code class="sig-prename descclassname">community.idealarm.</code><code class="sig-name descname">isActive</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="headerlink" href="#community.idealarm.isActive" title="Permalink to this definition">¶</a></dt>
@@ -414,7 +456,58 @@ group ‘G_Motion’</p>
 </dd></dl>
 
 </div>
-</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Key Concepts.html">ideAlarm Key Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Key Concepts.html#reliability">Reliability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Key Concepts.html#helps-you-to-maintain-safety-also-when-unarmed">Helps You to Maintain Safety Also When Unarmed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Key Concepts.html#alarm-zones">Alarm Zones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Key Concepts.html#highly-customizable">Highly Customizable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Key Concepts.html#alarm-zone-state">Alarm Zone State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Key Concepts.html#alarm-zone-arming-mode">Alarm Zone Arming Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Key Concepts.html#a-sensor-can-be-enabled-or-disabled">A Sensor Can Be Enabled or Disabled</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Glossary.html">ideAlarm Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Installation.html#installation-of-the-idealarm-package">Installation of the ideAlarm package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Configuration.html">ideAlarm Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Then What.html">Then what?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Then What.html#after-configuration">After Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Then What.html#create-a-simple-sitemap-for-testing">Create a Simple Sitemap for Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Then What.html#create-event-helpers-in-custom-py">Create Event Helpers in <code class="docutils literal notranslate"><span class="pre">custom.py</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Arm Disarm.html">Arming and Disarming</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Arm Disarm.html#using-the-openhab-web-gui">Using the openHAB Web GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Arm Disarm.html#programatically-e-g-using-scripts">Programatically (e.g. using scripts)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Arm Disarm.html#mqtt-alarm-control-panel">MQTT Alarm Control Panel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Event Helpers.html">ideAlarm Event Helpers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Event Helpers.html#naming">Naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Event Helpers.html#custom-helper-functions-for-various-alarm-events">Custom Helper Functions for Various Alarm Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Event Helpers.html#the-different-events">The Different Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/API.html">ideAlarm API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/API.html#about-the-api">About the API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/API.html#preparations">Preparations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/API.html#the-idealarm-object">The ideAlarm Object</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Updating.html">Updating ideAlarm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Uninstall.html">Uninstall ideAlarm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Troubleshooting.html">ideAlarm Troubleshooting and FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm/Troubleshooting.html#table-of-contents">Table of Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ideAlarm/Links.html">Links</a></li>
+</ul>
 </div>
 </div>
 
@@ -428,7 +521,7 @@ group ‘G_Motion’</p>
         <div align="right">
           
             <br/>
-            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Community/IdeAlarm.rst" class="fa fa-github"> Edit on GitHub</a>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Community/ideAlarm.rst" class="fa fa-github"> Edit on GitHub</a>
           
         </div>
       

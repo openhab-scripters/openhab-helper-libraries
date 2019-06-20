@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Arming and Disarming &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ideAlarm Event Helpers" href="Event Helpers.html" />
+    <link rel="prev" title="Then what?" href="Then What.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Core.html">Core</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Community.html">Community</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Alexa Speak and Respond.html">Alexa Speak and Respond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../AutoRemote.html">AutoRemote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ClickaTell.html">ClickaTell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../OpenWeatherMap.html">OpenWeatherMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Sonos.html">Sonos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../WeatherStationUploader.html">WeatherStationUploader</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../ideAlarm.html">ideAlarm</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../ideAlarm.html#about">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ideAlarm.html#release-notices">Release Notices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Key Concepts.html">ideAlarm Key Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Glossary.html">ideAlarm Glossary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Configuration.html">ideAlarm Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Then What.html">Then what?</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Arming and Disarming</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-the-openhab-web-gui">Using the openHAB Web GUI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#programatically-e-g-using-scripts">Programatically (e.g. using scripts)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mqtt-alarm-control-panel">MQTT Alarm Control Panel</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Event Helpers.html">ideAlarm Event Helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="API.html">ideAlarm API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Updating.html">Updating ideAlarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Uninstall.html">Uninstall ideAlarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Troubleshooting.html">ideAlarm Troubleshooting and FAQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Links.html">Links</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../Community.html">Community</a> &raquo;</li>
+        
+          <li><a href="../ideAlarm.html">ideAlarm</a> &raquo;</li>
+        
+      <li>Arming and Disarming</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="arming-and-disarming">
+<h1>Arming and Disarming<a class="headerlink" href="#arming-and-disarming" title="Permalink to this headline">¶</a></h1>
+<p>There are a few ways that you can arm and disarm an ideAlarm zone.</p>
+<div class="section" id="using-the-openhab-web-gui">
+<h2>Using the openHAB Web GUI<a class="headerlink" href="#using-the-openhab-web-gui" title="Permalink to this headline">¶</a></h2>
+<p>You can of course use the openHAB web GUI to switch the arming mode.
+This is not very convenient though and is probably useful only for testing.</p>
+</div>
+<div class="section" id="programatically-e-g-using-scripts">
+<h2>Programatically (e.g. using scripts)<a class="headerlink" href="#programatically-e-g-using-scripts" title="Permalink to this headline">¶</a></h2>
+<p>You can make scrips in any of openHAB’s scripting environments.
+Below are two JSR223 Jython script examples.
+Both of them are based on Jython scripting for openHAB.</p>
+<div class="section" id="a-simple-jython-script-example">
+<h3>A Simple Jython Script Example<a class="headerlink" href="#a-simple-jython-script-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Bedroom arming&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is the bed room arming rule&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Bedroom_Switch changed to ON&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">bedroom_arming</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">bedroom_arming</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Bedroom button pushed&#39;</span><span class="p">)</span>
+    <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="s1">&#39;Toggle_Z1_Armed_Home&#39;</span><span class="p">,</span> <span class="s1">&#39;ON&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-little-bit-more-advanced-jython-example">
+<h3>A Little Bit More Advanced Jython Example<a class="headerlink" href="#a-little-bit-more-advanced-jython-example" title="Permalink to this headline">¶</a></h3>
+<p>If you have a physical button device that you want to push 3 times within 10 seconds to toggle the arming mode.
+You may want to do like this to make things more obscure, for example if you just use a lighting switch beside the entrance door for arming and disarming.
+Security through obscurity in the example below, that physical button Item is named ‘Spider_Pig_Button’.
+It’s also using the getItemValue function from mylib.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="kn">from</span> <span class="nn">core.utils</span> <span class="kn">import</span> <span class="n">getItemValue</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Spider Pig rule&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Keeps track of how many times the Spider Pig Button has been pressed. Counter will be reset by the expire binding.&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Spider_Pig_Button changed to ON&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">spider_pig</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">qty</span> <span class="o">=</span> <span class="n">getItemValue</span><span class="p">(</span><span class="s1">&#39;Count_Spider_Pig&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">spider_pig</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Spider pig was pressed. Qty={}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qty</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">qty</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="s1">&#39;Toggle_Z1_Armed_Away&#39;</span><span class="p">,</span> <span class="s1">&#39;ON&#39;</span><span class="p">)</span>
+    <span class="n">events</span><span class="o">.</span><span class="n">postUpdate</span><span class="p">(</span><span class="s1">&#39;Count_Spider_Pig&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">qty</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Here is how the definition of the 2 Items might look like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">Count_Spider_Pig</span>  <span class="p">{</span><span class="n">expire</span><span class="o">=</span><span class="s2">&quot;10s,command=0&quot;</span><span class="p">}</span>
+<span class="n">Switch</span> <span class="n">Spider_Pig_Button</span> <span class="s2">&quot;Spider pig button&quot;</span> <span class="o">&lt;</span><span class="n">switch</span><span class="o">&gt;</span> <span class="p">{</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;zwave:device:XXXXXXX:nodeNN:sensor_binary1&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="mqtt-alarm-control-panel">
+<h2>MQTT Alarm Control Panel<a class="headerlink" href="#mqtt-alarm-control-panel" title="Permalink to this headline">¶</a></h2>
+<p>(Untested) You can easily integrate an Alarm Control Panel that communicates using MQTT.
+For example, the MQTT Alarm Control Panel for Home Assistant project might work well for integration with ideAlarm.</p>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>You’d need to:</p>
+<ol class="arabic simple">
+<li><p>Set up a MQTT server.
+Unless you already have one you’d probably want to set up a MQTT message broker such as Mosquitto on the same server as the one that runs openHAB.</p></li>
+<li><p>openHAB MQTT Binding should be installed and configured.</p></li>
+<li><p>Add two openHAB Items like in the example below:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">String</span> <span class="n">Alarm_CPanel_State</span>   <span class="s2">&quot;Alarm CPanel state [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="p">{</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;mqtt:topic:alarmpanel:XXXXXX&quot;</span><span class="p">}</span>
+<span class="n">String</span> <span class="n">Alarm_CPanel_Command</span> <span class="s2">&quot;Alarm CPanel command [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="p">{</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;mqtt:topic:alarmpanel:XXXXX&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The Alarm Control Panel will send an update to the <code class="docutils literal notranslate"><span class="pre">Alarm_CPanel_Command</span></code> Item with a payload to notify ideAlarm to arm or disarm.
+The MQTT service will use the <code class="docutils literal notranslate"><span class="pre">Alarm_CPanel_State</span></code> Item with the payload to notify the Alarm Control Panel of the current ideAlarm state, which will update the interface accordingly.</p>
+<p>When the prerequisites are met, it’s time to make a Custom Helper Function in <code class="docutils literal notranslate"><span class="pre">custom.py</span></code> that will synchronize your newly created Items <code class="docutils literal notranslate"><span class="pre">Alarm_CPanel_State</span></code> and <code class="docutils literal notranslate"><span class="pre">Alarm_CPanel_Command</span></code> with an ideAlarm zone.
+See <cite>Python/Community/IdeAlarm/Configuration:Event helpers</cite>.
+There’s a template custom script that we will use as a starter.
+Note that this is a Python library script so you’d have to reload the Jython rule binding before any changes that you make to the file takes effect.</p>
+<p>Change the function <code class="docutils literal notranslate"><span class="pre">onArmingModeChange</span></code> so that it updates the <code class="docutils literal notranslate"><span class="pre">Alarm_CPanel_State</span></code> Item when there is a change of arming mode for a zone.
+Below is an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">onArmingModeChange</span><span class="p">(</span><span class="n">zone</span><span class="p">,</span> <span class="n">newArmingMode</span><span class="p">,</span> <span class="n">oldArmingMode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function will be called when there is a change of arming mode for a zone.</span>
+<span class="sd">    oldArmingMode is None when initializing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">zone</span><span class="o">.</span><span class="n">zoneNumber</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">oldArmingMode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">newArmingMode</span> <span class="o">==</span> <span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;DISARMED&#39;</span><span class="p">]:</span>
+            <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="s1">&#39;Alarm_CPanel_State&#39;</span><span class="p">,</span> <span class="s1">&#39;disarmed&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">newArmingMode</span> <span class="o">==</span> <span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;ARMED_HOME&#39;</span><span class="p">]:</span>
+            <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="s1">&#39;Alarm_CPanel_State&#39;</span><span class="p">,</span> <span class="s1">&#39;armed_home&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">newArmingMode</span> <span class="o">==</span> <span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;ARMED_AWAY&#39;</span><span class="p">]:</span>
+            <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="s1">&#39;Alarm_CPanel_State&#39;</span><span class="p">,</span> <span class="s1">&#39;armed_away&#39;</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;onArmingModeChange: [{}] ---&gt; [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">),</span> <span class="n">kw</span><span class="p">(</span><span class="n">ARMINGMODE</span><span class="p">,</span> <span class="n">newArmingMode</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>For syncing the new arming modes that comes from the Alarm Control Panel, we create a regular Jython script.
+Below is an example of that:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="kn">from</span> <span class="nn">community.idealarm</span> <span class="kn">import</span> <span class="n">ideAlarm</span><span class="p">,</span> <span class="n">ARMINGMODE</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Sync APC commands&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;MQTT Alarm Control Panel synchronization&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Alarm_CPanel_Command changed&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">sync_apc_commands</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">itemState</span> <span class="o">==</span> <span class="s1">&#39;ARM_HOME&#39;</span> <span class="ow">and</span> <span class="n">ideAlarm</span><span class="o">.</span><span class="n">getZoneStatus</span><span class="p">(</span><span class="s1">&#39;MY_ZONE_NAME&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;ARMED_HOME&#39;</span><span class="p">]:</span>
+        <span class="n">ideAlarm</span><span class="o">.</span><span class="n">alarmZones</span><span class="p">[</span><span class="n">ideAlarm</span><span class="o">.</span><span class="n">getZoneIndex</span><span class="p">(</span><span class="s1">&#39;MY_ZONE_NAME&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">setArmingMode</span><span class="p">(</span><span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;ARMED_HOME&#39;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">itemState</span> <span class="o">==</span> <span class="s1">&#39;ARM_AWAY&#39;</span> <span class="ow">and</span> <span class="n">ideAlarm</span><span class="o">.</span><span class="n">getZoneStatus</span><span class="p">(</span><span class="s1">&#39;MY_ZONE_NAME&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;ARMED_AWAY&#39;</span><span class="p">]:</span>
+        <span class="n">ideAlarm</span><span class="o">.</span><span class="n">alarmZones</span><span class="p">[</span><span class="n">ideAlarm</span><span class="o">.</span><span class="n">getZoneIndex</span><span class="p">(</span><span class="s1">&#39;MY_ZONE_NAME&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">setArmingMode</span><span class="p">(</span><span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;ARMED_AWAY&#39;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">itemState</span> <span class="o">==</span> <span class="s1">&#39;DISARM&#39;</span> <span class="ow">and</span> <span class="n">ideAlarm</span><span class="o">.</span><span class="n">getZoneStatus</span><span class="p">(</span><span class="s1">&#39;MY_ZONE_NAME&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;DISARMED&#39;</span><span class="p">]:</span>
+        <span class="n">ideAlarm</span><span class="o">.</span><span class="n">alarmZones</span><span class="p">[</span><span class="n">ideAlarm</span><span class="o">.</span><span class="n">getZoneIndex</span><span class="p">(</span><span class="s1">&#39;MY_ZONE_NAME&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">setArmingMode</span><span class="p">(</span><span class="n">ARMINGMODE</span><span class="p">[</span><span class="s1">&#39;DISARMED&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Community/ideAlarm/Arm Disarm.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
