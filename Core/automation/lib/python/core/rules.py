@@ -1,10 +1,21 @@
+"""
+The rules module contains some utility functions and a decorator that can:
+
+    1) convert a Jython class into a `SimpleRule`, 
+    2) decorate the trigger decorator (@when) to create a `SimpleRule`.
+"""
+
 from inspect import isclass
 from java.util import UUID
-from org.eclipse.smarthome.automation import Rule as SmarthomeRule
+
+try:
+    from org.openhab.core.automation import Rule as SmarthomeRule
+except:
+    from org.eclipse.smarthome.automation import Rule as SmarthomeRule
 
 from core.log import logging, LOG_PREFIX, log_traceback
-
 from core.jsr223 import scope, get_automation_manager
+
 scope.scriptExtension.importPreset("RuleSimple")
 
 # this needs some attention in order to work with Automation API changes in 2.4.0 snapshots since build 1319
@@ -18,7 +29,6 @@ def set_uid_prefix(rule, prefix=None):
 class _FunctionRule(scope.SimpleRule):
     def __init__(self, callback, triggers, name=None, description=None, tags=None):
         self.triggers = triggers
-        self.callback = log_traceback(callback)
         if name is None:
             if hasattr(callback, '__name__'):
                 name = callback.__name__
@@ -26,6 +36,7 @@ class _FunctionRule(scope.SimpleRule):
                 name = "JSR223-Jython"
         self.name = name
         callback.log = logging.getLogger(LOG_PREFIX + "." + name)
+        self.callback = log_traceback(callback)
         if description is not None:
             self.description = description
         if tags is not None:
@@ -36,9 +47,27 @@ class _FunctionRule(scope.SimpleRule):
             self.callback(inputs.get('event'))
         except:
             import traceback
-            self.log.error(traceback.format_exc())
+            self.callback.log.error(traceback.format_exc())
 
 def rule(name=None, description=None, tags=None):
+    """openHAB DSL style rule decorator.
+
+    See :ref:`Guides/Rules:Decorators` for a full description of how to use
+    this decorator.
+
+    Examples:
+        .. code-block::
+
+          @rule('name', 'description', ['tag1', 'tag2'])
+          @rule('name', tags=['tag1', 'tag2'])
+          @rule('name')
+
+    Args:
+        name (str): Display name of the rule.
+        description (str): Description of the rule.
+        tags (list[str]): List of tags.
+    """
+
     def rule_decorator(object):
         if isclass(object):
             clazz = object
@@ -64,14 +93,31 @@ def rule(name=None, description=None, tags=None):
                     self.tags = set(tags)
             subclass = type(clazz.__name__, (clazz, scope.SimpleRule), dict(__init__=init))
             subclass.execute = log_traceback(clazz.execute)
-            return addRule(subclass())
+            new_rule = addRule(subclass())
+            subclass.UID = new_rule.UID
+            return subclass
         else:
-            function = object
-            newRule = _FunctionRule(function, function.triggers, name=name, description=description, tags=tags)
-            get_automation_manager().addRule(newRule)
-            function.triggers = None
-            return function
+            callable_obj = object
+            simple_rule = _FunctionRule(callable_obj, callable_obj.triggers, name=name, description=description, tags=tags)
+            new_rule = addRule(simple_rule)
+            callable_obj.UID = new_rule.UID
+            callable_obj.triggers = None
+            return callable_obj
     return rule_decorator
 
 def addRule(rule):
-    get_automation_manager().addRule(rule)
+    """Adds ``rule`` to openHAB's ``ruleRegistry``.
+
+    This is a wrapper of ``automationManager.addRule()`` that does not require
+    any additional imports. The `addRule` function is similar to the 
+    `automationManager.addRule` function, except that it can be safely used in
+    modules (versus scripts). Since the `automationManager` is different for
+    every script scope, the `core.rules.addRule` function looks up the
+    automation manager for each call. See :ref:`Guides/Rules:Extensions` for
+    examples of how to use this function.
+
+    Args:
+        rule (Rule): A rule to add to openHAB.
+    """
+    logging.getLogger(LOG_PREFIX + ".core.rules").debug("Added rule [{}]".format(rule.name))
+    return get_automation_manager().addRule(rule)

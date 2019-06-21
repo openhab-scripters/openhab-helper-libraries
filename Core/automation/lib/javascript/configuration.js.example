@@ -1,0 +1,7 @@
+'use strict';
+var LOG_PREFIX = "jsr223.javascript";
+
+var admin_email = "admin_email@some_domain.com";
+
+var openhabHost = "localhost";
+var openhabPort = "8080"# "8443";

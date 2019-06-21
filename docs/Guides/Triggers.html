@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Triggers &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Logging" href="Logging.html" />
+    <link rel="prev" title="Rules" href="Rules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Rules.html">Rules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Triggers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#items-and-groups">Items and Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#channel-event">Channel Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#thing-event">Thing Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cron">Cron</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-started">System Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-shuts-down">System Shuts Down</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Triggers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="triggers">
+<h1>Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>The following is a list of available triggers for use with the <code class="docutils literal notranslate"><span class="pre">when</span></code> Decorator.
+Any text in <code class="docutils literal notranslate"><span class="pre">CAPITAL</span> <span class="pre">LETTERS</span></code> should be replaced with a value specific to your use case, and anything in square brackets (<code class="docutils literal notranslate"><span class="pre">[]</span></code>) is optional.</p>
+<p>If you are looking for more information on these triggers as <a class="reference internal" href="Rules.html#extensions"><span class="std std-ref">Extensions</span></a>,
+it can be found in the Core Triggers documentation for the language of your choice.</p>
+</div></blockquote>
+<div class="section" id="items-and-groups">
+<h2>Items and Groups<a class="headerlink" href="#items-and-groups" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Item and Group event triggers catch commands and state changes or updates.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Item</span></code> trigger can be used to catch events from an item or group.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Member</span> <span class="pre">of</span></code> trigger will catch events from any member (item or group) of the specified group, but not the group itself.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Descendent</span> <span class="pre">of</span></code> creates a trigger for every item in the specified group, and every item in any groups within recursively.
+It will not create triggers for any groups, however.</p></li>
+</ul>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item ITEM_NAME received update [NEW_STATE]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item GROUP_NAME received update [NEW_STATE]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of GROUP_NAME received update [NEW_STATE]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of GROUP_NAME received update [NEW_STATE]&quot;</span><span class="p">)</span>
+
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;ITEM_NAME&quot;</span><span class="p">)</span> <span class="c1"># shorthand of &quot;Item ITEM_NAME changed&quot;</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item ITEM_NAME changed [from OLD_STATE] [to NEW_STATE]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item GROUP_NAME changed [from OLD_STATE] [to NEW_STATE]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of GROUP_NAME changed [from OLD_STATE] [to NEW_STATE]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of GROUP_NAME changed [from OLD_STATE] [to NEW_STATE]&quot;</span><span class="p">)</span>
+
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item ITEM_NAME received command [COMMAND]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item GROUP_NAME received command [COMMAND]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of GROUP_NAME received command [COMMAND]&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of GROUP_NAME received command [COMMAND]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Item</span> <span class="n">ITEM_NAME</span> <span class="n">received</span> <span class="n">update</span> <span class="o">[</span><span class="n">NEW_STATE</span><span class="o">]</span>
+<span class="n">Member</span> <span class="n">of</span> <span class="n">GROUP_NAME</span> <span class="n">received</span> <span class="n">update</span> <span class="o">[</span><span class="n">NEW_STATE</span><span class="o">]</span>
+
+<span class="n">Item</span> <span class="n">ITEM_NAME</span> <span class="n">changed</span> <span class="o">[</span><span class="n">from</span> <span class="n">OLD_STATE</span><span class="o">]</span> <span class="o">[</span><span class="n">to</span> <span class="n">NEW_STATE</span><span class="o">]</span>
+<span class="n">Item</span> <span class="n">GROUP_NAME</span> <span class="n">changed</span> <span class="o">[</span><span class="n">from</span> <span class="n">OLD_STATE</span><span class="o">]</span> <span class="o">[</span><span class="n">to</span> <span class="n">NEW_STATE</span><span class="o">]</span>
+<span class="n">Member</span> <span class="n">of</span> <span class="n">GROUP_NAME</span> <span class="n">changed</span> <span class="o">[</span><span class="n">from</span> <span class="n">OLD_STATE</span><span class="o">]</span> <span class="o">[</span><span class="n">to</span> <span class="n">NEW_STATE</span><span class="o">]</span>
+
+<span class="n">Item</span> <span class="n">ITEM_NAME</span> <span class="n">received</span> <span class="n">command</span> <span class="o">[</span><span class="n">COMMAND</span><span class="o">]</span>
+<span class="n">Item</span> <span class="n">GROUP_NAME</span> <span class="n">received</span> <span class="n">command</span> <span class="o">[</span><span class="n">COMMAND</span><span class="o">]</span>
+<span class="n">Member</span> <span class="n">of</span> <span class="n">GROUP_NAME</span> <span class="n">received</span> <span class="n">command</span> <span class="o">[</span><span class="n">COMMAND</span><span class="o">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>When using <code class="docutils literal notranslate"><span class="pre">Member</span> <span class="pre">of</span></code> or <code class="docutils literal notranslate"><span class="pre">Descendent</span> <span class="pre">of</span></code> triggers, you can get the name of the Item that triggered the event using <code class="docutils literal notranslate"><span class="pre">event.itemName</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using the <code class="docutils literal notranslate"><span class="pre">received</span> <span class="pre">command</span></code> trigger, the rule will be triggered <strong>BEFORE</strong> the Item’s state gets updated.
+You can use <code class="docutils literal notranslate"><span class="pre">event.itemCommand</span></code> to access the command that was sent.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the state or command used in the <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator has special characters, including spaces, it must be surrounded in single quotes <code class="docutils literal notranslate"><span class="pre">'like</span> <span class="pre">this'</span></code> to prevent errors.</p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="channel-event">
+<h2>Channel Event<a class="headerlink" href="#channel-event" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Channel triggers allow you to catch events from bindings using channels.
+You should find channel names and events in the documentation for the binding.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel CHANNEL:NAME&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel CHANNEL:NAME triggered&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel CHANNEL:NAME triggered EVENT&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Channel</span> <span class="s">&quot;CHANNEL:NAME&quot;</span>
+<span class="n">Channel</span> <span class="s">&quot;CHANNEL:NAME&quot;</span> <span class="n">triggered</span>
+<span class="n">Channel</span> <span class="s">&quot;CHANNEL:NAME&quot;</span> <span class="n">triggered</span> <span class="n">EVENT</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If you need the name of the channel or event that triggered the rule, they are available as <code class="docutils literal notranslate"><span class="pre">event.channel</span></code> and <code class="docutils literal notranslate"><span class="pre">event.event</span></code> respectively.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the event used in the <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator has special characters, including spaces, it must be surrounded in single quotes <code class="docutils literal notranslate"><span class="pre">'like</span> <span class="pre">this'</span></code> to prevent errors.</p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="thing-event">
+<h2>Thing Event<a class="headerlink" href="#thing-event" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Thing status changes can also be used to trigger rules.
+A list of all available statuses can be found <a class="reference external" href="https://www.openhab.org/docs/concepts/things.html">here</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">Thing triggers do not yet support <code class="docutils literal notranslate"><span class="pre">NEW_STATE</span></code> or <code class="docutils literal notranslate"><span class="pre">OLD_STATE</span></code> conditions.
+This is a limitation of the openHAB Automation API.</div>
+<div class="line">If you need to trigger on a specific event, you can get the event name via <code class="docutils literal notranslate"><span class="pre">event.statusInfo</span></code> and check if it is the event you needed.</div>
+</div>
+</div>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing THING:NAME received update&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing THING:NAME changed&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Thing</span> <span class="s">&quot;THING:NAME&quot;</span> <span class="n">received</span> <span class="n">update</span>
+<span class="n">Thing</span> <span class="s">&quot;THING:NAME&quot;</span> <span class="n">received</span> <span class="n">update</span> <span class="n">NEW_STATE</span>
+<span class="n">Thing</span> <span class="s">&quot;THING:NAME&quot;</span> <span class="n">changed</span>
+<span class="n">Thing</span> <span class="s">&quot;THING:NAME&quot;</span> <span class="n">changed</span> <span class="n">to</span> <span class="n">NEW_STATE</span>
+<span class="n">Thing</span> <span class="s">&quot;THING:NAME&quot;</span> <span class="n">changed</span> <span class="n">from</span> <span class="n">OLD_STATE</span> <span class="n">to</span> <span class="n">NEW_STATE</span>
+<span class="n">Thing</span> <span class="s">&quot;THING:NAME&quot;</span> <span class="n">changed</span> <span class="n">from</span> <span class="n">NEW_STATE</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="cron">
+<h2>Cron<a class="headerlink" href="#cron" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Cron triggers can be used to trigger rules at specific times.
+There are a few built-in expressions; their use is shown in the examples.
+Several tools are available to help with composing cron expressions such as <a class="reference external" href="http://www.cronmaker.com/">CronMaker</a> or <a class="reference external" href="http://www.freeformatter.com/cron-expression-generator-quartz.html">FreeFormatter</a>.
+More information can be found in the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-dsl.html#time-based-triggers">openHAB documentation</a>.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;5 5 5 * * ?&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 55 55 5 * * ?&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="n">triggers</span><span class="o">.</span><span class="n">EVERY_SECOND</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="n">triggers</span><span class="o">.</span><span class="n">EVERY_10_SECONDS</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="n">triggers</span><span class="o">.</span><span class="n">EVERY_MINUTE</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="n">triggers</span><span class="o">.</span><span class="n">EVERY_HOUR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Time</span> <span class="n">cron</span> <span class="s">&quot;5 5 5 * * ?&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="system-started">
+<h2>System Started<a class="headerlink" href="#system-started" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The system started trigger can be used to run a rule when openHAB is first started or when the file gets reloaded.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This trigger requires snapshot build S1566 or newer, see below for a workaround for previous versions.</p>
+</div>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">System</span> <span class="n">started</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For builds prior to snapshot S1566, which cannot use the StartupTrigger, you can run rules on openHAB start and file reload by calling the rule function directly.
+You should create a function at the end of file called <code class="docutils literal notranslate"><span class="pre">scriptLoaded</span></code> and put the calls to your rules in that function.
+Here is an example of how to do that:</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item my_item changed to ON&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_rule_function</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="c1"># your Python code here</span>
+
+
+<span class="k">def</span> <span class="nf">scriptLoaded</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+    <span class="c1"># call rule function when this file is loaded</span>
+    <span class="n">my_rule_function</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>TODO</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>TODO</p>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="system-shuts-down">
+<h2>System Shuts Down<a class="headerlink" href="#system-shuts-down" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The system shuts down trigger can be used to run a rule when openHAB shuts down.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<div class="line-block">
+<div class="line">There is currently no working <code class="docutils literal notranslate"><span class="pre">&quot;System</span> <span class="pre">shuts</span> <span class="pre">down&quot;</span></code> trigger.
+Any rules using this trigger with the <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator will not trigger when openHAB is exiting.</div>
+<div class="line">See below for a workaround.</div>
+</div>
+</div>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System shuts down&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">System</span> <span class="n">shuts</span> <span class="n">down</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>There is a workaround to run a rule when the script file gets unloaded, similar to the StartupTrigger workaround:</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item my_item changed to ON&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_rule_function</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="c1"># your Python code here</span>
+
+
+<span class="k">def</span> <span class="nf">scriptUnloaded</span><span class="p">():</span>
+    <span class="c1"># call rule when this file is unloaded</span>
+    <span class="n">my_rule_function</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>TODO</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>TODO</p>
+</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Guides/Triggers.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

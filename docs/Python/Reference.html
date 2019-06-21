@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Reference &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Core" href="Core.html" />
+    <link rel="prev" title="But How Do I…?" href="../Guides/But How Do I.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#suggested-reading">Suggested reading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scripts-vs-modules">Scripts vs. Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modifying-and-reloading-modules">Modifying and Reloading Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-modules">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-locations">Module Locations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="reference">
+<h1>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="suggested-reading">
+<h2>Suggested reading<a class="headerlink" href="#suggested-reading" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.jython.org/jythonbook/en/1.0/index.html">https://www.jython.org/jythonbook/en/1.0/index.html</a></p></li>
+<li><p><a class="reference external" href="https://wiki.python.org/moin/BeginnersGuide">https://wiki.python.org/moin/BeginnersGuide</a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/2/">https://docs.python.org/2/</a></p></li>
+</ul>
+</div>
+<div class="section" id="scripts-vs-modules">
+<h2>Scripts vs. Modules<a class="headerlink" href="#scripts-vs-modules" title="Permalink to this headline">¶</a></h2>
+<p>It’s important to understand the distinction between Jython <code class="docutils literal notranslate"><span class="pre">scripts</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code> in regards to openhab scripted automation.
+A Jython script is loaded by the <cite>javax.script</cite> script engine manager (formerly known as JSR223) that is integrated into the Next-Generation Rule Engine within openHAB Core.
+Each time a script file is loaded, openHAB creates an execution context for that script.
+When the file is modified, openHAB will destroy the old script context and create a new one.
+This means any objects (variables, classes, etc.) previously defined in the script will be lost when the script is reloaded.</p>
+<p>A Jython module is loaded by Jython itself through the standard Python <cite>import</cite> directive and uses <cite>sys.path</cite>.
+The normal Python module loading behavior applies.
+This means the module is normally loaded only once, and is not reloaded when the module source code changes.</p>
+</div>
+<div class="section" id="modifying-and-reloading-modules">
+<h2>Modifying and Reloading Modules<a class="headerlink" href="#modifying-and-reloading-modules" title="Permalink to this headline">¶</a></h2>
+<p>Changes to a module will not take effect until all other modules and scripts that have imported it have been reloaded.
+Restarting openHAB will remedy this, but another option is to use the reload() function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">myModule</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">myModule</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">myModule</span>
+</pre></div>
+</div>
+<p>If using imports like <cite>from core.triggers import when</cite>, or if the module is in a package, you will need to use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">core.triggers</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">triggers</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+</pre></div>
+</div>
+<p>Alternatively…</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;core.triggers&#39;</span><span class="p">])</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-modules">
+<h2>Custom Modules<a class="headerlink" href="#custom-modules" title="Permalink to this headline">¶</a></h2>
+<p>Custom modules and packages should be placed in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/personal/</span></code>.
+Modules do not have the same scope as scripts, but this can be remedied by importing <code class="docutils literal notranslate"><span class="pre">scope</span></code> from the <code class="docutils literal notranslate"><span class="pre">jsr223</span></code> module.
+This will allow for things like accessing the itemRegistry:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.jsr223</span> <span class="kn">import</span> <span class="n">scope</span>
+<span class="n">scope</span><span class="o">.</span><span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;MyItem&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-locations">
+<h2>Module Locations<a class="headerlink" href="#module-locations" title="Permalink to this headline">¶</a></h2>
+<p>One of the benefits of Jython over the openHAB rule DSL scripts is that you can use the full power of Python packages and modules to structure your code into reusable components.
+After following the installation steps, these modules will be located in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/</span></code>.
+They can be located anywhere, but the Python path must be configured to find them.
+There are several ways to do this:</p>
+<ol class="arabic simple">
+<li><p>Append the path to the <code class="docutils literal notranslate"><span class="pre">python.path</span></code> used in the EXTRA_JAVA_OPTS, separated woth a colon in Linux and a semicolon in Windows, e.g. <code class="docutils literal notranslate"><span class="pre">-Dpython.path=mypath1:mypath2</span></code>.</p></li>
+<li><p>Modify the <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> list in a Jython script that loads early (like a component script).</p></li>
+<li><p>Add a symlink in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/personal/</span></code>, which is already in the Python path, to the module or a package that contains it.</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Reference.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

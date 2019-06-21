@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>First Steps &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Rules" href="../Guides/Rules.html" />
+    <link rel="prev" title="File Locations" href="File Locations.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="File Locations.html">File Locations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>First Steps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="first-steps">
+<h1>First Steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>Javascript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<p>If you have made it to this page, you should have entries from the <code class="docutils literal notranslate"><span class="pre">hello_world.py</span></code> script appearing in your openHAB log.
+Let’s take a closer look at what is making that happen.
+Here is the rule from <code class="docutils literal notranslate"><span class="pre">hello_world.py</span></code>:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Jython Hello World (cron decorators)&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is an example cron triggered rule using decorators&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Test tag&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">])</span><span class="c1"># [description and tags are optional]</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 0/10 * * * * ?&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello_world_cron_decorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">hello_world_cron_decorators</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>It is written using the decorators provided by this library.
+This is by far the easiest way to write rules, and has been modelled after the syntax of the openHAB DSL to ease migration.
+Here we will take a closer look at what is happening.
+Lets start with the python code to be executed when the rule triggers.
+This needs to be written as a function with one argument:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello_world_cron_decorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="c1"># your code here</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can name this function almost anything you want, but it must be unique in the file it is in.
+The code you write in the function is entirely python.
+The <code class="docutils literal notranslate"><span class="pre">rule</span></code> decorator provides your rule function with a built-in logger to make things easy.
+It is an attribute of your function and is accessed using <code class="docutils literal notranslate"><span class="pre">myFunctionName.log</span></code> followed by <code class="docutils literal notranslate"><span class="pre">.level</span></code> to indicate the logging level, and finally <code class="docutils literal notranslate"><span class="pre">('My</span> <span class="pre">log</span> <span class="pre">message')</span></code> like so:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello_world_cron_decorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">hello_world_cron_decorators</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;This is a &#39;hello world!&#39; from a Jython rule (decorator): Cron&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">.info</span></code> part is the log level.
+More information on these can be found in <a class="reference internal" href="../Guides/Logging.html"><span class="doc">Logging</span></a>.</p>
+<p>Now lets dig in to the good stuff… the decorators!
+Decorators are basically just functions that modify other functions, but Python lets us put them on a single line starting with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> above the function we want to “decorate”.
+This makes the code much easier to read.
+First we need to import the <code class="docutils literal notranslate"><span class="pre">rule</span></code> and <code class="docutils literal notranslate"><span class="pre">when</span></code> decorators. This only needs to be done once at the top of each file you will be writing rules in.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>When writing an automation rule, we need to start with the <code class="docutils literal notranslate"><span class="pre">&#64;rule</span></code> decorator.
+It needs to be first, and there can only be one for each rule you write.
+The rule decorator must be provided a name you want to use for your rule as the first argument.
+This name must be unique in your openHAB instance and will be used as the display name of your rule in PaperUI.
+Optionally, you can also provide a longer description of what your rule does and a list of tags that can be used to categorize and help search for rules in Paper UI.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;My Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;My Rule Description&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Test tag&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">hello_world_cron_decorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="c1"># your code here</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now the rule above is written correctly, but it will never run because we haven’t told openHAB what should trigger the rule.
+The last piece is the <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> decorator.
+Each event that you want to trigger the rule needs its own <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> line, but you can add as many as you want.
+The <code class="docutils literal notranslate"><span class="pre">&#64;when</span></code> decorator only needs one argument which is a string representing the event that should trigger the rule.
+In this example, we are using <code class="docutils literal notranslate"><span class="pre">Time</span> <span class="pre">cron</span></code> which allows triggering rules at a certain time of day (every 10s in this case).</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 0/10 * * * * ?&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Put all of these concepts together and we have a rule that prints to the <em>info</em> log once every 10 seconds.
+Head over to <a class="reference internal" href="../Guides/Rules.html"><span class="doc">Rules</span></a> to learn more about writing your own rules.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<p>Nothing has been written yet</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Nothing has been written yet</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Getting Started/First Steps.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

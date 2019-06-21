@@ -1,0 +1,15 @@
+"""
+Define at what time of day you want Morning, Day, Evening, Night, and Late
+to start. The rule will adapt to changes in this dict, so times can be changed
+and Modes can be added or removed. Modes must be ordered first to last, with
+no overlap in times.
+"""
+
+from collections import OrderedDict
+
+time_of_day = OrderedDict([
+    ('Morning', {'hour': 7,  'minute': 0,  'second': 0}),
+    ('Day'    , {'hour': 9,  'minute': 0,  'second': 0}),
+    ('Evening', {'hour': 17, 'minute': 55, 'second': 0}),
+    ('Night'  , {'hour': 21, 'minute': 0,  'second': 0}),
+    ('Late'   , {'hour': 23, 'minute': 0,  'second': 0})])

@@ -1,3 +1,17 @@
+"""
+One of the challenges of scripted automation with Jython is that modules
+imported into scripts do not have direct access to the JSR223 scope types and
+objects.This module allows imported modules to access that data.
+
+.. code-block::
+
+    # In Jython module, not script...
+    from core.jsr223.scope import events
+
+    def update_data(data):
+        events.postUpdate("TestString1", str(data))
+"""
+
 import sys
 import types
 

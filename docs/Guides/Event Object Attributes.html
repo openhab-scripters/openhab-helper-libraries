@@ -1,0 +1,575 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Event Object Attributes &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../Examples/Examples.html" />
+    <link rel="prev" title="Actions" href="Actions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Actions.html">Actions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Event Object Attributes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="event-object-attributes">
+<h1>Event Object Attributes<a class="headerlink" href="#event-object-attributes" title="Permalink to this headline">¶</a></h1>
+<p>When a rule is triggered, the function is provided the event instance that triggered it.
+The specific data depends on the event type.
+For example, the <code class="docutils literal notranslate"><span class="pre">event</span></code> object returned by the <a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java">ItemStateChangedEvent</a> event type has <code class="docutils literal notranslate"><span class="pre">itemName</span></code>, <code class="docutils literal notranslate"><span class="pre">itemState</span></code>, and <code class="docutils literal notranslate"><span class="pre">oldItemState</span></code> attributes. The <code class="docutils literal notranslate"><span class="pre">StartupTrigger</span></code> and <code class="docutils literal notranslate"><span class="pre">GenericCronTrigger</span></code> do not provide any <code class="docutils literal notranslate"><span class="pre">event</span></code> objects.
+Rather than digging through the code to look up the attributes available in a particular <code class="docutils literal notranslate"><span class="pre">event</span></code> object, you can add a log entry inside the function and then trigger the rule (<a class="reference internal" href="But How Do I.html#view-the-names-of-an-object-s-attributes"><span class="std std-ref">View the names of an object’s attributes</span></a>).</p>
+<p>Here is a table of the attributes available in <code class="docutils literal notranslate"><span class="pre">event</span></code> objects (or <code class="docutils literal notranslate"><span class="pre">inputs['event']</span></code>, if using raw API or extensions), including a comparison to the Rules DSL implicit variables:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 19%" />
+<col style="width: 21%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rules DSL Equivalent</p></th>
+<th class="head"><p>Scripted Automation</p></th>
+<th class="head"><p>&#64;when Trigger(s)</p></th>
+<th class="head"><p>Event Object(s)</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">triggeringItem.name</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.itemName</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“received update”</div>
+<div class="line">“changed”</div>
+<div class="line">“received command”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateEvent.java">ItemStateEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java">ItemStateChangedEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemCommandEvent.java">ItemCommandEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java">ItemStatePredictedEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java">GroupItemStateChangedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Name of Item that triggered event (String)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">triggeringItem.name</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.memberName</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“changed”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java">GroupItemStateChangedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Name of member that caused the state</div>
+<div class="line">change of a parent Group (String)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">triggeringItem.state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.itemState</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“received update”</div>
+<div class="line">“changed”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateEvent.java">ItemStateEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java">ItemStateChangedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">State of item that triggered event (State)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">previousState</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.oldItemState</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“changed”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStateChangedEvent.java">ItemStateChangedEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java">GroupItemStateChangedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Previous state of Item or Group that</div>
+<div class="line">triggered event (State)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">receivedCommand</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.itemCommand</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“received command”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemCommandEvent.java">ItemCommandEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Command that triggered event (Command)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.predictedState</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Not currently supported</strong></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java">ItemStatePredictedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">State that the Item triggering the event</div>
+<div class="line">is predicted to have (State)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.isConfirmation</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Not currently supported</strong></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemStatePredictedEvent.java">ItemStatePredictedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">If <code class="docutils literal notranslate"><span class="pre">true</span></code> then it basically only confirms</div>
+<div class="line">the previous item state because a received</div>
+<div class="line">command will not be successfully executed</div>
+<div class="line">and therefore presumably will not result in</div>
+<div class="line">a state change (e.g. because no handler</div>
+<div class="line">currently is capable of delivering such an</div>
+<div class="line">event to its device) (Boolean)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.newItemState</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Not currently supported</strong></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/GroupItemStateChangedEvent.java">GroupItemStateChangedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">State of Group that triggered event (State)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.item</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Not currently supported</strong></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemAddedEvent.java">ItemAddedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Item that triggered event (Item)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.oldItem</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Not currently supported</strong></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core/src/main/java/org/eclipse/smarthome/core/items/events/ItemUpdatedEvent.java">ItemUpdatedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Item DTO prior to the Item being updated</div>
+<div class="line">(Item)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.channel</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“triggered”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ChannelTriggeredEvent.java">ChannelTriggeredEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Channel associated with Event that</div>
+<div class="line">triggered event (Channel)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.event</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“triggered”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ChannelTriggeredEvent.java">ChannelTriggeredEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Event that triggered event (Event)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.thing</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Not currently supported</strong></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingAddedEvent.java">ThingAddedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Thing that triggered event (Thing)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.oldThing</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Not currently supported</strong></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingUpdatedEvent.java">ThingUpdatedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Thing DTO prior to the Thing being updated</div>
+<div class="line">(Thing)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.thingUID</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“changed”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java">ThingStatusInfoEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java">ThingStatusInfoChangedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">ThingUID of Thing that triggered event</div>
+<div class="line">(ThingUID)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.statusInfo</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“changed”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoEvent.java">ThingStatusInfoEvent</a></div>
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java">ThingStatusInfoChangedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">ThingStatusInfo of Thing that triggered</div>
+<div class="line">event (ThingStatusInfo)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">N/A</div>
+</div>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">event.oldStatusInfo</span></code></p></td>
+<td><div class="line-block">
+<div class="line">“changed”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/openhab/openhab-core/blob/master/bundles/org.openhab.core.thing/src/main/java/org/eclipse/smarthome/core/thing/events/ThingStatusInfoChangedEvent.java">ThingStatusInfoChangedEvent</a></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Previous ThingStatusInfo of Thing that</div>
+<div class="line">triggered event (ThingStatusInfo)</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Guides/Event Object Attributes.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

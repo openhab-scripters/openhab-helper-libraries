@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ideAlarm Configuration" href="Configuration.html" />
+    <link rel="prev" title="ideAlarm Glossary" href="Glossary.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Core.html">Core</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Community.html">Community</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Alexa Speak and Respond.html">Alexa Speak and Respond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../AutoRemote.html">AutoRemote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ClickaTell.html">ClickaTell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../OpenWeatherMap.html">OpenWeatherMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Sonos.html">Sonos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../WeatherStationUploader.html">WeatherStationUploader</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../ideAlarm.html">ideAlarm</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../ideAlarm.html#about">About</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ideAlarm.html#release-notices">Release Notices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Key Concepts.html">ideAlarm Key Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Glossary.html">ideAlarm Glossary</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#installation-of-the-idealarm-package">Installation of the ideAlarm package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Configuration.html">ideAlarm Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Then What.html">Then what?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Arm Disarm.html">Arming and Disarming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Event Helpers.html">ideAlarm Event Helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="API.html">ideAlarm API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Updating.html">Updating ideAlarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Uninstall.html">Uninstall ideAlarm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Troubleshooting.html">ideAlarm Troubleshooting and FAQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Links.html">Links</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../Community.html">Community</a> &raquo;</li>
+        
+          <li><a href="../ideAlarm.html">ideAlarm</a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>The following should be installed, configured, tested and working before continuing with installing ideAlarm:</p>
+<ul>
+<li><p>openHAB expire binding</p></li>
+<li><p>openHAB persistence has been set up and working.
+See the Item groups suggestions below.</p></li>
+<li><p>Create the following Item Groups</p>
+<blockquote>
+<div><p>Some Items need to be persisted for ideAlarm to work.
+It’s convenient to set up persistence to certain Item groups.
+The naming of the first two groups below is just a suggestion.
+You may name them differently but for simplicity it might be a good idea to use the suggested names.
+The important thing is that Items belonging to the groups following gets persisted to restore your system after a restart.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Group</span> <span class="n">G_PersistOnChange</span> <span class="o">//</span> <span class="n">Persist</span> <span class="n">on</span> <span class="n">change</span> <span class="ow">and</span> <span class="n">system</span> <span class="n">start</span> <span class="n">up</span>
+<span class="n">Group</span> <span class="n">G_PersistOnUpdate</span> <span class="o">//</span> <span class="n">Persist</span> <span class="n">on</span> <span class="n">change</span> <span class="ow">and</span> <span class="n">system</span> <span class="n">start</span> <span class="n">up</span><span class="o">.</span> <span class="n">For</span> <span class="n">temp</span><span class="p">,</span> <span class="n">humidity</span> <span class="n">sensors</span> <span class="n">etc</span><span class="o">.</span>
+
+<span class="n">Group</span> <span class="n">G_VirtualDevice</span>      <span class="p">(</span><span class="n">G_PersistOnChange</span><span class="p">)</span>
+<span class="n">Group</span> <span class="n">G_Timer</span>
+<span class="n">Group</span> <span class="n">G_Alarm</span>              <span class="p">(</span><span class="n">G_PersistOnChange</span><span class="p">)</span>
+<span class="n">Group</span> <span class="n">G_Alarm_Z1</span>           <span class="p">(</span><span class="n">G_Alarm</span><span class="p">)</span>
+<span class="n">Group</span> <span class="n">G_Alarm_Z2</span>           <span class="p">(</span><span class="n">G_Alarm</span><span class="p">)</span>
+<span class="n">Group</span> <span class="n">G_AlarmArmingMode</span>    <span class="p">(</span><span class="n">G_Alarm</span><span class="p">)</span>
+<span class="n">Group</span> <span class="n">G_AlarmStatus</span>        <span class="p">(</span><span class="n">G_Alarm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Create Items for each alarm zone you intend to use</p>
+<blockquote>
+<div><p>For each alarm zone that you wish to define, create the following Items in one of your existing <code class="docutils literal notranslate"><span class="pre">.items</span></code> files located in the <code class="docutils literal notranslate"><span class="pre">$OPENHAB_CONF/items</span></code> folder.
+You are advised to keep the naming convention suggested at least until everything is set up and works well.
+Your first zone’s Items get Item names starting with ‘Z1’.
+Prepend your second zone Items with ‘Z2’ etc.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">Z1_Arming_Mode</span>          <span class="s2">&quot;Z1 Arming Mode: [MAP(en_armingmode.map):</span><span class="si">%s</span><span class="s2">]&quot;</span>    <span class="o">&lt;</span><span class="n">alarm</span><span class="o">&gt;</span>     <span class="p">(</span><span class="n">G_AlarmArmingMode</span><span class="p">)</span>
+<span class="n">Number</span> <span class="n">Z1_Status</span>               <span class="s2">&quot;Z1 Status: [MAP(en_zonestatus.map):</span><span class="si">%s</span><span class="s2">]&quot;</span>         <span class="o">&lt;</span><span class="n">alarm</span><span class="o">&gt;</span>     <span class="p">(</span><span class="n">G_AlarmStatus</span><span class="p">)</span>
+
+<span class="n">Switch</span> <span class="n">Toggle_Z1_Armed_Away</span>    <span class="s2">&quot;Toggle Z1 Armed Away&quot;</span>                           <span class="o">&lt;</span><span class="n">switch</span><span class="o">&gt;</span>    <span class="p">(</span><span class="n">G_VirtualDevice</span><span class="p">)</span>    <span class="p">{</span><span class="n">expire</span><span class="o">=</span><span class="s2">&quot;1s,command=OFF&quot;</span><span class="p">}</span>
+<span class="n">Switch</span> <span class="n">Toggle_Z1_Armed_Home</span>    <span class="s2">&quot;Toggle Z1 Armed Home&quot;</span>                           <span class="o">&lt;</span><span class="n">switch</span><span class="o">&gt;</span>    <span class="p">(</span><span class="n">G_VirtualDevice</span><span class="p">)</span>    <span class="p">{</span><span class="n">expire</span><span class="o">=</span><span class="s2">&quot;1s,command=OFF&quot;</span><span class="p">}</span>
+
+<span class="n">Number</span> <span class="n">Z1_Open_Sections</span>        <span class="s2">&quot;Z1 open sections [</span><span class="si">%.0f</span><span class="s2">]&quot;</span>                        <span class="o">&lt;</span><span class="n">door</span><span class="o">&gt;</span>      <span class="p">(</span><span class="n">G_VirtualDevice</span><span class="p">)</span>
+
+<span class="n">Switch</span> <span class="n">Z1_Entry_Timer</span>          <span class="s2">&quot;Z1 entry timer [</span><span class="si">%s</span><span class="s2">]&quot;</span>                            <span class="o">&lt;</span><span class="n">time</span><span class="o">&gt;</span>      <span class="p">(</span><span class="n">G_Timer</span><span class="p">)</span>            <span class="p">{</span><span class="n">expire</span><span class="o">=</span><span class="s2">&quot;15s,command=OFF&quot;</span><span class="p">}</span>
+<span class="n">Switch</span> <span class="n">Z1_Exit_Timer</span>           <span class="s2">&quot;Z1 exit timer [</span><span class="si">%s</span><span class="s2">]&quot;</span>                             <span class="o">&lt;</span><span class="n">time</span><span class="o">&gt;</span>      <span class="p">(</span><span class="n">G_Timer</span><span class="p">)</span>            <span class="p">{</span><span class="n">expire</span><span class="o">=</span><span class="s2">&quot;2m,command=OFF&quot;</span><span class="p">}</span>
+<span class="n">Switch</span> <span class="n">Z1_Nag_Timer</span>            <span class="s2">&quot;Z1 nag timer [</span><span class="si">%s</span><span class="s2">]&quot;</span>                              <span class="o">&lt;</span><span class="n">time</span><span class="o">&gt;</span>      <span class="p">(</span><span class="n">G_Timer</span><span class="p">)</span>            <span class="p">{</span><span class="n">expire</span><span class="o">=</span><span class="s2">&quot;4m,command=OFF&quot;</span><span class="p">}</span>
+<span class="n">Switch</span> <span class="n">Z1_Alert_Max_Timer</span>      <span class="s2">&quot;Z1 alert maximum time [</span><span class="si">%s</span><span class="s2">]&quot;</span>                     <span class="o">&lt;</span><span class="n">time</span><span class="o">&gt;</span>      <span class="p">(</span><span class="n">G_Timer</span><span class="p">)</span>            <span class="p">{</span><span class="n">expire</span><span class="o">=</span><span class="s2">&quot;20s,command=OFF&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="installation-of-the-idealarm-package">
+<h2>Installation of the ideAlarm package<a class="headerlink" href="#installation-of-the-idealarm-package" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Follow the instruction for how to <a class="reference internal" href="../../../Getting Started/Installation.html#community"><span class="std std-ref">install or update a Community package</span></a>.
+Make sure you haven’t skipped the step to install the mapping files.</p></li>
+<li><p>Edit the configuration dictionary <code class="docutils literal notranslate"><span class="pre">idealarm_configuration</span></code> that you’ve previously inserted into the openhab-helper-libraries configuration file.
+See <a class="reference internal" href="Configuration.html#idealarm-configuration"><span class="std std-ref">ideAlarm Configuration</span></a> for details.
+Before saving you might want to copy and paste the contents of your configuration file into the form on <a class="reference external" href="https://pythonbuddy.com/">PythonBuddy</a> to verify that the Python syntax is valid.</p></li>
+<li><p>Save and reload the openhab-helper-libraries configuration as described in <a class="reference internal" href="../../Reference.html#modifying-and-reloading-modules"><span class="std std-ref">Modifying and Reloading Modules</span></a>.</p></li>
+<li><p>Create a custom library script.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The custom library script defines what custom actions that will occurr in your system for some specific alarm system events.
+To help you create a custom library script, there are two example files.
+Choose between <code class="docutils literal notranslate"><span class="pre">custom_template.py.example</span></code> and <code class="docutils literal notranslate"><span class="pre">custom_template_verbose.py.example</span></code>.</p></li>
+<li><p>If you followed the instruction properly for how to <a class="reference internal" href="../../../Getting Started/Installation.html#community"><span class="std std-ref">install or update a Community package</span></a>, the two example files will reside in your <code class="docutils literal notranslate"><span class="pre">$OPENHAB_CONF/automation/lib/python/personal/idealarm/</span></code> directory.
+Rename one of those files to <code class="docutils literal notranslate"><span class="pre">custom.py</span></code>.</p></li>
+<li><p>Edit the <code class="docutils literal notranslate"><span class="pre">custom.py</span></code> file to suit your needs.
+Start simple and optionally add complexity after you see that things are working well.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Community/ideAlarm/Installation.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

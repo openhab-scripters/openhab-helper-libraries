@@ -1,0 +1,467 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Logging &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Actions" href="Actions.html" />
+    <link rel="prev" title="Triggers" href="Triggers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Triggers.html">Triggers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Logging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rule-decorator">Rule Decorator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-log">core.log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#log-action">Log Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#slf4j">SLF4J</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Community.html">Community</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Logging</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="logging">
+<h1>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h1>
+<p>The helper libraries provide several ways to produce log output in openHAB.
+This can be useful for providing information or error messages from your scripts to help diagnose issues.
+In some of the following examples, the logger can be modified to wherever you want the log to go.
+The default logger used in the modules and scripts is ‘jsr223.&lt;language name&gt;’, which is pulled from the value assigned to the LOG_PREFIX variable in the configuration library.
+If this is modified, be sure to <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html#logging-in-openhab">configure your logging</a> to include the logger chosen.</p>
+<div class="section" id="rule-decorator">
+<h2>Rule Decorator<a class="headerlink" href="#rule-decorator" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The <code class="docutils literal notranslate"><span class="pre">rule</span></code> decorator adds a logger attribute to the function or class that it is decorating.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Example Rule&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">example_function</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">example_function</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Example info log&quot;</span><span class="p">)</span>
+    <span class="n">example_function</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Example warning log&quot;</span><span class="p">)</span>
+    <span class="n">example_function</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Example error log&quot;</span><span class="p">)</span>
+    <span class="n">example_function</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Example debug log&quot;</span><span class="p">)</span>
+    <span class="n">example_function</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;Example trace log&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="core-log">
+<h2>core.log<a class="headerlink" href="#core-log" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>It is also possible to create a logger using the <code class="docutils literal notranslate"><span class="pre">core.log</span></code> library to be used by all functions in a script or library.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Logging example from root logger [DEBUG]: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Logging example from root logger [INFO]: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Logging example from root logger [WARN]: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Logging example from root logger [ERROR]: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;Logging example from root logger [TRACE]: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.test_logging_script&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Logging example from logger, using text appended to LOG_PREFIX: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.test_logging_script&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Logging example from logger, using text appended to LOG_PREFIX: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>The <cite>core.log</cite> does not yet exist for this language.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>The <cite>core.log</cite> does not yet exist for this language.</p>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="log-action">
+<h2>Log Action<a class="headerlink" href="#log-action" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>The openHAB log action, as used in the Rules DSL, can be imported and used to write to the logs from a script or rule.
+Since LogAction uses SLF4J, it supports parameterized logging.
+Parameterized logging is beneficial, since the values in the parameterized are not processed unless the logger is visible in the current logging level.
+This means that the complicated logging you do in debug does not affect the performance of your system when the logging level is set to info.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">LogAction</span>
+
+<span class="n">LogAction</span><span class="o">.</span><span class="n">logInfo</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;Example info log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">LogAction</span><span class="o">.</span><span class="n">logWarn</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;Example warning log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">LogAction</span><span class="o">.</span><span class="n">logError</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;Example error log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">LogAction</span><span class="o">.</span><span class="n">logDebug</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;Example debug log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">logInfo</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.model.script.actions.LogAction&quot;</span><span class="p">).</span><span class="nx">logInfo</span><span class="p">;</span>
+
+<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Rules&quot;</span><span class="p">,</span> <span class="s2">&quot;This is a test [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.eclipse.smarthome.model.script.actions.LogAction</span>
+
+<span class="kt">def</span> <span class="n">logInfo</span> <span class="o">=</span> <span class="n">LogAction</span><span class="o">.&amp;</span><span class="n">logInfo</span>
+
+<span class="n">logInfo</span><span class="o">(</span><span class="s2">&quot;Rules&quot;</span><span class="o">,</span> <span class="s2">&quot;This is a test [{}]&quot;</span><span class="o">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-Java notranslate"><div class="highlight"><pre><span></span><span class="n">logInfo</span><span class="o">(</span><span class="s">&quot;EXAMPLE&quot;</span><span class="o">,</span> <span class="s">&quot;Example info log [{}]&quot;</span><span class="o">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="o">)</span>
+<span class="n">logWarn</span><span class="o">(</span><span class="s">&quot;EXAMPLE&quot;</span><span class="o">,</span> <span class="s">&quot;Example warning log [{}]&quot;</span><span class="o">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="o">)</span>
+<span class="n">logError</span><span class="o">(</span><span class="s">&quot;EXAMPLE&quot;</span><span class="o">,</span> <span class="s">&quot;Example error log [{}]&quot;</span><span class="o">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="o">)</span>
+<span class="n">logDebug</span><span class="o">(</span><span class="s">&quot;EXAMPLE&quot;</span><span class="o">,</span> <span class="s">&quot;Example debug log [{}]&quot;</span><span class="o">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="slf4j">
+<h2>SLF4J<a class="headerlink" href="#slf4j" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>As an alternative to using <code class="docutils literal notranslate"><span class="pre">core.log</span></code>, you can access <code class="docutils literal notranslate"><span class="pre">SLF4J</span></code> directly in a similar manner.
+SLF4J supports parameterized logging.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA==-1 docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5-1 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">org.slf4j</span> <span class="kn">import</span> <span class="n">LoggerFactory</span>
+<span class="kn">from</span> <span class="nn">configuration</span> <span class="kn">import</span> <span class="n">LOG_PREFIX</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.EXAMPLE&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Example info log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Example warning log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Example error log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Example debug log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA==-1 docutils container">
+<p>Documentation has not yet been created for this functionality.</p>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5-1 docutils container">
+<p>Documentation has not yet been created for this functionality.</p>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Guides/Logging.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

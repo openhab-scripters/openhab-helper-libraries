@@ -1,0 +1,13 @@
+*********
+Reference
+*********
+
+``/automation/lib/javascript/core/utils.js`` contains more simplifying and helping functions.
+
+``/automation/lib/javascript/core/PersistenceExtensions.js`` contains more simplifying PersistenceExtensions functions.
+
+``/automation/lib/javascript/core/triggers.js`` contains trigger functions.
+
+``Script Examples/Javascript/ActionExamples.js`` contains examples for default actions like PersistenceExtensions, HTTP, Ping, Audio, Voice, ThingAction.
+
+``Script Examples/Javascript/ItemTest.js`` contains examples for testing Items and Groups.
