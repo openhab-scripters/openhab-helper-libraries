@@ -176,6 +176,7 @@ class IdeAlarmZone(object):
             self.sensors.append(IdeAlarmSensor(self, sensor))
         self.armingModeItem = cfg['armingModeItem']
         self.statusItem = cfg['statusItem']
+        self.pinCode = cfg['pinCode']
 
         self.openSections = self.countOpenSections()
         self.setArmingMode(getItemValue(self.armingModeItem, ARMINGMODE['DISARMED'])) # Will also set the zone status to normal
@@ -304,16 +305,23 @@ class IdeAlarmZone(object):
         Called whenever an alarm arming mode toggle switch has been switched.
         '''
         newArmingMode = None
+        pinCode = getItemValue(itemName, 0)
+        if pinCode == 0:
+            return
         if itemName == self.armAwayToggleSwitch:
             if self.getArmingMode() in [ARMINGMODE['DISARMED']]:
                 newArmingMode = ARMINGMODE['ARMED_AWAY']
-            else:
+            elif pinCode == self.pinCode:
                 newArmingMode = ARMINGMODE['DISARMED']
+            else:
+                self.log.info(u"Invalid pin code provided to disarm zone [{}]".format(self.name.decode('utf8')))
         else:
             if self.getArmingMode() in [ARMINGMODE['DISARMED']]:
                 newArmingMode = ARMINGMODE['ARMED_HOME']
-            else:
+            elif pinCode == self.pinCode:
                 newArmingMode = ARMINGMODE['DISARMED']
+            else:
+                self.log.info(u"Invalid pin code provided to disarm zone [{}]".format(self.name.decode('utf8')))
 
         self.log.debug(u"Toggling zone [{}] to new arming mode: [{}]".format(self.name.decode('utf8'), kw(ARMINGMODE, newArmingMode)))
         self.setArmingMode(newArmingMode)
@@ -515,8 +523,8 @@ class IdeAlarm(object):
             for item in self.getSensors():
                 when("Item {} changed".format(item))(function) # TODO: Check if this works for items with accented characters in the name
             for i in range(len(self.alarmZones)):
-                when("Item {} changed to ON".format(self.alarmZones[i].armAwayToggleSwitch))(function)
-                when("Item {} changed to ON".format(self.alarmZones[i].armHomeToggleSwitch))(function)
+                when("Item {} changed".format(self.alarmZones[i].armAwayToggleSwitch))(function)
+                when("Item {} changed".format(self.alarmZones[i].armHomeToggleSwitch))(function)
                 when("Item Z{}_Entry_Timer received command OFF".format(i + 1))(function)
                 when("Item Z{}_Exit_Timer received command OFF".format(i + 1))(function)
                 when("Item Z{}_Nag_Timer received command OFF".format(i + 1))(function)

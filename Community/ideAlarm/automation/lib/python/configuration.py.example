@@ -38,7 +38,9 @@ idealarm_configuration = {
             'armAwayToggleSwitch': 'Toggle_Z1_Armed_Away',
             'armHomeToggleSwitch': 'Toggle_Z1_Armed_Home',
             'mainZone': True,
-            'canArmWithTrippedSensors': False
+            'canArmWithTrippedSensors': False,
+            'pinCodeEntry': 'Z1_PinCode',
+            'pinCode': 1111
         },
         {
             'name': 'Pembridge Square Residence',
