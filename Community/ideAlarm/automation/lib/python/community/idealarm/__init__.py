@@ -306,19 +306,17 @@ class IdeAlarmZone(object):
         '''
         newArmingMode = None
         pinCode = getItemValue(itemName, 0)
-        if pinCode == 0:
-            return
         if itemName == self.armAwayToggleSwitch:
             if self.getArmingMode() in [ARMINGMODE['DISARMED']]:
                 newArmingMode = ARMINGMODE['ARMED_AWAY']
-            elif pinCode == self.pinCode:
+            elif pinCode == self.pinCode or self.pinCode == None:
                 newArmingMode = ARMINGMODE['DISARMED']
             else:
                 self.log.info(u"Invalid pin code provided to disarm zone [{}]".format(self.name.decode('utf8')))
         else:
             if self.getArmingMode() in [ARMINGMODE['DISARMED']]:
                 newArmingMode = ARMINGMODE['ARMED_HOME']
-            elif pinCode == self.pinCode:
+            elif pinCode == self.pinCode or self.pinCode == None:
                 newArmingMode = ARMINGMODE['DISARMED']
             else:
                 self.log.info(u"Invalid pin code provided to disarm zone [{}]".format(self.name.decode('utf8')))

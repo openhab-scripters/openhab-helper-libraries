@@ -40,7 +40,7 @@ idealarm_configuration = {
             'mainZone': True,
             'canArmWithTrippedSensors': False,
             'pinCodeEntry': 'Z1_PinCode',
-            'pinCode': 1111
+            'pinCode': None
         },
         {
             'name': 'Pembridge Square Residence',
