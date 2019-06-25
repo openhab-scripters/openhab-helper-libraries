@@ -4,6 +4,8 @@ Utilities
 
 import random
 import time
+import re
+import uuid
 
 try:
     from org.eclipse.smarthome.core.types import TypeParser
@@ -167,3 +169,12 @@ def validate_channel_uid(channel_uid_or_string):# returns ChannelUID or None
         log.warn("[{}] is not a valid Channel".format(channel_uid))
         return None
     return channel_uid
+
+def validate_uid(uid):# returns a valid UID
+    #_valid_chars_re = "^[a-zA-Z][a-zA-Z0-9_]*$"
+    valid_characters = re.compile("[^A-Za-z0-9_-]")
+    uid = valid_characters.sub("_", uid)
+    uid = re.sub(r"__+", "_", uid)
+    if not re.match("^[a-zA-Z]", uid):
+        uid = "{}_{}".format(uid, uuid.uuid1().hex)
+    return uid

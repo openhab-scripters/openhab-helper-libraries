@@ -49,7 +49,7 @@ def log_traceback(fn):
     def wrapper(*args, **kwargs):
         try:
             return fn(*args, **kwargs)
-        except Exception as ex:
+        except:
             rule_name = None
             if hasattr(fn, 'log'):
                 fn.log.error(traceback.format_exc())

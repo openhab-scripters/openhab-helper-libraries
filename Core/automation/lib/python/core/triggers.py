@@ -51,7 +51,6 @@ scope.scriptExtension.importPreset(None)
 import inspect
 import json
 import uuid
-import re
 from shlex import split
 
 import java.util
@@ -81,8 +80,8 @@ try:
 except:
     from org.openhab.core.types import TypeParser
 
-import core
 from core.osgi.events import OsgiEventTrigger
+from core.utils import validate_uid
 from core.log import logging, LOG_PREFIX
 
 from org.quartz.CronExpression import isValidExpression
@@ -350,12 +349,6 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
     """
 
     try:
-        def convert_trigger_name(trigger_name):
-            valid_characters = re.compile("[^A-Za-z0-9_-]")
-            trigger_name = valid_characters.sub("_", trigger_name)
-            trigger_name = re.sub(r"__+", "_", trigger_name)
-            return trigger_name
-        
         def item_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
@@ -375,7 +368,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                     "-to-" if new_state is not None and trigger_type == "changed" else "",
                     "-" if trigger_type == "received update" and new_state is not None else "",
                     new_state if new_state is not None else "")
-                trigger_name = convert_trigger_name(trigger_name)
+                trigger_name = validate_uid(trigger_name)
                 if trigger_type == "received update":
                     function.triggers.append(ItemStateUpdateTrigger(member.name, state=new_state, triggerName=trigger_name).trigger)
                 elif trigger_type == "received command":
@@ -499,7 +492,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                 if trigger_type is None:
                     trigger_type = "changed"
 
-            trigger_name = convert_trigger_name(trigger_name or target)
+            trigger_name = validate_uid(trigger_name or target)
 
         # validate the inputs, and if anything isn't populated correctly throw an exception
         if target_type is None or target_type not in ["Item", "Member of", "Descendent of", "Thing", "Channel", "System", "Time"]:
@@ -544,6 +537,21 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         elif target_type == "Time":
             return cron_trigger
 
-    except Exception as e:
+    except ValueError as ve:
+        log.warn(ve)
+
+        def bad_trigger(function):
+            if not hasattr(function, 'triggers'):
+                function.triggers = []
+            function.triggers.append(None)
+            #log.warn("triggers = [{}]".format(function.triggers))
+            #log.warn("all None = [{}]".format(all(function.triggers)))
+            #log.warn("count = [{}]".format(function.triggers.count(None)))
+            #function.has_bad_trigger = True
+            return function
+
+        return bad_trigger
+
+    except:       
         import traceback
-        log.error("when: Exception [{}]: [{}]".format(e, traceback.format_exc()))
+        log.debug(traceback.format_exc())

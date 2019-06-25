@@ -61,7 +61,7 @@ def remove_item(item_or_item_name):
     try:
         item = remove_all_links(item_or_item_name)
         if item is None:
-            log.debug("Item cannot be removed because it does not exist in the ItemRegistry: [{}]".format(item.name))
+            log.warn("Item cannot be removed because it does not exist in the ItemRegistry: [{}]".format(item_or_item_name))
             return None
 
         ManagedItemProvider.remove(item.name)
