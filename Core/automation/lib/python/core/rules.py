@@ -16,6 +16,8 @@ except:
 from core.log import logging, LOG_PREFIX, log_traceback
 from core.jsr223 import scope, get_automation_manager
 
+log = logging.getLogger("{}.core.rules".format(LOG_PREFIX))
+
 scope.scriptExtension.importPreset("RuleSimple")
 
 # this needs some attention in order to work with Automation API changes in 2.4.0 snapshots since build 1319
@@ -35,7 +37,7 @@ class _FunctionRule(scope.SimpleRule):
             else:
                 name = "JSR223-Jython"
         self.name = name
-        callback.log = logging.getLogger(LOG_PREFIX + "." + name)
+        callback.log = logging.getLogger("{}.{}".format(LOG_PREFIX, name))
         self.callback = log_traceback(callback)
         if description is not None:
             self.description = description
@@ -81,7 +83,7 @@ def rule(name=None, description=None, tags=None):
                 else:
                     self.name = name
                 #set_uid_prefix(self)
-                self.log = logging.getLogger(LOG_PREFIX + "." + self.name)
+                self.log = logging.getLogger("{}.{}".format(LOG_PREFIX, self.name))
                 clazz.__init__(self, *args, **kwargs)
                 if description is not None:
                     self.description = description
@@ -98,11 +100,15 @@ def rule(name=None, description=None, tags=None):
             return subclass
         else:
             callable_obj = object
-            simple_rule = _FunctionRule(callable_obj, callable_obj.triggers, name=name, description=description, tags=tags)
-            new_rule = addRule(simple_rule)
-            callable_obj.UID = new_rule.UID
-            callable_obj.triggers = None
-            return callable_obj
+            if callable_obj.triggers.count(None) == 0:
+                simple_rule = _FunctionRule(callable_obj, callable_obj.triggers, name=name, description=description, tags=tags)
+                new_rule = addRule(simple_rule)
+                callable_obj.UID = new_rule.UID
+                callable_obj.triggers = None
+                return callable_obj
+            else:
+                log.warn("rule: not creating rule [{}] due to an invalid trigger definition".format(name))
+                return None
     return rule_decorator
 
 def addRule(rule):
@@ -119,5 +125,5 @@ def addRule(rule):
     Args:
         rule (Rule): A rule to add to openHAB.
     """
-    logging.getLogger(LOG_PREFIX + ".core.rules").debug("Added rule [{}]".format(rule.name))
+    log.debug("Added rule [{}]".format(rule.name))
     return get_automation_manager().addRule(rule)
