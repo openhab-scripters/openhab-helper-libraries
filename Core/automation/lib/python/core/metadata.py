@@ -12,7 +12,6 @@ from collections import MutableMapping
 
 from core import osgi
 from core.jsr223.scope import itemRegistry
-from core.utils import validate_item, validate_uid
 
 try:
     from org.openhab.core.items import Metadata, MetadataKey
