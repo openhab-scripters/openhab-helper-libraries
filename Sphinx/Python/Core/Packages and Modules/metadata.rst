@@ -1,4 +1,4 @@
-metadata
+Metadata
 --------
 
 .. automodule:: core.metadata
