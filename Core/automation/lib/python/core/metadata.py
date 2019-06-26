@@ -8,8 +8,6 @@ __all__ = [
     "remove_key_value"
 ]
 
-from collections import MutableMapping
-
 from core import osgi
 from core.jsr223.scope import itemRegistry
 
