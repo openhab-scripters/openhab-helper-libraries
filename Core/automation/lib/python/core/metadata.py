@@ -1,7 +1,5 @@
 """
 This module provides functions for manipulating Item Metadata.
-
-
 """
 
 __all__ = [
@@ -11,18 +9,15 @@ __all__ = [
 ]
 
 from collections import MutableMapping
-import re
 
 from core import osgi
 from core.jsr223.scope import itemRegistry
-from core.utils import validate_item
+from core.utils import validate_item, validate_uid
 
 try:
     from org.openhab.core.items import Metadata, MetadataKey
-    from org.openhab.core.items import ItemNotFoundException
 except:
     from org.eclipse.smarthome.core.items import Metadata, MetadataKey
-    from org.eclipse.smarthome.core.items import ItemNotFoundException
 
 metadata_registry = osgi.get_service(
         "org.openhab.core.items.MetadataRegistry"
@@ -33,203 +28,241 @@ metadata_registry = osgi.get_service(
 from core.log import logging, LOG_PREFIX
 log = logging.getLogger("{}.core.metadata".format(LOG_PREFIX))
 
-# Valid characters for names
-# this allows only numbers and letters for first char, 
-# then numbers, letters, and underscore for the rest
-_valid_chars_re = "^[a-zA-Z][a-zA-Z0-9_]*$"
-
 def get_all_namespaces(item_name):
     """
-    Lists all of an Item's namespaces.
+    This function will return a list of an Item's namespaces.
 
     Args:
-        item_name (string): Name of the item to scan.
+        item_name (string): name of the Item to retrieve namespaces names from
 
     Returns:
-        A list of strings representing the namespace names found for the
-        item provided.
-
-    Raises:
-        ValueError: Iteam does not exist.
+        list of strings representing the namespace names found for the
+            specified Item
+        False: Item does not exist
     """
-    if validate_item(item_name) is None:
-        raise ValueError("Item '{}' does not exist".format(item_name))
-    return map(lambda metadata: metadata.UID.namespace, filter(lambda metadata: metadata.UID.itemName == item_name, metadata_registry.getAll()))
+    try:
+        return map(lambda metadata: metadata.UID.namespace, filter(lambda metadata: metadata.UID.itemName == item_name, metadata_registry.getAll()))
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
 
-def get_metadata(item_name, namespace, muttable=False):
+def get_metadata(item_name, namespace):
     """
-    Gets a metadata object from the registry.
+    This function will return the Metadata object associated with the
+    specified Item.
 
     Args:
-        item_name (string): Name of the item.
-        namespace (string): Name of the namespace.
-        muttable (bool): Set ``True`` to return a muttable ``configuration``
-            in the metadata object, default is immutable.
+        item_name (string): name of the Item.
+        namespace (string): name of the namespace.
 
     Returns:
-        A metadata object containing the namespace ``value`` and
-        ``configuration`` dictionary. Will return ``None`` if namespace does
-        not exist.
-
-    Raises:
-        ValueError: Item does not exist.
-        ValueError: Namespace name is invalid.
+        Metadata object: This will contain the namespace ``value`` and
+        ``configuration`` dictionary
+        None: metadata does not exist for the Item
+        False: Item does not exist or namespace name is invalid
     """
-    if validate_item(item_name) is None:
-        raise ValueError("Item '{}' does not exist".format(item_name))
-    if not re.match(_valid_chars_re, namespace):
-        raise ValueError("'{}' is not a valid namespace name".format(namespace))
-    log.debug("Fetching metadata namespace '{namespace}' from Item '{item}'".format(
-        item=item_name, namespace=namespace))
-    metadata = metadata_registry.get(MetadataKey(namespace, item_name))
-    if muttable:
-        metadata.configuratin = dict(metadata.configuratin).copy()
-    log.debug("{metadata}".format(metadata=metadata))
-    return metadata
+    try:
+        log.debug("Getting metadata: Item [{}], namespace [{}]".format(item_name, namespace))
+        metadata = metadata_registry.get(MetadataKey(namespace, item_name))
+        return metadata
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
 
 def set_metadata(item_name, namespace, configuration, value=None, overwrite=False):
     """
-    Sets metadata value and configuration.
-
-    This function sets or updates a metadata namespace's value and
-    configuration, optionally overwriting the existing data. If not overwriting,
-    any existing keys with new values provided will be updated to the new
-    values.
+    This function creates or modifies Item metadata, optionally overwriting
+    the existing data. If not overwriting, the provided keys and values will
+    be overlaid on top of the existing keys and values.
 
     Args:
-        item_name (string): Name of the item.
-        namespace (string): Name of the namespace.
-        configuration (dict): Configuration dict to add to namespace.
-        value: New namespace value, ``None`` will use existing value.
-        overwrite (bool): If ``True`` existing namespace data will be discarded.
+        item_name (string): name of the Item
+        namespace (string): name of the namespace
+        configuration (dict): ``configuration`` dictionary to add to the
+            namespace
+        value (string): either the new namespace value or ``None``
+        overwrite (bool): if ``True``, existing namespace data will be
+            discarded
 
-    Raises:
-        ValueError: Item does not exist.
-        ValueError: Namespace name is invalid.
+    Returns:
+        True: Operation completed
+        False: Item does not exist or namespace name is invalid
     """
-    if validate_item(item_name) is None:
-        raise ValueError("Item '{}' does not exist".format(item_name))
-    if not re.match(_valid_chars_re, namespace):
-        raise ValueError("'{}' is not a valid namespace name".format(namespace))
-    log.debug("Saving metadata namespace '{namespace}' for Item '{item}'".format(
-        item=item_name, namespace=namespace))
-    if overwrite:
-        remove_metadata(item_name, namespace)
-    metadata = get_metadata(item_name, namespace)
-    if metadata is None or overwrite:
-        metadata_registry.add(Metadata(MetadataKey(namespace, item_name), value, configuration))
-    else:
-        if value is None:
-            value = metadata.value
-        new_configuration = dict(metadata.configuration).copy()
-        new_configuration.update(configuration)
-        metadata_registry.update(Metadata(MetadataKey(namespace, item_name), value, new_configuration))
+    try:
+        if overwrite:
+            remove_metadata(item_name, namespace)
+        metadata = get_metadata(item_name, namespace)
+        if metadata == False:
+            log.debug("Set metadata: Item or namespace does not exist: Item [{}], namespace [{}]".format(item_name, namespace))
+            return False
+        else:
+            result = None
+            if metadata is None or overwrite:
+                log.debug("Adding or overwriting metadata namespace with [value: {}, configuration: {}]: Item [{}], namespace [{}]".format(value, configuration, item_name, namespace))
+                result = metadata_registry.add(Metadata(MetadataKey(namespace, item_name), value, configuration))
+            else:
+                if value is None:
+                    value = metadata.value
+                new_configuration = dict(metadata.configuration).copy()
+                new_configuration.update(configuration)
+                log.debug("Setting metadata namespace to [value: {}, configuration: {}]: Item [{}], namespace [{}]".format(value, new_configuration, item_name, namespace))
+                result = metadata_registry.update(Metadata(MetadataKey(namespace, item_name), value, new_configuration))
+            return False if result is None else True
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
 
 def remove_metadata(item_name, namespace=None):
     """
-    Removes metadata namespaces.
+    This function removes the Item metadata for the specified namepsace or for
+    all namespaces.
 
     Args:
-        item_name (string): Name of the item.
-        namespace (string): Name of the namespace, ``None`` will remove all
-            namespaces for the specified item.
+        item_name (string): name of the item
+        namespace (string): name of the namespace or ``None``, which will
+            remove metadata in all namespaces for the specified Item
 
-    Raises:
-        ValueError: Item does not exist.
-        ValueError: Namespace name is invalid.
+    Returns:
+        True: Operation completed
+        False: Item does not exist or namespace name is invalid
     """
-    if validate_item(item_name) is None:
-        raise ValueError("Item '{}' does not exist".format(item_name))
-    if namespace is None:
-        log.debug("Deleting all metadata from Item '{item}'".format(item=item_name))
-        metadata_registry.removeItemMetadata(item_name)
-    else:
-        if not re.match(_valid_chars_re, namespace):
-            raise ValueError("'{}' is not a valid namespace name".format(namespace))
-        log.debug("Deleting metadata namespace '{namespace}' from Item '{item}'".format(
-            item=item_name, namespace=namespace))
-        metadata_registry.remove(MetadataKey(namespace, item_name))
+    try:
+        if namespace is None:
+            log.debug("Deleting all metadata: Item [{}]".format(item_name))
+            metadata_registry.removeItemMetadata(item_name)
+        else:
+            log.debug("Deleting metadata: Item [{}], namespace [{}]".format(item_name, namespace))
+            metadata_registry.remove(MetadataKey(namespace, item_name))
+        return True
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
 
 def get_value(item_name, namespace):
     """
-    Returns the metadata value for the namespace.
+    This function will return the Item metadata ``value`` for the specified
+    namespace.
 
     Args:
-        item_name (string): Name of the item.
-        namespace (string): Name of the namespace.
+        item_name (string): name of the item
+        namespace (string): name of the namespace
 
-    Raises:
-        ValueError: Item does not exist.
-        ValueError: Namespace name is invalid.
+    Returns:
+        value: namespace ``value``, can be ``None``
+        False: Item does not exist or namespace name is invalid
     """
-    metadata = get_metadata(item_name, namespace)
-    return metadata.value
+    try:
+        log.debug("Getting namespace value: Item [{}], namespace [{}]".format(item_name, namespace))
+        metadata = get_metadata(item_name, namespace)
+        return metadata.value
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
 
 def set_value(item_name, namespace, value):
     """
-    Sets the metadata value for the namespace.
+    This function creates or updates the Item metadata ``value`` for the
+    specified namespace.
 
     Args:
-        item_name (string): Name of the item.
-        namespace (string): Name of the namespace.
-        value: New value for namespace.
+        item_name (string): name of the Item
+        namespace (string): name of the namespace
+        value (string): new or updated value for the namespace
 
-    Raises:
-        ValueError: Item does not exist.
-        ValueError: Namespace name is invalid.
+    Returns:
+        True: Operation completed
+        False: Item does not exist or namespace name is invalid
     """
-    metadata = get_metadata(item_name, namespace)
-    set_metadata(item_name, namespace, value, metadata.configuration)
+    try:
+        log.debug("Setting namespace value: Item [{}], namespace [{}], value [{}]".format(item_name, namespace, value))
+        metadata = get_metadata(item_name, namespace)
+        return set_metadata(item_name, namespace, metadata.configuration, value, True)
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
 
 def get_key_value(item_name, namespace, key):
     """
-    Fetches the configuration value for the key provided.
+    Ths function returns the ``configuration`` value for the specified key.
 
     Args:
-        item_name (string): Name of the item.
-        namespace (string): Name of the namespace.
-        key (string): Key to fetch from the metadata configuration.
+        item_name (string): name of the Item
+        namespace (string): name of the namespace
+        key (string): ``configuration`` key to return
 
-    Raises:
-        ValueError: Item does not exist.
-        ValueError: Namespace name is invalid.
+    Returns:
+        value: ``configuration`` key value, can be ``None``
+        False: Item does not exist or namespace name is invalid
     """
-    metadata = get_metadata(item_name, namespace)
-    return metadata.configuration.get(key)
+    try:
+        log.debug("Getting value for key: Item [{}], namespace [{}], key [{}]".format(item_name, namespace, key))
+        metadata = get_metadata(item_name, namespace)
+        return metadata.configuration.get(key)
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
 
 def set_key_value(item_name, namespace, key, value):
     """
-    Sets a metdata configuration value in the namespace.
+    This function creates or updates a ``configuration`` value in the
+    specified namespace. This function cannot be used unless the namespace
+    already exists.
 
     Args:
-        item_name (string): Name of the item.
-        namespace (string): Name of the namespace.
-        key (string): Configuration key to set.
-        value: Value for configuration key.
+        item_name (string): name of the Item
+        namespace (string): name of the namespace
+        key (string): ``configuration`` key to create or update
+        value (string or decimal): value to set for ``configuration`` key
 
-    Raises:
-        ValueError: Item does not exist.
-        ValueError: Namespace name is invalid.
+    Returns:
+        True: Operation completed
+        False: Item does not exist or namespace name is invalid
     """
-    metadata = get_metadata(item_name, namespace)
-    new_configuration = dict(metadata.configuration).copy()
-    new_configuration.update({key: value})
-    set_metadata(item_name, namespace, metadata.value, new_configuration)
+    try:
+        log.debug("Setting value for key: Item [{}], namespace [{}], key [{}], value [{}]".format(item_name, namespace, key, value))
+        metadata = get_metadata(item_name, namespace)
+        new_configuration = {key: value}
+        if metadata is not None:
+            new_configuration = dict(metadata.configuration).copy()
+            new_configuration.update({key: value})
+        return set_metadata(item_name, namespace, new_configuration)
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
 
 def remove_key_value(item_name, namespace, key):
     """
-    Removes a configuration key from the metadata namespace.
+    This function removes a ``configuration`` key and its value from the
+    specified namespace.
 
     Args:
-        item_name (string): Name of the item.
-        namespace (string): Name of the namespace.
-        key (string): Configuration key to remove from the metadata.
+        item_name (string): name of the Item
+        namespace (string): name of the namespace
+        key (string): ``configuration`` key to remove
 
-    Raises:
-        ValueError: Item does not exist.
-        ValueError: Namespace name is invalid.
+    Returns:
+        True: Operation completed
+        False: Item does not exist or namespace name is invalid
     """
-    metadata = get_metadata(item_name, namespace)
-    new_configuration = dict(metadata.configuration).copy()
-    new_configuration.pop(key, None)
-    set_metadata(item_name, namespace, metadata.value, new_configuration, True)
+    try:
+        log.debug("Removing key: Item [{}], namespace [{}], key [{}]".format(item_name, namespace, key))
+        metadata = get_metadata(item_name, namespace)
+        if metadata is not None:
+            new_configuration = dict(metadata.configuration).copy()
+            new_configuration.pop(key)
+            return set_metadata(item_name, namespace, new_configuration, metadata.value, True)
+        else:
+            log.debug("Removing key: metadata does not exist: Item [{}], namespace [{}]".format(item_name, namespace))
+            return False
+    except:
+        import traceback
+        log.warn(traceback.format_exc())
+        return False
