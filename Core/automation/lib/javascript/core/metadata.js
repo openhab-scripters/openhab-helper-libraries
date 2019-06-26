@@ -48,28 +48,19 @@ This library provides functions for manipulating Item Metadata.
         Returns:
             array of strings representing the namespace names found for the
                 specified Item
-            false: Item does not exist
-
-        Raises:
-            TODO: ValueError: Item does not exist
         */
-        try {
-            var namespace_names = [];
-            log.debug("Getting all namespaces: Item [{}]", item_name);
-            MetadataRegistry.getAll()
-                .stream()
-                .filter(function(metadata) {
-                    return metadata.UID.itemName == item_name;
-                })
-                .forEach(function(metadata) {
-                    namespace_names.push(metadata.UID.namespace);
-                });
+        var namespace_names = [];
+        log.debug("get_all_namespaces: Item [{}]", item_name);
+        MetadataRegistry.getAll()
+            .stream()
+            .filter(function(metadata) {
+                return metadata.UID.itemName == item_name;
+            })
+            .forEach(function(metadata) {
+                namespace_names.push(metadata.UID.namespace);
+            });
 
-            return namespace_names;
-        } catch(e) {
-            log.warn(e);
-            return false;
-        }
+        return namespace_names;
     };
 
     context.get_metadata = function(item_name, namespace) {
@@ -78,27 +69,16 @@ This library provides functions for manipulating Item Metadata.
         specified Item.
 
         Args:
-            item_name (string): name of the Item.
-            namespace (string): name of the namespace.
+            item_name (string): name of the Item
+            namespace (string): name of the namespace
 
         Returns:
             Metadata object: contains the namespace ``value`` and
                 ``configuration`` dictionary
-            null: namespace or metadata does not exist for the Item
-            false: namespace name is invalid
-
-        Raises:
-            TODO: ValueError: Item does not exist
-            IllegalArgumentException: namespace name is invalid
+            null: metadata or Item does not exist
         */
-        try {
-            log.debug("Getting metadata: Item [{}], namespace [{}]", item_name, namespace);
-            var metadata = MetadataRegistry.get(new MetadataKey(namespace, item_name));
-            return metadata;
-        } catch(e) {
-            log.warn(e);
-            return false;
-        }
+        log.debug("get_metadata: Item [{}], namespace [{}]", item_name, namespace);
+        return MetadataRegistry.get(new MetadataKey(namespace, item_name));
     };
 
     context.set_metadata = function(item_name, namespace, configuration, value, overwrite) {
@@ -115,77 +95,43 @@ This library provides functions for manipulating Item Metadata.
             value (string): either the new namespace value or ``null``
             overwrite (bool): if ``true``, existing namespace data will be
                 discarded
-
-        Returns:
-            true: Operation completed
-            false: Item does not exist or namespace name is invalid
-
-        Raises:
-            TODO: ValueError: Item does not exist
-            IllegalArgumentException: namespace name is invalid
         */
-        try {
-            overwrite = overwrite || false;
-            value = value || null;
-            if (overwrite) {
-                remove_metadata(item_name, namespace);
+        overwrite = overwrite || false;
+        value = value || null;
+        if (overwrite) {
+            remove_metadata(item_name, namespace);
+        }
+        var metadata = get_metadata(item_name, namespace);
+        if (metadata === null || overwrite) {
+            log.debug("set_metadata: adding or overwriting metadata namespace with [value: {}, configuration: {}]: Item [{}], namespace [{}]", [value, JSON.stringify(configuration), item_name, namespace]);
+            MetadataRegistry.add(new Metadata(new MetadataKey(namespace, item_name), value, configuration));
+        } else {
+            if (!value) {
+                value = metadata.value;
             }
-            var metadata = get_metadata(item_name, namespace);
-            if (metadata === false) {
-                log.debug("Set metadata: Item or namespace does not exist: Item [{}], namespace [{}]", item_name, namespace);
-                return false;
-            } else {
-                var result = null
-                if (metadata === null || overwrite) {
-                    log.debug("Adding or overwriting metadata namespace with [value: {}, configuration: {}]: Item [{}], namespace [{}]", [value, JSON.stringify(configuration), item_name, namespace]);
-                    result = MetadataRegistry.add(new Metadata(new MetadataKey(namespace, item_name), value, configuration));
-                } else {
-                    if (!value) {
-                        value = metadata.value;
-                    }
-                    var new_configuration = _merge_configuration(metadata.configuration, configuration);
-                    log.debug("Setting metadata namespace to [value: {}, configuration: {}]: Item [{}], namespace [{}]", [value, JSON.stringify(new_configuration), item_name, namespace]);
-                    result = MetadataRegistry.update(new Metadata(new MetadataKey(namespace, item_name), value, new_configuration));
-                }
-                return (result === null ? false : true);
-            }
-        } catch(e) {
-            log.warn(e);
-            return false;
+            var new_configuration = _merge_configuration(metadata.configuration, configuration);
+            log.debug("set_metadata: setting metadata namespace to [value: {}, configuration: {}]: Item [{}], namespace [{}]", [value, JSON.stringify(new_configuration), item_name, namespace]);
+            MetadataRegistry.update(new Metadata(new MetadataKey(namespace, item_name), value, new_configuration));
         }
     };
 
     context.remove_metadata = function(item_name, namespace) {
         /*
-        This function removes the Item metadata for the specified namepsace or for
+        This function removes the Item metadata for the specified namespace or
         all namespaces.
 
         Args:
             item_name (string): name of the item
             namespace (string): name of the namespace or ``null``, which will
                 remove metadata in all namespaces for the specified Item
-
-        Returns:
-            true: Operation completed
-            false: Item does not exist or namespace name is invalid
-
-        Raises:
-            TODO: ValueError: Item does not exist
-            IllegalArgumentException: namespace name is invalid
         */
-        try {
-            namespace = namespace || null;
-            if (!namespace) {
-                log.debug("Deleting all metadata: Item [{}]", item_name);
-                MetadataRegistry.removeItemMetadata(item_name);
-            } else {
-                log.debug("Deleting metadata: Item [{}], namespace [{}]", item_name, namespace);
-                MetadataRegistry.remove(new MetadataKey(namespace, item_name));
-            }
-            return true;
-        } catch(e) {
-            log.warn(e);
-            return false;
+        namespace = namespace || null;
+        if (!namespace) {
+            log.debug("remove_metadata (all): Item [{}]", item_name);
+            MetadataRegistry.removeItemMetadata(item_name);
+        } else {
+            log.debug("remove_metadata: Item [{}], namespace [{}]", item_name, namespace);
+            MetadataRegistry.remove(new MetadataKey(namespace, item_name));
         }
     };
 
@@ -200,19 +146,14 @@ This library provides functions for manipulating Item Metadata.
 
         Returns:
             value: namespace ``value``, can be ``null``
-            false: Item does not exist or namespace name is invalid
-
-        Raises:
-            TODO: ValueError: Item does not exist
-            IllegalArgumentException: namespace name is invalid
+            null: metadata or Item does not exist
         */
-        try {
-            log.debug("Getting namespace value: Item [{}], namespace [{}]", item_name, namespace);
-            var metadata = get_metadata(item_name, namespace);
+        log.debug("get_value: Item [{}], namespace [{}]", item_name, namespace);
+        var metadata = get_metadata(item_name, namespace);
+        if (metadata) {
             return metadata.value;
-        } catch(e) {
-            log.warn(e);
-            return false;
+        } else {
+            return null;
         }
     };
 
@@ -225,22 +166,13 @@ This library provides functions for manipulating Item Metadata.
             item_name (string): name of the Item
             namespace (string): name of the namespace
             value (string): new or updated value for the namespace
-
-        Returns:
-            true: Operation completed
-            false: Item does not exist or namespace name is invalid
-
-        Raises:
-            TODO: ValueError: Item does not exist
-            IllegalArgumentException: namespace name is invalid
         */
-        try {
-            log.debug("Setting namespace value: Item [{}], namespace [{}], value [{}]", [item_name, namespace, value]);
-            var metadata = get_metadata(item_name, namespace);
-            return set_metadata(item_name, namespace, metadata.configuration, value, true);
-        } catch(e) {
-            log.warn(e);
-            return false;
+        log.debug("set_value: Item [{}], namespace [{}], value [{}]", [item_name, namespace, value]);
+        var metadata = get_metadata(item_name, namespace);
+        if (metadata) {
+            set_metadata(item_name, namespace, metadata.configuration, value, true);
+        } else {
+            set_metadata(item_name, namespace, {}, value);
         }
     };
 
@@ -255,19 +187,14 @@ This library provides functions for manipulating Item Metadata.
 
         Returns:
             value: ``configuration`` key value, can be ``null``
-            false: Item does not exist or namespace name is invalid
-
-        Raises:
-            TODO: ValueError: Item does not exist
-            IllegalArgumentException: namespace name is invalid
+            null: metadata or Item does not exist
         */
-        try {
-            log.debug("Getting value for key: Item [{}], namespace [{}], key [{}]", [item_name, namespace, key]);
-            var metadata = get_metadata(item_name, namespace);
+        log.debug("get_key_value: Item [{}], namespace [{}], key [{}]", [item_name, namespace, key]);
+        var metadata = get_metadata(item_name, namespace);
+        if (metadata) {
             return metadata.configuration[key];
-        } catch(e) {
-            log.warn(e);
-            return false;
+        } else {
+            return null;
         }
     };
 
@@ -281,29 +208,17 @@ This library provides functions for manipulating Item Metadata.
             item_name (string): name of the Item
             namespace (string): name of the namespace
             key (string): ``configuration`` key to create or update
-            value (string or decimal): value to set for ``configuration`` key
-
-        Returns:
-            true: Operation completed
-            false: Item does not exist or namespace name is invalid
-
-        Raises:
-            TODO: ValueError: Item does not exist
-            IllegalArgumentException: namespace name is invalid
+            value (string, decimal, boolean): value to set for ``configuration``
+                key
         */
-        try {
-            log.debug("Setting value for key: Item [{}], namespace [{}], key [{}], value [{}]", [item_name, namespace, key, value]);
-            var metadata = get_metadata(item_name, namespace);
-            var new_configuration = {};
-            new_configuration[key] = value;
-            if (metadata) {
-                new_configuration = _merge_configuration(metadata.configuration, new_configuration);
-            }
-            return set_metadata(item_name, namespace, new_configuration);
-        } catch(e) {
-            log.warn(e);
-            return false;
+        log.debug("set_key_value: Item [{}], namespace [{}], key [{}], value [{}]", [item_name, namespace, key, value]);
+        var metadata = get_metadata(item_name, namespace);
+        var new_configuration = {};
+        new_configuration[key] = value;
+        if (metadata) {
+            new_configuration = _merge_configuration(metadata.configuration, new_configuration);
         }
+        set_metadata(item_name, namespace, new_configuration);
     };
 
     context.remove_key_value = function(item_name, namespace, key) {
@@ -315,29 +230,15 @@ This library provides functions for manipulating Item Metadata.
             item_name (string): name of the Item
             namespace (string): name of the namespace
             key (string): ``configuration`` key to remove
-
-        Returns:
-            true: Operation completed
-            false: Item does not exist or namespace name is invalid
-
-        Raises:
-            TODO: ValueError: Item does not exist
-            IllegalArgumentException: namespace name is invalid
         */
-        try {
-            log.debug("Removing key: Item [{}], namespace [{}], key [{}]", [item_name, namespace, key]);
-            var metadata = get_metadata(item_name, namespace);
-            if (metadata) {
-                var new_configuration = _merge_configuration(metadata.configuration, {});
-                delete new_configuration[key];
-                return set_metadata(item_name, namespace, new_configuration, metadata.value, true);
-            } else {
-                log.debug("Removing key: metadata does not exist: Item [{}], namespace [{}]", item_name, namespace);
-                return false
-            }
-        } catch(e) {
-            log.warn(e);
-            return false;
+        log.debug("remove_key_value: Item [{}], namespace [{}], key [{}]", [item_name, namespace, key]);
+        var metadata = get_metadata(item_name, namespace);
+        if (metadata) {
+            var new_configuration = _merge_configuration(metadata.configuration, {});
+            delete new_configuration[key];
+            set_metadata(item_name, namespace, new_configuration, metadata.value, true);
+        } else {
+            log.debug("remove_key_value: metadata does not exist: Item [{}], namespace [{}]", item_name, namespace);
         }
     };
 
