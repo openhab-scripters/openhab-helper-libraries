@@ -13,8 +13,17 @@
 	//https://wiki.shibboleth.net/confluence/display/IDP30/ScriptedAttributeDefinition
 	var logger 					= Java.type("org.slf4j.LoggerFactory").getLogger("jsr223.javascript");
 	
-	var RuleBuilder 			= Java.type("org.openhab.core.automation.util.RuleBuilder");
-	var RuleManager 			= Java.type("org.openhab.core.automation.RuleManager");
+	try {
+		var RuleBuilder = Java.type("org.openhab.core.automation.util.RuleBuilder");
+	} catch(e) {
+		var RuleBuilder = Java.type("org.eclipse.smarthome.automation.core.util.RuleBuilder");
+	}
+	
+	try {
+		var RuleManager = Java.type("org.openhab.core.automation.RuleManager");
+	} catch(e) {
+		var RuleManager = Java.type("org.eclipse.smarthome.automation.RuleManager");
+	}
 
 	var uuid 					= Java.type("java.util.UUID");
 	var ScriptExecution 		= Java.type("org.eclipse.smarthome.model.script.actions.ScriptExecution");
