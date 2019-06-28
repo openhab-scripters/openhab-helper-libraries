@@ -227,13 +227,45 @@ This is the default logger used in the examples and the helper libraries.</p></l
 <li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB Scripted Automation documentation</a> and the language specific documentation found as links on that page.</p></li>
 <li><p>Install the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> add-on.</p></li>
 <li><p>Shut down openHAB.</p></li>
-<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a>. Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into: <br />
-* package repository openHAB installation, like openHABian: <code class="docutils literal notranslate"><span class="pre">/etc/openhab2/</span></code> <br />
-* default Linux manual openHAB installation: <code class="docutils literal notranslate"><span class="pre">/opt/openhab2/conf/</span></code> <br />
-* default Windows manual openHAB installation: <code class="docutils literal notranslate"><span class="pre">C:\openhab2\conf\</span></code> <br />
-This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a>.
-This will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
-If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a>.
+Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into your openHAB’s configuration directory, which varies based on the type of installation:</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UGFja2FnZSByZXBvc2l0b3J5LCBsaWtlIG9wZW5IQUJpYW4= docutils container">
+<div class="docutils container">
+<p>Package repository, like openHABian</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-TWFudWFsIChMaW51eCBkZWZhdWx0KQ== docutils container">
+<div class="docutils container">
+<p>Manual (Linux default)</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-TWFudWFsIChXaW5kb3dzIGRlZmF1bHQp docutils container">
+<div class="docutils container">
+<p>Manual (Windows default)</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UGFja2FnZSByZXBvc2l0b3J5LCBsaWtlIG9wZW5IQUJpYW4= active docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/openhab2/
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-TWFudWFsIChMaW51eCBkZWZhdWx0KQ== docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/openhab2/conf/
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-TWFudWFsIChXaW5kb3dzIGRlZmF1bHQp docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:\openhab2\conf\
+</pre></div>
+</div>
+</div>
+</div>
+<p>This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a> and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
+If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p>
+</li>
 <li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
 For example, in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.py.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.py</span></code>.
 These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
@@ -295,7 +327,7 @@ Just like openHAB, this repository is community driven!</p></li>
 </ol>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<ol class="arabic simple">
+<ol class="arabic">
 <li><p>The <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> is still in development, so it is recommended to use the latest snapshot or milestone release of <a class="reference external" href="https://www.openhab.org/download/">openHAB</a>.</p></li>
 <li><p>Use the <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html">Karaf logging</a> commands to enable debug logging for automation: <code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">org.openhab.core.automation</span></code>.
 Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
@@ -305,13 +337,45 @@ This is the default logger used in the examples and the helper libraries.</p></l
 <li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB Scripted Automation documentation</a> and the language specific documentation found as links on that page.</p></li>
 <li><p>Install the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> add-on.</p></li>
 <li><p>Shut down openHAB.</p></li>
-<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a>. Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into: <br />
-* package repository openHAB installation, like openHABian: <code class="docutils literal notranslate"><span class="pre">/etc/openhab2/</span></code> <br />
-* default Linux manual openHAB installation: <code class="docutils literal notranslate"><span class="pre">/opt/openhab2/conf/</span></code> <br />
-* default Windows manual openHAB installation: <code class="docutils literal notranslate"><span class="pre">C:\openhab2\conf\</span></code> <br />
-This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a>.
-This will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
-If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a>.
+Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into your openHAB’s configuration directory, which varies based on the type of installation:</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UGFja2FnZSByZXBvc2l0b3J5LCBsaWtlIG9wZW5IQUJpYW4= docutils container">
+<div class="docutils container">
+<p>Package repository, like openHABian</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-TWFudWFsIChMaW51eCBkZWZhdWx0KQ== docutils container">
+<div class="docutils container">
+<p>Manual (Linux default)</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-TWFudWFsIChXaW5kb3dzIGRlZmF1bHQp docutils container">
+<div class="docutils container">
+<p>Manual (Windows default)</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UGFja2FnZSByZXBvc2l0b3J5LCBsaWtlIG9wZW5IQUJpYW4= active docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/openhab2/
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-TWFudWFsIChMaW51eCBkZWZhdWx0KQ== docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/openhab2/conf/
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-TWFudWFsIChXaW5kb3dzIGRlZmF1bHQp docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:\openhab2\conf\
+</pre></div>
+</div>
+</div>
+</div>
+<p>This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a> and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
+If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p>
+</li>
 <li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
 For example, in <code class="docutils literal notranslate"><span class="pre">/automation/lib/javascript/</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.js.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.js</span></code>.
 These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
@@ -325,7 +389,7 @@ Just like openHAB, this repository is community driven!</p></li>
 </ol>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
-<ol class="arabic simple">
+<ol class="arabic">
 <li><p>The <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> is still in development, so it is recommended to use the latest snapshot or milestone release of <a class="reference external" href="https://www.openhab.org/download/">openHAB</a>.</p></li>
 <li><p>Use the <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html">Karaf logging</a> commands to enable debug logging for automation: <code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">org.openhab.core.automation</span></code>.
 Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
@@ -335,13 +399,45 @@ This is the default logger used in the examples and the helper libraries.</p></l
 <li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB Scripted Automation documentation</a> and the language specific documentation found as links on that page.</p></li>
 <li><p>Install the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> add-on.</p></li>
 <li><p>Shut down openHAB.</p></li>
-<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a>. Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into: <br />
-* package repository openHAB installation, like openHABian: <code class="docutils literal notranslate"><span class="pre">/etc/openhab2/</span></code> <br />
-* default Linux manual openHAB installation: <code class="docutils literal notranslate"><span class="pre">/opt/openhab2/conf/</span></code> <br />
-* default Windows manual openHAB installation: <code class="docutils literal notranslate"><span class="pre">C:\openhab2\conf\</span></code> <br />
-This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a>.
-This will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
-If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p></li>
+<li><p><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip">Download the contents of this repository</a>.
+Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into your openHAB’s configuration directory, which varies based on the type of installation:</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UGFja2FnZSByZXBvc2l0b3J5LCBsaWtlIG9wZW5IQUJpYW4= docutils container">
+<div class="docutils container">
+<p>Package repository, like openHABian</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-TWFudWFsIChMaW51eCBkZWZhdWx0KQ== docutils container">
+<div class="docutils container">
+<p>Manual (Linux default)</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-TWFudWFsIChXaW5kb3dzIGRlZmF1bHQp docutils container">
+<div class="docutils container">
+<p>Manual (Windows default)</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UGFja2FnZSByZXBvc2l0b3J5LCBsaWtlIG9wZW5IQUJpYW4= active docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/etc/openhab2/
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-TWFudWFsIChMaW51eCBkZWZhdWx0KQ== docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/openhab2/conf/
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-TWFudWFsIChXaW5kb3dzIGRlZmF1bHQp docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:\openhab2\conf\
+</pre></div>
+</div>
+</div>
+</div>
+<p>This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a> and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
+If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p>
+</li>
 <li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
 For example, in <code class="docutils literal notranslate"><span class="pre">/automation/lib/groovy/</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.groovy.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.groovy</span></code>.
 These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
