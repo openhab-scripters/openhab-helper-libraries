@@ -7,7 +7,7 @@ When choosing to use a solution submitted by the community, the files will need 
 
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :glob:
 
     Community/*

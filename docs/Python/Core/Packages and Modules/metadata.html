@@ -1,0 +1,521 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>metadata &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="rules" href="rules.html" />
+    <link rel="prev" title="log" href="log.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Core.html">Core</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../Core.html#packages-and-modules">Packages and Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="osgi.html">osgi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="actions.html">actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="date.html">date</a></li>
+<li class="toctree-l3"><a class="reference internal" href="items.html">items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jsr223.html">jsr223</a></li>
+<li class="toctree-l3"><a class="reference internal" href="links.html">links</a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html">log</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">metadata</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#structure">Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-core.metadata">Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rules.html">rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html">testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triggers.html">triggers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Core.html#component-scripts">Component Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Core.html#scripts">Scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Examples.html">Examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../Core.html">Core</a> &raquo;</li>
+        
+      <li>metadata</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="metadata">
+<h1>metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p>In Jython, a Metadata object will look like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Metadata</span> <span class="p">[</span><span class="n">key</span><span class="o">=</span><span class="n">Namespace_Name</span><span class="p">:</span><span class="n">Item_Name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">namespace</span> <span class="n">value</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="p">[</span><span class="n">Key_1</span><span class="o">=</span><span class="s2">&quot;key 1 value&quot;</span><span class="p">,</span> <span class="n">Key_2</span><span class="o">=</span><span class="mf">5.5</span><span class="p">,</span> <span class="n">Key_3</span><span class="o">=</span><span class="n">false</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>Metadata objects are uniquely defined by an Item name and a namespace name, and contain a “value” and the “configuration”.
+The “value” is not very useful, as it only holds a single value.
+The “configuration” provides the actual metadata as a dictionary.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>└── Item
+    ├── Namespace 1
+    │   ├── Value
+    │   └── Configuration
+    │       ├── Key 1
+    │       │   └── Value
+    │       ├── Key 2
+    │       │   └── Value
+    │       └── Key 3
+    │           └── Value
+    ├── Namespace 2
+    │   ├── Value
+    │   └── Configuration
+    │       ├── Key 1
+    │       │   └── Value
+    │       └── Key 2
+    │           └── Value
+    └── Namespace 3
+        ├── Value
+        └── Configuration
+            └── Key 1
+                └── Value
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-core.metadata">
+<span id="module"></span><h2>Module<a class="headerlink" href="#module-core.metadata" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functions for manipulating Item Metadata.</p>
+<dl class="function">
+<dt id="core.metadata.get_all_namespaces">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">get_all_namespaces</code><span class="sig-paren">(</span><em class="sig-param">item_name</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.get_all_namespaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will return a list of an Item’s namespaces.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a list of an Item&#39;s namespaces</span>
+<span class="n">get_all_namespaces</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item_name</strong> (<em>string</em>) – name of the Item to retrieve namespaces names from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of strings representing the namespace names found for the
+specified Item</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.metadata.get_metadata">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">get_metadata</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will return the Metadata object associated with the
+specified Item.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get Metadata object from an Item&#39;s namespace</span>
+<span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
+<li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Metadata object containing the namespace
+<code class="docutils literal notranslate"><span class="pre">value</span></code> and <code class="docutils literal notranslate"><span class="pre">configuration</span></code> dictionary, but will be <code class="docutils literal notranslate"><span class="pre">None</span></code> if
+the metadata or Item does not exist</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Metadata object or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.metadata.set_metadata">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">set_metadata</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">configuration</em>, <em class="sig-param">value=None</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.set_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates or modifies Item metadata, optionally overwriting
+the existing data. If not overwriting, the provided keys and values will
+be overlaid on top of the existing keys and values.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add/change metadata in an Item&#39;s namespace (only overwrites existing keys and &quot;value&quot; is optional)</span>
+<span class="n">set_metadata</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Key_1&quot;</span><span class="p">:</span> <span class="s2">&quot;key 1 value&quot;</span><span class="p">,</span> <span class="s2">&quot;Key_2&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Key_3&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">},</span> <span class="s2">&quot;namespace_value&quot;</span><span class="p">)</span>
+
+<span class="c1"># Overwrite metadata in an Item&#39;s namespace with new data</span>
+<span class="n">set_metadata</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Key_5&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
+<li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
+<li><p><strong>configuration</strong> (<em>dict</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> dictionary to add to the
+namespace</p></li>
+<li><p><strong>value</strong> (<em>string</em>) – either the new namespace value or <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, existing namespace data will be
+discarded</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.metadata.remove_metadata">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">remove_metadata</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.remove_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function removes the Item metadata for the specified namepsace or for
+all namespaces.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove a namespace from an Item</span>
+<span class="n">remove_metadata</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">)</span>
+
+<span class="c1"># Remove ALL namespaces from an Item</span>
+<span class="n">remove_metadata</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – name of the item</p></li>
+<li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace or <code class="docutils literal notranslate"><span class="pre">None</span></code>, which will
+remove metadata in all namespaces for the specified Item</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.metadata.get_key_value">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">get_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.get_key_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ths function returns the <code class="docutils literal notranslate"><span class="pre">configuration</span></code> value for the specified key.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get key/value pair from Item&#39;s namespace &quot;configuration&quot;</span>
+<span class="n">get_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key_1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
+<li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key to return</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">configuration</span></code> key value or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the metadata or
+Item does not exist</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.metadata.set_key_value">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">set_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">key</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.set_key_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates or updates a <code class="docutils literal notranslate"><span class="pre">configuration</span></code> value in the
+specified namespace. This function cannot be used unless the namespace
+already exists.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set key/value pair in Item&#39;s namespace &quot;configuration&quot;</span>
+<span class="n">set_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key_1&quot;</span><span class="p">,</span> <span class="s2">&quot;key_1 value&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
+<li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key to create or update</p></li>
+<li><p><strong>value</strong> (<em>string</em><em>, </em><em>decimal</em><em>, </em><em>boolean</em><em> or </em><em>None</em>) – value to set for <code class="docutils literal notranslate"><span class="pre">configuration</span></code>
+key</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.metadata.remove_key_value">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">remove_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.remove_key_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function removes a <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key and its value from the
+specified namespace.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove key/value pair from namespace ``configuration``</span>
+<span class="n">remove_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key_1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
+<li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key to remove</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.metadata.get_value">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will return the Item metadata <code class="docutils literal notranslate"><span class="pre">value</span></code> for the specified
+namespace.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get Item&#39;s namespace &quot;value&quot;</span>
+<span class="n">get_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – name of the item</p></li>
+<li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>namespace <code class="docutils literal notranslate"><span class="pre">value</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the metadata or
+Item does not exist</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.metadata.set_value">
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">set_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates or updates the Item metadata <code class="docutils literal notranslate"><span class="pre">value</span></code> for the
+specified namespace.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set Item&#39;s namespace &quot;value&quot;</span>
+<span class="n">set_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;namespace value&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
+<li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
+<li><p><strong>value</strong> (<em>string</em>) – new or updated value for the namespace</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Core/Packages and Modules/metadata.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

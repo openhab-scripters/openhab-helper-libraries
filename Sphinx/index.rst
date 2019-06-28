@@ -44,6 +44,7 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     Python/Reference.rst
     Python/Core.rst
     Python/Community.rst
+    Python/Examples.rst
 
 
 .. toctree::

@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-python module which can be used to send SMS messages via the Clickatell HTTP/S API
-Interface on https://api.clickatell.com/
+This module can be used to send SMS messages via the Clickatell HTTP/S API at https://api.clickatell.com/.
+
+This file was originally published at https://github.com/jacques/pyclickatell.
+
+2018-07-07: B. Synnerlig added smsEncode() function
+
 License
+-------
+
 Copyright (c) 2006-2012 Jacques Marneweck. All rights reserved.
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-This file was originally published at https://github.com/jacques/pyclickatell
-2018-07-07 B. Synnerlig added smsEncode() function
 """
 
 import urllib, urllib2

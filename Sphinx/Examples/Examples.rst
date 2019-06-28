@@ -8,5 +8,4 @@ Examples
 
     Hello World
     Design Patterns/Design Patterns.rst
-    Component Scripts/Component Scripts.rst
     *

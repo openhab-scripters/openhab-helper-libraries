@@ -10,14 +10,10 @@ Packages and Modules
 --------------------
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :glob:
 
     Core/Packages and Modules/osgi.rst
-    Core/Packages and Modules/rules.rst
-    Core/Packages and Modules/triggers.rst
-    Core/Packages and Modules/log.rst
-    Core/Packages and Modules/actions.rst
     Core/Packages and Modules/*
 
 
@@ -25,7 +21,7 @@ Component Scripts
 -----------------
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :glob:
 
     Core/Component Scripts/*
@@ -35,6 +31,6 @@ Scripts
 -------
 
 .. toctree::
-    :maxdepth: 0
+    :maxdepth: 1
 
     Core/Scripts/000_startup_delay.rst
