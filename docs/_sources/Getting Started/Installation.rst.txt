@@ -24,7 +24,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 .. |core_step_2| replace::
     Use the `Karaf logging`_ commands to enable debug logging for automation: ``log:set DEBUG org.openhab.core.automation``.
     Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
-    For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to change this to `org.eclipse.smarthome.automation`.
+    For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to change this to ``org.eclipse.smarthome.automation``.
 
 .. |core_step_3| replace::
     Enable debug logging for jsr223: ``log:set DEBUG jsr223``.
@@ -47,7 +47,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
     This will create a directory structure as described in :doc:`File Locations`.
     This will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
     If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
-    
+
 .. |core_step_8a| replace::
     There is a main configuration file for each scripting language's helper libraries that will need to be renamed.
 
@@ -85,7 +85,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 
             .. tabs::
 
-                .. group-tab:: Using an `/etc/default/openhab2` file
+                .. group-tab:: Using an ``/etc/default/openhab2`` file
                 
                     This option is typically used with a package repository openHAB installation (includes openHABian).
                     If creating a new file, remember to set the permissions so that the `openhab` account has at least read access.
@@ -95,7 +95,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 
                         EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
 
-                .. group-tab:: Using the `start.sh` script
+                .. group-tab:: Using the ``start.sh`` script
                 
                     This option is typically used with a manual openHAB installation on Linux.
 
@@ -104,7 +104,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
                         # Add to the top of the file
                         export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
 
-                .. group-tab:: Using the `start.bat` script
+                .. group-tab:: Using the ``start.bat`` script
                 
                     This option is for a manual openHAB installation on Windows.
                     If you are *not* using OH 2.5, 2.5M2, S1604, or newer, you will first need to update your ``C:\openhab2\runtime\bin\setenv.bat`` file with the `changes in the current file <https://github.com/openhab/openhab-distro/blob/master/distributions/openhab/src/main/resources/bin/setenv.bat#L121>`_.
@@ -117,11 +117,8 @@ Instructions for installation in a Docker container are available :doc:`here <Do
         #.  Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to the path specified above in the EXTRA_JAVA_OPTS.
             A full installation of Jython can also be used, but the paths above would need to be modified.
             Jython 2.7.1 and 2.7.2a1+ will also work, but 2.7.0 has proven to be very stable.
-        #.  After completing the steps in the [Quick Start Guide](/Docs/README.md#quick-start-guide), create rules using [rule and trigger decorators](Defining-Rules.md#rule-and-trigger-decorators).
-            There is documentation on how to create rules directly with the API, but the decorators are by far the simplest.
         #.  Copy the ``/Script Examples/Python/hello_world.py`` script to ``/automation/jsr223/python/personal/``.
         #.  |core_step_9|
-        #.  Review the Jython helper library documentation.
         #.  |core_step_10|
         #.  |core_step_11|
 
@@ -159,15 +156,17 @@ Instructions for installation in a Docker container are available :doc:`here <Do
         #.  Extract ``/groovy-2.4.12/lib/groovy*.jar`` to ``/runtime/lib/ext/``.
         #.  Copy the ``/Script Examples/Groovy/HelloWorld.groovy`` script to ``/automation/jsr223/groovy/personal/``.
         #.  |core_step_9|
-        #.  Review the Groovy helper library documentation.
         #.  |core_step_10|
         #.  |core_step_11|
+
+
+To upgrade to the latest version of the helper libraries, delete the older version and follow the installation steps.
 
 
 Community
 =========
 
-The Community section of the repository contains scripts and libraries contain functionality beyond what is provided in Core.
+The Community section of the repository contains scripts and libraries that contain functionality beyond what is provided in Core.
 For the scripting language(s) being used, browse the Community documentation and/or the files downloaded from the repository.
 These instructions will help guide you through process of installing or upgrading a Community package.
 
@@ -209,6 +208,14 @@ These instructions will help guide you through process of installing or upgradin
         #.  |community_step_3|
             For example, there may be some settings copied to ``/automation/lib/python/configuration.groovy.example`` that need to be added to ``configuration.groovy``.
         #.  |community_step_4|
+
+
+Personal
+========
+
+Personal scripts and modules should be placed in the appropriate ``personal`` directories documented in :doc:`File Locations`.
+Once installed, the files in ``community`` and ``core`` directories should **not** be modified.
+If you want to make or test a change, first copy the files to ``personal`` directories (you may also need to modify imports too).
 
 
 .. _openHAB: https://www.openhab.org/download/

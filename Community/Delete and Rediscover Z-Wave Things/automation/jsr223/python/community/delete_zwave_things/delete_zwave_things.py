@@ -1,16 +1,23 @@
 '''
-PURPOSE:
+PURPOSE
+-------
+
 OH does not currently support automatically updating a Things definition, when
 a binding is updated. This rule will delete all managed Z-Wave Things and then
 rediscover them.
 
-REQUIRES:
+REQUIRES
+--------
+
 * OH installed on Linux
 * The Z-Wave binding
 * A Delete_Zwave_Things Item
 
-KNOWN ISSUES:
+KNOWN ISSUES
+------------
+
 * Manual configurations (e.q., location, name, etc.) will not be replaced after the deletion.
+
 '''
 
 from time import sleep

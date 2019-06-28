@@ -99,6 +99,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#community">Community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#personal">Personal</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="File Locations.html">File Locations</a></li>
@@ -119,6 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Python/Reference.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Python/Core.html">Core</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Python/Community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python/Examples.html">Examples</a></li>
 </ul>
 <p class="caption"><span class="caption-text">JavaScript</span></p>
 <ul>
@@ -219,7 +221,7 @@
 <li><p>The <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> is still in development, so it is recommended to use the latest snapshot or milestone release of <a class="reference external" href="https://www.openhab.org/download/">openHAB</a>.</p></li>
 <li><p>Use the <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html">Karaf logging</a> commands to enable debug logging for automation: <code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">org.openhab.core.automation</span></code>.
 Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
-For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to change this to <cite>org.eclipse.smarthome.automation</cite>.</p></li>
+For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to change this to <code class="docutils literal notranslate"><span class="pre">org.eclipse.smarthome.automation</span></code>.</p></li>
 <li><p>Enable debug logging for jsr223: <code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">jsr223</span></code>.
 This is the default logger used in the examples and the helper libraries.</p></li>
 <li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB Scripted Automation documentation</a> and the language specific documentation found as links on that page.</p></li>
@@ -240,23 +242,23 @@ These examples assume that you will be using the standalone Jython 2.7.0 jar in 
 Changes to the EXTRA_JAVA_OPTS require an openHAB restart.</p>
 <div class="sphinx-tabs docutils container">
 <div class="ui top attached tabular menu sphinx-menu docutils container">
-<div class="active item sphinx-data-tab-VXNpbmcgYW4gYC9ldGMvZGVmYXVsdC9vcGVuaGFiMmAgZmlsZQ== docutils container">
+<div class="active item sphinx-data-tab-VXNpbmcgYW4gYGAvZXRjL2RlZmF1bHQvb3BlbmhhYjJgYCBmaWxl docutils container">
 <div class="docutils container">
-<p>Using an <cite>/etc/default/openhab2</cite> file</p>
+<p>Using an <code class="docutils literal notranslate"><span class="pre">/etc/default/openhab2</span></code> file</p>
 </div>
 </div>
-<div class="item sphinx-data-tab-VXNpbmcgdGhlIGBzdGFydC5zaGAgc2NyaXB0 docutils container">
+<div class="item sphinx-data-tab-VXNpbmcgdGhlIGBgc3RhcnQuc2hgYCBzY3JpcHQ= docutils container">
 <div class="docutils container">
-<p>Using the <cite>start.sh</cite> script</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">start.sh</span></code> script</p>
 </div>
 </div>
-<div class="item sphinx-data-tab-VXNpbmcgdGhlIGBzdGFydC5iYXRgIHNjcmlwdA== docutils container">
+<div class="item sphinx-data-tab-VXNpbmcgdGhlIGBgc3RhcnQuYmF0YGAgc2NyaXB0 docutils container">
 <div class="docutils container">
-<p>Using the <cite>start.bat</cite> script</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">start.bat</span></code> script</p>
 </div>
 </div>
 </div>
-<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-VXNpbmcgYW4gYC9ldGMvZGVmYXVsdC9vcGVuaGFiMmAgZmlsZQ== active docutils container">
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-VXNpbmcgYW4gYGAvZXRjL2RlZmF1bHQvb3BlbmhhYjJgYCBmaWxl active docutils container">
 <p>This option is typically used with a package repository openHAB installation (includes openHABian).
 If creating a new file, remember to set the permissions so that the <cite>openhab</cite> account has at least read access.
 If a file already exists and there is an EXTRA_JAVA_OPTS variable, add a space and append everything in quotes.</p>
@@ -264,14 +266,14 @@ If a file already exists and there is an EXTRA_JAVA_OPTS variable, add a space a
 </pre></div>
 </div>
 </div>
-<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-VXNpbmcgdGhlIGBzdGFydC5zaGAgc2NyaXB0 docutils container">
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-VXNpbmcgdGhlIGBgc3RhcnQuc2hgYCBzY3JpcHQ= docutils container">
 <p>This option is typically used with a manual openHAB installation on Linux.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add to the top of the file</span>
 <span class="nb">export</span> <span class="nv">EXTRA_JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python&quot;</span>
 </pre></div>
 </div>
 </div>
-<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-VXNpbmcgdGhlIGBzdGFydC5iYXRgIHNjcmlwdA== docutils container">
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-VXNpbmcgdGhlIGBgc3RhcnQuYmF0YGAgc2NyaXB0 docutils container">
 <p>This option is for a manual openHAB installation on Windows.
 If you are <em>not</em> using OH 2.5, 2.5M2, S1604, or newer, you will first need to update your <code class="docutils literal notranslate"><span class="pre">C:\openhab2\runtime\bin\setenv.bat</span></code> file with the <a class="reference external" href="https://github.com/openhab/openhab-distro/blob/master/distributions/openhab/src/main/resources/bin/setenv.bat#L121">changes in the current file</a>.</p>
 <div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="c1">REM Add to the top of the file</span>
@@ -284,12 +286,9 @@ If you are <em>not</em> using OH 2.5, 2.5M2, S1604, or newer, you will first nee
 <li><p>Download the <a class="reference external" href="http://www.jython.org/downloads.html">standalone Jython 2.7.0 jar</a> and copy it to the path specified above in the EXTRA_JAVA_OPTS.
 A full installation of Jython can also be used, but the paths above would need to be modified.
 Jython 2.7.1 and 2.7.2a1+ will also work, but 2.7.0 has proven to be very stable.</p></li>
-<li><p>After completing the steps in the [Quick Start Guide](/Docs/README.md#quick-start-guide), create rules using [rule and trigger decorators](Defining-Rules.md#rule-and-trigger-decorators).
-There is documentation on how to create rules directly with the API, but the decorators are by far the simplest.</p></li>
 <li><p>Copy the <code class="docutils literal notranslate"><span class="pre">/Script</span> <span class="pre">Examples/Python/hello_world.py</span></code> script to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/python/personal/</span></code>.</p></li>
 <li><p>Start openHAB and watch the logs for errors and the entries from the Hello World script.
 This script will make a log entry every 10s and should be deleted after installation has been verified.</p></li>
-<li><p>Review the Jython helper library documentation.</p></li>
 <li><p>Ask questions on the <a class="reference external" href="https://community.openhab.org/tags/jsr223">openHAB forum</a> and tag posts with <code class="docutils literal notranslate"><span class="pre">jsr223</span></code>. Report issues <a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/issues">here</a>, but please don’t hesitate to update the documentation and code.
 Just like openHAB, this repository is community driven!</p></li>
 <li><p>Check out the <a class="reference internal" href="First Steps.html"><span class="doc">First Steps</span></a> page for what to do next.</p></li>
@@ -300,7 +299,7 @@ Just like openHAB, this repository is community driven!</p></li>
 <li><p>The <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> is still in development, so it is recommended to use the latest snapshot or milestone release of <a class="reference external" href="https://www.openhab.org/download/">openHAB</a>.</p></li>
 <li><p>Use the <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html">Karaf logging</a> commands to enable debug logging for automation: <code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">org.openhab.core.automation</span></code>.
 Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
-For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to change this to <cite>org.eclipse.smarthome.automation</cite>.</p></li>
+For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to change this to <code class="docutils literal notranslate"><span class="pre">org.eclipse.smarthome.automation</span></code>.</p></li>
 <li><p>Enable debug logging for jsr223: <code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">jsr223</span></code>.
 This is the default logger used in the examples and the helper libraries.</p></li>
 <li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB Scripted Automation documentation</a> and the language specific documentation found as links on that page.</p></li>
@@ -330,7 +329,7 @@ Just like openHAB, this repository is community driven!</p></li>
 <li><p>The <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-ng.html">Next-Generation Rule Engine</a> is still in development, so it is recommended to use the latest snapshot or milestone release of <a class="reference external" href="https://www.openhab.org/download/">openHAB</a>.</p></li>
 <li><p>Use the <a class="reference external" href="https://www.openhab.org/docs/administration/logging.html">Karaf logging</a> commands to enable debug logging for automation: <code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">org.openhab.core.automation</span></code>.
 Leave this on for setup and testing, but you may want to set to WARN when everything is setup.
-For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to change this to <cite>org.eclipse.smarthome.automation</cite>.</p></li>
+For older openHAB builds before the ESH reintegration (older than snapshot 1566 and 2.5M2), you will need to change this to <code class="docutils literal notranslate"><span class="pre">org.eclipse.smarthome.automation</span></code>.</p></li>
 <li><p>Enable debug logging for jsr223: <code class="docutils literal notranslate"><span class="pre">log:set</span> <span class="pre">DEBUG</span> <span class="pre">jsr223</span></code>.
 This is the default logger used in the examples and the helper libraries.</p></li>
 <li><p>Review the general <a class="reference external" href="https://www.openhab.org/docs/configuration/jsr223.html">openHAB Scripted Automation documentation</a> and the language specific documentation found as links on that page.</p></li>
@@ -351,17 +350,17 @@ These files can be used to secure personal information, so that they are not sto
 <li><p>Copy the <code class="docutils literal notranslate"><span class="pre">/Script</span> <span class="pre">Examples/Groovy/HelloWorld.groovy</span></code> script to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/groovy/personal/</span></code>.</p></li>
 <li><p>Start openHAB and watch the logs for errors and the entries from the Hello World script.
 This script will make a log entry every 10s and should be deleted after installation has been verified.</p></li>
-<li><p>Review the Groovy helper library documentation.</p></li>
 <li><p>Ask questions on the <a class="reference external" href="https://community.openhab.org/tags/jsr223">openHAB forum</a> and tag posts with <code class="docutils literal notranslate"><span class="pre">jsr223</span></code>. Report issues <a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/issues">here</a>, but please don’t hesitate to update the documentation and code.
 Just like openHAB, this repository is community driven!</p></li>
 <li><p>Check out the <a class="reference internal" href="First Steps.html"><span class="doc">First Steps</span></a> page for what to do next.</p></li>
 </ol>
 </div>
 </div>
+<p>To upgrade to the latest version of the helper libraries, delete the older version and follow the installation steps.</p>
 </div>
 <div class="section" id="community">
 <h2>Community<a class="headerlink" href="#community" title="Permalink to this headline">¶</a></h2>
-<p>The Community section of the repository contains scripts and libraries contain functionality beyond what is provided in Core.
+<p>The Community section of the repository contains scripts and libraries that contain functionality beyond what is provided in Core.
 For the scripting language(s) being used, browse the Community documentation and/or the files downloaded from the repository.
 These instructions will help guide you through process of installing or upgrading a Community package.</p>
 <div class="sphinx-tabs docutils container">
@@ -411,6 +410,12 @@ For example, there may be some settings copied to <code class="docutils literal 
 </ol>
 </div>
 </div>
+</div>
+<div class="section" id="personal">
+<h2>Personal<a class="headerlink" href="#personal" title="Permalink to this headline">¶</a></h2>
+<p>Personal scripts and modules should be placed in the appropriate <code class="docutils literal notranslate"><span class="pre">personal</span></code> directories documented in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a>.
+Once installed, the files in <code class="docutils literal notranslate"><span class="pre">community</span></code> and <code class="docutils literal notranslate"><span class="pre">core</span></code> directories should <strong>not</strong> be modified.
+If you want to make or test a change, first copy the files to <code class="docutils literal notranslate"><span class="pre">personal</span></code> directories (you may also need to modify imports too).</p>
 </div>
 </div>
 

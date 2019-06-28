@@ -1,22 +1,29 @@
-'''
-PURPOSE:
+"""
+Purpose
+-------
+
 This script will parse all Alexa voice commands, and if they match the text in the rule, it will send a command to an Item
 linked to that Alexa device's TTS Channel. For example, I can ask Alexa "Are the doors locked?", and the device that I asked
 will respond with "all doors are locked" or a list of the unlocked doors. Additional phrases can be added.
 
-REQUIRES:
-    org.openhab.binding.amazonalexacontrol
-    A routine setup in the Alexa app that captures the same text you are capturing (I used a volume adjustment for the action)
-    
-    Items:
-    Group    gAlexa_LastVoiceCommand    "Last Voice Command"
-    String    DiningRoom_Dot_LastVoiceCommand    "Dining Room: Last Voice Command [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand"}
-    String    DiningRoom_Dot_TTS    "Dining Room: TTS [%s]"    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
-    String    FamilyRoom_Dot_LastVoiceCommand    "Famiy Room: Last Voice Command [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand"}
-    String    FamilyRoom_Dot_TTS    "Family Room: TTS [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
+Requires
+--------
+
+* `Amazon Echo Control <https://www.openhab.org/addons/bindings/amazonechocontrol/>`_ binding
+* A routine setup in the Alexa app that captures the same text you are capturing (I used a volume adjustment for the action)
+* Items:
+
+  .. code-block::
+
+      Group    gAlexa_LastVoiceCommand    "Last Voice Command"
+      String    DiningRoom_Dot_LastVoiceCommand    "Dining Room: Last Voice Command [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand"}
+      String    DiningRoom_Dot_TTS    "Dining Room: TTS [%s]"    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
+      String    FamilyRoom_Dot_LastVoiceCommand    "Famiy Room: Last Voice Command [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand"}
+      String    FamilyRoom_Dot_TTS    "Family Room: TTS [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
 
 The getLockStates function can be removed or replaced. It uses a group (gSecurity) that contains all of my outer doors.
-'''
+"""
+
 from core.triggers import when
 from core.rules import rule
 
