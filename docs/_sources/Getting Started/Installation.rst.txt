@@ -39,6 +39,12 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 .. |core_step_6| replace::
     Shut down openHAB.
 
+.. |core_step_7| replace::
+    `Download the contents of this repository`_.
+    Using the ``openhab`` account, copy the *contents* of the ``/Core/`` directory into your openHAB's site configuration directory (`Linux`_, `Windows`_).
+    This will create a directory structure as described in :doc:`File Locations` and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
+    If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
+
 .. |core_step_8a| replace::
     There is a main configuration file for each scripting language's helper libraries that will need to be renamed.
 
@@ -60,168 +66,94 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 
     .. group-tab:: Python
 
-        #.  |core_step_1|
-        #.  |core_step_2|
-        #.  |core_step_3|
-        #.  |core_step_4|
-        #.  |core_step_5|
-        #.  |core_step_6|
-        #.  `Download the contents of this repository`_.
-            Using the ``openhab`` account, copy the *contents* of the ``/Core/`` directory into your openHAB's configuration directory, which varies based on the type of installation:
+        #. |core_step_1|
+        #. |core_step_2|
+        #. |core_step_3|
+        #. |core_step_4|
+        #. |core_step_5|
+        #. |core_step_6|
+        #. |core_step_7|
+        #. |core_step_8a|
+           For example, in ``/automation/lib/python/``, rename the file ``configuration.py.example`` to ``configuration.py``.
+           |core_step_8b|
+        #. Add/modify the EXTRA_JAVA_OPTS.
+           These examples assume that you will be using the standalone Jython 2.7.0 jar in the next step.
+           Changes to the EXTRA_JAVA_OPTS require an openHAB restart.
 
-            .. tabs::
+           .. tabs::
 
-                .. group-tab:: Package repository, like openHABian
+               .. group-tab:: Using an ``/etc/default/openhab2`` file
                 
-                    .. code-block:: none
+                   This option is typically used with a package repository openHAB installation (includes openHABian).
+                   If creating a new file, remember to set the permissions so that the `openhab` account has at least read access.
+                   If a file already exists and there is an EXTRA_JAVA_OPTS variable, add a space and append everything in quotes.
 
-                        /etc/openhab2/
+                   .. code-block:: none
 
-                .. group-tab:: Manual (Linux default)
+                       EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
+
+               .. group-tab:: Using the ``start.sh`` script
                 
-                    .. code-block:: none
+                   This option is typically used with a manual openHAB installation on Linux.
 
-                        /opt/openhab2/conf/
+                   .. code-block:: none
 
-                .. group-tab:: Manual (Windows default)
+                       # Add to the top of the file
+                       export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
+
+               .. group-tab:: Using the ``start.bat`` script
                 
-                    .. code-block:: none
+                   This option is for a manual openHAB installation on Windows.
+                   If you are *not* using OH 2.5, 2.5M2, S1604, or newer, you will first need to update your ``C:\openhab2\runtime\bin\setenv.bat`` file with the `changes in the current file <https://github.com/openhab/openhab-distro/blob/master/distributions/openhab/src/main/resources/bin/setenv.bat#L121>`_.
 
-                        C:\openhab2\conf\
+                   .. code-block:: none
 
-            This will create a directory structure as described in :doc:`File Locations` and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
-            If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
-        #.  |core_step_8a|
-            For example, in ``/automation/lib/python/``, rename the file ``configuration.py.example`` to ``configuration.py``.
-            |core_step_8b|
-        #.  Add/modify the EXTRA_JAVA_OPTS.
-            These examples assume that you will be using the standalone Jython 2.7.0 jar in the next step.
-            Changes to the EXTRA_JAVA_OPTS require an openHAB restart.
+                       REM Add to the top of the file
+                       set EXTRA_JAVA_OPTS=-Xbootclasspath/a:C:\openhab2\conf\automation\jython\jython-standalone-2.7.0.jar -Dpython.home=C:\openhab2\conf\automation\jython -Dpython.path=C:\openhab2\conf\automation\lib\python
 
-            .. tabs::
-
-                .. group-tab:: Using an ``/etc/default/openhab2`` file
-                
-                    This option is typically used with a package repository openHAB installation (includes openHABian).
-                    If creating a new file, remember to set the permissions so that the `openhab` account has at least read access.
-                    If a file already exists and there is an EXTRA_JAVA_OPTS variable, add a space and append everything in quotes.
-
-                    .. code-block:: bash
-
-                        EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
-
-                .. group-tab:: Using the ``start.sh`` script
-                
-                    This option is typically used with a manual openHAB installation on Linux.
-
-                    .. code-block:: bash
-
-                        # Add to the top of the file
-                        export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
-
-                .. group-tab:: Using the ``start.bat`` script
-                
-                    This option is for a manual openHAB installation on Windows.
-                    If you are *not* using OH 2.5, 2.5M2, S1604, or newer, you will first need to update your ``C:\openhab2\runtime\bin\setenv.bat`` file with the `changes in the current file <https://github.com/openhab/openhab-distro/blob/master/distributions/openhab/src/main/resources/bin/setenv.bat#L121>`_.
-
-                    .. code-block:: bat
-
-                        REM Add to the top of the file
-                        set EXTRA_JAVA_OPTS=-Xbootclasspath/a:C:\openhab2\conf\automation\jython\jython-standalone-2.7.0.jar -Dpython.home=C:\openhab2\conf\automation\jython -Dpython.path=C:\openhab2\conf\automation\lib\python
-
-        #.  Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to the path specified above in the EXTRA_JAVA_OPTS.
-            A full installation of Jython can also be used, but the paths above would need to be modified.
-            Jython 2.7.1 and 2.7.2a1+ will also work, but 2.7.0 has proven to be very stable.
-        #.  Copy the ``/Script Examples/Python/hello_world.py`` script to ``/automation/jsr223/python/personal/``.
-        #.  |core_step_9|
-        #.  |core_step_10|
-        #.  |core_step_11|
+        #. Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to the path specified above in the EXTRA_JAVA_OPTS.
+           A full installation of Jython can also be used, but the paths above would need to be modified.
+           Jython 2.7.1 and 2.7.2a1+ will also work, but 2.7.0 has proven to be very stable.
+        #. Copy the ``/Script Examples/Python/hello_world.py`` script to ``/automation/jsr223/python/personal/``.
+        #. |core_step_9|
+        #. |core_step_10|
+        #. |core_step_11|
 
     .. group-tab:: JavaScript
 
-        #.  |core_step_1|
-        #.  |core_step_2|
-        #.  |core_step_3|
-        #.  |core_step_4|
-        #.  |core_step_5|
-        #.  |core_step_6|
-        #.  `Download the contents of this repository`_.
-            Using the ``openhab`` account, copy the *contents* of the ``/Core/`` directory into your openHAB's configuration directory, which varies based on the type of installation:
-
-            .. tabs::
-
-                .. group-tab:: Package repository, like openHABian
-                
-                    .. code-block:: none
-
-                        /etc/openhab2/
-
-                .. group-tab:: Manual (Linux default)
-                
-                    .. code-block:: none
-
-                        /opt/openhab2/conf/
-
-                .. group-tab:: Manual (Windows default)
-                
-                    .. code-block:: none
-
-                        C:\openhab2\conf\
-
-            This will create a directory structure as described in :doc:`File Locations` and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
-            If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
-        #.  |core_step_8a|
-            For example, in ``/automation/lib/javascript/``, rename the file ``configuration.js.example`` to ``configuration.js``.
-            |core_step_8b|
-        #.  Copy the ``/Script Examples/Javascript/HelloWorld.js`` script to ``/automation/jsr223/javascript/personal/``.
-        #.  |core_step_9|
-        #.  Review the Javascript helper library documentation.
-        #.  |core_step_10|
-        #.  |core_step_11|
+        #. |core_step_1|
+        #. |core_step_2|
+        #. |core_step_3|
+        #. |core_step_4|
+        #. |core_step_5|
+        #. |core_step_6|
+        #. |core_step_7|
+        #. |core_step_8a|
+           For example, in ``/automation/lib/javascript/``, rename the file ``configuration.js.example`` to ``configuration.js``.
+           |core_step_8b|
+        #. Copy the ``/Script Examples/Javascript/HelloWorld.js`` script to ``/automation/jsr223/javascript/personal/``.
+        #. |core_step_9|
+        #. |core_step_10|
+        #. |core_step_11|
 
     .. group-tab:: Groovy
 
-        #.  |core_step_1|
-        #.  |core_step_2|
-        #.  |core_step_3|
-        #.  |core_step_4|
-        #.  |core_step_5|
-        #.  |core_step_6|
-        #.  `Download the contents of this repository`_.
-            Using the ``openhab`` account, copy the *contents* of the ``/Core/`` directory into your openHAB's configuration directory, which varies based on the type of installation:
-
-            .. tabs::
-
-                .. group-tab:: Package repository, like openHABian
-                
-                    .. code-block:: none
-
-                        /etc/openhab2/
-
-                .. group-tab:: Manual (Linux default)
-                
-                    .. code-block:: none
-
-                        /opt/openhab2/conf/
-
-                .. group-tab:: Manual (Windows default)
-                
-                    .. code-block:: none
-
-                        C:\openhab2\conf\
-
-            This will create a directory structure as described in :doc:`File Locations` and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
-            If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
-        #.  |core_step_8a|
-            For example, in ``/automation/lib/groovy/``, rename the file ``configuration.groovy.example`` to ``configuration.groovy``.
-            |core_step_8b|
-        #.  Download the `Groovy binary`_.
-        #.  Extract ``/groovy-2.4.12/lib/groovy*.jar`` to ``/runtime/lib/ext/``.
-        #.  Copy the ``/Script Examples/Groovy/HelloWorld.groovy`` script to ``/automation/jsr223/groovy/personal/``.
-        #.  |core_step_9|
-        #.  |core_step_10|
-        #.  |core_step_11|
-
+        #. |core_step_1|
+        #. |core_step_2|
+        #. |core_step_3|
+        #. |core_step_4|
+        #. |core_step_5|
+        #. |core_step_6|
+        #. |core_step_7|
+        #. |core_step_8a|
+           For example, in ``/automation/lib/groovy/``, rename the file ``configuration.groovy.example`` to ``configuration.groovy``.
+           |core_step_8b|
+        #. Download the `Groovy binary`_.
+        #. Extract ``/groovy-2.4.12/lib/groovy*.jar`` to ``/runtime/lib/ext/``.
+        #. Copy the ``/Script Examples/Groovy/HelloWorld.groovy`` script to ``/automation/jsr223/groovy/personal/``.
+        #. |core_step_9|
+        #. |core_step_10|
+        #. |core_step_11|
 
 To upgrade to the latest version of the helper libraries, delete the older version and follow the installation steps.
 
@@ -249,28 +181,28 @@ These instructions will help guide you through process of installing or upgradin
 
     .. group-tab:: Python
 
-        #.  |community_step_1|
-        #.  |community_step_2|
-        #.  |community_step_3|
-            For example, there may be some settings copied to ``/automation/lib/python/configuration.py.example`` that need to be added to ``configuration.py``.
-        #.  |community_step_4|
-            If using Python, you could alternatively use the methods described in :ref:`Python/Reference:Modifying and Reloading Modules`.
+        #. |community_step_1|
+        #. |community_step_2|
+        #. |community_step_3|
+           For example, there may be some settings copied to ``/automation/lib/python/configuration.py.example`` that need to be added to ``configuration.py``.
+        #. |community_step_4|
+           If using Python, you could alternatively use the methods described in :ref:`Python/Reference:Modifying and Reloading Modules`.
 
     .. group-tab:: JavaScript
 
-        #.  |community_step_1|
-        #.  |community_step_2|
-        #.  |community_step_3|
-            For example, there may be some settings copied to ``/automation/lib/javascript/configuration.js.example`` that need to be added to ``configuration.js``.
-        #.  |community_step_4|
+        #. |community_step_1|
+        #. |community_step_2|
+        #. |community_step_3|
+           For example, there may be some settings copied to ``/automation/lib/javascript/configuration.js.example`` that need to be added to ``configuration.js``.
+        #. |community_step_4|
 
     .. group-tab:: Groovy
 
-        #.  |community_step_1|
-        #.  |community_step_2|
-        #.  |community_step_3|
-            For example, there may be some settings copied to ``/automation/lib/python/configuration.groovy.example`` that need to be added to ``configuration.groovy``.
-        #.  |community_step_4|
+        #. |community_step_1|
+        #. |community_step_2|
+        #. |community_step_3|
+           For example, there may be some settings copied to ``/automation/lib/python/configuration.groovy.example`` that need to be added to ``configuration.groovy``.
+        #. |community_step_4|
 
 
 Personal
@@ -287,5 +219,7 @@ If you want to make or test a change, first copy the files to ``personal`` direc
 .. _Karaf logging: https://www.openhab.org/docs/administration/logging.html
 .. _openHAB forum: https://community.openhab.org/tags/jsr223
 .. _Download the contents of this repository: https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip
+.. _Linux: https://www.openhab.org/docs/installation/linux.html#file-locations
+.. _Windows: https://www.openhab.org/docs/installation/windows.html#file-locations
 .. _Groovy binary: https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.12.zip
 .. _here: https://github.com/openhab-scripters/openhab-helper-libraries/issues
