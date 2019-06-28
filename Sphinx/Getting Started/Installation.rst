@@ -39,15 +39,6 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 .. |core_step_6| replace::
     Shut down openHAB.
 
-.. |core_step_7| replace::
-    `Download the contents of this repository`_. Using the ``openhab`` account, copy the *contents* of the ``/Core/`` directory into: |br|
-    * package repository openHAB installation, like openHABian: ``/etc/openhab2/`` |br|
-    * default Linux manual openHAB installation: ``/opt/openhab2/conf/`` |br|
-    * default Windows manual openHAB installation: ``C:\openhab2\conf\`` |br|
-    This will create a directory structure as described in :doc:`File Locations`.
-    This will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
-    If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
-
 .. |core_step_8a| replace::
     There is a main configuration file for each scripting language's helper libraries that will need to be renamed.
 
@@ -75,7 +66,31 @@ Instructions for installation in a Docker container are available :doc:`here <Do
         #.  |core_step_4|
         #.  |core_step_5|
         #.  |core_step_6|
-        #.  |core_step_7|
+        #.  `Download the contents of this repository`_.
+            Using the ``openhab`` account, copy the *contents* of the ``/Core/`` directory into your openHAB's configuration directory, which varies based on the type of installation:
+
+            .. tabs::
+
+                .. group-tab:: Package repository, like openHABian
+                
+                    .. code-block:: none
+
+                        /etc/openhab2/
+
+                .. group-tab:: Manual (Linux default)
+                
+                    .. code-block:: none
+
+                        /opt/openhab2/conf/
+
+                .. group-tab:: Manual (Windows default)
+                
+                    .. code-block:: none
+
+                        C:\openhab2\conf\
+
+            This will create a directory structure as described in :doc:`File Locations` and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
+            If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
         #.  |core_step_8a|
             For example, in ``/automation/lib/python/``, rename the file ``configuration.py.example`` to ``configuration.py``.
             |core_step_8b|
@@ -130,7 +145,31 @@ Instructions for installation in a Docker container are available :doc:`here <Do
         #.  |core_step_4|
         #.  |core_step_5|
         #.  |core_step_6|
-        #.  |core_step_7|
+        #.  `Download the contents of this repository`_.
+            Using the ``openhab`` account, copy the *contents* of the ``/Core/`` directory into your openHAB's configuration directory, which varies based on the type of installation:
+
+            .. tabs::
+
+                .. group-tab:: Package repository, like openHABian
+                
+                    .. code-block:: none
+
+                        /etc/openhab2/
+
+                .. group-tab:: Manual (Linux default)
+                
+                    .. code-block:: none
+
+                        /opt/openhab2/conf/
+
+                .. group-tab:: Manual (Windows default)
+                
+                    .. code-block:: none
+
+                        C:\openhab2\conf\
+
+            This will create a directory structure as described in :doc:`File Locations` and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
+            If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
         #.  |core_step_8a|
             For example, in ``/automation/lib/javascript/``, rename the file ``configuration.js.example`` to ``configuration.js``.
             |core_step_8b|
@@ -148,7 +187,31 @@ Instructions for installation in a Docker container are available :doc:`here <Do
         #.  |core_step_4|
         #.  |core_step_5|
         #.  |core_step_6|
-        #.  |core_step_7|
+        #.  `Download the contents of this repository`_.
+            Using the ``openhab`` account, copy the *contents* of the ``/Core/`` directory into your openHAB's configuration directory, which varies based on the type of installation:
+
+            .. tabs::
+
+                .. group-tab:: Package repository, like openHABian
+                
+                    .. code-block:: none
+
+                        /etc/openhab2/
+
+                .. group-tab:: Manual (Linux default)
+                
+                    .. code-block:: none
+
+                        /opt/openhab2/conf/
+
+                .. group-tab:: Manual (Windows default)
+                
+                    .. code-block:: none
+
+                        C:\openhab2\conf\
+
+            This will create a directory structure as described in :doc:`File Locations` and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
+            If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
         #.  |core_step_8a|
             For example, in ``/automation/lib/groovy/``, rename the file ``configuration.groovy.example`` to ``configuration.groovy``.
             |core_step_8b|
