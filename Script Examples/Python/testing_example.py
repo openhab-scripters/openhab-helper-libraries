@@ -32,6 +32,7 @@ class ItemPostUpdater(object):
     def cleanup(self):
         pass
 
+
 class MyUnitTest(unittest.TestCase):
 
     ITEM1NAME = "TestNumber1"
