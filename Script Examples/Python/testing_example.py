@@ -1,41 +1,67 @@
 """
-Examples of unit testing.
-
-Required Items:
-    Number TestNumber1
-    Number TestNumber2
+Example of unit testing.
 """
-
 import unittest
 import time
-from core.log import logging
-from core.testing import run_test
-from core.rules import rule
-from core.triggers import when
 import core.items
+from core.jsr223 import scope, get_automation_manager
+from core.log import logging, LOG_PREFIX
+from core.rules import rule
+from core.testing import _run_test
+from core.triggers import when
+from core.utils import getItemValue, postUpdateCheckFirst
 
-@rule("Example testing rule")
-@when("Item TestNumber1 received update")
-def double_the_value():
-    events.postUpdate("TestNumber2", str(2 * items.TestNumber1.floatValue()))
+RESPONSE_TIME = 5
+
+log = logging.getLogger("{}.testing_example".format(LOG_PREFIX))
+
+class ItemPostUpdater(object):
+    def __init__(self, item1, item2):
+        self.item1 = item1
+        self.item2 = item2
+
+        # create the rule.
+        self.myrule=rule(self.__class__.__name__ + " " + item1.name)(
+            when("Item {} received update".format(item1.name))
+            (self))
+
+    # this method gets called when the rule executes
+    def __call__(self, event):
+        log.debug("rule {} triggered by {}, state {}".format(self.__class__.__name__, event.itemName, event.itemState))
+        events.postUpdate(self.item2.name, str(2 * getItemValue(self.item1.name, 0.1)))
+    
+    def cleanup(self):
+        #get_automation_manager().removeRule(rule)
+        #log.info(self.myrule)
+        #log.info(dir(self.myrule))
+        pass
 
 class MyUnitTest(unittest.TestCase):
+
+    ITEM1NAME = "TestNumber1"
+    ITEM2NAME = "TestNumber2"
+
+
     def setUp(self):
-        core.items.add("TestNumber1", "Number")
-        core.items.add("TestNumber2", "Number")
+        self.item1 = core.items.add_item(self.ITEM1NAME, "Number")
+        self.item2 = core.items.add_item(self.ITEM2NAME, "Number")
+        self.test = ItemPostUpdater(self.item1, self.item2)
 
     def tearDown(self):
-        core.items.remove("TestNumber1")
-        core.items.remove("TestNumber2")
+        core.items.remove_item(self.item1)
+        core.items.remove_item(self.item2)
+        self.test.cleanup()
 
     def test_item(self):
-        events.postUpdate("TestNumber1", str(5))
-        time.sleep(1)
-        self.assertEqual(items.TestNumber2.floatValue(), 10)
+        events.postUpdate(self.item1, str(5))
+        time.sleep(RESPONSE_TIME)
+        self.assertEqual(self.item2.state.floatValue(), 10.0)
 
 # results are also logged to the openHAB log file
 # status can be used to take actions like sending notifications
 # results are a JSON formatted string (will probably change to return Python dict instead)
 
-def scriptLoaded():
-    print(run_test(MyUnitTest))
+def scriptLoaded(id):
+    log.info("testing_2_example.py Unittest: [{}]".format(5 + 5))
+    log.info(_run_test(MyUnitTest))
+
