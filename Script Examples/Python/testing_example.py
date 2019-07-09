@@ -7,7 +7,7 @@ import core.items
 from core.jsr223 import scope, get_automation_manager
 from core.log import logging, LOG_PREFIX
 from core.rules import rule
-from core.testing import _run_test
+from core.testing import run_test
 from core.triggers import when
 from core.utils import getItemValue, postUpdateCheckFirst
 
@@ -31,16 +31,12 @@ class ItemPostUpdater(object):
         events.postUpdate(self.item2.name, str(2 * getItemValue(self.item1.name, 0.1)))
     
     def cleanup(self):
-        #get_automation_manager().removeRule(rule)
-        #log.info(self.myrule)
-        #log.info(dir(self.myrule))
         pass
 
 class MyUnitTest(unittest.TestCase):
 
     ITEM1NAME = "TestNumber1"
     ITEM2NAME = "TestNumber2"
-
 
     def setUp(self):
         self.item1 = core.items.add_item(self.ITEM1NAME, "Number")
@@ -62,6 +58,5 @@ class MyUnitTest(unittest.TestCase):
 # results are a JSON formatted string (will probably change to return Python dict instead)
 
 def scriptLoaded(id):
-    log.info("testing_2_example.py Unittest: [{}]".format(5 + 5))
-    log.info(_run_test(MyUnitTest))
+    log.info(run_test(MyUnitTest))
 
