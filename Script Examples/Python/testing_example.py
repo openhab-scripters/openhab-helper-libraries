@@ -3,6 +3,7 @@ Examples of unit testing.
 """
 import unittest
 import time
+import core.items
 from core.log import logging, LOG_PREFIX
 from core.rules import rule
 from core.testing import _run_test
