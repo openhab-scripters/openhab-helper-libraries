@@ -29,7 +29,6 @@ class ItemPostUpdater(object):
         log.debug("rule {} triggered by {}, state {}".format(self.__class__.__name__, event.itemName, event.itemState))
         events.postUpdate(self.item2.name, str(2 * getItemValue(self.item1.name, 0.1)))
 
-
     def cleanup(self):
         pass
 
