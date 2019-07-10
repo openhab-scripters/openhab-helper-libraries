@@ -59,4 +59,4 @@ class MyUnitTest(unittest.TestCase):
 # results are a JSON formatted string (will probably change to return Python dict instead)
 
 def scriptLoaded(id):
-    log.info(run_test(MyUnitTest))
+    log.info(run_test(MyUnitTest))    
