@@ -60,3 +60,4 @@ class MyUnitTest(unittest.TestCase):
 
 def scriptLoaded(id):
     log.info(run_test(MyUnitTest))
+    
