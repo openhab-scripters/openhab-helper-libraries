@@ -38,7 +38,6 @@ class MyUnitTest(unittest.TestCase):
     ITEM1NAME = "TestNumber1"
     ITEM2NAME = "TestNumber2"
 
-
     def setUp(self):
         self.item1 = core.items.add_item(self.ITEM1NAME, "Number")
         self.item2 = core.items.add_item(self.ITEM2NAME, "Number")
