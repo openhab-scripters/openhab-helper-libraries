@@ -53,6 +53,7 @@ class MyUnitTest(unittest.TestCase):
         time.sleep(RESPONSE_TIME)
         self.assertEqual(self.item2.state.floatValue(), 10.0)
 
+
 # results are also logged to the openHAB log file
 # status can be used to take actions like sending notifications
 # results are a JSON formatted string (will probably change to return Python dict instead)
