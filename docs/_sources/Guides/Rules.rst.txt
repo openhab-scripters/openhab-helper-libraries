@@ -97,7 +97,7 @@ Imports
 
             .. code-block:: python
 
-                @rule("Rule Name", description="Optional Rule Description", tag=["Tag 1", "Tag 2"])
+                @rule("Rule Name", description="Optional Rule Description", tags=["Tag 1", "Tag 2"])
 
         .. group-tab:: JavaScript
 
