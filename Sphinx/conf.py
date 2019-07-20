@@ -124,7 +124,7 @@ autosectionlabel_prefix_document = True
 # -- Options for HTML output -------------------------------------------------
 
 # root url for these docs, also used to make CNAME for GH Pages
-html_baseurl = "https://github.com/openhab-scripters/openhab-helper-libraries/"
+html_baseurl = "https://openhab-scripters.github.io/openhab-helper-libraries/"
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
