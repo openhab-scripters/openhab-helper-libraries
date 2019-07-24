@@ -211,10 +211,13 @@ def to_joda_datetime(value):
         TypeError: type of ``value`` is not recognized by this package.
     """
     if isinstance(value, DateTime):
-            return value
+        return value
 
     value_zoneddatetime = to_java_zoneddatetime(value)
-    return DateTime(format_date(value_zoneddatetime))
+    return DateTime(
+        format_date(value_zoneddatetime),
+        DateTimeZone.forID(value_zoneddatetime.getZone().getId())
+    )
 
 class pythonTimezone(datetime.tzinfo):
     """Python tzinfo with ``offset`` in minutes and name ``name``.
