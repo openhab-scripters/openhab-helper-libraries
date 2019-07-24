@@ -43,8 +43,13 @@ from java.time.temporal.ChronoUnit import DAYS, HOURS, MINUTES, SECONDS
 from datetime import datetime as pythonDateTime, date as pythonDate
 from org.joda.time import DateTime as jodaDateTime, DateTimeZone as jodaDateTimeZone
 from java.util import Calendar as utilCalendar, Date as utilDateTime, TimeZone as utilTimeZone
-from org.openhab.core.library.types import DateTimeType as legacyDateTime
 from org.eclipse.smarthome.core.library.types import DateTimeType as eclipseDateTime
+
+try:
+    # if the compat1.x bundle is not installed the 1.x DateTimeType is not available
+    from org.openhab.core.library.types import DateTimeType as legacyDateTime
+except:
+    pass
 
 __all__ = [
     "format_date",
@@ -140,8 +145,11 @@ def to_java_zoneddatetime(value):
     # Joda DateTime
     if isinstance(value, jodaDateTime):
         return value.toGregorianCalendar().toZonedDateTime()
-    # OH DateTimeType or ESH DateTimeType
-    if isinstance(value, (legacyDateTime, eclipseDateTime)):
+    # openHAB DateTimeType
+    if isinstance(value, eclipseDateTime):
+        return to_java_zoneddatetime(value.calendar)
+    # openHAB 1.x DateTimeType
+    if legacyDateTime and isinstance(value, legacyDateTime):
         return to_java_zoneddatetime(value.calendar)
 
     raise TypeError("Unknown type: " + str(type(value)))
