@@ -129,7 +129,7 @@ def to_java_zoneddatetime(value):
         return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.of(value.getTimeZone().getID()))
     # java.util.Date
     if isinstance(value, Date):
-        return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(value.getTimezoneOffset()*60)))
+        return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.ofOffset("GMT", ZoneOffset.ofHours(0 - value.getTimezoneOffset() / 60)))
     # Joda DateTime
     if isinstance(value, DateTime):
         return value.toGregorianCalendar().toZonedDateTime()
