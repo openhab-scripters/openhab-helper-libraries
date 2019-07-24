@@ -96,12 +96,12 @@ def to_java_zoneddatetime(value):
 
     Args:
         value: any known DateTime value.
-    
+
     Returns:
         | A ``java.time.ZonedDateTime`` representing ``value``.
         | If ``value`` does not have timezone information, the system default
           will be used.
-    
+
     Raises:
         TypeError: type of ``value`` is not recognized by this package.
     """
@@ -144,18 +144,18 @@ def to_java_calendar(value):
 
     Args:
         value: any known DateTime value.
-    
+
     Returns:
         | A ``java.util.calendar`` representing ``value``.
         | If ``value`` does not have timezone information, the system default
           will be used.
-    
+
     Raises:
         TypeError: type of ``value`` is not recognized by this package.
     """
     if isinstance(value, Calendar):
         return value
-    
+
     value_zoneddatetime = to_java_zoneddatetime(value)
     new_calendar = Calendar.getInstance(TimeZone.getTimeZone(value_zoneddatetime.getZone().getId()))
     new_calendar.set(Calendar.YEAR, value_zoneddatetime.getYear())
@@ -172,12 +172,12 @@ def to_python_datetime(value):
 
     Args:
         value: any known DateTime value.
-    
+
     Returns:
         | A Python ``datetime.datetime`` representing ``value``.
         | If ``value`` does not have timezone information, the system default
           will be used.
-    
+
     Raises:
         TypeError: type of ``value`` is not recognized by this package.
     """
@@ -201,32 +201,32 @@ def to_joda_datetime(value):
 
     Args:
         value: any known DateTime value.
-    
+
     Returns:
         | An ``org.joda.time.DateTime`` representing ``value``.
         | If ``value`` does not have timezone information, the system default
           will be used.
-    
+
     Raises:
         TypeError: type of ``value`` is not recognized by this package.
     """
     if isinstance(value, DateTime):
-            return value
-    
+        return value
+
     value_zoneddatetime = to_java_zoneddatetime(value)
     return DateTime(
-        value_zoneddatetime.toInstant(),
+        format_date(value_zoneddatetime),
         DateTimeZone.forID(value_zoneddatetime.getZone().getId())
     )
 
 class pythonTimezone(datetime.tzinfo):
     """Python tzinfo with ``offset`` in minutes and name ``name``.
-        
+
     Args:
         offset (int): timezone offset from UTC in minutes.
         name (str): display name of this instance.
     """
-    
+
     def __init__(self, offset=0, name=""):
         self.__offset = offset
         self.__name = name
