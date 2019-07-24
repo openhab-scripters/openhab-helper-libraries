@@ -113,7 +113,7 @@ def to_java_zoneddatetime(value):
         return value.atZone(timezone_id)
     # python datetime
     if isinstance(value, datetime.datetime):
-        if value.tzinfo is not None: timezone_id = ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(value.utcoffset().total_seconds()))
+        if value.tzinfo is not None: timezone_id = ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(int(value.utcoffset().total_seconds())))
         return ZonedDateTime.of(
             value.year,
             value.month,
