@@ -80,15 +80,15 @@ def days_between(value_from, value_to, calendar_days=False):
         return DAYS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def hours_between(value_from, value_to):
-    """Returns ``int`` of whole hours between ``value_from`` and ``value_to``."""
+    """Returns ``long`` of whole hours between ``value_from`` and ``value_to``."""
     return HOURS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def minutes_between(value_from, value_to):
-    """Returns ``int`` of whole minutes between ``value_from`` and ``value_to``."""
+    """Returns ``long`` of whole minutes between ``value_from`` and ``value_to``."""
     return MINUTES.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def seconds_between(value_from, value_to):
-    """Returns ``int`` of whole seconds between ``value_from`` and ``value_to``."""
+    """Returns ``long`` of whole seconds between ``value_from`` and ``value_to``."""
     return SECONDS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def to_java_zoneddatetime(value):
