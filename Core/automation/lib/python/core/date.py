@@ -116,9 +116,9 @@ def to_java_zoneddatetime(value):
     Raises:
         TypeError: type of ``value`` is not recognized by this package.
     """
-    timezone_id = javaZoneId.systemDefault()
     if isinstance(value, javaDateTime):
         return value
+    timezone_id = javaZoneId.systemDefault()
     # java.time.LocalDateTime
     if isinstance(value, javaLocalDateTime):
         return value.atZone(timezone_id)
@@ -152,7 +152,7 @@ def to_java_zoneddatetime(value):
     if legacyDateTime and isinstance(value, legacyDateTime):
         return to_java_zoneddatetime(value.calendar)
 
-    raise TypeError("Unknown type: " + str(type(value)))
+    raise TypeError("Unknown type: {}".format(str(type(value))))
 
 def to_python_datetime(value):
     """Converts any known DateTime type to a Python ``datetime.datetime`` type.
