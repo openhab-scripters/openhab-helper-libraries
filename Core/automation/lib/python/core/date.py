@@ -1,27 +1,46 @@
 """
-Date/time utilities for converting between the several different types used by
-openHAB. It can also format any of these types for sending to an openHAB Item
-using ``format_date(value)``, which will return the date as a string in the 
-correct format. There are also some convenience functions for determining the
-span between two datetimes. ``days_between``, ``hours_between``,
-``minutes_between``, and ``seconds_between`` will return the number of whole
-units of each unit of time between the two datetimes passed. They will return
-negative numbers if ``value_from`` is after ``value_to``. See
-`java.time.temporal.ChronoUnit <https://docs.oracle.com/javase/8/docs/api/java/time/temporal/ChronoUnit.html>`_
-if you want more information.
+The Date module provides data types and methods for working with DateTime items.
 
-This module accepts any of the following DateTime types:
+Types
+=====
 
-.. code-block::
+    There are three DateTime types made available by this module:
 
-    java.time.ZonedDateTime
-    java.time.LocalDateTime
-    java.util.Calendar
-    java.util.Date
-    org.joda.time.DateTime
-    datetime.datetime (Python)
-    org.eclipse.smarthome.core.library.types.DateTimeType
-    org.openhab.core.library.types.DateTimeType
+    .. code-block::
+
+        from core.date import javaDateTime # recommended
+        from core.date import pythonDateTime
+        from core.date import jodaDateTime
+
+    It is recommended that you use ``javaDateTime`` from this module for all
+    operations involving dates or ``DateTime`` items. See the documentation for
+    `java.time.ZonedDateTime <https://docs.oracle.com/javase/8/docs/api/java/time/ZonedDateTime.html>`_
+    for more information about its useage.
+
+    .. warning::
+
+        The use of ``jodaDateTime`` for new rules is not recommended as the Joda
+        package may not be available in future versions of openHAB. You will
+        find that ``javaDateTime`` has many functions in common with
+        ``jodaDateTime``, which should make transitioning fairly straight
+        forward.
+
+    All of the methods in this module can accept any of the following DateTime
+    types:
+
+    .. code-block::
+
+        java.time.ZonedDateTime
+        java.time.LocalDateTime
+        java.util.Calendar
+        java.util.Date
+        org.joda.time.DateTime
+        datetime.datetime (Python)
+        org.eclipse.smarthome.core.library.types.DateTimeType
+        org.openhab.core.library.types.DateTimeType
+
+Functions
+=========
 """
 
 import sys
@@ -65,48 +84,104 @@ def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
     """Returns string of ``value`` formatted according to ``format_string``.
 
     This function can be used when updating Items in openHAB or to format any
-    DateTime value for output.
+    DateTime value for output. The default format string follows the same
+    ISO8601 format used in openHAB.
 
     Examples:
         .. code-block::
 
-            sendCommand("item_name", date.format_date(date_value))
+            sendCommand("date_item", format_date(date_value))
+            log.info("The time is currently: {}".format(format_date(javaDateTime.now())))
 
     Args:
-        value: any known DateTime value.
-        format_string (string): pattern to format ``value`` with.
+        value: Any known DateTime value.
+        format_string (str): Pattern to format ``value`` with.
             See `java.time.format.DateTimeFormatter <https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html>`_
             for format string tokens.
+
+    Returns:
+        | A string representation of ``value`` according to ``format_string``.
+        | If ``value`` does not have timezone information, the system default
+          will be used.
     """
     return to_java_zoneddatetime(value).format(DateTimeFormatter.ofPattern(format_string))
 
 def days_between(value_from, value_to, calendar_days=False):
-    '''Returns number of whole days between value_from and value_to. Setting 
-    calendar_days=True will provide the number of calendar days, rather than 
-    24 hour intervals.
-    Accepts any date type used by this module'''
+    """Returns the number of days between ``value_from`` and ``value_to``.
+    Will return a negative number if ``value_from`` is after ``value__to``.
+
+    Examples:
+        .. code-block::
+
+            span_days = days_between(items["date_item"], javaDateTime.now())
+
+    Args:
+        value_from: Value to start from.
+        value_to: Value to measure to.
+        calendar_days (bool): If ``True`` will return calendar days between
+            instead of 24-hour periods between.
+    """
     if calendar_days:
         return DAYS.between(to_java_zoneddatetime(value_from).toLocalDate().atStartOfDay(), to_java_zoneddatetime(value_to).toLocalDate().atStartOfDay())
     else:
         return DAYS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def hours_between(value_from, value_to):
-    """Returns ``long`` of whole hours between ``value_from`` and ``value_to``."""
+    """Returns the number of hours between ``value_from`` and ``value_to``.
+    Will return a negative number if ``value_from`` is after ``value__to``.
+
+    Examples:
+        .. code-block::
+
+            span_hours = hours_between(items["date_item"], javaDateTime.now())
+
+    Args:
+        value_from: Value to start from.
+        value_to: Value to measure to.
+    """
     return HOURS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def minutes_between(value_from, value_to):
-    """Returns ``long`` of whole minutes between ``value_from`` and ``value_to``."""
+    """Returns the number of minutes between ``value_from`` and ``value_to``.
+    Will return a negative number if ``value_from`` is after ``value__to``.
+
+    Examples:
+        .. code-block::
+
+            span_minutes = minutes_between(items["date_item"], javaDateTime.now())
+
+    Args:
+        value_from: Value to start from.
+        value_to: Value to measure to.
+    """
     return MINUTES.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def seconds_between(value_from, value_to):
-    """Returns ``long`` of whole seconds between ``value_from`` and ``value_to``."""
+    """Returns the number of seconds between ``value_from`` and ``value_to``.
+    Will return a negative number if ``value_from`` is after ``value__to``.
+
+    Examples:
+        .. code-block::
+
+            span_seconds = seconds_between(items["date_item"], javaDateTime.now())
+
+    Args:
+        value_from: Value to start from.
+        value_to: Value to measure to.
+    """
     return SECONDS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def to_java_zoneddatetime(value):
     """Converts any known DateTime type to a ``java.time.ZonedDateTime`` type.
+    This is the same type as ``date.javaDateTime``.
+
+    Examples:
+        .. code-block::
+
+            java_time = to_java_zoneddatetime(items["date_item"])
 
     Args:
-        value: any known DateTime value.
+        value: Any known DateTime value.
 
     Returns:
         | A ``java.time.ZonedDateTime`` representing ``value``.
@@ -114,7 +189,7 @@ def to_java_zoneddatetime(value):
           will be used.
 
     Raises:
-        TypeError: type of ``value`` is not recognized by this package.
+        TypeError: If type of ``value`` is not recognized by this package.
     """
     if isinstance(value, javaDateTime):
         return value
@@ -156,9 +231,15 @@ def to_java_zoneddatetime(value):
 
 def to_python_datetime(value):
     """Converts any known DateTime type to a Python ``datetime.datetime`` type.
+    This is the same type as ``date.pythonDateTime``.
+
+    Examples:
+        .. code-block::
+
+            python_time = to_python_datetime(items["date_item"])
 
     Args:
-        value: any known DateTime value.
+        value: Any known DateTime value.
 
     Returns:
         | A Python ``datetime.datetime`` representing ``value``.
@@ -166,7 +247,7 @@ def to_python_datetime(value):
           will be used.
 
     Raises:
-        TypeError: type of ``value`` is not recognized by this package.
+        TypeError: If type of ``value`` is not recognized by this package.
     """
     if isinstance(value, pythonDateTime):
         return value
@@ -187,8 +268,8 @@ class pythonTimezone(datetime.tzinfo):
     """Python tzinfo with ``offset`` in minutes and name ``name``.
 
     Args:
-        offset (int): timezone offset from UTC in minutes.
-        name (str): display name of this instance.
+        offset (int): Timezone offset from UTC in minutes.
+        name (str): Display name of this instance.
     """
 
     def __init__(self, offset=0, name=""):
@@ -206,9 +287,15 @@ class pythonTimezone(datetime.tzinfo):
 
 def to_joda_datetime(value):
     """Converts any known DateTime type to a ``org.joda.time.DateTime`` type.
+    This is the same type as ``date.jodaDateTime``.
+
+    Examples:
+        .. code-block::
+
+            joda_time = to_joda_datetime(items["date_item"])
 
     Args:
-        value: any known DateTime value.
+        value: Any known DateTime value.
 
     Returns:
         | An ``org.joda.time.DateTime`` representing ``value``.
@@ -216,7 +303,7 @@ def to_joda_datetime(value):
           will be used.
 
     Raises:
-        TypeError: type of ``value`` is not recognized by this package.
+        TypeError: If type of ``value`` is not recognized by this package.
     """
     if isinstance(value, jodaDateTime):
         return value
@@ -228,18 +315,23 @@ def to_joda_datetime(value):
     )
 
 def to_java_calendar(value):
-    """Converts any known DateTime type to a ``java.util.calendar`` type.
+    """Converts any known DateTime type to a ``java.util.Calendar`` type.
+
+    Examples:
+        .. code-block::
+
+            calendar_time = to_java_calendar(items["date_item"])
 
     Args:
-        value: any known DateTime value.
+        value: Any known DateTime value.
 
     Returns:
-        | A ``java.util.calendar`` representing ``value``.
+        | A ``java.util.Calendar`` representing ``value``.
         | If ``value`` does not have timezone information, the system default
           will be used.
 
     Raises:
-        TypeError: type of ``value`` is not recognized by this package.
+        TypeError: If type of ``value`` is not recognized by this package.
     """
     if isinstance(value, utilCalendar):
         return value
