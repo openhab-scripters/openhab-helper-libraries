@@ -93,7 +93,7 @@ def postUpdate(itemName, newValue):
     item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
     scope.events.postUpdate(item, newValue)
 
-def postUpdateIfDifferent(itemName, newValue, sendACommand=False, floatPrecision=None):
+def post_update_if_different(itemName, newValue, sendACommand=False, floatPrecision=None):
     '''
     newValue must be of a type supported by the item
 
@@ -137,14 +137,14 @@ def postUpdateIfDifferent(itemName, newValue, sendACommand=False, floatPrecision
         return False
 
 # backwards compatibility
-postUpdateCheckFirst = postUpdateIfDifferent
+postUpdateCheckFirst = post_update_if_different
 
-def sendCommandIfDifferent(itemName, newValue, floatPrecision=None):
+def send_command_if_different(itemName, newValue, floatPrecision=None):
     ''' See postUpdateCheckFirst '''
     return postUpdateCheckFirst(itemName, newValue, sendACommand=True, floatPrecision=floatPrecision)
 
 # backwards compatibility
-sendCommandCheckFirst = sendCommandIfDifferent
+sendCommandCheckFirst = send_command_if_different
 
 def validate_item(item_or_item_name):# returns Item or None
     item = item_or_item_name
