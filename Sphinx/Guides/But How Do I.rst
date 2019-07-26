@@ -927,7 +927,7 @@ Run a rule by UID
         .. code-block::
 
             from core import osgi
-            rule_engine = osgi.get_service("org.eclipse.smarthome.automation.RuleManager")
+            ruleEngine = osgi.get_service("org.openhab.core.automation.RuleManager") or osgi.get_service("org.eclipse.smarthome.automation.RuleManager")
             ruleEngine.runNow(ruleFunction.UID)
             consider_conditions = True# consider the rule's Conditions
             ruleEngine.runNow(ruleFunction.UID, considerConditions, {'name': 'EXAMPLE'})
@@ -962,10 +962,13 @@ Enable/disable a Thing
 
             from core.log import logging, LOG_PREFIX
             log = logging.getLogger("{}.TEST".format(LOG_PREFIX))
-            from org.eclipse.smarthome.core.thing import ThingUID
             from core import osgi
+            try:
+                from org.openhab.core.thing import Thing UID
+            except:
+                from org.eclipse.smarthome.core.thing import ThingUID
 
-            thing_manager = osgi.get_service("org.eclipse.smarthome.core.thing.ThingManager")
+            thing_manager = osgi.get_service("org.openhab.core.thing.ThingManager") or osgi.get_service("org.eclipse.smarthome.core.thing.ThingManager")
             kodi_thing = things.get(ThingUID("kodi:kodi:familyroom"))
             thing_manager.setEnabled(ThingUID("kodi:kodi:familyroom"), False)# disable Thing
             log.debug("Disabled: isEnabled [{}], statusInfo [{}]".format(kodi_thing.isEnabled(), kodi_thing.statusInfo))
