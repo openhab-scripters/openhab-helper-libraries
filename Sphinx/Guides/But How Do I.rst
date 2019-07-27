@@ -862,8 +862,8 @@ Get the UID of a rule by name
 
         .. code-block::
 
-            scriptExtension.importPreset("RuleSupport")
-            ruleUID = filter(lambda rule: rule.name == "This is the name of my rule", rules.getAll())[0].UID
+            ruleRegistry = scriptExtension.get("ruleRegistry")
+            ruleUID = filter(lambda rule: rule.name == "This is the name of my rule", ruleRegistry.getAll())[0].UID
 
     .. group-tab:: JavaScript
 
