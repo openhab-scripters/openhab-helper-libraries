@@ -1,16 +1,9 @@
-'''
-This module bridges the `Python standard ``logging`` module
-<https://docs.python.org/2/library/logging.html>` with openHAB logging. The
-``configuration`` module also provides a `LOG_PREFIX` variable, which is used
-as the default logger. This is used throughout the core modules and scripts,
-including the ``log`` module. LOG_PREFIX can be modified based on personal
-preference.
-
-If openHAB Cloud Connector is installed, exceptions will be sent as a
-notification. If the configuration.adminEmail variable is populated, the
-notification will be sent to that person. Otherwise, a broadcast notification
-will be sent.
-'''
+"""
+This module bridges the `Python standard logging module <https://docs.python.org/2/library/logging.html>`_
+with the slf4j library used by openHAB. The ``configuration`` module provides
+a ``LOG_PREFIX`` variable that is used as the default logger throughout the
+core modules and scripts.
+"""
 
 import logging
 import functools
@@ -38,13 +31,21 @@ class Slf4jHandler(logging.Handler):
             logger.warn(message)
         elif level == logging.INFO:
             logger.info(message)
-            
+
 handler = Slf4jHandler()
 logging.root.setLevel(logging.DEBUG)
 logging.root.handlers = [handler]
 
 def log_traceback(fn):
-    """Decorator to provide better Jython stack traces"""
+    """
+    Decorator to provide better Jython stack traces
+
+    Essentially, the decorated function/class/method is wrapped in a try/except
+    and will log a traceback for exceptions. If openHAB Cloud Connector is
+    installed, exceptions will be sent as a notification. If the
+    configuration.adminEmail variable is populated, the notification will be
+    sent to that address. Otherwise, a broadcast notification will be sent.
+    """
     functools.wraps(fn)
     def wrapper(*args, **kwargs):
         try:
