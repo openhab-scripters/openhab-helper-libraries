@@ -573,6 +573,7 @@ def scene(item, scene, metadata, host):
                 value="eos_menu_scene_type"
             ))
         menu_choices.append(Separator(line=" "))
+        menu_choices.append(Separator(line="    Settings"))
         for key in [key for key in eos.META_KEY_LIST if get_scene_setting(item, scene, key, host, metadata=dummy_metadata, depth=1) is not None]:
             if answer == key:  pointed_at = len(menu_choices)
             menu_choices.append(Choice(
@@ -631,7 +632,6 @@ def scene(item, scene, metadata, host):
             ))
 
         clear()
-        echo(metadata)
         answer = select(message=menu_message, choices=menu_choices, style=eos_style, qmark="", pointed_at=pointed_at).ask()
 
         if answer == "eos_menu_edit_name":
