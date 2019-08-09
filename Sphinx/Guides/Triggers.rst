@@ -31,6 +31,7 @@ Items and Groups
                 @when("Member of GROUP_NAME received update [NEW_STATE]")
                 @when("Descendent of GROUP_NAME received update [NEW_STATE]")
 
+                @when("ITEM_NAME") # shorthand of "Item ITEM_NAME changed"
                 @when("Item ITEM_NAME changed [from OLD_STATE] [to NEW_STATE]")
                 @when("Item GROUP_NAME changed [from OLD_STATE] [to NEW_STATE]")
                 @when("Member of GROUP_NAME changed [from OLD_STATE] [to NEW_STATE]")
@@ -76,53 +77,56 @@ Items and Groups
         If the state or command used in the ``when`` decorator has special characters, including spaces, it must be surrounded in single quotes ``'like this'`` to prevent errors.
 
 
+Channel Event
+=============
+
+    Channel triggers allow you to catch events from bindings using channels.
+    You should find channel names and events in the documentation for the binding.
+
+    .. tabs::
+
+        .. group-tab:: Python
+
+            .. code-block::
+
+                @when("Channel CHANNEL:NAME")
+                @when("Channel CHANNEL:NAME triggered")
+                @when("Channel CHANNEL:NAME triggered EVENT")
+
+        .. group-tab:: JavaScript
+
+            Decorators have not yet been created for the JavaScript helper libraries.
+
+        .. group-tab:: Groovy
+
+            Decorators have not yet been created for the Groovy helper libraries.
+
+        .. group-tab:: Rules DSL
+
+            .. code-block:: java
+
+                Channel "CHANNEL:NAME"
+                Channel "CHANNEL:NAME" triggered
+                Channel "CHANNEL:NAME" triggered EVENT
+
+    If you need the name of the channel or event that triggered the rule, they are available as ``event.channel`` and ``event.event`` respectively.
+
+    .. warning::
+
+        If the event used in the ``when`` decorator has special characters, including spaces, it must be surrounded in single quotes ``'like this'`` to prevent errors.
+
+
 Thing Event
 ===========
 
     Thing status changes can also be used to trigger rules.
     A list of all available statuses can be found `here <https://www.openhab.org/docs/concepts/things.html>`_.
-    If you need to trigger on a specific status, you can get the status name via ``event.statusInfo.status`` and check if it is the status that you needed.
-
-    .. tabs::
-
-        .. group-tab:: Python
-
-            .. code-block::
-
-                @when("Thing THING:NAME received update [NEW_STATE]")
-                @when("Thing THING:NAME changed [from OLD_STATE] [to NEW_STATE]")
-
-        .. group-tab:: JavaScript
-
-            Decorators have not yet been created for the JavaScript helper libraries.
-
-        .. group-tab:: Groovy
-
-            Decorators have not yet been created for the Groovy helper libraries.
-
-        .. group-tab:: Rules DSL
-
-            .. code-block:: java
-
-                Thing "THING:NAME" received update [NEW_STATE]
-                Thing "THING:NAME" changed [from OLD_STATE] [to NEW_STATE]
-
-    .. warning::
-
-        If the status used in the ``when`` decorator has special characters, including spaces, it must be surrounded in single quotes ``'like this'`` to prevent errors.
-
-
-Channel Event
-=============
-
-    Channel triggers allow you to catch events from bindings using Channels.
-    You can find Channel names and events in the documentation for the binding.
 
     .. note::
 
-        Only *trigger* Channels can be used with this trigger, `same as in the rules DSL <https://www.openhab.org/docs/configuration/rules-dsl.html#channel-based-triggers>`_.
-        If not using a trigger Channel, you will receive a validation error when saving the script.
-        The binding documentation will identify which Channels, if any, are trigger Channels.
+        | Thing triggers do not yet support ``NEW_STATE`` or ``OLD_STATE`` conditions.
+          This is a limitation of the openHAB Automation API.
+        | If you need to trigger on a specific event, you can get the event name via ``event.statusInfo`` and check if it is the event you needed.
 
     .. tabs::
 
@@ -130,7 +134,8 @@ Channel Event
 
             .. code-block::
 
-                @when("Channel CHANNEL:NAME triggered [EVENT]")
+                @when("Thing THING:NAME received update")
+                @when("Thing THING:NAME changed")
 
         .. group-tab:: JavaScript
 
@@ -144,13 +149,12 @@ Channel Event
 
             .. code-block:: java
 
-                Channel "CHANNEL:NAME" triggered [EVENT]
-
-    If you need the name of the Channel or event that triggered the rule, they are available as ``event.channel`` and ``event.event``, respectively.
-
-    .. warning::
-
-        If the event used in the ``when`` decorator has special characters, including spaces, it must be surrounded in single quotes ``'like this'`` to prevent errors.
+                Thing "THING:NAME" received update
+                Thing "THING:NAME" received update NEW_STATE
+                Thing "THING:NAME" changed
+                Thing "THING:NAME" changed to NEW_STATE
+                Thing "THING:NAME" changed from OLD_STATE to NEW_STATE
+                Thing "THING:NAME" changed from NEW_STATE
 
 
 Cron
@@ -171,7 +175,12 @@ Cron
 
             .. code-block::
 
+                @when("5 5 5 * * ?")
                 @when("Time cron 55 55 5 * * ?")
+                @when(triggers.EVERY_SECOND)
+                @when(triggers.EVERY_10_SECONDS)
+                @when(triggers.EVERY_MINUTE)
+                @when(triggers.EVERY_HOUR)
 
         .. group-tab:: JavaScript
 
@@ -185,7 +194,7 @@ Cron
 
             .. code-block:: java
 
-                Time cron "55 55 5 * * ?"
+                Time cron "5 5 5 * * ?"
 
 
 System Started
@@ -234,6 +243,7 @@ System Started
                 def my_rule_function(event):
                     # your Python code here
 
+
                 def scriptLoaded(id):
                     # call rule function when this file is loaded
                     my_rule_function(None)
@@ -250,9 +260,37 @@ System Started
 System Shuts Down
 =================
 
-    There is currently no working ``"System shuts down"`` trigger.
-    If attempting to use this trigger with the ``when`` decorator, you will receive a validation error when saving the script.
-    Below are workarounds for executing a function when a script is unloaded, similar to what is described for ``System started``.
+    The system shuts down trigger can be used to run a rule when openHAB shuts down.
+
+    .. warning::
+
+        | There is currently no working ``"System shuts down"`` trigger.
+          Any rules using this trigger with the ``when`` decorator will not trigger when openHAB is exiting.
+        | See below for a workaround.
+
+    .. tabs::
+
+        .. group-tab:: Python
+
+            .. code-block::
+
+                @when("System shuts down")
+
+        .. group-tab:: JavaScript
+
+            Decorators have not yet been created for the JavaScript helper libraries.
+
+        .. group-tab:: Groovy
+
+            Decorators have not yet been created for the Groovy helper libraries.
+
+        .. group-tab:: Rules DSL
+
+            .. code-block:: java
+
+                System shuts down
+
+    There is a workaround to run a rule when the script file gets unloaded, similar to the StartupTrigger workaround:
 
     .. tabs::
 
@@ -265,8 +303,9 @@ System Shuts Down
                 def my_rule_function(event):
                     # your Python code here
 
+
                 def scriptUnloaded():
-                    # call rule function when this file is unloaded, but be sure an event of None is handled
+                    # call rule when this file is unloaded
                     my_rule_function(None)
 
         .. group-tab:: JavaScript
@@ -276,9 +315,3 @@ System Shuts Down
         .. group-tab:: Groovy
 
             TODO
-
-        .. group-tab:: Rules DSL
-
-            .. code-block:: java
-
-                System shuts down
