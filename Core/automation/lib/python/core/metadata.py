@@ -69,6 +69,7 @@ def get_metadata(item_name, namespace):
     log.debug("get_metadata: Item [{}], namespace [{}]".format(item_name, namespace))
     metadata = metadata_registry.get(MetadataKey(namespace, item_name))
     '''
+    # this might be interesting, but I haven't come across a need for it
     if metadata is None:
         return {"value": None, "configuration": None}
     else:
