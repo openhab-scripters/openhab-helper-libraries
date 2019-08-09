@@ -66,6 +66,14 @@ def get_metadata(item_name, namespace):
         the metadata or Item does not exist
     """
     log.debug("get_metadata: Item [{}], namespace [{}]".format(item_name, namespace))
+    metadata = metadata_registry.get(MetadataKey(namespace, item_name))
+    '''
+    # this might be interesting, but I haven't come across a need for it
+    if metadata is None:
+        return {"value": None, "configuration": None}
+    else:
+        return metadata
+    '''
     return metadata_registry.get(MetadataKey(namespace, item_name))
 
 def set_metadata(item_name, namespace, configuration, value=None, overwrite=False):
