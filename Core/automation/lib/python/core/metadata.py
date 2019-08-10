@@ -36,7 +36,8 @@ def get_all_namespaces(item_name):
             get_all_namespaces("Item_Name")
 
     Args:
-        item_name (string): name of the Item to retrieve namespaces names from
+        item_name (string): the name of the Item to retrieve the namespace
+        names for
 
     Returns:
         list: list of strings representing the namespace names found for the
@@ -63,7 +64,7 @@ def get_metadata(item_name, namespace):
     Returns:
         Metadata object or None: Metadata object containing the namespace
         ``value`` and ``configuration`` dictionary, but will be ``None`` if
-        the metadata or Item does not exist
+        the namespace or Item do not exist
     """
     log.debug("get_metadata: Item [{}], namespace [{}]".format(item_name, namespace))
     metadata = metadata_registry.get(MetadataKey(namespace, item_name))
@@ -140,7 +141,7 @@ def remove_metadata(item_name, namespace=None):
         log.debug("remove_metadata: Item [{}], namespace [{}]".format(item_name, namespace))
         metadata_registry.remove(MetadataKey(namespace, item_name))
 
-def get_key_value(item_name, namespace, key):
+def get_key_value(item_name, namespace, *args):
     """
     Ths function returns the ``configuration`` value for the specified key.
 
@@ -148,75 +149,100 @@ def get_key_value(item_name, namespace, key):
         .. code-block::
 
             # Get key/value pair from Item's namespace "configuration"
-            get_key_value("Item_Name", "Namespace_Name", "Key_1")
+            get_key_value("Item_Name", "Namespace_Name", "Key", "Subkey", "Subsubkey")
 
     Args:
         item_name (string): name of the Item
         namespace (string): name of the namespace
-        key (string): ``configuration`` key to return
+        key (string): ``configuration`` key to return (multiple keys in
+            descending branches can be used)
 
     Returns:
-        string: ``configuration`` key value or ``None`` if the metadata or
+        string: ``configuration`` key value or ``{}`` if the metadata, key or
         Item does not exist
     """
-    log.debug("get_key_value: Item [{}], namespace [{}], key [{}]".format(item_name, namespace, key))
+    log.debug("get_key_value: Item [{}], namespace [{}], args [{}]".format(item_name, namespace, args))
     metadata = get_metadata(item_name, namespace)
     if metadata is not None:
-        return metadata.configuration.get(key)
+        result = metadata.configuration.get(args[0])
+        if result is None:
+            return {}
+        else:
+            for arg in args[1:]:
+                result = result.get(arg, {})
+            return result
     else:
-        return None
+        return {}
 
-def set_key_value(item_name, namespace, key, value):
+def set_key_value(item_name, namespace, *args):
     """
-    This function creates or updates a ``configuration`` value in the
-    specified namespace. This function cannot be used unless the namespace
-    already exists.
+    This function creates or updates a key value in the specified namespace.
 
     Examples:
         .. code-block::
 
             # Set key/value pair in Item's namespace "configuration"
-            set_key_value("Item_Name", "Namespace_Name", "Key_1", "key_1 value")
+            set_key_value("Item_Name", "Namespace_Name", "Key", "Subkey", "Subsubkey", "Value")
 
     Args:
         item_name (string): name of the Item
         namespace (string): name of the namespace
-        key (string): ``configuration`` key to create or update
-        value (string, decimal, boolean or None): value to set for ``configuration``
-            key
+        key (string): key to create or update (multiple keys in descending
+            branches can be used)
+        value (string, decimal, boolean, dict or None): value to set
     """
-    log.debug("set_key_value: Item [{}], namespace [{}], key [{}], value [{}]".format(item_name, namespace, key, value))
-    metadata = get_metadata(item_name, namespace)
-    new_configuration = {key: value}
-    if metadata is not None:
-        new_configuration = dict(metadata.configuration).copy()
-        new_configuration.update({key: value})
-    set_metadata(item_name, namespace, new_configuration)
+    log.debug("set_key_value: Item [{}], namespace [{}], args [{}]".format(item_name, namespace, args))
+    if len(args) > 1:
+        metadata = get_metadata(item_name, namespace)
+        new_configuration = {}
+        if metadata is not None:
+            new_configuration = dict(metadata.configuration).copy()
+        sub_dict = new_configuration
+        for arg in args[:-1]:
+            if arg not in sub_dict.keys():
+                sub_dict[arg] = {}
+            if arg == args[-2]:
+                sub_dict[arg] = args[-1]
+            else:
+                sub_dict = sub_dict[arg]
+        set_metadata(item_name, namespace, new_configuration)
+    else:
+        log.warn("set_key_value: at least two args required: args [{}]".format(args))
 
-def remove_key_value(item_name, namespace, key):
+def remove_key_value(item_name, namespace, *args):
     """
-    This function removes a ``configuration`` key and its value from the
-    specified namespace.
+    This function removes a key from a namespace's ``configuration``.
 
     Examples:
         .. code-block::
 
             # Remove key/value pair from namespace ``configuration``
-            remove_key_value("Item_Name", "Namespace_Name", "Key_1")
+            remove_key_value("Item_Name", "Namespace_Name", "Key", "Subkey", "Subsubkey")
 
     Args:
         item_name (string): name of the Item
         namespace (string): name of the namespace
-        key (string): ``configuration`` key to remove
+        key (string): ``configuration`` key to remove (multiple keys in
+            descending branches can be used)
     """
-    log.debug("remove_key_value: Item [{}], namespace [{}], key [{}]".format(item_name, namespace, key))
-    metadata = get_metadata(item_name, namespace)
-    if metadata is not None:
-        new_configuration = dict(metadata.configuration).copy()
-        new_configuration.pop(key)
-        set_metadata(item_name, namespace, new_configuration, metadata.value, True)
+    log.debug("remove_key_value: Item [{}], namespace [{}], args [{}]".format(item_name, namespace, args))
+    if len(args) > 0:
+        metadata = get_metadata(item_name, namespace)
+        if metadata is not None:
+            new_configuration = dict(metadata.configuration).copy()
+            sub_dict = new_configuration
+            for arg in args:
+                if arg != args[-1]:
+                    sub_dict = sub_dict.get(arg, {})
+                elif sub_dict != {}:
+                    sub_dict.pop(arg)
+                else:
+                    log.warn("remove_key_value: key does not exist: Item [{}], namespace [{}], args [{}]".format(item_name, namespace, args))
+            set_metadata(item_name, namespace, new_configuration, metadata.value, True)
+        else:
+            log.warn("remove_key_value: metadata does not exist: Item [{}], namespace [{}]".format(item_name, namespace))
     else:
-        log.debug("remove_key_value: metadata does not exist: Item [{}], namespace [{}]".format(item_name, namespace))
+        log.warn("remove_key_value: at least one arg required")
 
 def get_value(item_name, namespace):
     """
