@@ -6,40 +6,14 @@ Config value loader
 
 from community.eos import log
 from community.eos.constants import *
+from community.eos import constants
 
-import sys
+import sys, copy, collections
 
 _master_group_name = ""
 _scene_item_prefix = ""
 _scene_item_suffix = ""
 _reinit_item_name = ""
-_scene_defaults = {
-    LIGHT_TYPE_SWITCH: {
-        SCENE_ON: { META_KEY_STATE: "ON" },
-        SCENE_OFF: { META_KEY_STATE: "OFF" },
-        META_KEY_STATE: "OFF",
-        META_KEY_STATE_ABOVE: "OFF",
-        META_KEY_STATE_BELOW: "ON"
-    },
-    LIGHT_TYPE_DIMMER: {
-        SCENE_ON: { META_KEY_STATE: 100 },
-        SCENE_OFF: { META_KEY_STATE: 0 },
-        META_KEY_STATE: 0,
-        META_KEY_STATE_HIGH: 0,
-        META_KEY_STATE_LOW: 100,
-        META_KEY_STATE_ABOVE: 0,
-        META_KEY_STATE_BELOW: 100
-    },
-    LIGHT_TYPE_COLOR: {
-        SCENE_ON: { META_KEY_STATE: 100 },
-        SCENE_OFF: { META_KEY_STATE: 0 },
-        META_KEY_STATE: 0,
-        META_KEY_STATE_HIGH: 0,
-        META_KEY_STATE_LOW: 100,
-        META_KEY_STATE_ABOVE: 0,
-        META_KEY_STATE_BELOW: 100
-    }
-}
 
 __all__ = [  ]
 
@@ -67,37 +41,26 @@ def _get_conf_value(name, valid_types=None, default=None):
         return default
 
 def load():
-    #global _master_group_name, _scene_item_prefix, _scene_item_suffix, _reinit_item_name
     this.master_group_name = _get_conf_value(CONF_KEY_MASTER_GROUP, str, "")
     this.scene_item_prefix = _get_conf_value(CONF_KEY_SCENE_PREFIX, str, "")
     this.scene_item_suffix = _get_conf_value(CONF_KEY_SCENE_SUFFIX, str, "")
     this.reinit_item_name = _get_conf_value(CONF_KEY_REINIT_ITEM, str, "")
-    this.scene_defaults = _scene_defaults.copy()
-    this.scene_defaults.update(_get_conf_value(CONF_KEY_SCENE_DEFAULTS, dict, {}))
+    this.log_trace = _get_conf_value(CONF_KEY_LOG_TRACE, None, False)
 
-"""
-def master_group_name():
-    return _get_conf_value(CONF_KEY_MASTER_GROUP, str, "")
+    # recursively update global settings with dict from config
+    def update(d, u):
+        for k, v in u.iteritems():
+            dv = d.get(k, {})
+            if not isinstance(dv, collections.Mapping):
+                d[k] = v
+            elif isinstance(v, collections.Mapping):
+                d[k] = update(dv, v)
+            else:
+                d[k] = v
+        return d
+    global_settings = copy.deepcopy(constants._global_settings)
+    this.global_settings = update(global_settings, _get_conf_value(CONF_KEY_GLOBAL_SETTINGS, dict, {}))
 
-def scene_item_prefix():
-    return _get_conf_value(CONF_KEY_SCENE_PREFIX, str, "")
-
-def scene_item_suffix():
-    return _get_conf_value(CONF_KEY_SCENE_SUFFIX, str, "")
-
-def reinit_item_name():
-    value = _get_conf_value(CONF_KEY_REINIT_ITEM, str, "")
-    if validate_item(value):
-        return value
-    else:
-        log.warn("Eos reload item '{name}' does not exist".format(name=value))
-        return ""
-
-def scene_defaults():
-    value = _scene_defaults.copy
-    value.update(_get_conf_value(CONF_KEY_SCENE_DEFAULTS, dict, {}))
-    return value
-"""
 
 this = sys.modules[__name__]
 load()
