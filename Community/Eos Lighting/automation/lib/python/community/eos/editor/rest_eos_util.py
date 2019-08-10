@@ -8,23 +8,18 @@ if sys.version_info[0] < 3: # Python 2.x
 else: # Python 3.x
     pass
 
-import os, json
+import os, json, copy, collections, six
 from ast import literal_eval
 from click import echo
 
+from constants import *
 from rest_metadata import get_metadata, get_value
 from rest_utils import validate_item
-import rest_editor_eos as eos
 
-itemtypesScene = ["String"]
-itemtypesLight = ["Color", "Dimmer", "Number", "Switch"]
-itemtypesSwitch = ["Switch"]
-itemtypesDimmer = ["Color", "Dimmer", "Number"]
-itemtypesColor = ["Color"]
-itemtypesGroup = ["Group"]
 
 __all__ = ["get_conf_value", "validate_item_name", "get_scene_item", "get_light_items",
-    "get_group_items", "resolve_type", "get_item_eos_group", "get_scene_type"]
+    "get_group_items", "resolve_type", "get_item_eos_group", "get_other_items",
+    "get_global_settings", "get_scene_setting", "get_scene_type"]
 
 
 def get_conf_value(name, valid_types=None, default=None):
@@ -49,18 +44,14 @@ def get_conf_value(name, valid_types=None, default=None):
 def validate_item_name(name, prefix, suffix):
     """Verifies that ``name`` starts with ``prefix`` and ends with ``suffix``.
     Returns ``True`` or ``False``"""
-    if name[:len(prefix)] == prefix and name[-len(suffix):] == suffix:
-        return True
-    else:
-        return False
+    return name[:len(prefix)] == prefix and name[-len(suffix):] == suffix
 
 def get_scene_item(group):
     """Finds the scene item in a group.
 
     Returns the scene item or ``None`` if it does not find exactly one match.
     """
-    if group is None: return None
-    items = [item for item in group["members"] if validate_item_name(item["name"], get_conf_value(eos.CONF_KEY_SCENE_PREFIX, default=""), get_conf_value(eos.CONF_KEY_SCENE_SUFFIX, default=""))]
+    items = [item for item in group.get("members", {}) if validate_item_name(item["name"], get_conf_value(CONF_KEY_SCENE_PREFIX, default=""), get_conf_value(CONF_KEY_SCENE_SUFFIX, default=""))]
     if not items:
         return None
     elif len(items) > 1:
@@ -70,7 +61,7 @@ def get_scene_item(group):
     else:
         return items[0]
 
-def get_light_items(group, openhab_host):
+def get_light_items(group, host):
     """Finds all light items in a group.
 
     Returns a list of valid Eos lights.
@@ -80,7 +71,7 @@ def get_light_items(group, openhab_host):
             if item["type"] not in itemtypesGroup
                 and item["type"] in itemtypesLight
                 and item["name"] != get_scene_item(group)["name"]
-                and resolve_type(get_value(item["name"], eos.META_NAME_EOS, openhab_host)) is not None
+                and resolve_type(get_value(item["name"], META_NAME_EOS, host)) is not None
         ] if "members" in group else []
 
 def get_group_items(group):
@@ -91,7 +82,6 @@ def get_group_items(group):
     return [
         item for item in group["members"]
             if item["type"] in itemtypesGroup
-                and validate_item_name(item["name"], get_conf_value(eos.CONF_KEY_GROUP_PREFIX, default=""), get_conf_value(eos.CONF_KEY_GROUP_SUFFIX, default=""))
                 and get_scene_item(group) is not None
         ] if "members" in group else []
                 # removed because we want any groups that might have lights we can configure
@@ -119,39 +109,121 @@ def resolve_type(value):
         # parseable
         return value
 
-def get_item_eos_group(item, openhab_host):
+def get_item_eos_group(item, host):
     """Gets the Eos group from the item's groups.
 
     Returns the group item or ``None`` if it does not find exactly one match.
     """
-    groups = [group for group in item["groupNames"] if get_scene_item(validate_item(group, openhab_host))]
+    groups = [group for group in item["groupNames"] if get_scene_item(validate_item(group, host))]
     if not groups:
         return None
     elif len(groups) > 1:
         return None
     else:
-        return validate_item(groups[0], openhab_host)
+        return validate_item(groups[0], host)
 
-def get_other_items(group, openhab_host):
+def get_other_items(group, host):
     """Finds all non Eos items in a group.
 
     Returns a list of all non Eos items in the group.
     """
-    others = [item for item in group["members"]]
-    for item in get_light_items(group, openhab_host):
-        others.remove(item)
+    others = {item["name"]:item for item in group["members"]}
+    for item in get_light_items(group, host):
+        others.pop(item["name"], None)
     for item in get_group_items(group):
-        others.remove(item)
-    try:
-        others.remove(get_scene_item(group))
-    except:
-        pass
-    return others
+        others.pop(item["name"], None)
+    for item in [item for item in group["members"] if item["name"] == get_conf_value(CONF_KEY_REINIT_ITEM, str)]:
+        others.pop(item["name"], None)
+    for item in [others[key] for key in others]:
+        if item["type"] not in itemtypesLight and item["type"] != itemtypesGroup:
+            others.pop(item["name"], None)
+    others.pop(get_scene_item(group)["name"], None)
+    return [others[key] for key in others]
 
-def get_scene_type(item, scene):
-    """
-    Determine the scene type of ``scene`` for ``item``
+def get_global_settings():
+    def update(d, u):
+        for k, v in six.iteritems(u):
+            dv = d.get(k, {})
+            if not isinstance(dv, collections.Mapping):
+                d[k] = v
+            elif isinstance(v, collections.Mapping):
+                d[k] = update(dv, v)
+            else:
+                d[k] = v
+        return d
+    import constants
+    global_settings = copy.deepcopy(constants._global_settings)
+    return update(global_settings, get_conf_value(CONF_KEY_GLOBAL_SETTINGS, dict, {}))
 
-    Returns the name of scene type
-    """
-    return "SCENE TYPE"
+def get_scene_setting(scene, light_type, key, data, depth=10, min_depth=1):
+    # Gets a setting value by searching:
+    # Scene in Item > Item > Scene in Light Type in Group > Light Type in Group >
+    # Scene in Group > Group > Scene in Light Type in Global > Light Type in Global >
+    # Scene in Global > Global
+    item_data = data["item"]
+    group_data = data["group"]
+    global_data = data["global"]
+
+    value = None
+    if depth >= 1 and 1 >= min_depth and 1 in META_KEY_DEPTH_MAP[key] and item_data.get(scene, {}).get(key, None) is not None:
+        # source = "Scene in Item"
+        value = item_data.get(scene, {}).get(key, None)
+    elif depth >= 2 and 2 >= min_depth and 2 in META_KEY_DEPTH_MAP[key] and item_data.get(key, None) is not None:
+        # source = "Item"
+        value = item_data.get(key, None)
+    elif depth >= 3 and 3 >= min_depth and 3 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(scene, {}).get(key, None) is not None:
+        # source = "Scene in Light Type in Group"
+        value = group_data.get(light_type, {}).get(scene, {}).get(key, None)
+    elif depth >= 4 and 4 >= min_depth and 4 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(key, None) is not None:
+        # source = "Light Type in Group"
+        value = group_data.get(light_type, {}).get(key, None)
+    elif depth >= 5 and 5 >= min_depth and 5 in META_KEY_DEPTH_MAP[key] and group_data.get(scene, {}).get(key, None) is not None:
+        # source = "Scene in Group"
+        value = group_data.get(scene, {}).get(key, None)
+    elif depth >= 6 and 6 >= min_depth and 6 in META_KEY_DEPTH_MAP[key] and group_data.get(key, None) is not None:
+        # source = "Group"
+        value = group_data.get(key, None)
+    elif depth >= 7 and 7 >= min_depth and 7 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(scene, {}).get(key, None) is not None:
+        # source = "Scene in Light Type in Global"
+        value = global_data.get(light_type, {}).get(scene, {}).get(key, None)
+    elif depth >= 8 and 8 >= min_depth and 8 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(key, None) is not None:
+        # source = "Light Type in Global"
+        value = global_data.get(light_type, {}).get(key, None)
+    elif depth >= 9 and 9 >= min_depth and 9 in META_KEY_DEPTH_MAP[key] and global_data.get(scene, {}).get(key, None) is not None:
+        # source = "Scene in Global"
+        value = global_data.get(scene, {}).get(key, None)
+    elif depth >= 10 and 10 >= min_depth and 10 in META_KEY_DEPTH_MAP[key] and global_data.get(key, None) is not None:
+        # source = "Global"
+        value = global_data.get(key, None)
+    return value
+
+def get_scene_type(scene, light_type, data, min_depth=1):
+    # gets the scene type
+    if not light_type: return ""
+    for depth in range(min_depth, 11):
+        if light_type == LIGHT_TYPE_SWITCH:
+            if get_scene_setting(scene, light_type, META_KEY_STATE, data, depth=depth, min_depth=min_depth) is not None:
+                return SCENE_TYPE_FIXED
+            elif get_scene_setting(scene, light_type, META_KEY_LEVEL_THRESHOLD, data, depth=depth, min_depth=min_depth) is not None:
+                return SCENE_TYPE_THRESHOLD
+        elif light_type == LIGHT_TYPE_DIMMER:
+            if get_scene_setting(scene, light_type, META_KEY_STATE, data, depth=depth, min_depth=min_depth) is not None:
+                return SCENE_TYPE_FIXED
+            elif get_scene_setting(scene, light_type, META_KEY_LEVEL_HIGH, data, depth=depth, min_depth=min_depth) is not None \
+            or get_scene_setting(scene, light_type, META_KEY_LEVEL_LOW, data, depth=depth, min_depth=min_depth) is not None \
+            or get_scene_setting(scene, light_type, META_KEY_STATE_HIGH, data, depth=depth, min_depth=min_depth) is not None \
+            or get_scene_setting(scene, light_type, META_KEY_STATE_LOW, data, depth=depth, min_depth=min_depth) is not None:
+                return SCENE_TYPE_SCALED
+            elif get_scene_setting(scene, light_type, META_KEY_LEVEL_THRESHOLD, data, depth=depth, min_depth=min_depth) is not None:
+                return SCENE_TYPE_THRESHOLD
+        elif light_type == LIGHT_TYPE_COLOR:
+            if get_scene_setting(scene, light_type, META_KEY_STATE, data, depth=depth, min_depth=min_depth) is not None:
+                return SCENE_TYPE_FIXED
+            elif get_scene_setting(scene, light_type, META_KEY_LEVEL_HIGH, data, depth=depth, min_depth=min_depth) is not None \
+            or get_scene_setting(scene, light_type, META_KEY_LEVEL_LOW, data, depth=depth, min_depth=min_depth) is not None \
+            or get_scene_setting(scene, light_type, META_KEY_STATE_HIGH, data, depth=depth, min_depth=min_depth) is not None \
+            or get_scene_setting(scene, light_type, META_KEY_STATE_LOW, data, depth=depth, min_depth=min_depth) is not None:
+                return SCENE_TYPE_SCALED
+            elif get_scene_setting(scene, light_type, META_KEY_LEVEL_THRESHOLD, data, depth=depth, min_depth=min_depth) is not None:
+                return SCENE_TYPE_THRESHOLD
+    return None

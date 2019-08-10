@@ -64,9 +64,9 @@ def set_metadata(item_name, namespace, host, configuration, value=None, overwrit
                 {"value": value, "config": configuration}
             )
         if resp:
-            return True if resp.status_code in [200, 201] else False
+            return resp if resp.status_code in [200, 201] else None
         else:
-            return False
+            return None # raise error?
     else:
         if value is None:
             value = metadata.get("value", None)
@@ -79,9 +79,9 @@ def set_metadata(item_name, namespace, host, configuration, value=None, overwrit
                 {"value": value, "config": new_configuration}
             )
         if resp:
-            return True if resp.status_code in [200, 201] else False
+            return resp if resp.status_code in [200, 201] else None
         else:
-            return False
+            return None # raise error?
 
 def remove_metadata(item_name, namespace, host):
     if namespace is not None:

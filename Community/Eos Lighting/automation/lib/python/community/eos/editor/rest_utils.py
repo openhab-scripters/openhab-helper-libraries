@@ -113,12 +113,9 @@ def validate_item(item_or_item_name, host, query=""):
         return None
 
 def update_item(item, host):
-    if isinstance(item, dict):
-        resp = rest_put(host, "items/{item_name}".format(item_name=item["name"]), item)
-        if resp:
-            # 200 means item created, should do a check?
-            return True if resp.status_code == [200, 201] else False
-        else:
-            return False
+    resp = rest_put(host, "items/{item_name}".format(item_name=item["name"]), item)
+    if resp:
+        # 200 means item created, should do a check?
+        return resp if resp.status_code == [200, 201] else None
     else:
-        return False
+        return None # raise error?
