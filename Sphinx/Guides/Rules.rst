@@ -97,7 +97,7 @@ Imports
 
             .. code-block:: python
 
-                @rule("Rule Name", description="Optional Rule Description", tag=["Tag 1", "Tag 2"])
+                @rule("Rule Name", description="Optional Rule Description", tags=["Tag 1", "Tag 2"])
 
         .. group-tab:: JavaScript
 
@@ -127,7 +127,7 @@ Imports
 
             .. code-block::
 
-                @rule("Rule Name", description="Optional Rule Description", tag=["Tag 1", "Tag 2"])
+                @rule("Rule Name", description="Optional Rule Description", tags=["Tag 1", "Tag 2"])
                 @when("Time cron 0/10 * * * * ?")
                 @when("Item Test_Switch_1 received update")
 
@@ -169,7 +169,7 @@ Function
 
             .. code-block::
 
-                @rule("Rule Name", description="Optional Rule Description", tag=["Tag 1", "Tag 2"])
+                @rule("Rule Name", description="Optional Rule Description", tags=["Tag 1", "Tag 2"])
                 @when("Time cron 0/10 * * * * ?")
                 @when("Item Test_Switch_1 received update")
                 def my_rule_function(event):

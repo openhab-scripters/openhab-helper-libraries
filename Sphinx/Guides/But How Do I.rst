@@ -36,7 +36,7 @@ Get an Item
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             My_Item
 
@@ -74,7 +74,7 @@ Get the state of an Item
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             My_Item.state
 
@@ -104,7 +104,7 @@ Get the triggering Item
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             triggeringItem
 
@@ -134,7 +134,7 @@ Get the triggering Item's name
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             triggeringItem.name
 
@@ -164,7 +164,7 @@ Get the triggering Item's state
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             triggeringItem.state
 
@@ -194,7 +194,7 @@ Get the triggeringItem's previous state
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             previousState
 
@@ -224,7 +224,7 @@ Get the received command
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             receivedCommand
 
@@ -262,7 +262,7 @@ Send a command to an Item
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             Test_SwitchItem.sendCommand(ON)
             // or
@@ -296,7 +296,7 @@ Send an update to an Item
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             Test_SwitchItem.postUpdate(ON)
             // or
@@ -334,7 +334,7 @@ Stop a rule if the triggering Item's state is NULL or UNDEF
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             if (triggeringItem.state == NULL || triggeringItem.state == UNDEF) {
                 return
@@ -373,7 +373,7 @@ Convert a value to a state for comparison
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -406,7 +406,7 @@ Convert DecimalType to an integer or float for arithmetic
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -446,7 +446,7 @@ Get the members or all members of a Group
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             gTest.members
 
@@ -479,7 +479,7 @@ Iterate over members of a Group
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             gTest.members.forEach[item |
                 // do stuff
@@ -499,6 +499,10 @@ Filter members of a group
 
             listOfMembers = filter(lambda item: item.state == ON, ir.getItem("gTest").members)
 
+            # or using a list comprehension
+
+            listOfMembers = [item for item in ir.getItem("gTest").members if item.state == ON]
+
     .. group-tab:: JavaScript
 
         .. code-block:: JavaScript
@@ -515,7 +519,7 @@ Filter members of a group
 
         Returns a GrouptItem
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             val listOfMembers = gTest.members.filter(GenericItem item | item.state == ON)
 
@@ -531,6 +535,10 @@ Get the first Item in a filtered list of Group members
 
             my_item = filter(lambda item: item.state == ON, ir.getItem("gTest").members)[0]
 
+            # or using a list comprehension
+
+            my_item = [item for item in ir.getItem("gTest").members if item.state == ON][0]
+
     .. group-tab:: JavaScript
 
         .. code-block:: JavaScript
@@ -545,7 +553,7 @@ Get the first Item in a filtered list of Group members
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             val myItem = gTest.members.findFirst(item.state == ON)
 
@@ -563,6 +571,10 @@ Get first 5 Items from a filtered list of Group members
 
             my_items = filter(lambda item: item.state == OFF, ir.getItem("gTest").members)[0:5]
 
+            # or using a list comprehension
+
+            my_items = [item for item in ir.getItem("gTest").members if item.state == ON][0:5]
+
     .. group-tab:: JavaScript
 
         .. code-block:: JavaScript
@@ -577,7 +589,7 @@ Get first 5 Items from a filtered list of Group members
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -609,7 +621,7 @@ Get a sorted list of Group members matching a condition
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -641,7 +653,7 @@ Get a list of values mapped from the members of a Group
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -674,7 +686,7 @@ Perform an arithmetic reduction of values from members of a Group
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -706,7 +718,7 @@ Example with several functions using Group members
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -740,7 +752,7 @@ Single line comment
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             // this is a single line comment
 
@@ -782,7 +794,7 @@ Multiline comment
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             /*
             this is
@@ -818,7 +830,7 @@ View the names of an object's attributes
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             Not possible
 
@@ -848,7 +860,7 @@ View all symbols in a context
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             Not possible
 
@@ -862,8 +874,11 @@ Get the UID of a rule by name
 
         .. code-block::
 
-            ruleRegistry = scriptExtension.get("ruleRegistry")
-            ruleUID = filter(lambda rule: rule.name == "This is the name of my rule", ruleRegistry.getAll())[0].UID
+            ruleUID = filter(lambda rule: rule.name == "This is the name of my rule", rules.getAll())[0].UID
+
+            # or using a list comprehension
+
+            ruleUID = [rule for rule in rules.getAll() if rule.name == "This is the name of my rule"][0].UID
 
     .. group-tab:: JavaScript
 
@@ -879,7 +894,7 @@ Get the UID of a rule by name
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             Not possible
 
@@ -912,7 +927,7 @@ Enable or disable a rule by UID
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             Not possible
 
@@ -946,9 +961,43 @@ Run a rule by UID
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             Not possible
+
+
+Get Thing Status
+----------------
+
+.. tabs::
+
+    .. group-tab:: Python
+
+        .. code-block::
+
+            from org.eclipse.smarthome.core.thing import ThingUID
+
+            thing_status = things.get(ThingUID('kodi:kodi:familyroom')).status
+
+    .. group-tab:: JavaScript
+
+        .. code-block:: JavaScript
+
+            var ThingUID = Java.type("org.eclipse.smarthome.core.thing.ThingUID");
+
+            var thingStatus = things.get(new ThingUID('kodi:kodi:familyroom')).status;
+
+    .. group-tab:: Groovy
+
+        .. code-block:: Groovy
+
+            TODO
+
+    .. group-tab:: Rules DSL
+
+        .. code-block:: Xtend
+
+            var thingStatus = getThingStatusInfo('kodi:kodi:familyroom').status
 
 
 Enable/disable a Thing
@@ -989,7 +1038,7 @@ Enable/disable a Thing
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -1001,7 +1050,7 @@ Read/Add/Remove Item metadata
 
     .. group-tab:: Python
 
-            https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868
+            See the examples in the module... :doc:`Python/Core/Component Scripts/Packages and Modules/metadata`
 
     .. group-tab:: JavaScript
 
@@ -1050,7 +1099,7 @@ Use org.joda.time.DateTime
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             now
 
@@ -1081,7 +1130,7 @@ Pause a thread
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             Thread::sleep(5000)// the unit is milliseconds
 
@@ -1109,7 +1158,7 @@ Use a timer
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 

@@ -1,7 +1,7 @@
 """
 One of the challenges of scripted automation with Jython is that modules
 imported into scripts do not have direct access to the JSR223 scope types and
-objects.This module allows imported modules to access that data.
+objects. This module allows imported modules to access that data.
 
 .. code-block::
 
@@ -36,7 +36,7 @@ _presets = [
 ]
 
 class _Jsr223ModuleFinder(object):
-    class ScopeModule(types.ModuleType):        
+    class ScopeModule(types.ModuleType):
         def __getattr__(self, name):
             global _presets
             scope = get_scope()
@@ -50,7 +50,7 @@ class _Jsr223ModuleFinder(object):
                         # print "auto-import preset ", name, preset, scriptExtension
                         scriptExtension.importPreset(preset[1])
             return value if value is not None else _get_scope_value(scope, name)
-    
+
     def load_module(self, fullname):
         if fullname not in sys.modules:
             m = _Jsr223ModuleFinder.ScopeModule('scope')
@@ -58,13 +58,13 @@ class _Jsr223ModuleFinder(object):
             setattr(m , '__name__', 'scope')
             setattr(m , '__loader__', self)
             sys.modules[fullname] = m
-                
+
     def find_module(self, fullname, path=None):
         if fullname == "core.jsr223.scope":
             return self
-        
+
 sys.meta_path.append(_Jsr223ModuleFinder())
- 
+
 def get_automation_manager():
     scope = get_scope()
     _get_scope_value(scope, "scriptExtension").importPreset("RuleSupport")
