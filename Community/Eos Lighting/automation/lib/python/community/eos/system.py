@@ -46,7 +46,7 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
         return all_items_valid
 
     def _gen_triggers_for_group(group, ruleScene, ruleLight):
-        if get_value(group.name, META_NAME_EOS).lower() in META_STRING_FALSE:
+        if str(get_value(group.name, META_NAME_EOS)).lower() in META_STRING_FALSE:
             log.info("Found group '{group}' but it is disabled".format(name=group.name))
         else:
             log.debug("Scanning group '{group}' for scene and light items".format(group=group.name))
@@ -57,7 +57,7 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
                 log.debug("Added scene item trigger for '{name}'".format(name=itemScene.name))
                 # add lights triggers
                 for light in get_light_items(group):
-                    if get_value(light.name, META_NAME_EOS).lower() in META_STRING_FALSE:
+                    if str(get_value(light.name, META_NAME_EOS)).lower() in META_STRING_FALSE:
                         log.info("Found light '{name}' in '{group}' but it is disabled".format(name=light.name, group=group.name))
                     else:
                         log.debug("Found light '{name}' in '{group}'".format(name=light.name, group=group.name))

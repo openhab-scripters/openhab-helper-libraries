@@ -125,11 +125,17 @@ def menu_navigate(root_group_name, host, back_group=None):
         menu_choices.append(Choice(title="Add a new Eos group to this group", value="eos_menu_add_new_group", disabled="not implemented yet"))
         menu_choices.append(Separator(line=" "))
         if back_group:
-            menu_choices.append(Choice(title="Back to '{}'".format(back_group), value="eos_menu_back"))
+            menu_choices.append(Choice(
+                    title=[
+                        ("class:text", "Back to '{}'".format(back_group)),
+                        ("class:disabled", "  (ctrl+c)")
+                    ],
+                    value="eos_menu_back"
+                ))
         menu_choices.append(Choice(
                 title=[
                     ("class:text", "Exit"),
-                    ("class:disabled", "  (ctrl+c)")
+                    ("class:disabled", "  (ctrl+c)" if not back_group else "")
                 ],
                 value="eos_menu_exit"
             ))
@@ -137,8 +143,12 @@ def menu_navigate(root_group_name, host, back_group=None):
         clear()
         answer = select(message=menu_message, choices=menu_choices, style=eos_style, qmark="", pointed_at=pointed_at).ask()
 
-        if not answer or answer == "eos_menu_exit":
-            # ctrl+c, or "Exit"
+        if not answer:
+            # ctrl+c - back or exit
+            answer = "eos_menu_back" if back_group else "eos_menu_exit"
+
+        if answer == "eos_menu_exit":
+            # "Exit"
             clear()
             exit(0)
         elif answer == "eos_menu_back":
@@ -207,6 +217,8 @@ def save_metadata(item, host, data):
             if d[k] in [{}, None]:
                 d.pop(k, None)
 
+    purge_empty(data)
+
     item_type = "item" if item["type"] in itemtypesLight else "group"
 
     if item_type == "item": data[item_type].pop("light_type", None)
@@ -270,18 +282,18 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             return data["group"]
         elif depth == 10:
             return data["global"]
-        elif depth == 1 or depth == 5 or depth == 9:
+        elif depth == 1:
             if scene not in data_at_depth(depth+1):
                 data_at_depth(depth+1)[scene] = {}
             return data_at_depth(depth+1)[scene]
-        elif depth == 3 or depth == 7:
-            if scene not in data_at_depth(depth+1):
-                data_at_depth(depth+3)[scene] = {}
-            return data_at_depth(depth+3)[scene]
-        elif depth == 4 or depth == 8:
-            if light_type not in data_at_depth(depth+2):
-                data_at_depth(depth+2)[light_type] = {}
-            return data_at_depth(depth+2)[light_type]
+        elif depth in [3, 4, 7, 8]:
+            if scene not in data_at_depth(depth+2):
+                data_at_depth(depth+2)[scene] = {}
+            return data_at_depth(depth+2)[scene]
+        elif depth == 5 or depth == 9:
+            if light_type not in data_at_depth(depth+1):
+                data_at_depth(depth+1)[light_type] = {}
+            return data_at_depth(depth+1)[light_type]
 
     def get_scene_depth_for_type():
         # determine the depth a scene should be at
@@ -290,12 +302,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         elif is_type:
             return 3
         elif is_group:
-            return 5
-
-    def get_key_depth(key, min_depth=1):
-        for depth in range(min_depth, 11):
-            if key in data_at_depth(depth):
-                return depth
+            return 4
 
     def value_applies(key):
         # returns true if value will be used to evalute the current scene
@@ -351,7 +358,10 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
     item_type = "group" if is_group else "item"
     light_type = light_type or data["item"].get("light_type", None)
 
-    menu_message = "Eos Editor > Edit {}".format("Light" if is_light else "Group" if is_group else "Light Type" if is_type else "Scene")
+    menu_message = "Eos Editor > {} {}".format(
+            "View" if view_only else "Edit",
+            "Light" if is_light else "Group" if is_group else "Light Type" if is_type else "Scene"
+        )
     save = False
     answer = None
     pointed_at = None
@@ -449,7 +459,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             menu_choices.append(Separator(line="    Scenes"))
             scenes_added = []
             if is_light:
-                for key in [key for key in data["item"] if isinstance(data["item"][key], dict)]:
+                for key in sorted([key for key in data["item"] if isinstance(data["item"][key], dict)]):
                     scenes_added.append(key)
                     if answer == "eos_menu_scene_{}".format(key): pointed_at = len(menu_choices)
                     menu_choices.append(Choice(     # Item Scenes
@@ -460,7 +470,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                             ],
                             value="eos_menu_scene_{}".format(key)
                         ))
-            for key in [key for key in data["group"].get(light_type, {}) if isinstance(data["group"][light_type][key], dict) and key not in scenes_added]:
+            for key in sorted([key for key in data["group"].get(light_type, {}) if isinstance(data["group"][light_type][key], dict) and key not in scenes_added]):
                 scenes_added.append(key)
                 if answer == "eos_menu_scene_{}".format(key): pointed_at = len(menu_choices)
                 menu_choices.append(Choice(     # Light Type Scenes in Group
@@ -471,7 +481,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                         ],
                         value="eos_menu_scene_{}".format(key)
                     ))
-            for key in [key for key in data["group"] if isinstance(data["group"][key], dict) and key not in LIGHT_TYPE_LIST and key not in scenes_added]:
+            for key in sorted([key for key in data["group"] if isinstance(data["group"][key], dict) and key not in LIGHT_TYPE_LIST and key not in scenes_added]):
                 scenes_added.append(key)
                 if answer == "eos_menu_scene_{}".format(key): pointed_at = len(menu_choices)
                 menu_choices.append(Choice(     # Group Scenes
@@ -482,7 +492,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                         ],
                         value="eos_menu_scene_{}".format(key)
                     ))
-            for key in [key for key in data["global"].get(light_type, {}) if isinstance(data["global"][light_type][key], dict) and key not in scenes_added]:
+            for key in sorted([key for key in data["global"].get(light_type, {}) if isinstance(data["global"][light_type][key], dict) and key not in scenes_added]):
                 scenes_added.append(key)
                 if answer == "eos_menu_scene_{}".format(key): pointed_at = len(menu_choices)
                 menu_choices.append(Choice(     # Light Type Scenes in Global
@@ -493,7 +503,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                         ],
                         value="eos_menu_scene_{}".format(key)
                     ))
-            for key in [key for key in data["global"] if isinstance(data["global"][key], dict) and key not in LIGHT_TYPE_LIST and key not in scenes_added]:
+            for key in sorted([key for key in data["global"] if isinstance(data["global"][key], dict) and key not in LIGHT_TYPE_LIST and key not in scenes_added]):
                 scenes_added.append(key)
                 if answer == "eos_menu_scene_{}".format(key): pointed_at = len(menu_choices)
                 menu_choices.append(Choice(     # Global Scenes
@@ -551,7 +561,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         menu_choices.append(Separator(line=" "))
         if not view_only:
             menu_choices.append(Choice(title="Save" if (is_light or is_group) else "Apply", value="eos_menu_save"))
-        if scene and scene in data_at_depth(depth+1) and not view_only:
+        if scene and scene in data_at_depth(depth+(1 if is_light else 2)) and not view_only:
             if answer == "eos_menu_remove_scene": pointed_at = len(menu_choices)
             menu_choices.append(Choice(title="Remove scene from {}".format("Light" if depth < 3 else "Light Type" if depth < 5 else "Group"), value="eos_menu_remove_scene"))
         menu_choices.append(Choice(
@@ -580,8 +590,8 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             # edit scene name
             new_scene = prompt_text("Enter a new scene name:", default=scene)
             if new_scene:
-                data_at_depth(depth+1)[new_scene] = data_at_depth(depth+1)[scene]
-                del data_at_depth(depth+1)[scene]
+                data_at_depth(depth)[new_scene] = data_at_depth(depth)[scene]
+                del data_at_depth(depth)[scene]
                 scene = new_scene
             del new_scene
         elif answer == "eos_menu_enabled":
@@ -592,7 +602,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             data["group"]["follow_parent"] = not data["group"].get("follow_parent", True)
         elif answer[:len("eos_menu_light_type_")] == "eos_menu_light_type_":
             # edit data for light type
-            item, data = menu_eos(item, data, host, 4,
+            item, data = menu_eos(item, data, host, 5,
                     light_type=answer[len("eos_menu_light_type_"):],
                     is_type=True
                 ) or (item, data)
@@ -600,6 +610,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             # edit scene
             item, data = menu_eos(item, data, host,
                     get_scene_depth_for_type(),
+                    light_type=light_type,
                     scene=answer[len("eos_menu_scene_"):]
                 ) or (item, data)
         elif answer == "eos_menu_test_scene":
@@ -647,7 +658,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             # remove scene
             save = True
             exit_loop = True
-            data_at_depth(depth+1).pop(scene, None)
+            data_at_depth(depth+(1 if is_light else 2)).pop(scene, None)
 
     clear()
     return (item, data) if save else False

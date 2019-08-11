@@ -171,8 +171,8 @@ def get_scene_setting(item, scene, key, depth=10):
     """
     Gets a setting value by searching:
     Scene in Item > Item > Scene in Light Type in Group > Light Type in Group >
-    Scene in Group > Group > Scene in Light Type in Global > Light Type in Global >
-    Scene in Global > Global
+    Light Type in Group > Group > Scene in Light Type in Global > Scene in Global >
+    Light Type in Global > Global
     """
     light_type = LIGHT_TYPE_MAP.get(item.type.lower(), None)
     item_data = get_metadata(item.name, META_NAME_EOS).get("configuration", {})
@@ -191,24 +191,24 @@ def get_scene_setting(item, scene, key, depth=10):
     elif depth >= 3 and 3 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(scene, {}).get(key, None) is not None:
         source = "Scene in Light Type in Group"
         value = group_data.get(light_type, {}).get(scene, {}).get(key, None)
-    elif depth >= 4 and 4 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(key, None) is not None:
-        source = "Light Type in Group"
-        value = group_data.get(light_type, {}).get(key, None)
-    elif depth >= 5 and 5 in META_KEY_DEPTH_MAP[key] and group_data.get(scene, {}).get(key, None) is not None:
+    elif depth >= 4 and 4 in META_KEY_DEPTH_MAP[key] and group_data.get(scene, {}).get(key, None) is not None:
         source = "Scene in Group"
         value = group_data.get(scene, {}).get(key, None)
+    elif depth >= 5 and 5 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(key, None) is not None:
+        source = "Light Type in Group"
+        value = group_data.get(light_type, {}).get(key, None)
     elif depth >= 6 and 6 in META_KEY_DEPTH_MAP[key] and group_data.get(key, None) is not None:
         source = "Group"
         value = group_data.get(key, None)
     elif depth >= 7 and 7 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(scene, {}).get(key, None) is not None:
         source = "Scene in Light Type in Global"
         value = global_data.get(light_type, {}).get(scene, {}).get(key, None)
-    elif depth >= 8 and 8 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(key, None) is not None:
-        source = "Light Type in Global"
-        value = global_data.get(light_type, {}).get(key, None)
-    elif depth >= 9 and 9 in META_KEY_DEPTH_MAP[key] and global_data.get(scene, {}).get(key, None) is not None:
+    elif depth >= 8 and 8 in META_KEY_DEPTH_MAP[key] and global_data.get(scene, {}).get(key, None) is not None:
         source = "Scene in Global"
         value = global_data.get(scene, {}).get(key, None)
+    elif depth >= 9 and 9 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(key, None) is not None:
+        source = "Light Type in Global"
+        value = global_data.get(light_type, {}).get(key, None)
     elif depth >= 10 and 10 in META_KEY_DEPTH_MAP[key] and global_data.get(key, None) is not None:
         source = "Global"
         value = global_data.get(key, None)
