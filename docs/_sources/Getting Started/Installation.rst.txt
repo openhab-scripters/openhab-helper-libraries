@@ -83,7 +83,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
            .. tabs::
 
                .. group-tab:: Using an ``/etc/default/openhab2`` file
-                
+
                    This option is typically used with a package repository openHAB installation (includes openHABian).
                    If creating a new file, remember to set the permissions so that the `openhab` account has at least read access.
                    If a file already exists and there is an EXTRA_JAVA_OPTS variable, add a space and append everything in quotes.
@@ -93,7 +93,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
                        EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
 
                .. group-tab:: Using the ``start.sh`` script
-                
+
                    This option is typically used with a manual openHAB installation on Linux.
 
                    .. code-block:: none
@@ -102,7 +102,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
                        export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
 
                .. group-tab:: Using the ``start.bat`` script
-                
+
                    This option is for a manual openHAB installation on Windows.
                    If you are *not* using OH 2.5, 2.5M2, S1604, or newer, you will first need to update your ``C:\openhab2\runtime\bin\setenv.bat`` file with the `changes in the current file <https://github.com/openhab/openhab-distro/blob/master/distributions/openhab/src/main/resources/bin/setenv.bat#L121>`_.
 
@@ -186,7 +186,7 @@ These instructions will help guide you through process of installing or upgradin
         #. |community_step_3|
            For example, there may be some settings copied to ``/automation/lib/python/configuration.py.example`` that need to be added to ``configuration.py``.
         #. |community_step_4|
-           If using Python, you could alternatively use the methods described in :ref:`Python/Reference:Modifying and Reloading Modules`.
+           If using Python, you could alternatively use the methods described in :ref:`Python/Reference:Modifying and Reloading Packages or Modules`.
 
     .. group-tab:: JavaScript
 

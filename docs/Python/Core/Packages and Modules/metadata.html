@@ -31,6 +31,8 @@
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -121,6 +123,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rules.html">rules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="testing.html">testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triggers.html">triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Core.html#component-scripts">Component Scripts</a></li>
@@ -251,7 +254,10 @@ The “configuration” provides the actual metadata as a dictionary.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>item_name</strong> (<em>string</em>) – name of the Item to retrieve namespaces names from</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_name</strong> (<em>string</em>) – the name of the Item to retrieve the namespace</p></li>
+<li><p><strong>for</strong> (<em>names</em>) – </p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>list of strings representing the namespace names found for the
@@ -283,7 +289,7 @@ specified Item.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Metadata object containing the namespace
 <code class="docutils literal notranslate"><span class="pre">value</span></code> and <code class="docutils literal notranslate"><span class="pre">configuration</span></code> dictionary, but will be <code class="docutils literal notranslate"><span class="pre">None</span></code> if
-the metadata or Item does not exist</p>
+the namespace or Item do not exist</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Metadata object or None</p>
@@ -346,11 +352,11 @@ remove metadata in all namespaces for the specified Item</p></li>
 
 <dl class="function">
 <dt id="core.metadata.get_key_value">
-<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">get_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.get_key_value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">get_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.get_key_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ths function returns the <code class="docutils literal notranslate"><span class="pre">configuration</span></code> value for the specified key.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get key/value pair from Item&#39;s namespace &quot;configuration&quot;</span>
-<span class="n">get_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key_1&quot;</span><span class="p">)</span>
+<span class="n">get_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key&quot;</span><span class="p">,</span> <span class="s2">&quot;Subkey&quot;</span><span class="p">,</span> <span class="s2">&quot;Subsubkey&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -358,11 +364,12 @@ remove metadata in all namespaces for the specified Item</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
 <li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
-<li><p><strong>key</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key to return</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key to return (multiple keys in
+descending branches can be used)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">configuration</span></code> key value or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the metadata or
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">configuration</span></code> key value or <code class="docutils literal notranslate"><span class="pre">{}</span></code> if the metadata, key or
 Item does not exist</p>
 </dd>
 <dt class="field-odd">Return type</dt>
@@ -373,13 +380,11 @@ Item does not exist</p>
 
 <dl class="function">
 <dt id="core.metadata.set_key_value">
-<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">set_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">key</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.set_key_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function creates or updates a <code class="docutils literal notranslate"><span class="pre">configuration</span></code> value in the
-specified namespace. This function cannot be used unless the namespace
-already exists.</p>
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">set_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.set_key_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates or updates a key value in the specified namespace.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set key/value pair in Item&#39;s namespace &quot;configuration&quot;</span>
-<span class="n">set_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key_1&quot;</span><span class="p">,</span> <span class="s2">&quot;key_1 value&quot;</span><span class="p">)</span>
+<span class="n">set_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key&quot;</span><span class="p">,</span> <span class="s2">&quot;Subkey&quot;</span><span class="p">,</span> <span class="s2">&quot;Subsubkey&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -387,9 +392,9 @@ already exists.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
 <li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
-<li><p><strong>key</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key to create or update</p></li>
-<li><p><strong>value</strong> (<em>string</em><em>, </em><em>decimal</em><em>, </em><em>boolean</em><em> or </em><em>None</em>) – value to set for <code class="docutils literal notranslate"><span class="pre">configuration</span></code>
-key</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – key to create or update (multiple keys in descending
+branches can be used)</p></li>
+<li><p><strong>value</strong> (<em>string</em><em>, </em><em>decimal</em><em>, </em><em>boolean</em><em>, </em><em>dict</em><em> or </em><em>None</em>) – value to set</p></li>
 </ul>
 </dd>
 </dl>
@@ -397,12 +402,11 @@ key</p></li>
 
 <dl class="function">
 <dt id="core.metadata.remove_key_value">
-<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">remove_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.remove_key_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function removes a <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key and its value from the
-specified namespace.</p>
+<code class="sig-prename descclassname">core.metadata.</code><code class="sig-name descname">remove_key_value</code><span class="sig-paren">(</span><em class="sig-param">item_name</em>, <em class="sig-param">namespace</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#core.metadata.remove_key_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function removes a key from a namespace’s <code class="docutils literal notranslate"><span class="pre">configuration</span></code>.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove key/value pair from namespace ``configuration``</span>
-<span class="n">remove_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key_1&quot;</span><span class="p">)</span>
+<span class="n">remove_key_value</span><span class="p">(</span><span class="s2">&quot;Item_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Namespace_Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Key&quot;</span><span class="p">,</span> <span class="s2">&quot;Subkey&quot;</span><span class="p">,</span> <span class="s2">&quot;Subsubkey&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -410,7 +414,8 @@ specified namespace.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>item_name</strong> (<em>string</em>) – name of the Item</p></li>
 <li><p><strong>namespace</strong> (<em>string</em>) – name of the namespace</p></li>
-<li><p><strong>key</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key to remove</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – <code class="docutils literal notranslate"><span class="pre">configuration</span></code> key to remove (multiple keys in
+descending branches can be used)</p></li>
 </ul>
 </dd>
 </dl>

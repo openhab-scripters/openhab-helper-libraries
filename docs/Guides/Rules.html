@@ -33,6 +33,8 @@
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
@@ -313,7 +315,7 @@ Finally, the decorator wraps the function or classes’ <code class="docutils li
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -361,7 +363,7 @@ The syntax for <code class="docutils literal notranslate"><span class="pre">when
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 0/10 * * * * ?&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received update&quot;</span><span class="p">)</span>
 </pre></div>
@@ -419,7 +421,7 @@ More information on logging can be found on the <a class="reference internal" hr
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Rule Name&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional Rule Description&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Tag 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Tag 2&quot;</span><span class="p">])</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 0/10 * * * * ?&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received update&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">my_rule_function</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>

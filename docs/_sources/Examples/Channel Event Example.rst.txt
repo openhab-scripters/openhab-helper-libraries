@@ -2,4 +2,16 @@
 Channel Event Example
 *********************
 
-.. automodule:: scripts.examples.channel_event_example
+.. tabs::
+
+    .. group-tab:: Python
+
+        .. literalinclude:: ../../Script Examples/Python/channel_event_example.py
+
+    .. group-tab:: Javascript
+
+        TODO
+
+    .. group-tab:: Groovy
+
+        TODO

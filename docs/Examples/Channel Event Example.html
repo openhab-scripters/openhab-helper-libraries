@@ -25,14 +25,22 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Directory Watcher Example" href="Directory Watcher Example.html" />
@@ -190,9 +198,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.examples.channel_event_example">
-<span id="channel-event-example"></span><h1>Channel Event Example<a class="headerlink" href="#module-scripts.examples.channel_event_example" title="Permalink to this headline">¶</a></h1>
-<p>This script displays an example of a rule triggered by Channel events.</p>
+  <div class="section" id="channel-event-example">
+<h1>Channel Event Example<a class="headerlink" href="#channel-event-example" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>Javascript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This script displays an example of a rule triggered by Channel events.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Example Channel event rule (decorators) [description and tags are optional]</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Example Channel event rule (decorators)&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is an example rule that is triggered by the sun setting&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Example&quot;</span><span class="p">,</span> <span class="s2">&quot;Astro&quot;</span><span class="p">])</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel astro:sun:local:set#event triggered START&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">channelEventExampleDecorators</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">channelEventExampleDecorators</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sunset triggered&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<p>TODO</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>TODO</p>
+</div>
+</div>
 </div>
 
 

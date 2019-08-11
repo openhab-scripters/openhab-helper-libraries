@@ -31,6 +31,8 @@
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -106,9 +108,9 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#suggested-reading">Suggested reading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scripts-vs-modules">Scripts vs. Modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#modifying-and-reloading-modules">Modifying and Reloading Modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#custom-modules">Custom Modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-locations">Module Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modifying-and-reloading-packages-or-modules">Modifying and Reloading Packages or Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-packages-and-modules">Custom Packages and Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-and-module-locations">Package and Module Locations</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Core.html">Core</a></li>
@@ -196,58 +198,65 @@
 </div>
 <div class="section" id="scripts-vs-modules">
 <h2>Scripts vs. Modules<a class="headerlink" href="#scripts-vs-modules" title="Permalink to this headline">¶</a></h2>
-<p>It’s important to understand the distinction between Jython <code class="docutils literal notranslate"><span class="pre">scripts</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code> in regards to openhab scripted automation.
-A Jython script is loaded by the <cite>javax.script</cite> script engine manager (formerly known as JSR223) that is integrated into the Next-Generation Rule Engine within openHAB Core.
+<p>It’s important to understand the distinction between <code class="docutils literal notranslate"><span class="pre">scripts</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code> in regards to openHAB scripted automation.
+A Python script is loaded by the <code class="docutils literal notranslate"><span class="pre">javax.script</span></code> (formerly known as JSR223) script engine manager that is integrated into the Next-Generation Rule Engine.
 Each time a script file is loaded, openHAB creates an execution context for that script.
 When the file is modified, openHAB will destroy the old script context and create a new one.
 This means any objects (variables, classes, etc.) previously defined in the script will be lost when the script is reloaded.</p>
-<p>A Jython module is loaded by Jython itself through the standard Python <cite>import</cite> directive and uses <cite>sys.path</cite>.
-The normal Python module loading behavior applies.
-This means the module is normally loaded only once, and is not reloaded when the module source code changes.</p>
+<p>A module is loaded by the Jython interpreter through the standard Python <code class="docutils literal notranslate"><span class="pre">import</span></code> directive which utilizes <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>.
+Python module loading behavior applies, which means the module is normally loaded only once, and is not reloaded when the module source code changes.</p>
 </div>
-<div class="section" id="modifying-and-reloading-modules">
-<h2>Modifying and Reloading Modules<a class="headerlink" href="#modifying-and-reloading-modules" title="Permalink to this headline">¶</a></h2>
-<p>Changes to a module will not take effect until all other modules and scripts that have imported it have been reloaded.
-Restarting openHAB will remedy this, but another option is to use the reload() function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">myModule</span>
-<span class="nb">reload</span><span class="p">(</span><span class="n">myModule</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">myModule</span>
+<div class="section" id="modifying-and-reloading-packages-or-modules">
+<h2>Modifying and Reloading Packages or Modules<a class="headerlink" href="#modifying-and-reloading-packages-or-modules" title="Permalink to this headline">¶</a></h2>
+<p>Changes to a package or module will not take effect until all other packages, modules and scripts that have imported it have been reloaded.
+Restarting openHAB will remedy this, but another option is to use the <code class="docutils literal notranslate"><span class="pre">reload</span></code> function.
+Import the package or module, reload it, then import again.</p>
+<p>Reload a package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">personal.my_package</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">personal</span><span class="o">.</span><span class="n">my_package</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">personal.my_package</span>
 </pre></div>
 </div>
-<p>If using imports like <cite>from core.triggers import when</cite>, or if the module is in a package, you will need to use:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">core.triggers</span>
-<span class="nb">reload</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">triggers</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+<p>Reload a module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">personal.my_package.my_module</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">personal</span><span class="o">.</span><span class="n">my_package</span><span class="o">.</span><span class="n">my_module</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">personal.my_package.my_module</span>
 </pre></div>
 </div>
-<p>Alternatively…</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
-<span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;core.triggers&#39;</span><span class="p">])</span>
-<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+<p>If you are using an import like <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">personal.my_package.my_module</span> <span class="pre">import</span> <span class="pre">my_function</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">personal.my_package.my_module</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">personal</span><span class="o">.</span><span class="n">my_package</span><span class="o">.</span><span class="n">my_module</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">personal.my_package.my_module</span> <span class="kn">import</span> <span class="n">my_function</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="custom-modules">
-<h2>Custom Modules<a class="headerlink" href="#custom-modules" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="custom-packages-and-modules">
+<h2>Custom Packages and Modules<a class="headerlink" href="#custom-packages-and-modules" title="Permalink to this headline">¶</a></h2>
 <p>Custom modules and packages should be placed in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/personal/</span></code>.
 Modules do not have the same scope as scripts, but this can be remedied by importing <code class="docutils literal notranslate"><span class="pre">scope</span></code> from the <code class="docutils literal notranslate"><span class="pre">jsr223</span></code> module.
 This will allow for things like accessing the itemRegistry:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.jsr223</span> <span class="kn">import</span> <span class="n">scope</span>
-<span class="n">scope</span><span class="o">.</span><span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;MyItem&quot;</span><span class="p">)</span>
+<span class="n">scope</span><span class="o">.</span><span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;my_item&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="module-locations">
-<h2>Module Locations<a class="headerlink" href="#module-locations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="package-and-module-locations">
+<h2>Package and Module Locations<a class="headerlink" href="#package-and-module-locations" title="Permalink to this headline">¶</a></h2>
 <p>One of the benefits of Jython over the openHAB rule DSL scripts is that you can use the full power of Python packages and modules to structure your code into reusable components.
 After following the installation steps, these modules will be located in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/</span></code>.
 They can be located anywhere, but the Python path must be configured to find them.
 There are several ways to do this:</p>
-<ol class="arabic simple">
-<li><p>Append the path to the <code class="docutils literal notranslate"><span class="pre">python.path</span></code> used in the EXTRA_JAVA_OPTS, separated woth a colon in Linux and a semicolon in Windows, e.g. <code class="docutils literal notranslate"><span class="pre">-Dpython.path=mypath1:mypath2</span></code>.</p></li>
-<li><p>Modify the <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> list in a Jython script that loads early (like a component script).</p></li>
-<li><p>Add a symlink in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/personal/</span></code>, which is already in the Python path, to the module or a package that contains it.</p></li>
+<ol class="arabic">
+<li><p>Append the path to the <code class="docutils literal notranslate"><span class="pre">python.path</span></code> used in the EXTRA_JAVA_OPTS, separated with a colon in Linux and a semicolon in Windows, e.g. <code class="docutils literal notranslate"><span class="pre">-Dpython.path=mypath1:mypath2</span></code>.</p></li>
+<li><p>In your Python script, append the path to your package or module to the <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;/path/to/my_package_or_module&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Add a symlink in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/personal/</span></code>, which is already in the Python path, to the package or module.</p></li>
 </ol>
 </div>
 </div>

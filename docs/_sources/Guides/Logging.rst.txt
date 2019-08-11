@@ -31,11 +31,11 @@ Rule Decorator
 
         .. group-tab:: JavaScript
 
-            Decorators have not yet been created for the JavaScript helper libraries.
+            Decorators have not been created for the JavaScript helper libraries.
 
         .. group-tab:: Groovy
 
-            Decorators have not yet been created for the Groovy helper libraries.
+            Decorators have not been created for the Groovy helper libraries.
 
 
 core.log
@@ -64,20 +64,20 @@ core.log
 
         .. group-tab:: JavaScript
 
-            The `core.log` does not yet exist for this language.
+            The `core.log` library does not exist for this language.
 
         .. group-tab:: Groovy
 
-            The `core.log` does not yet exist for this language.
+            The `core.log` library does not exist for this language.
 
 
-Log Action
-==========
+LogAction
+=========
 
-    The openHAB log action, as used in the Rules DSL, can be imported and used to write to the logs from a script or rule.
+    The openHAB LogAction, as used in the Rules DSL, can be imported and used to write to the logs from a script or rule.
     Since LogAction uses SLF4J, it supports parameterized logging.
-    Parameterized logging is beneficial, since the values in the parameterized are not processed unless the logger is visible in the current logging level.
-    This means that the complicated logging you do in debug does not affect the performance of your system when the logging level is set to info.
+    Parameterized logging is beneficial, since the values in the parameters are not processed unless the logger is visible in the current logging level.
+    This means that the complicated logging you do in ``debug`` does not affect the performance of your system when the logging level is set to ``info``.
 
     .. tabs::
 
@@ -96,10 +96,13 @@ Log Action
 
             .. code-block:: JavaScript
 
-                'use strict';
-                var logInfo = Java.type("org.eclipse.smarthome.model.script.actions.LogAction").logInfo;
+                var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF");
+                load(OPENHAB_CONF + '/automation/lib/javascript/core/actions.js');
 
-                logInfo("Rules", "This is a test [{}]", 5 + 5);
+                LogAction.logInfo("EXAMPLE", "Example info log [{}]", 5 + 5);
+                LogAction.logWarn("EXAMPLE", "Example warning log [{}]", 5 + 5);
+                LogAction.logError("EXAMPLE", "Example error log [{}]", 5 + 5);
+                LogAction.logDebug("EXAMPLE", "Example debug log [{}]", 5 + 5);
 
         .. group-tab:: Groovy
 
@@ -146,7 +149,13 @@ SLF4J
 
             .. group-tab:: JavaScript
 
-                Documentation has not yet been created for this functionality.
+                var LoggerFactory = Java.type('org.slf4j.LoggerFactory');
+                var log = LoggerFactory.getLogger("jsr223.javascript.EXAMPLE");
+
+                log.info("Example info log [{}]", 5 + 5);
+                log.warn("Example warning log [{}]", 5 + 5);
+                log.error("Example error log [{}]", 5 + 5);
+                log.debug("Example debug log [{}]", 5 + 5);
 
         .. group-tab:: Groovy
 

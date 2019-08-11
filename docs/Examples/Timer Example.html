@@ -25,14 +25,22 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="But How Do I…?" href="../Guides/But How Do I.html" />
@@ -190,19 +198,122 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.examples.timer_example">
-<span id="timer-example"></span><h1>Timer Example<a class="headerlink" href="#module-scripts.examples.timer_example" title="Permalink to this headline">¶</a></h1>
-<p>This example shows two methods of using timers in rules.</p>
-<dl class="data">
-<dt id="scripts.examples.timer_example.chargerTimer1">
-<code class="sig-prename descclassname">scripts.examples.timer_example.</code><code class="sig-name descname">chargerTimer1</code><em class="property"> = None</em><a class="headerlink" href="#scripts.examples.timer_example.chargerTimer1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Possible timer states:
-NEW - instantiated
-RUNNABLE - defined
-TIMED_WAITING - timer is running (slight delay after timer is stopped)
-TERMINATED - timer completed or stopped</p>
-</dd></dl>
+  <div class="section" id="timer-example">
+<h1>Timer Example<a class="headerlink" href="#timer-example" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>Javascript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows two methods of using timers in rules.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+
+<span class="c1"># Example using Python threading.Time</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="n">chargerTimer1</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Possible timer states:</span>
+<span class="sd">NEW - instantiated</span>
+<span class="sd">RUNNABLE - defined</span>
+<span class="sd">TIMED_WAITING - timer is running (slight delay after timer is stopped)</span>
+<span class="sd">TERMINATED - timer completed or stopped</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Example rule using python threading.timer&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Outlet9_Power changed&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">batteryChargingMonitor1</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="c1">#log.debug(&quot;Battery charging monitor: {}: start&quot;.format(event.itemState))</span>
+    <span class="k">global</span> <span class="n">chargerTimer1</span>
+    <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="s2">&quot;Outlet9&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ON</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">itemState</span> <span class="o">&lt;=</span> <span class="n">DecimalType</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span> <span class="o">&lt;=</span> <span class="n">DecimalType</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">chargerTimer1</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">chargerTimer1</span><span class="o">.</span><span class="n">getState</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;TERMINATED&quot;</span><span class="p">:</span>
+            <span class="n">chargerTimer1</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="s2">&quot;Outlet9&quot;</span><span class="p">,</span><span class="s2">&quot;OFF&quot;</span><span class="p">))</span><span class="c1"># 600 seconds = 5 minutes</span>
+            <span class="n">chargerTimer1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">batteryChargingMonitor1</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Battery charging monitor: Started battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemState</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">chargerTimer1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">chargerTimer1</span><span class="o">.</span><span class="n">getState</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;TIMED_WAITING&quot;</span><span class="p">:</span>
+        <span class="n">chargerTimer1</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="n">batteryChargingMonitor1</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Battery charging monitor: Cancelled battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemState</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span><span class="p">))</span>
+
+<span class="c1"># Example using the createTimer Action</span>
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">ScriptExecution</span>
+<span class="kn">from</span> <span class="nn">org.joda.time</span> <span class="kn">import</span> <span class="n">DateTime</span>
+<span class="n">chargerTimer2</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Example rule using createTimer&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Outlet9_Power changed&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">batteryChargingMonitor2</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="c1">#log.debug(&quot;Battery charging monitor: {}: start&quot;.format(event.itemState))</span>
+    <span class="k">global</span> <span class="n">chargerTimer2</span>
+    <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="s2">&quot;Outlet9&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ON</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">itemState</span> <span class="o">&lt;=</span> <span class="n">DecimalType</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span> <span class="o">&lt;=</span> <span class="n">DecimalType</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">chargerTimer2</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">chargerTimer2</span><span class="o">.</span><span class="n">hasTerminated</span><span class="p">():</span>
+            <span class="n">chargerTimer2</span> <span class="o">=</span> <span class="n">ScriptExecution</span><span class="o">.</span><span class="n">createTimer</span><span class="p">(</span><span class="n">DateTime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">plusMinutes</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="s2">&quot;Outlet9&quot;</span><span class="p">,</span><span class="s2">&quot;OFF&quot;</span><span class="p">))</span>
+            <span class="n">batteryChargingMonitor2</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Battery charging monitor: Started battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemState</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">chargerTimer2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">chargerTimer2</span><span class="o">.</span><span class="n">hasTerminated</span><span class="p">():</span>
+        <span class="n">chargerTimer2</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+        <span class="n">batteryChargingMonitor2</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Battery charging monitor: Cancelled battery charging turn off timer: Outlet9_Power=[{}], oldItemState=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemState</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">oldItemState</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
+<span class="cm"> * Examples of rules that utilize GenericCron Trigger</span>
+<span class="cm"> * </span>
+<span class="cm"> * Copyright (c) 2019 Contributors to the openHAB Scripters project</span>
+<span class="cm"> * </span>
+<span class="cm"> * @author Helmut Lehmeyer - initial contribution</span>
+<span class="cm"> */</span>
+<span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="nx">load</span><span class="p">(</span><span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s2">&quot;java.lang.System&quot;</span><span class="p">).</span><span class="nx">getenv</span><span class="p">(</span><span class="s2">&quot;OPENHAB_CONF&quot;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;/automation/lib/javascript/core/rules.js&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="s2">&quot;TimerExample.js&quot;</span><span class="p">;</span>
+<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################# &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; ##################&quot;</span><span class="p">);</span>
+
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; TimerExample&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TimerExample L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="nx">TimerTrigger</span><span class="p">(</span><span class="s2">&quot;0/15 * * * * ?&quot;</span><span class="p">)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span> 
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>
+		
+		<span class="nx">logInfo</span><span class="p">(</span> <span class="s2">&quot;createTimer start&quot;</span><span class="p">);</span>
+		<span class="nx">createTimer</span><span class="p">(</span><span class="nx">DateTime</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">plusSeconds</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="kd">function</span><span class="p">(){</span>
+			<span class="nx">logWarn</span><span class="p">(</span> <span class="s2">&quot;createTimer stopped &quot;</span><span class="p">);</span>
+		<span class="p">});</span>
+		
+		<span class="nx">logInfo</span><span class="p">(</span> <span class="s2">&quot;setTimeout start&quot;</span><span class="p">);</span>
+		<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">){</span>
+			<span class="nx">logWarn</span><span class="p">(</span> <span class="s2">&quot;setTimeout stopped &quot;</span> <span class="o">+</span> <span class="nx">m</span><span class="p">);</span>
+		<span class="p">},</span> <span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;bla&quot;</span><span class="p">);</span>
+
+	<span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>TODO</p>
+</div>
+</div>
 </div>
 
 

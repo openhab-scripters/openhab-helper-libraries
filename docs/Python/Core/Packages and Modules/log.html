@@ -31,6 +31,8 @@
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rules.html">rules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="testing.html">testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triggers.html">triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Core.html#component-scripts">Component Scripts</a></li>
@@ -199,16 +202,10 @@
             
   <div class="section" id="module-core.log">
 <span id="log"></span><h1>log<a class="headerlink" href="#module-core.log" title="Permalink to this headline">¶</a></h1>
-<p>This module bridges the <cite>Python standard ``logging`</cite> module
-&lt;<a class="reference external" href="https://docs.python.org/2/library/logging.html">https://docs.python.org/2/library/logging.html</a>&gt;` with openHAB logging. The
-<code class="docutils literal notranslate"><span class="pre">configuration</span></code> module also provides a <cite>LOG_PREFIX</cite> variable, which is used
-as the default logger. This is used throughout the core modules and scripts,
-including the <code class="docutils literal notranslate"><span class="pre">log</span></code> module. LOG_PREFIX can be modified based on personal
-preference.</p>
-<p>If openHAB Cloud Connector is installed, exceptions will be sent as a
-notification. If the configuration.adminEmail variable is populated, the
-notification will be sent to that person. Otherwise, a broadcast notification
-will be sent.</p>
+<p>This module bridges the <a class="reference external" href="https://docs.python.org/2/library/logging.html">Python standard logging module</a>
+with the slf4j library used by openHAB. The <code class="docutils literal notranslate"><span class="pre">configuration</span></code> module provides
+a <code class="docutils literal notranslate"><span class="pre">LOG_PREFIX</span></code> variable that is used as the default logger throughout the
+core modules and scripts.</p>
 <dl class="class">
 <dt id="core.log.Slf4jHandler">
 <em class="property">class </em><code class="sig-prename descclassname">core.log.</code><code class="sig-name descname">Slf4jHandler</code><span class="sig-paren">(</span><em class="sig-param">level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#core.log.Slf4jHandler" title="Permalink to this definition">¶</a></dt>
@@ -227,6 +224,11 @@ raises a NotImplementedError.</p>
 <dt id="core.log.log_traceback">
 <code class="sig-prename descclassname">core.log.</code><code class="sig-name descname">log_traceback</code><span class="sig-paren">(</span><em class="sig-param">fn</em><span class="sig-paren">)</span><a class="headerlink" href="#core.log.log_traceback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to provide better Jython stack traces</p>
+<p>Essentially, the decorated function/class/method is wrapped in a try/except
+and will log a traceback for exceptions. If openHAB Cloud Connector is
+installed, exceptions will be sent as a notification. If the
+configuration.adminEmail variable is populated, the notification will be
+sent to that address. Otherwise, a broadcast notification will be sent.</p>
 </dd></dl>
 
 </div>

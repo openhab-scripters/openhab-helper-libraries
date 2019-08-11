@@ -25,14 +25,22 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Testing Example" href="Testing Example.html" />
@@ -190,11 +198,72 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.examples.rule_registry_example">
-<span id="rule-registry-example"></span><h1>Rule Registry Example<a class="headerlink" href="#module-scripts.examples.rule_registry_example" title="Permalink to this headline">¶</a></h1>
-<p>This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags, enable and disable rule instances dynamically, and manually fire rules with specified inputs.
-Requires a rule with a “Test tag” tag.
-Tags can be set in the rule decorator or rule constructors (self.tags = [“tag1”, “tag2”]).</p>
+  <div class="section" id="rule-registry-example">
+<h1>Rule Registry Example<a class="headerlink" href="#rule-registry-example" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>Javascript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows how to retrieve the RuleRegistry service and use it to query rule instances based on tags, enable and disable rule instances dynamically, and manually fire rules with specified inputs.</span>
+<span class="sd">Requires a rule with a &quot;Test tag&quot; tag.</span>
+<span class="sd">Tags can be set in the rule decorator or rule constructors (self.tags = [&quot;tag1&quot;, &quot;tag2&quot;]).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">core.osgi</span> <span class="kn">import</span> <span class="n">get_service</span>
+<span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.registry_example&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
+
+<span class="c1"># Get rules by tags</span>
+<span class="c1"># Tags can be set in rule constructors</span>
+<span class="c1"># Example: self.tags = [&quot;tag1&quot;, &quot;tag2&quot;]</span>
+<span class="n">rule_registry</span> <span class="o">=</span> <span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.openhab.core.automation.RuleRegistry&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.automation.RuleRegistry&quot;</span><span class="p">)</span>
+<span class="n">rules_with_tag</span> <span class="o">=</span> <span class="n">rule_registry</span><span class="o">.</span><span class="n">getByTag</span><span class="p">(</span><span class="s2">&quot;Test tag&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">:</span>
+    <span class="n">rule_status</span> <span class="o">=</span> <span class="n">rule_registry</span><span class="o">.</span><span class="n">getStatusInfo</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">UID</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rule name=[{}], description=[{}], tags=[{}], UID=[{}], status=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rule</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">rule</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="n">rule</span><span class="o">.</span><span class="n">UID</span><span class="p">,</span> <span class="n">rule_status</span><span class="p">))</span>
+
+    <span class="c1"># disable a rule</span>
+    <span class="n">rule_registry</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">UID</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+
+    <span class="c1"># later...</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="c1"># reenable the rule</span>
+    <span class="n">rule_registry</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">UID</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># fire the rule manually (with inputs)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Triggering rule manually&quot;</span><span class="p">)</span>
+    <span class="n">rule_registry</span><span class="o">.</span><span class="n">runNow</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">UID</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;EXAMPLE&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<p>TODO</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>TODO</p>
+</div>
+</div>
 </div>
 
 

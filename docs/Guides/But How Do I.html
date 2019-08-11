@@ -33,6 +33,8 @@
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
@@ -141,6 +143,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#get-the-uid-of-a-rule-by-name">Get the UID of a rule by name</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enable-or-disable-a-rule-by-uid">Enable or disable a rule by UID</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#run-a-rule-by-uid">Run a rule by UID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-thing-status">Get Thing Status</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enable-disable-a-thing">Enable/disable a Thing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#read-add-remove-item-metadata">Read/Add/Remove Item metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#use-org-joda-time-datetime">Use org.joda.time.DateTime</a></li>
@@ -280,7 +283,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">My_Item</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">My_Item</span>
 </pre></div>
 </div>
 </div>
@@ -335,7 +338,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">My_Item</span><span class="o">.</span><span class="na">state</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">My_Item</span><span class="o">.</span><span class="n">state</span>
 </pre></div>
 </div>
 </div>
@@ -382,7 +385,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span>
 </pre></div>
 </div>
 </div>
@@ -429,7 +432,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span><span class="o">.</span><span class="na">name</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span><span class="o">.</span><span class="n">name</span>
 </pre></div>
 </div>
 </div>
@@ -476,7 +479,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span><span class="o">.</span><span class="na">state</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">triggeringItem</span><span class="o">.</span><span class="n">state</span>
 </pre></div>
 </div>
 </div>
@@ -523,7 +526,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">previousState</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">previousState</span>
 </pre></div>
 </div>
 </div>
@@ -570,7 +573,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">receivedCommand</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">receivedCommand</span>
 </pre></div>
 </div>
 </div>
@@ -624,7 +627,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Test_SwitchItem</span><span class="o">.</span><span class="na">sendCommand</span><span class="o">(</span><span class="n">ON</span><span class="o">)</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">Test_SwitchItem</span><span class="o">.</span><span class="n">sendCommand</span><span class="o">(</span><span class="n">ON</span><span class="o">)</span>
 <span class="c1">// or</span>
 <span class="n">sendCommand</span><span class="o">(</span><span class="s">&quot;Test_SwitchItem&quot;</span><span class="o">,</span> <span class="s">&quot;ON&quot;</span><span class="o">)</span>
 </pre></div>
@@ -674,7 +677,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Test_SwitchItem</span><span class="o">.</span><span class="na">postUpdate</span><span class="o">(</span><span class="n">ON</span><span class="o">)</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">Test_SwitchItem</span><span class="o">.</span><span class="n">postUpdate</span><span class="o">(</span><span class="n">ON</span><span class="o">)</span>
 <span class="c1">// or</span>
 <span class="n">postUpdate</span><span class="o">(</span><span class="s">&quot;Test_SwitchItem&quot;</span><span class="o">,</span> <span class="s">&quot;ON&quot;</span><span class="o">)</span>
 </pre></div>
@@ -729,7 +732,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">(</span><span class="n">triggeringItem</span><span class="o">.</span><span class="na">state</span> <span class="o">==</span> <span class="n">NULL</span> <span class="o">||</span> <span class="n">triggeringItem</span><span class="o">.</span><span class="na">state</span> <span class="o">==</span> <span class="n">UNDEF</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">(</span><span class="n">triggeringItem</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">NULL</span> <span class="o">||</span> <span class="n">triggeringItem</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">UNDEF</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span>
 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
     <span class="c1">// do stuff</span>
@@ -785,7 +788,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -835,7 +838,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -891,9 +894,9 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">gTest</span><span class="o">.</span><span class="na">members</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">gTest</span><span class="o">.</span><span class="n">members</span>
 
-<span class="n">gTest</span><span class="o">.</span><span class="na">allMembers</span>
+<span class="n">gTest</span><span class="o">.</span><span class="n">allMembers</span>
 </pre></div>
 </div>
 </div>
@@ -941,7 +944,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">gTest</span><span class="o">.</span><span class="na">members</span><span class="o">.</span><span class="na">forEach</span><span class="o">[</span><span class="n">item</span> <span class="o">|</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">gTest</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">forEach</span><span class="o">[</span><span class="n">item</span> <span class="o">|</span>
     <span class="c1">// do stuff</span>
 <span class="o">]</span>
 </pre></div>
@@ -977,6 +980,10 @@
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
 <p>Returns a list of Items, not a GroupItem</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">listOfMembers</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="p">,</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">)</span>
+
+<span class="c1"># or using a list comprehension</span>
+
+<span class="n">listOfMembers</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -992,7 +999,7 @@
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
 <p>Returns a GrouptItem</p>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">listOfMembers</span> <span class="o">=</span> <span class="n">gTest</span><span class="o">.</span><span class="na">members</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">GenericItem</span> <span class="n">item</span> <span class="o">|</span> <span class="n">item</span><span class="o">.</span><span class="na">state</span> <span class="o">==</span> <span class="n">ON</span><span class="o">)</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">listOfMembers</span> <span class="o">=</span> <span class="n">gTest</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">GenericItem</span> <span class="n">item</span> <span class="o">|</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
@@ -1025,6 +1032,10 @@
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_item</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="p">,</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># or using a list comprehension</span>
+
+<span class="n">my_item</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1039,7 +1050,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">myItem</span> <span class="o">=</span> <span class="n">gTest</span><span class="o">.</span><span class="na">members</span><span class="o">.</span><span class="na">findFirst</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="na">state</span> <span class="o">==</span> <span class="n">ON</span><span class="o">)</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">myItem</span> <span class="o">=</span> <span class="n">gTest</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">findFirst</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
@@ -1073,6 +1084,10 @@
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
 <p>Returns a list of Items</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_items</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">OFF</span><span class="p">,</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="c1"># or using a list comprehension</span>
+
+<span class="n">my_items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">ON</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1087,7 +1102,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -1135,7 +1150,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -1183,7 +1198,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -1232,7 +1247,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -1280,7 +1295,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -1330,7 +1345,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// this is a single line comment</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="c1">// this is a single line comment</span>
 </pre></div>
 </div>
 </div>
@@ -1389,7 +1404,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="cm">/*</span>
 <span class="cm">this is</span>
 <span class="cm">a multiline</span>
 <span class="cm">comment</span>
@@ -1442,7 +1457,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
 </pre></div>
 </div>
 </div>
@@ -1489,7 +1504,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
 </pre></div>
 </div>
 </div>
@@ -1521,8 +1536,11 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scriptExtension</span><span class="o">.</span><span class="n">importPreset</span><span class="p">(</span><span class="s2">&quot;RuleSupport&quot;</span><span class="p">)</span>
-<span class="n">ruleUID</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">rule</span><span class="p">:</span> <span class="n">rule</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;This is the name of my rule&quot;</span><span class="p">,</span> <span class="n">rules</span><span class="o">.</span><span class="n">getAll</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">UID</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ruleUID</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">rule</span><span class="p">:</span> <span class="n">rule</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;This is the name of my rule&quot;</span><span class="p">,</span> <span class="n">rules</span><span class="o">.</span><span class="n">getAll</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">UID</span>
+
+<span class="c1"># or using a list comprehension</span>
+
+<span class="n">ruleUID</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="o">.</span><span class="n">getAll</span><span class="p">()</span> <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;This is the name of my rule&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">UID</span>
 </pre></div>
 </div>
 </div>
@@ -1537,7 +1555,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
 </pre></div>
 </div>
 </div>
@@ -1587,7 +1605,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
 </pre></div>
 </div>
 </div>
@@ -1620,7 +1638,7 @@
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">osgi</span>
-<span class="n">rule_engine</span> <span class="o">=</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.automation.RuleManager&quot;</span><span class="p">)</span>
+<span class="n">ruleEngine</span> <span class="o">=</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.openhab.core.automation.RuleManager&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.automation.RuleManager&quot;</span><span class="p">)</span>
 <span class="n">ruleEngine</span><span class="o">.</span><span class="n">runNow</span><span class="p">(</span><span class="n">ruleFunction</span><span class="o">.</span><span class="n">UID</span><span class="p">)</span>
 <span class="n">consider_conditions</span> <span class="o">=</span> <span class="bp">True</span><span class="c1"># consider the rule&#39;s Conditions</span>
 <span class="n">ruleEngine</span><span class="o">.</span><span class="n">runNow</span><span class="p">(</span><span class="n">ruleFunction</span><span class="o">.</span><span class="n">UID</span><span class="p">,</span> <span class="n">considerConditions</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;EXAMPLE&#39;</span><span class="p">})</span>
@@ -1638,7 +1656,58 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">Not</span> <span class="n">possible</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="get-thing-status">
+<h3>Get Thing Status<a class="headerlink" href="#get-thing-status" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">org.eclipse.smarthome.core.thing</span> <span class="kn">import</span> <span class="n">ThingUID</span>
+
+<span class="n">thing_status</span> <span class="o">=</span> <span class="n">things</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ThingUID</span><span class="p">(</span><span class="s1">&#39;kodi:kodi:familyroom&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">status</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">ThingUID</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.core.thing.ThingUID&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">thingStatus</span> <span class="o">=</span> <span class="nx">things</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">new</span> <span class="nx">ThingUID</span><span class="p">(</span><span class="s1">&#39;kodi:kodi:familyroom&#39;</span><span class="p">)).</span><span class="nx">status</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">thingStatus</span> <span class="o">=</span> <span class="n">getThingStatusInfo</span><span class="o">(</span><span class="s">&#39;kodi:kodi:familyroom&#39;</span><span class="o">).</span><span class="n">status</span>
 </pre></div>
 </div>
 </div>
@@ -1672,10 +1741,13 @@
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.TEST&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
-<span class="kn">from</span> <span class="nn">org.eclipse.smarthome.core.thing</span> <span class="kn">import</span> <span class="n">ThingUID</span>
 <span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">osgi</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">org.openhab.core.thing</span> <span class="kn">import</span> <span class="n">Thing</span> <span class="n">UID</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">org.eclipse.smarthome.core.thing</span> <span class="kn">import</span> <span class="n">ThingUID</span>
 
-<span class="n">thing_manager</span> <span class="o">=</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.core.thing.ThingManager&quot;</span><span class="p">)</span>
+<span class="n">thing_manager</span> <span class="o">=</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.openhab.core.thing.ThingManager&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">osgi</span><span class="o">.</span><span class="n">get_service</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.core.thing.ThingManager&quot;</span><span class="p">)</span>
 <span class="n">kodi_thing</span> <span class="o">=</span> <span class="n">things</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ThingUID</span><span class="p">(</span><span class="s2">&quot;kodi:kodi:familyroom&quot;</span><span class="p">))</span>
 <span class="n">thing_manager</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">ThingUID</span><span class="p">(</span><span class="s2">&quot;kodi:kodi:familyroom&quot;</span><span class="p">),</span> <span class="bp">False</span><span class="p">)</span><span class="c1"># disable Thing</span>
 <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Disabled: isEnabled [{}], statusInfo [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kodi_thing</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">(),</span> <span class="n">kodi_thing</span><span class="o">.</span><span class="n">statusInfo</span><span class="p">))</span>
@@ -1695,7 +1767,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -1727,7 +1799,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
-<p><a class="reference external" href="https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868">https://community.openhab.org/t/jsr223-jython-using-item-metadata-in-rules/53868</a></p>
+<p>See the examples in the module… <a class="reference internal" href="../Python/Core/Packages and Modules/metadata.html"><span class="doc">metadata</span></a></p>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
 <div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
@@ -1790,7 +1862,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">now</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">now</span>
 </pre></div>
 </div>
 </div>
@@ -1838,7 +1910,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nl">Thread:</span><span class="o">:</span><span class="n">sleep</span><span class="o">(</span><span class="mi">5000</span><span class="o">)</span><span class="c1">// the unit is milliseconds</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="nl">Thread:</span><span class="o">:</span><span class="n">sleep</span><span class="o">(</span><span class="mi">5000</span><span class="o">)</span><span class="c1">// the unit is milliseconds</span>
 </pre></div>
 </div>
 </div>
@@ -1883,7 +1955,7 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
