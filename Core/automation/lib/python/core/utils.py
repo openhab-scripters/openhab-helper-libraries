@@ -135,7 +135,7 @@ def postUpdate(itemName, newValue):
     item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
     scope.events.postUpdate(item, newValue)
 
-def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=None):
+def post_update_if_different(itemName, newValue, sendACommand=False, floatPrecision=None):
     """
     Checks if the current state of the item is different than the desired new
     state. If the target state is the same, no update is posted.
@@ -182,16 +182,23 @@ def postUpdateCheckFirst(itemName, newValue, sendACommand=False, floatPrecision=
                 log.debug("New postUpdate value for [{}] is [{}]".format(item.name, newValue))
             return True
         else:
+            log.debug("Not {} {} to {} since it is the same as the current state".format("sending command" if sendACommand else "posting update", newValue, item.name))
             return False
     else:
         log.warn("[{}] is not an accepted {} for [{}]".format(newValue, "command type" if sendACommand else "state", item.name))
         return False
 
-def sendCommandCheckFirst(itemName, newValue, floatPrecision=None):
+# backwards compatibility
+postUpdateCheckFirst = post_update_if_different
+
+def send_command_if_different(itemName, newValue, floatPrecision=None):
     """
     See postUpdateCheckFirst
     """
     return postUpdateCheckFirst(itemName, newValue, sendACommand=True, floatPrecision=floatPrecision)
+
+# backwards compatibility
+sendCommandCheckFirst = send_command_if_different
 
 def validate_item(item_or_item_name):
     """

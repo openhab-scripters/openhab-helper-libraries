@@ -8,7 +8,7 @@ from core.log import logging, LOG_PREFIX
 from core.rules import rule
 from core.testing import run_test
 from core.triggers import when
-from core.utils import getItemValue, postUpdateCheckFirst
+from core.utils import getItemValue
 
 RESPONSE_TIME = 5
 
@@ -59,4 +59,4 @@ class MyUnitTest(unittest.TestCase):
 # results are a JSON formatted string (will probably change to return Python dict instead)
 
 def scriptLoaded(id):
-    log.info(run_test(MyUnitTest))    
+    log.info(run_test(MyUnitTest))
