@@ -52,7 +52,10 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
         else:
             log.debug("Scanning group '{group}' for scene and light items".format(group=group.name))
             itemScene = get_scene_item(group)
-            if itemScene and _gen_triggers_for_level_sources(get_metadata(group.name, META_NAME_EOS).get("configuration", {})):
+            if itemScene:
+                if not _gen_triggers_for_level_sources(get_metadata(group.name, META_NAME_EOS).get("configuration", {})):
+                    log.warn("Some '{level_source}' items for group '{group}' do not exist".format(
+                            level_source=META_KEY_LEVEL_SOURCE, group=group.name))
                 # add scene trigger
                 when("Item {name} changed".format(name=itemScene.name))(ruleScene)
                 log.debug("Added scene item trigger for '{name}'".format(name=itemScene.name))
@@ -62,11 +65,13 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
                         log.info("Found light '{name}' in '{group}' but it is disabled".format(name=light.name, group=group.name))
                     else:
                         log.debug("Found light '{name}' in '{group}'".format(name=light.name, group=group.name))
-                        if _gen_triggers_for_level_sources(get_metadata(light.name, META_NAME_EOS).get("configuration", {})):
-                            log.debug("Adding light item trigger for '{name}'".format(name=light.name))
-                            when("Item {name} received update".format(name=light.name))(ruleLight)
+                        if not _gen_triggers_for_level_sources(get_metadata(light.name, META_NAME_EOS).get("configuration", {})):
+                            log.warn("Some '{level_source}' items for light '{name}' do not exist".format(
+                                    level_source=META_KEY_LEVEL_SOURCE, name=light.name))
+                        log.debug("Adding light item trigger for '{name}'".format(name=light.name))
+                        when("Item {name} received update".format(name=light.name))(ruleLight)
                 # recurse into groups
-                for group in get_group_items(group):
+                for group in get_group_items(group, include_no_lights=True):
                     _gen_triggers_for_group(group, ruleScene, ruleLight)
             else:
                 log.warn("No lights or groups in '{group}' will be discovered because it has no scene item".format(group=group.name))

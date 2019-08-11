@@ -61,7 +61,7 @@ def update_light(item):
         log.debug("Processing update for light '{name}'".format(name=item.name))
 
     scene = get_scene_for_item(item)
-    log.debug("Got scene '{scene}' for item '{name}'".format(scene=scene, name=item.name))
+    if config.log_trace: log.debug("Got scene '{scene}' for item '{name}'".format(scene=scene, name=item.name))
 
     if scene != SCENE_MANUAL:
         newState = get_state_for_scene(item, scene)
@@ -109,14 +109,14 @@ def get_state_for_scene(item, scene):
         log.error("Couldn't get light type for '{name}'".format(name=item.name))
         return str(item.state)
     else:
-        log.debug("Got light type '{type}' for '{name}'".format(type=light_type, name=item.name))
+        if config.log_trace: log.debug("Got light type '{type}' for '{name}'".format(type=light_type, name=item.name))
 
     scene_type = get_scene_type(item, scene, light_type)
     if scene_type is None:
         log.error("Couldn't get scene type for '{name}'".format(name=item.name))
         return str(item.state)
     else:
-        log.debug("Got scene type '{type}' for '{name}'".format(type=scene_type, name=item.name))
+        if config.log_trace: log.debug("Got scene type '{type}' for '{name}'".format(type=scene_type, name=item.name))
 
     # Fixed State type
     if scene_type == SCENE_TYPE_FIXED:
@@ -125,7 +125,6 @@ def get_state_for_scene(item, scene):
             log.error("Fixed State type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE, name=item.name, scene=scene))
             return str(item.state)
-        log.debug("Got fixed state '{state}' for '{name}' scene '{scene}'".format(state=state, name=item.name, scene=scene))
 
     # Threshold type
     elif scene_type == SCENE_TYPE_THRESHOLD:
@@ -138,7 +137,7 @@ def get_state_for_scene(item, scene):
             log.warn("Level item '{key}' for scene '{scene}' for item '{name}' has no value".format(
                 key=get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE), scene=scene, name=item.name))
             return str(item.state)
-        log.debug("Got value '{value}' for level for scene '{scene}' for item '{name}'".format(value=level_value, scene=scene, name=item.name))
+        if config.log_trace: log.debug("Got value '{value}' for level for scene '{scene}' for item '{name}'".format(value=level_value, scene=scene, name=item.name))
 
         level_threshold = get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD)
         if level_threshold is None:
@@ -159,7 +158,6 @@ def get_state_for_scene(item, scene):
             return str(item.state)
 
         state = state_above if level_value > level_threshold else state_below
-        log.debug("Calculated threshold state '{state}' for '{name}' scene '{scene}'".format(state=state, name=item.name, scene=scene))
 
     # Scaling type
     elif scene_type == SCENE_TYPE_SCALED and light_type in [LIGHT_TYPE_DIMMER, LIGHT_TYPE_COLOR]:
@@ -173,7 +171,7 @@ def get_state_for_scene(item, scene):
                 key=get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE), scene=scene, name=item.name))
             return str(item.state)
         level_value = float(level_value)
-        log.debug("Got value '{value}' for level for scene '{scene}' for item '{name}'".format(value=level_value, scene=scene, name=item.name))
+        if config.log_trace: log.debug("Got value '{value}' for level for scene '{scene}' for item '{name}'".format(value=level_value, scene=scene, name=item.name))
 
         level_high = get_scene_setting(item, scene, META_KEY_LEVEL_HIGH)
         if level_high is None:
@@ -202,10 +200,10 @@ def get_state_for_scene(item, scene):
             return str(item.state)
 
         state_above = get_scene_setting(item, scene, META_KEY_STATE_ABOVE) or state_high
-        log.debug("Got value '{value}' for key '{key}' for scene '{scene}' for item '{name}'".format(value=state_above, key=META_KEY_STATE_ABOVE, scene=scene, name=item.name))
+        if config.log_trace: log.debug("Got value '{value}' for key '{key}' for scene '{scene}' for item '{name}'".format(value=state_above, key=META_KEY_STATE_ABOVE, scene=scene, name=item.name))
 
         state_below = get_scene_setting(item, scene, META_KEY_STATE_BELOW) or state_low
-        log.debug("Got value '{value}' for key '{key}' for scene '{scene}' for item '{name}'".format(value=state_below, key=META_KEY_STATE_BELOW, scene=scene, name=item.name))
+        if config.log_trace: log.debug("Got value '{value}' for key '{key}' for scene '{scene}' for item '{name}'".format(value=state_below, key=META_KEY_STATE_BELOW, scene=scene, name=item.name))
 
         if level_value > level_high:
             state = state_above
@@ -221,7 +219,6 @@ def get_state_for_scene(item, scene):
                 state.append(scale(float(state_low[1]), float(state_high[1])))
                 state.append(scale(float(state_low[2]), float(state_high[2])))
 
-        log.debug("Calculated scaled state '{state}' for '{name}' scene '{scene}'".format(state=state, name=item.name, scene=scene))
     else:
         log.error("Invalid scene configuration for '{name}' scene '{scene}'".format(name=item.name, scene=scene))
         return str(item.state)
@@ -245,5 +242,6 @@ def get_state_for_scene(item, scene):
             state=state, name=item.name, scene=scene, type=item.type))
         return str(item.state)
 
-    log.debug("New state '{state}' for '{name}' scene '{scene}'".format(state=state, name=item.name, scene=scene))
+    log.debug("Determined {type} state '{state}' for '{name}' scene '{scene}'".format(
+            type=scene_type, state=state, name=item.name, scene=scene))
     return state

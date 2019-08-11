@@ -63,8 +63,8 @@ def get_scene_item(group):
     elif len(items) > 1:
         itemList = ""
         for item in items: itemList = "{list}'{name}', ".format(list=itemList, name=item.name)
-        log.debug("Group '{group}' contains more than one scene item: {list}".format(group=group.name, list=itemList[:-2]))
-        log.debug("Each group can only have one scene item, please correct.")
+        log.debug("Group '{group}' contains more than one scene item. Each group can only have one scene item, please correct. ({list})".format(
+                group=group.name, list=itemList[:-2]))
         return None
     elif not isinstance(items[0], itemtypesScene):
         log.error("Group '{group}' scene item '{name}' is not a StringItem".format(group=group.name, name=items[0].name))
@@ -88,7 +88,7 @@ def get_light_items(group):
         ] if hasattr(group, "members") else []
 
 
-def get_group_items(group):
+def get_group_items(group, include_no_lights=False):
     """Finds all group items in a group.
 
     Returns a list of valid Eos groups.
@@ -97,7 +97,7 @@ def get_group_items(group):
         item for item in group.members
             if isinstance(item, itemtypesGroup)
                 and get_scene_item(group) is not None
-                and len(get_light_items(item)) > 0
+                and (len(get_light_items(item)) > 0 or include_no_lights)
         ] if hasattr(group, "members") else []
 
 
@@ -214,10 +214,10 @@ def get_scene_setting(item, scene, key, depth=10):
         value = global_data.get(key, None)
     else:
         if config.log_trace: log.debug("No value found for key '{key}' for scene '{scene}' for item '{name}' at depth {depth}".format(
-            key=key, scene=scene, name=item.name, depth=depth))
+                key=key, scene=scene, name=item.name, depth=depth))
         return None
-    log.debug("Got setting '{key}' for scene '{scene}' for item '{name}' from {source}: {value}".format(
-        key=key, scene=scene, name=item.name, source=source, value=value))
+    if config.log_trace: log.debug("Got setting '{key}' for scene '{scene}' for item '{name}' from {source}: {value}".format(
+            key=key, scene=scene, name=item.name, source=source, value=value))
     return value
 
 def get_scene_type(item, scene, light_type):
