@@ -1,0 +1,509 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>utils &mdash; openHAB Helper Libraries  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="100_DirectoryTrigger.py" href="../Component Scripts/100_DirectoryTrigger.html" />
+    <link rel="prev" title="triggers" href="triggers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> openHAB Helper Libraries
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/File Locations.html">File Locations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/First Steps.html">First Steps</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Rules.html">Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Triggers.html">Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples/Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/But How Do I.html">But How Do I…?</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Core.html">Core</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../Core.html#packages-and-modules">Packages and Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="osgi.html">osgi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="actions.html">actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="date.html">date</a></li>
+<li class="toctree-l3"><a class="reference internal" href="items.html">items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jsr223.html">jsr223</a></li>
+<li class="toctree-l3"><a class="reference internal" href="links.html">links</a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html">log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata.html">metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rules.html">rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html">testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triggers.html">triggers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Core.html#component-scripts">Component Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Core.html#scripts">Scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Examples.html">Examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../JavaScript/Reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Coding Guidelines.html">Coding Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Contributing/Writing Docs.html">Writing Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">openHAB Helper Libraries</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../Core.html">Core</a> &raquo;</li>
+        
+      <li>utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/openhab-scripters/openhab-helper-libraries/">GitHub Repository</a>
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-core.utils">
+<span id="utils"></span><h1>utils<a class="headerlink" href="#module-core.utils" title="Permalink to this headline">¶</a></h1>
+<p>Utilities</p>
+<p>This module provides miscellaneous utility functions that are used across the core packages and modules.</p>
+<dl class="function">
+<dt id="core.utils.kw">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">kw</code><span class="sig-paren">(</span><em class="sig-param">dict</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.kw" title="Permalink to this definition">¶</a></dt>
+<dd><p>In a given dictionary, get the first key that has a value matching the one provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dict</strong> – the dictionary to search</p></li>
+<li><p><strong>value</strong> – the value to match to a key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>string representing the first key with a matching vlaue, or</dt><dd><p>None if the value is not found</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.iround">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">iround</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.iround" title="Permalink to this definition">¶</a></dt>
+<dd><p>Round a float to the nearest integer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – the float to round</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>integer value of float</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.getItemValue">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">getItemValue</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">defVal</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.getItemValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Item’s value if the Item exists and is initialized, otherwise
+returns the default value. <code class="docutils literal notranslate"><span class="pre">itemRegistry.getItem</span></code> will return an object
+for uninitialized items, but it has less methods. <code class="docutils literal notranslate"><span class="pre">itemRegistry.getItem</span></code>
+will throw an ItemNotFoundException if the Item is not in the registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>itemName</strong> – name of the Item</p></li>
+<li><p><strong>defVal</strong> – the default value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the state if the</dt><dd><p>Item converted to the type of default value, or the default value
+if the Item’s state is NULL or UNDEF</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int, float, ON, OFF, OPEN, CLOSED, str, or DateTime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.getLastUpdate">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">getLastUpdate</code><span class="sig-paren">(</span><em class="sig-param">itemName</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.getLastUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Item’s last update datetime as an ‘org.joda.time.DateTime &lt;<a class="reference external" href="http://joda-time.sourceforge.net/apidocs/org/joda/time/DateTime.html">http://joda-time.sourceforge.net/apidocs/org/joda/time/DateTime.html</a>&gt;`_.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>itemName</strong> – name of the Item</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DateTime representing the time of the Item’s last update</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DateTime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.sendCommand">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">sendCommand</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">newValue</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.sendCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a command to an item regardless of its current state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>itemName</strong> (<em>string</em><em> or </em><em>Item</em>) – name of the Item</p></li>
+<li><p><strong>newValue</strong> – command to send to the Item</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.postUpdate">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">postUpdate</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">newValue</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.postUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Posts an update to an item regardless of its current state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>itemName</strong> (<em>string</em><em> or </em><em>Item</em>) – name of the Item</p></li>
+<li><p><strong>newValue</strong> – state to update the Item with</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.post_update_if_different">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">post_update_if_different</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">newValue</em>, <em class="sig-param">sendACommand=False</em>, <em class="sig-param">floatPrecision=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.post_update_if_different" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the current state of the item is different than the desired new
+state. If the target state is the same, no update is posted.</p>
+<p>sendCommand vs postUpdate:
+If you want to tell something to change (turn a light on, change the
+thermostat to a new temperature, start raising the blinds, etc.), then you
+want to send a command to an Item using sendCommand. If your Items’ states
+are not being updated by a binding, the autoupdate feature or something
+else external, you will probably want to update the state in a rule using
+postUpdate.</p>
+<p>Unfortunately, most decimal fractions cannot be represented exactly as
+binary fractions. A consequence is that, in general, the decimal
+floating-point numbers you enter are only approximated by the binary
+floating-point numbers actually stored in the machine. Therefore,
+comparing the stored value with the new value will most likely always
+result in a difference. You can supply the named argument floatPrecision
+to round the value before comparing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>itemName</strong> (<em>string</em><em> or </em><em>Item</em>) – name of the Item</p></li>
+<li><p><strong>newValue</strong> – state to update the Item with (must be of a type supported
+by the Item)</p></li>
+<li><p><strong>sendACommand</strong> (<em>boolean</em>) – send a command rather than an update</p></li>
+<li><p><strong>floatPrecision</strong> (<em>int</em>) – the precision of the Item’s state to use when
+comparing</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.postUpdateCheckFirst">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">postUpdateCheckFirst</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">newValue</em>, <em class="sig-param">sendACommand=False</em>, <em class="sig-param">floatPrecision=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.postUpdateCheckFirst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the current state of the item is different than the desired new
+state. If the target state is the same, no update is posted.</p>
+<p>sendCommand vs postUpdate:
+If you want to tell something to change (turn a light on, change the
+thermostat to a new temperature, start raising the blinds, etc.), then you
+want to send a command to an Item using sendCommand. If your Items’ states
+are not being updated by a binding, the autoupdate feature or something
+else external, you will probably want to update the state in a rule using
+postUpdate.</p>
+<p>Unfortunately, most decimal fractions cannot be represented exactly as
+binary fractions. A consequence is that, in general, the decimal
+floating-point numbers you enter are only approximated by the binary
+floating-point numbers actually stored in the machine. Therefore,
+comparing the stored value with the new value will most likely always
+result in a difference. You can supply the named argument floatPrecision
+to round the value before comparing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>itemName</strong> (<em>string</em><em> or </em><em>Item</em>) – name of the Item</p></li>
+<li><p><strong>newValue</strong> – state to update the Item with (must be of a type supported
+by the Item)</p></li>
+<li><p><strong>sendACommand</strong> (<em>boolean</em>) – send a command rather than an update</p></li>
+<li><p><strong>floatPrecision</strong> (<em>int</em>) – the precision of the Item’s state to use when
+comparing</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.send_command_if_different">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">send_command_if_different</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">newValue</em>, <em class="sig-param">floatPrecision=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.send_command_if_different" title="Permalink to this definition">¶</a></dt>
+<dd><p>See postUpdateCheckFirst</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.sendCommandCheckFirst">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">sendCommandCheckFirst</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">newValue</em>, <em class="sig-param">floatPrecision=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.sendCommandCheckFirst" title="Permalink to this definition">¶</a></dt>
+<dd><p>See postUpdateCheckFirst</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.validate_item">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">validate_item</code><span class="sig-paren">(</span><em class="sig-param">item_or_item_name</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.validate_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates whether an Item exists or if an Item name is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item_or_item_name</strong> (<em>string</em><em> or </em><em>Item</em>) – name of the Item</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>validated Item, or None if the Item does not exist or the</dt><dd><p>Item name is not in a valid format</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Item or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.validate_channel_uid">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">validate_channel_uid</code><span class="sig-paren">(</span><em class="sig-param">channel_uid_or_string</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.validate_channel_uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates whether a ChannelUID exists or if a ChannelUID is valid.</p>
+<p>Args:
+channel_uid_or_string (string or ChannelUID): the ChannelUID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>validated ChannelUID, or None if the ChannelUID</dt><dd><p>does not exist or the ChannelUID is not in a valid format</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ChannelUID or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.utils.validate_uid">
+<code class="sig-prename descclassname">core.utils.</code><code class="sig-name descname">validate_uid</code><span class="sig-paren">(</span><em class="sig-param">uid</em><span class="sig-paren">)</span><a class="headerlink" href="#core.utils.validate_uid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates whether a UID is valid.</p>
+<p>Args:
+uid (string) or None: the UID to validate or None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>valid UID</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    
+      
+        <div align="right">
+          
+            <br/>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Core/Packages and Modules/utils.rst" class="fa fa-github"> Edit on GitHub</a>
+          
+        </div>
+      
+    
+  
+
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Contributors to the openHAB Scripters project
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

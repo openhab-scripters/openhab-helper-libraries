@@ -31,11 +31,13 @@
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="100_DirectoryTrigger.py" href="../Component Scripts/100_DirectoryTrigger.html" />
+    <link rel="next" title="utils" href="utils.html" />
     <link rel="prev" title="testing" href="testing.html" /> 
 </head>
 
@@ -117,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rules.html">rules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="testing.html">testing</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Core.html#component-scripts">Component Scripts</a></li>
@@ -204,51 +207,51 @@ Jython rule definitions.</p>
 <p>Trigger classes for wrapping Automation API (see <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a>
 for more details):</p>
 <ul class="simple">
-<li><p><strong>ItemStateChangeTrigger</strong></p></li>
-<li><p><strong>ItemStateUpdateTrigger</strong></p></li>
-<li><p><strong>ItemCommandTrigger</strong></p></li>
-<li><p><strong>ItemEventTrigger</strong> (based on “core.GenericEventTrigger”)</p></li>
-<li><p><strong>CronTrigger</strong></p></li>
-<li><p><strong>StartupTrigger</strong> - fires when rule is activated (implemented in Jython)</p></li>
-<li><p><strong>DirectoryEventTrigger</strong> - fires when directory contents change (Jython, see
-related component for more info)</p></li>
-<li><p><strong>ItemAddedTrigger</strong> - fires when rule is added to the RuleRegistry
-(implemented in Jython)</p></li>
-<li><p><strong>ItemRemovedTrigger</strong> - fires when rule is removed from the RuleRegistry
-(implemented in Jython)</p></li>
-<li><p><strong>ItemUpdatedTrigger</strong> - fires when rule is updated in the RuleRegistry
-(implemented in Jython, not a state update!)</p></li>
-<li><p><strong>ChannelEventTrigger</strong> - fires when a Channel gets an event e.g. from the
-Astro Binding</p></li>
+<li><p><strong>ItemStateChangeTrigger</strong> - fires when the specified Item’s state changes</p></li>
+<li><p><strong>ItemStateUpdateTrigger</strong> - fires when the specified Item’s state is updated</p></li>
+<li><p><strong>ItemCommandTrigger</strong> - fires when the specified Item receives a Command</p></li>
+<li><p><strong>ThingStatusChangeTrigger</strong> - fires when the specified Thing’s status changes</p></li>
+<li><p><strong>ThingStatusUpdateTrigger</strong> - fires when the specified Thing’s status is updated</p></li>
+<li><p><strong>ChannelEventTrigger</strong> - fires when a Channel reports an event</p></li>
+<li><p><strong>CronTrigger</strong> - fires based on cron expression</p></li>
+<li><p><strong>GenericEventTrigger</strong> - fires when the specified occurs</p></li>
+<li><p><strong>ItemEventTrigger</strong> (based on “GenericEventTrigger”)</p></li>
+<li><p><strong>ThingEventTrigger</strong> - fires when a Thing reports an event</p></li>
+<li><p><strong>DirectoryEventTrigger</strong> - fires when directory contents change</p></li>
+<li><p><strong>ItemRegistryTrigger</strong> - fires when the specified Item event occurs</p></li>
+<li><p><strong>ItemAddedTrigger</strong> (based on “ItemRegistryTrigger”)</p></li>
+<li><p><strong>ItemRemovedTrigger</strong> (based on “ItemRegistryTrigger”)</p></li>
+<li><p><strong>ItemUpdatedTrigger</strong> (based on “ItemRegistryTrigger”)</p></li>
+<li><p><strong>StartupTrigger</strong> - fires when the rule is activated (implemented in Jython)</p></li>
 </ul>
-<p>Trigger function decorator (see <a class="reference internal" href="../../../Guides/Rules.html#decorators"><span class="std std-ref">Decorators</span></a> for more
-details):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received command OFF&quot;</span><span class="p">)</span>
+<p>The <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator simplifies many of these triggers and allows for them
+to be used with natural language, as used in the rules DSL.
+(see <a class="reference internal" href="../../../Guides/Rules.html#decorators"><span class="std std-ref">Decorators</span></a> for more details).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 55 55 5 * * ?&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received command OFF&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_2 received update ON&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of gMotion_Sensors changed to OFF&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of gContact_Sensors changed to ON&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed&quot;</span><span class="p">)</span> <span class="c1">#Thing statuses cannot currently be used in triggers</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_String_1 changed from &#39;old test string&#39; to &#39;new test string&#39;&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item gMotion_Sensors changed&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of gMotion_Sensors changed from ON to OFF&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of gContact_Sensors changed from OPEN to CLOSED&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed from ONLINE to OFFLINE&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom received update ONLINE&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel astro:sun:local:eclipse#event triggered START&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span> <span class="c1">#&#39;System started&#39; requires S1566 or newer, and &#39;System shuts down&#39; is not available</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;55 55 5 * * ?&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>As a workaround for ‘System started’, add the rule function directly to the
-script. Here is an example that can be used with the function from the
-hello_world.py example script…</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">helloWorldCronDecorators</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span><span class="c1"># requires S1566 or newer (&#39;System shuts down&#39; has not been implemented)</span>
+
+<span class="n">If</span> <span class="n">using</span> <span class="n">a</span> <span class="n">build</span> <span class="n">of</span> <span class="n">openHAB</span> <span class="n">prior</span> <span class="n">to</span> <span class="n">S1566</span><span class="p">,</span> <span class="n">see</span> <span class="p">:</span><span class="n">ref</span><span class="p">:</span><span class="sb">`Guides/Triggers:System Started`</span> <span class="k">for</span> <span class="n">a</span> <span class="sb">``</span><span class="n">System</span> <span class="n">started</span><span class="sb">``</span> <span class="n">workaround</span><span class="o">.</span>
+<span class="n">For</span> <span class="n">everyone</span><span class="p">,</span> <span class="n">see</span> <span class="p">:</span><span class="n">ref</span><span class="p">:</span><span class="sb">`Guides/Triggers:System Shuts Down`</span> <span class="k">for</span> <span class="n">a</span> <span class="n">method</span> <span class="n">of</span> <span class="n">executing</span> <span class="n">a</span> <span class="n">function</span> <span class="n">when</span> <span class="n">a</span> <span class="n">script</span> <span class="ow">is</span> <span class="n">unloaded</span><span class="p">,</span> <span class="n">symulating</span> <span class="n">a</span> <span class="sb">``</span><span class="n">System</span> <span class="n">shuts</span> <span class="n">down</span><span class="sb">``</span> <span class="n">trigger</span><span class="o">.</span>
 </pre></div>
 </div>
 <dl class="class">
 <dt id="core.triggers.ItemStateUpdateTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ItemStateUpdateTrigger</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">state=None</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ItemStateUpdateTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
-<p>Builds an ItemStateUpdateTrigger Module to be used when creating a Rule.</p>
-<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these
-extensions</p>
+<p>This class builds an ItemStateUpdateTrigger Module to be used when creating a Rule.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ItemStateUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;MyItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">,</span> <span class="s2">&quot;MyItem_received_update_ON&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
-<span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ItemStateUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;MyOtherItem&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ItemStateUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;MyItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">,</span> <span class="s2">&quot;MyItem-received-update-ON&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+<span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ItemStateUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;MyOtherItem&quot;</span><span class="p">,</span> <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;MyOtherItem-received-update-OFF&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -277,12 +280,11 @@ extensions</p>
 <dt id="core.triggers.ItemStateChangeTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ItemStateChangeTrigger</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">previousState=None</em>, <em class="sig-param">state=None</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ItemStateChangeTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
-<p>Builds an ItemStateChangeTrigger Module to be used when creating a Rule.</p>
-<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these
-extensions</p>
+<p>This class builds an ItemStateChangeTrigger Module to be used when creating a Rule.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ItemStateChangeTrigger</span><span class="p">(</span><span class="s2">&quot;MyItem&quot;</span><span class="p">,</span> <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">,</span> <span class="s2">&quot;MyItem_changed_from_OFF_to_ON&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
-<span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ItemStateChangeTrigger</span><span class="p">(</span><span class="s2">&quot;MyOtherItem&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ItemStateChangeTrigger</span><span class="p">(</span><span class="s2">&quot;MyItem&quot;</span><span class="p">,</span> <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">,</span> <span class="s2">&quot;MyItem-changed-from-OFF-to-ON&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+<span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ItemStateChangeTrigger</span><span class="p">(</span><span class="s2">&quot;MyOtherItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">,</span> <span class="s2">&quot;OFF&quot;</span><span class="p">,</span><span class="s2">&quot;MyOtherItem-changed-from-ON-to-OFF&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -312,12 +314,11 @@ extensions</p>
 <dt id="core.triggers.ItemCommandTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ItemCommandTrigger</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">command=None</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ItemCommandTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
-<p>Builds an ItemCommandTrigger Module to be used when creating a Rule.</p>
-<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these
-extensions</p>
+<p>This class builds an ItemCommandTrigger Module to be used when creating a Rule.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ItemCommandTrigger</span><span class="p">(</span><span class="s2">&quot;MyItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">,</span> <span class="s2">&quot;MyItem_received_command_ON&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
-<span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ItemCommandTrigger</span><span class="p">(</span><span class="s2">&quot;MyOtherItem&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ItemCommandTrigger</span><span class="p">(</span><span class="s2">&quot;MyItem&quot;</span><span class="p">,</span> <span class="s2">&quot;ON&quot;</span><span class="p">,</span> <span class="s2">&quot;MyItem-received-command-ON&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+<span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ItemCommandTrigger</span><span class="p">(</span><span class="s2">&quot;MyOtherItem&quot;</span><span class="p">,</span> <span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="s2">&quot;MyOtherItem-received-command-OFF&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -343,15 +344,78 @@ extensions</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="core.triggers.ThingStatusUpdateTrigger">
+<em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ThingStatusUpdateTrigger</code><span class="sig-paren">(</span><em class="sig-param">thingUID</em>, <em class="sig-param">status=None</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ThingStatusUpdateTrigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
+<p>This class builds a ThingStatusUpdateTrigger Module to be used when creating a Rule.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ThingStatusUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;kodi:kodi:familyroom&quot;</span><span class="p">,</span> <span class="s2">&quot;ONLINE&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channelUID</strong> (<em>str</em>) – Thing to watch for status updates</p></li>
+<li><p><strong>status</strong> (<em>str</em>) – Trigger only when Thing is updated to this status</p></li>
+<li><p><strong>triggerName</strong> (<em>str</em>) – Name of this trigger</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="core.triggers.ThingStatusUpdateTrigger.trigger">
+<code class="sig-name descname">trigger</code><a class="headerlink" href="#core.triggers.ThingStatusUpdateTrigger.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger object to be added to a Rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Trigger</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="core.triggers.ThingStatusChangeTrigger">
+<em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ThingStatusChangeTrigger</code><span class="sig-paren">(</span><em class="sig-param">thingUID</em>, <em class="sig-param">previousStatus=None</em>, <em class="sig-param">status=None</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ThingStatusChangeTrigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
+<p>This class builds a ThingStatusChangeTrigger Module to be used when creating a Rule.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ThingStatusChangeTrigger</span><span class="p">(</span><span class="s2">&quot;kodi:kodi:familyroom&quot;</span><span class="p">,</span> <span class="s2">&quot;ONLINE&quot;</span><span class="p">,</span> <span class="s2">&quot;OFFLINE).trigger]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channelUID</strong> (<em>str</em>) – Thing to watch for status changes</p></li>
+<li><p><strong>previousStatus</strong> (<em>str</em>) – Trigger only when Thing is changed from this status</p></li>
+<li><p><strong>status</strong> (<em>str</em>) – Trigger only when Thing is changed to this status</p></li>
+<li><p><strong>triggerName</strong> (<em>str</em>) – Name of this trigger</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="core.triggers.ThingStatusChangeTrigger.trigger">
+<code class="sig-name descname">trigger</code><a class="headerlink" href="#core.triggers.ThingStatusChangeTrigger.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger object to be added to a Rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Trigger</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="core.triggers.ChannelEventTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ChannelEventTrigger</code><span class="sig-paren">(</span><em class="sig-param">channelUID</em>, <em class="sig-param">event=None</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ChannelEventTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
-<p>Builds an ChannelEventTrigger Module to be used when creating a Rule.</p>
-<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these
-extensions</p>
+<p>This class builds a ChannelEventTrigger Module to be used when creating a Rule.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ChannelEventTrigger</span><span class="p">(</span><span class="s2">&quot;binding:segment:segment&quot;</span><span class="p">,</span> <span class="s2">&quot;MyEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;Channel_binding-segment-segment_MyEvent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
-<span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">ChannelEventTrigger</span><span class="p">(</span><span class="s2">&quot;binding:segment:segment&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ChannelEventTrigger</span><span class="p">(</span><span class="s2">&quot;astro:sun:local:eclipse#event&quot;</span><span class="p">,</span> <span class="s2">&quot;START&quot;</span><span class="p">,</span> <span class="s2">&quot;solar-eclipse-event-start&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -380,30 +444,175 @@ extensions</p>
 <dt id="core.triggers.GenericEventTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">GenericEventTrigger</code><span class="sig-paren">(</span><em class="sig-param">eventSource</em>, <em class="sig-param">eventTypes</em>, <em class="sig-param">eventTopic='smarthome/*'</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.GenericEventTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
+<p>This class builds a GenericEventTrigger Module to be used when creating a Rule.
+It allows you to trigger on any event that comes through the Event Bus.
+It’s one of the the most powerful triggers, but it is also the most complicated to configure.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">GenericEventTrigger</span><span class="p">(</span><span class="s2">&quot;smarthome/items/Test_Switch_1/&quot;</span><span class="p">,</span> <span class="s2">&quot;ItemStateEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;smarthome/items/*&quot;</span><span class="p">,</span> <span class="s2">&quot;Test_Switch_1-received-update&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eventSource</strong> (<em>str</em>) – Source to watch for trigger events</p></li>
+<li><p><strong>eventTypes</strong> (<em>str</em><em> or </em><em>list</em>) – Types of events to watch</p></li>
+<li><p><strong>eventTopic</strong> (<em>str</em>) – Topic to watch</p></li>
+<li><p><strong>triggerName</strong> (<em>str</em>) – Name of this trigger</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="core.triggers.GenericEventTrigger.trigger">
+<code class="sig-name descname">trigger</code><a class="headerlink" href="#core.triggers.GenericEventTrigger.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger object to be added to a Rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Trigger</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="core.triggers.ItemEventTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ItemEventTrigger</code><span class="sig-paren">(</span><em class="sig-param">eventSource</em>, <em class="sig-param">eventTypes</em>, <em class="sig-param">eventTopic='smarthome/items/*'</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ItemEventTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
+<p>This class is the same as the <code class="docutils literal notranslate"><span class="pre">GenericEventTrigger</span></code>, but simplifies it a bit for use with Items.
+The available Item <code class="docutils literal notranslate"><span class="pre">eventTypes</span></code> are:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;ItemStateEvent&quot; (Item state update)
+&quot;ItemCommandEvent&quot; (Item received Command)
+&quot;ItemStateChangedEvent&quot; (Item state changed)
+&quot;GroupItemStateChangedEvent&quot; (GroupItem state changed)
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ItemEventTrigger</span><span class="p">(</span><span class="s2">&quot;Test_Switch_1&quot;</span><span class="p">,</span> <span class="s2">&quot;ItemStateEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;smarthome/items/*&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eventSource</strong> (<em>str</em>) – Source to watch for trigger events</p></li>
+<li><p><strong>eventTypes</strong> (<em>str</em><em> or </em><em>list</em>) – Types of events to watch</p></li>
+<li><p><strong>eventTopic</strong> (<em>str</em>) – Topic to watch (no need to change default)</p></li>
+<li><p><strong>triggerName</strong> (<em>str</em>) – Name of this trigger</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="core.triggers.ItemEventTrigger.trigger">
+<code class="sig-name descname">trigger</code><a class="headerlink" href="#core.triggers.ItemEventTrigger.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger object to be added to a Rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Trigger</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="core.triggers.ThingEventTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ThingEventTrigger</code><span class="sig-paren">(</span><em class="sig-param">thingUID</em>, <em class="sig-param">eventTypes</em>, <em class="sig-param">eventTopic='smarthome/things/*'</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ThingEventTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
+<p>This class is the same as the <code class="docutils literal notranslate"><span class="pre">GenericEventTrigger</span></code>, but simplifies it a bit for use with Things.
+The available Thing <code class="docutils literal notranslate"><span class="pre">eventTypes</span></code> are:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;ThingAddedEvent&quot;
+&quot;ThingRemovedEvent&quot;
+&quot;ThingStatusInfoChangedEvent&quot;
+&quot;ThingStatusInfoEvent&quot;
+&quot;ThingUpdatedEvent&quot;
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">ThingEventTrigger</span><span class="p">(</span><span class="s2">&quot;kodi:kodi:familyroom&quot;</span><span class="p">,</span> <span class="s2">&quot;ThingStatusInfoEvent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eventSource</strong> (<em>str</em>) – Source to watch for trigger events</p></li>
+<li><p><strong>eventTypes</strong> (<em>str</em><em> or </em><em>list</em>) – Types of events to watch</p></li>
+<li><p><strong>eventTopic</strong> (<em>str</em>) – Topic to watch (no need to change default)</p></li>
+<li><p><strong>triggerName</strong> (<em>str</em>) – Name of this trigger</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="core.triggers.ThingEventTrigger.trigger">
+<code class="sig-name descname">trigger</code><a class="headerlink" href="#core.triggers.ThingEventTrigger.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger object to be added to a Rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Trigger</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="core.triggers.CronTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">CronTrigger</code><span class="sig-paren">(</span><em class="sig-param">cronExpression</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.CronTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
+<p>This class builds a CronTrigger Module to be used when creating a Rule.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">CronTrigger</span><span class="p">(</span><span class="s2">&quot;0 55 17 * * ?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cronExpression</strong> (<em>str</em>) – A valid <a class="reference external" href="http://www.quartz-scheduler.org/documentation/quartz-2.2.2/tutorials/tutorial-lesson-06.html">cron expression</a></p></li>
+<li><p><strong>triggerName</strong> (<em>str</em>) – Name of this trigger</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="core.triggers.CronTrigger.trigger">
+<code class="sig-name descname">trigger</code><a class="headerlink" href="#core.triggers.CronTrigger.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger object to be added to a Rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Trigger</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="core.triggers.StartupTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">StartupTrigger</code><span class="sig-paren">(</span><em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.StartupTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">org.openhab.core.automation.Trigger</span></code></p>
+<p>This class builds a StartupTrigger Module to be used when creating a Rule.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these extensions.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MyRule</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">StartupTrigger</span><span class="p">()</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>triggerName</strong> (<em>str</em>) – Name of this trigger</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="core.triggers.StartupTrigger.trigger">
+<code class="sig-name descname">trigger</code><a class="headerlink" href="#core.triggers.StartupTrigger.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger object to be added to a Rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Trigger</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -414,19 +623,19 @@ extensions</p>
 
 <dl class="function">
 <dt id="core.triggers.when">
-<code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">when</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">target_type=None</em>, <em class="sig-param">trigger_type=None</em>, <em class="sig-param">old_state=None</em>, <em class="sig-param">new_state=None</em>, <em class="sig-param">event_types=None</em>, <em class="sig-param">trigger_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.when" title="Permalink to this definition">¶</a></dt>
-<dd><p>openHAB DSL style trigger decorator.</p>
-<p>See <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a> for examples of how to use these
-extensions</p>
+<code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">when</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">target_type=None</em>, <em class="sig-param">trigger_type=None</em>, <em class="sig-param">old_state=None</em>, <em class="sig-param">new_state=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.when" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function decorator provides the ability to create rule triggers using language similar to the rules DSL.</p>
+<p>See <a class="reference internal" href="../../../Guides/Rules.html#decorators"><span class="std std-ref">Decorators</span></a> for examples of how to use this decorator</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received command OFF&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_2 received update ON&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item gMotion_Sensors changed to ON&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_String_1 changed from &#39;old test string&#39; to &#39;new test string&#39;&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item gMotion_Sensors changed&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of gMotion_Sensors changed to OFF&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of gContact_Sensors changed to OPEN&quot;</span><span class="p">)</span> <span class="c1"># Similar to &#39;Member of&#39;, but creates a trigger for each non-group sibling Item (think group_item.allMembers())</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed&quot;</span><span class="p">)</span> <span class="c1"># ThingStatusInfo (from &lt;status&gt; to &lt;status&gt;) cannot currently be used in triggers</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of gContact_Sensors changed to ON&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed&quot;</span><span class="p">)</span> <span class="c1">#Thing statuses cannot currently be used in triggers</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel astro:sun:local:eclipse#event triggered START&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span> <span class="c1"># &#39;System started&#39; requires S1566 or newer, and &#39;System shuts down&#39; is not available</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span> <span class="c1">#&#39;System started&#39; requires S1566 or newer, and &#39;System shuts down&#39; is not available</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 55 55 5 * * ?&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -438,8 +647,6 @@ extensions</p>
 <li><p><strong>trigger_type</strong> (<em>str</em>) – Trigger type (“changed”, “received command”, etc.)</p></li>
 <li><p><strong>old_state</strong> (<em>str</em>) – Old state for “Item changed from” events</p></li>
 <li><p><strong>new_state</strong> (<em>str</em>) – New state for “changed to”, “Item received update/command”, and “Channel triggered” events</p></li>
-<li><p><strong>event_types</strong> (<em>str</em>) – Event type for GenericEventTrigger (keeps backwards compatibility with earlier versions)</p></li>
-<li><p><strong>trigger_name</strong> (<em>str</em>) – Name to assign to this trigger</p></li>
 </ul>
 </dd>
 </dl>

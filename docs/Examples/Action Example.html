@@ -25,14 +25,22 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Channel Event Example" href="Channel Event Example.html" />
@@ -190,10 +198,430 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.examples.action_example">
-<span id="action-example"></span><h1>Action Example<a class="headerlink" href="#module-scripts.examples.action_example" title="Permalink to this headline">¶</a></h1>
-<p>Shows an example of using the <cite>core.actions</cite> module to access an Action.
-Requires the Astro action.</p>
+  <div class="section" id="action-example">
+<h1>Action Example<a class="headerlink" href="#action-example" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>Javascript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Shows an example of using the `core.actions` module to access an Action.</span>
+<span class="sd">Requires the Astro action.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Astro</span>
+<span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
+<span class="kn">from</span> <span class="nn">java.util</span> <span class="kn">import</span> <span class="n">Date</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.action_example&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sunrise: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Astro</span><span class="o">.</span><span class="n">getAstroSunsetStart</span><span class="p">(</span><span class="n">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="mf">38.897096</span><span class="p">,</span> <span class="o">-</span><span class="mf">77.036545</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="cm">/**</span>
+<span class="cm"> * Example rules that utilize Actions</span>
+<span class="cm"> * </span>
+<span class="cm"> * Copyright (c) 2019 Contributors to the openHAB Scripters project</span>
+<span class="cm"> * </span>
+<span class="cm"> * @author Helmut Lehmeyer - initial contribution</span>
+<span class="cm"> */</span>
+<span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">OPENHAB_CONF</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s2">&quot;java.lang.System&quot;</span><span class="p">).</span><span class="nx">getenv</span><span class="p">(</span><span class="s2">&quot;OPENHAB_CONF&quot;</span><span class="p">);</span> <span class="c1">// most this is /etc/openhab2</span>
+<span class="nx">load</span><span class="p">(</span><span class="nx">OPENHAB_CONF</span><span class="o">+</span><span class="s1">&#39;/automation/lib/javascript/core/rules.js&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="s2">&quot;ActionExamples.js&quot;</span><span class="p">;</span>
+<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################# &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; ##################&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">myRule</span> <span class="o">=</span> <span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Busevents&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/55 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span> 
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot; SimpleRule::execute &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span> <span class="s2">&quot; input &quot;</span><span class="o">+</span> <span class="nx">input</span><span class="p">);</span>
+		<span class="c1">//logInfo(&quot;uuid &quot;+__LINE__, uuid.randomUUID(), &quot;bla&quot;, &quot;bla&quot;); </span>
+		<span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot;uuid &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span> <span class="nx">uuid</span><span class="p">.</span><span class="nx">randomUUID</span><span class="p">(),</span> <span class="s2">&quot;bla&quot;</span><span class="p">,</span> <span class="s2">&quot;bla&quot;</span><span class="p">);</span> 
+		<span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot;Rule &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span> <span class="nx">Rule</span><span class="p">);</span> 
+		<span class="c1">//logDebug(&quot;uuid &quot;+__LINE__, uuid.randomUUID(), &quot;bla&quot;, &quot;bla&quot;); </span>
+		<span class="c1">//logWarn(&quot;uuid &quot;+__LINE__, uuid.randomUUID(), &quot;bla&quot;, &quot;bla&quot;); </span>
+		<span class="c1">//logTrace(&quot;uuid &quot;+__LINE__, uuid.randomUUID(), &quot;bla&quot;, &quot;bla&quot;); </span>
+		
+		
+		<span class="kd">var</span> <span class="nx">actions</span> <span class="o">=</span> <span class="nx">getActions</span><span class="p">();</span>
+		<span class="k">for</span><span class="p">(</span> <span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">actions</span><span class="p">){</span>
+			<span class="kd">var</span> <span class="nx">ai</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+			<span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- service &quot;</span><span class="o">+</span><span class="nx">i</span> <span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span> <span class="nx">ai</span><span class="p">);</span>
+		<span class="p">}</span>
+		
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>
+		<span class="c1">//logWarn(&quot; -- oh &quot;, oh);</span>
+		<span class="c1">//logInfo(&quot;################ &quot;+me+&quot; Line: &quot;+__LINE__+&quot;  #################&quot;);</span>
+		<span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- Rule &quot;</span><span class="p">,</span> <span class="nx">Rule</span><span class="p">);</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>
+		
+		<span class="c1">//postUpdate(&quot;testItemSwitch&quot;, OFF);</span>
+		<span class="c1">//postUpdate(&quot;testItemSwitch&quot;, ON);</span>
+		
+		<span class="c1">//Java 8 </span>
+		<span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -#### LocalDateTime.now().withMinute(0) &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span> <span class="nx">LocalDateTime</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">withMinute</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+		<span class="c1">//Java 7</span>
+		<span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -#### DateTime.now().withMinute(0) &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span> <span class="nx">DateTime</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">withMinuteOfHour</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+		
+		<span class="c1">// Run Timer</span>
+		<span class="kd">var</span> <span class="nx">runme</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span><span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; runme &quot;</span><span class="p">,</span> <span class="s2">&quot;runme&quot;</span><span class="p">);};</span>
+		<span class="nx">createTimer</span><span class="p">(</span><span class="nx">now</span><span class="p">().</span><span class="nx">plusSeconds</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="nx">runme</span><span class="p">);</span>
+		
+		<span class="c1">//getAction(&quot;XMPP&quot;).static.sendXMPP(&quot;helmutl@lewi-cleantech.net&quot;, &quot;automation XMPP :-)&quot;);</span>
+		<span class="c1">//sendXMPP(&quot;helmutl@lewi-cleantech.net&quot;, &quot;automation XMPP :-)&quot;);</span>
+		
+		<span class="c1">//getAction(&quot;Mail&quot;).static.sendMail(&quot;hl@lewi.io&quot;, &quot;automation Mail :-)&quot;, &quot;It works!&quot;);</span>
+		<span class="c1">//sendMail(&quot;hl@lewi.io&quot;, &quot;automation Mail :-)&quot;, &quot;It works!&quot;);</span>
+		
+		<span class="c1">//See: helper.js line 270</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot; -- input &quot;</span><span class="o">+</span> <span class="nx">input</span><span class="p">);</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot; -- oldState &quot;</span><span class="o">+</span> <span class="nx">input</span><span class="p">.</span><span class="nx">oldState</span><span class="p">);</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot; -- newState &quot;</span><span class="o">+</span> <span class="nx">input</span><span class="p">.</span><span class="nx">newState</span><span class="p">);</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot; -- event &quot;</span><span class="o">+</span> <span class="nx">input</span><span class="p">.</span><span class="nx">event</span><span class="p">);</span> <span class="c1">//event=testItemSwitch changed from OFF to ON</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot; -- event &quot;</span><span class="o">+</span> <span class="nx">getTriggeredData</span><span class="p">(</span><span class="nx">input</span><span class="p">).</span><span class="nx">triggerType</span><span class="p">);</span>
+
+		<span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- getTriggers &quot;</span><span class="p">,</span> <span class="nx">myRule</span><span class="p">.</span><span class="nx">getTriggers</span><span class="p">());</span>
+        <span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- getConditions &quot;</span><span class="p">,</span> <span class="nx">myRule</span><span class="p">.</span><span class="nx">getConditions</span><span class="p">());</span>
+        <span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- getActions &quot;</span><span class="p">,</span> <span class="nx">myRule</span><span class="p">.</span><span class="nx">getActions</span><span class="p">());</span>
+        <span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- getConfigurationDescriptions &quot;</span><span class="p">,</span> <span class="nx">myRule</span><span class="p">.</span><span class="nx">getConfigurationDescriptions</span><span class="p">());</span>
+        <span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- getConfiguration &quot;</span><span class="p">,</span> <span class="nx">myRule</span><span class="p">.</span><span class="nx">getConfiguration</span><span class="p">());</span>
+        <span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- getTemplateUID &quot;</span><span class="p">,</span> <span class="nx">myRule</span><span class="p">.</span><span class="nx">getTemplateUID</span><span class="p">());</span>
+        <span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot; -- getVisibility &quot;</span><span class="p">,</span> <span class="nx">myRule</span><span class="p">.</span><span class="nx">getVisibility</span><span class="p">());</span>
+
+	<span class="p">}</span>
+<span class="p">});</span>
+
+
+
+<span class="cm">/**</span>
+<span class="cm"> * Busevents</span>
+<span class="cm"> *</span>
+<span class="cm"> * see helper.js too.</span>
+<span class="cm"> *</span>
+<span class="cm"> * sendCommand(Item, String)</span>
+<span class="cm"> * sendCommand(Item, Number)</span>
+<span class="cm"> * sendCommand(String, String)</span>
+<span class="cm"> * getAcceptedCommandNames(Item)</span>
+<span class="cm"> * sendCommand(Item, Command)</span>
+<span class="cm"> * postUpdate(Item, Number)</span>
+<span class="cm"> * postUpdate(Item, String)</span>
+<span class="cm"> * postUpdate(String, String)</span>
+<span class="cm"> * getAcceptedDataTypeNames(Item)</span>
+<span class="cm"> * postUpdate(Item, State)</span>
+<span class="cm"> * storeStates(Item...)</span>
+<span class="cm"> * restoreStates(Map&lt;Item, State&gt;)</span>
+<span class="cm"> */</span>
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Busevents&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>
+		
+		<span class="kd">var</span> <span class="nx">it</span> <span class="o">=</span> <span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;errors_in_logs&quot;</span><span class="p">);</span>
+		
+		<span class="c1">//sendCommand(it, String);</span>
+		<span class="c1">//sendCommand(it, Number);</span>
+		<span class="c1">//sendCommand(String, String);</span>
+		<span class="c1">//sendCommand(it, Command);</span>
+		
+		<span class="c1">//postUpdate(it, Number);</span>
+		<span class="c1">//postUpdate(it, String);</span>
+		<span class="c1">//postUpdate(String, String);</span>
+		<span class="c1">//postUpdate(it, State);</span>
+		
+		<span class="c1">//NOT TESTED YET: storeStates(it);</span>
+		<span class="c1">//NOT TESTED YET: restoreStates([it, State]);</span>
+		<span class="c1">//logInfo( me+__LINE__, &quot;meldet &quot;+ it.state +&quot; &quot;);</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+
+
+<span class="cm">/**</span>
+<span class="cm"> * Examples to import and use actions that are provided in standard Rule Engine too.</span>
+<span class="cm"> * PersistenceExtensions</span>
+<span class="cm"> * HTTP</span>
+<span class="cm"> * Ping</span>
+<span class="cm"> * Audio</span>
+<span class="cm"> * Voice</span>
+<span class="cm"> * ThingAction</span>
+<span class="cm"> */</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * getActions to see which actions are available</span>
+<span class="cm"> */</span>
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; getActions&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>	
+		<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">getActions</span><span class="p">();</span>
+		<span class="kd">var</span> <span class="nx">aList</span> <span class="o">=</span> <span class="nx">getActionList</span><span class="p">();</span>
+		<span class="nx">print</span><span class="p">(</span><span class="s2">&quot;getActionList: 	&quot;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span> <span class="nx">aList</span> <span class="p">));</span>
+		
+		<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">aList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+			<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################|&quot;</span><span class="o">+</span><span class="nx">aList</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+			<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################|&quot;</span><span class="o">+</span><span class="nx">a</span><span class="p">[</span><span class="nx">aList</span><span class="p">[</span><span class="nx">i</span><span class="p">]]);</span>
+			<span class="k">if</span><span class="p">(</span><span class="nx">aList</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;XMPP&quot;</span><span class="p">)</span><span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;### &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  ###|&quot;</span><span class="o">+</span><span class="nx">a</span><span class="p">[</span><span class="nx">aList</span><span class="p">[</span><span class="nx">i</span><span class="p">]].</span><span class="nx">getActionClass</span><span class="p">().</span><span class="kr">static</span><span class="p">.</span><span class="nx">sendXMPP</span><span class="p">(</span><span class="s2">&quot;helmutl@lewi-cleantech.net&quot;</span><span class="p">,</span><span class="s2">&quot;jkkkk&quot;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;|###&quot;</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="c1">//</span>
+		<span class="c1">//var XMP = ScriptServiceUtil.actionServices[6].getActionClass();//.getConstructor().newInstance();</span>
+		<span class="c1">//logInfo(&quot;################ &quot;+me+&quot; Line: &quot;+__LINE__+&quot;  #################|&quot;+XMP.static.sendXMPP(&quot;helmutl@lewi-cleantech.net&quot;,&quot;vvvvvvvvvvv&quot;));</span>
+		<span class="c1">//logInfo(&quot;################ &quot;+me+&quot; Line: &quot;+__LINE__+&quot;  #################|&quot;+getAction(&quot;XMPP&quot;).static.sendXMPP(&quot;helmutl@lewi-cleantech.net&quot;,&quot;jkkkk&quot;)+&quot;|##########&quot;);</span>
+		
+	<span class="p">}</span>
+<span class="p">});</span>
+ 
+<span class="cm">/**</span>
+<span class="cm"> * PersistenceExtensions</span>
+<span class="cm"> * PersistenceExtensions are default imported by helper.js see: &#39;jslib/PersistenceExtensions.js&#39;</span>
+<span class="cm"> */</span>
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; PersistenceExtensions&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>	
+		
+		<span class="cm">/*</span>
+<span class="cm">		persist</span>
+<span class="cm">		historicState</span>
+<span class="cm">		changedSince</span>
+<span class="cm">		updatedSince</span>
+<span class="cm">		maximumSince</span>
+<span class="cm">		minimumSince</span>
+<span class="cm">		averageSince</span>
+<span class="cm">		sumSince</span>
+<span class="cm">		lastUpdate</span>
+<span class="cm">		deltaSince</span>
+<span class="cm">		evolutionRate</span>
+<span class="cm">		previousState</span>
+<span class="cm">		*/</span>
+		
+		<span class="c1">//print(&quot;PersistenceExtensions TEST: &quot;+persistExt(&quot;previousState&quot;, &quot;Suntracer_Temp&quot;));</span>
+		<span class="c1">// ATTENTION this writes to DB!! print(&quot;PersistenceExtensions persist: 	&quot;+persist(&quot;Suntracer_Temp&quot;, 22));</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions historicState: 	&quot;</span><span class="o">+</span><span class="nx">historicState</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions changedSince: 	&quot;</span><span class="o">+</span><span class="nx">changedSince</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions updatedSince: 	&quot;</span><span class="o">+</span><span class="nx">updatedSince</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions maximumSince: 	&quot;</span><span class="o">+</span><span class="nx">maximumSince</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions minimumSince: 	&quot;</span><span class="o">+</span><span class="nx">minimumSince</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions averageSince: 	&quot;</span><span class="o">+</span><span class="nx">averageSince</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions sumSince: 		&quot;</span><span class="o">+</span><span class="nx">sumSince</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span> 	
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions lastUpdate: 	&quot;</span><span class="o">+</span><span class="nx">lastUpdate</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">));</span> 
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions deltaSince: 	&quot;</span><span class="o">+</span><span class="nx">deltaSince</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span> 
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions evolutionRate: 	&quot;</span><span class="o">+</span><span class="nx">evolutionRate</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">,</span> <span class="nx">now</span><span class="p">().</span><span class="nx">minusDays</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;PersistenceExtensions previousState: 	&quot;</span><span class="o">+</span><span class="nx">previousState</span><span class="p">(</span><span class="s2">&quot;Suntracer_Temp&quot;</span><span class="p">));</span>
+
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * HTTP !! IST DAS NÖTIG? SIEHE ### getActions ### in helper.js</span>
+<span class="cm"> * sendHttpGetRequest(String url)</span>
+<span class="cm"> * sendHttpGetRequest(String url, int timeout)</span>
+<span class="cm"> * sendHttpPutRequest(String url)</span>
+<span class="cm"> * sendHttpPutRequest(String url, int timeout)</span>
+<span class="cm"> * sendHttpPutRequest(String url, String contentType, String content)</span>
+<span class="cm"> * sendHttpPutRequest(String url, String contentType, String content, int timeout)</span>
+<span class="cm"> * sendHttpPostRequest(String url)</span>
+<span class="cm"> * sendHttpPostRequest(String url, int timeout)</span>
+<span class="cm"> * sendHttpPostRequest(String url, String contentType, String content)</span>
+<span class="cm"> * sendHttpPostRequest(String url, String contentType, String content, int timeout)</span>
+<span class="cm"> * sendHttpDeleteRequest(String url)</span>
+<span class="cm"> * sendHttpDeleteRequest(String url, int timeout)</span>
+<span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">HTTP</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s1">&#39;org.eclipse.smarthome.model.script.actions.HTTP&#39;</span><span class="p">);</span>
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; HTTP&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>	
+		<span class="nx">print</span><span class="p">(</span><span class="s2">&quot;HTTP sendHttpGetRequest: 	&quot;</span> <span class="o">+</span> <span class="nx">HTTP</span><span class="p">.</span><span class="nx">sendHttpGetRequest</span><span class="p">(</span><span class="s2">&quot;http://www.heise.de&quot;</span><span class="p">));</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Ping</span>
+<span class="cm"> * boolean checkVitality(String host, int port, int timeout)</span>
+<span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">Ping</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s1">&#39;org.eclipse.smarthome.model.script.actions.Ping&#39;</span><span class="p">);</span>
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Ping&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>	
+		<span class="nx">print</span><span class="p">(</span><span class="s2">&quot;Ping localhost: 	&quot;</span> <span class="o">+</span> <span class="nx">Ping</span><span class="p">.</span><span class="nx">checkVitality</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">500</span><span class="p">));</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Exec on bash</span>
+<span class="cm"> */</span>
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Exec&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">antwort</span> <span class="o">=</span> <span class="nx">executeCommandLineAndWaitResponse</span><span class="p">(</span><span class="s2">&quot;bash /data/findErrors.sh&quot;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">);</span>
+		<span class="nx">logInfo</span><span class="p">(</span> <span class="nx">me</span><span class="p">,</span> <span class="s2">&quot;meldet &quot;</span><span class="o">+</span> <span class="nx">antwort</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="p">);</span>
+		<span class="nx">antwort</span> <span class="o">=</span> <span class="nx">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;bash /data/findErrors.sh&quot;</span><span class="p">);</span>
+		<span class="nx">logInfo</span><span class="p">(</span> <span class="nx">me</span><span class="p">,</span> <span class="s2">&quot;meldet &quot;</span><span class="o">+</span> <span class="nx">antwort</span> <span class="o">+</span><span class="s2">&quot; &quot;</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Audio</span>
+<span class="cm"> * playSound(String filename)</span>
+<span class="cm"> * playSound(String sink, String filename)</span>
+<span class="cm"> * playStream(String url)</span>
+<span class="cm"> * playStream(String sink, String filename)</span>
+<span class="cm"> * getMasterVolume()</span>
+<span class="cm"> * setMasterVolume(float volume)</span>
+<span class="cm"> * setMasterVolume(PercentType percent)</span>
+<span class="cm"> * increaseMasterVolume(float volume)</span>
+<span class="cm"> * decreaseMasterVolume(float volume)</span>
+<span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">Audio</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s1">&#39;org.eclipse.smarthome.model.script.actions.Audio&#39;</span><span class="p">);</span>
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Audio&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>		
+		<span class="nx">print</span><span class="p">(</span><span class="s2">&quot;Ping getMasterVolume: 	&quot;</span> <span class="o">+</span> <span class="nx">Audio</span><span class="p">.</span><span class="nx">getMasterVolume</span><span class="p">());</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Voice</span>
+<span class="cm"> * say(Object text)</span>
+<span class="cm"> * say(Object text, String voice)</span>
+<span class="cm"> * say(Object text, String voice, String sink)</span>
+<span class="cm"> * interpret(Object text)</span>
+<span class="cm"> * interpret(Object text, String voice)</span>
+<span class="cm"> * interpret(Object text, String voice, String sink)</span>
+<span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">Voice</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s1">&#39;org.eclipse.smarthome.model.script.actions.Voice&#39;</span><span class="p">);</span>
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Voice&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;TEST L:&quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+		<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;################ &quot;</span><span class="o">+</span><span class="nx">me</span><span class="o">+</span><span class="s2">&quot; Line: &quot;</span><span class="o">+</span><span class="nx">__LINE__</span><span class="o">+</span><span class="s2">&quot;  #################&quot;</span><span class="p">);</span>	
+		<span class="nx">print</span><span class="p">(</span><span class="s2">&quot;Voice say &#39;Hello Voice&#39;: 	&quot;</span> <span class="o">+</span> <span class="nx">Voice</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="s2">&quot;Hello Voice&quot;</span><span class="p">));</span>	
+	<span class="p">}</span>
+<span class="p">});</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * ThingAction</span>
+<span class="cm"> * ThingStatusInfo getThingStatusInfo(String thingUid)</span>
+<span class="cm"> */</span>
+<span class="cm">/* DOES NOT FIND ThingAction anymore</span>
+<span class="cm">var ThingAction = Java.type(&#39;org.eclipse.smarthome.model.script.actions.ThingAction&#39;);</span>
+<span class="cm">JSRule({</span>
+<span class="cm">	name: me+&quot; ThingAction&quot;,</span>
+<span class="cm">	description: &quot;TEST L:&quot;+__LINE__,</span>
+<span class="cm">	triggers: [ </span>
+<span class="cm">		//TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+<span class="cm">	],</span>
+<span class="cm">	execute: function( module, input){</span>
+<span class="cm">		logInfo(&quot;################ &quot;+me+&quot; Line: &quot;+__LINE__+&quot;  #################&quot;);		</span>
+<span class="cm">		print(&quot;ThingAction getThingStatusInfo of&#39;: 	&quot; + ThingAction.getThingStatusInfo(&quot;chromecast:chromecast:6a01c5ef0f0a6b3fd15849eda1379ab8&quot;));	</span>
+<span class="cm">	}</span>
+<span class="cm">});*/</span>
+
+
+
+
+
+<span class="nx">JSRule</span><span class="p">({</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Light_UG_Arbeitsraum Mode&quot;</span><span class="p">,</span>
+	<span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+	<span class="nx">triggers</span><span class="o">:</span> <span class="p">[</span> 
+		<span class="c1">//IS WORKING: TimerTrigger(&quot;0/15 * * * * ?&quot;)</span>
+		<span class="c1">//IS WORKING: ChangedEventTrigger(&quot;testItemSwitch&quot;, &quot;ON&quot;, &quot;OFF&quot;)</span>
+		<span class="c1">//IS WORKING: UpdatedEventTrigger(&quot;testItemSwitch&quot;),</span>
+        <span class="c1">//IS WORKING: CommandEventTrigger(&quot;testItemSwitch&quot;)</span>
+        <span class="nx">CommandEventTrigger</span><span class="p">(</span><span class="s2">&quot;Light_UG_Arbeitsraum&quot;</span><span class="p">)</span> 
+	<span class="p">],</span>
+	<span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">module</span><span class="p">,</span> <span class="nx">input</span><span class="p">){</span>
+
+        <span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Light_UG_Arbeitsraum&quot;</span><span class="p">,</span> <span class="s2">&quot;Light_UG_Arbeitsraum Switched&quot;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">receivedCommand</span> <span class="o">=</span> <span class="nx">getTriggeredData</span><span class="p">(</span><span class="nx">input</span><span class="p">).</span><span class="nx">receivedCommand</span><span class="p">;</span>
+        <span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Light_UG_Arbeitsraum&quot;</span><span class="p">,</span> <span class="nx">receivedCommand</span><span class="p">);</span>
+        <span class="cm">/*</span>
+<span class="cm">		var Box_Kitchen_Mode = getItem(&quot;Box_Kitchen_Mode&quot;);</span>
+
+<span class="cm">        logInfo(&quot;Light_UG_Arbeitsraum&quot;, &quot;Light_UG_Arbeitsraum Activated&quot;);</span>
+<span class="cm">        if (receivedCommand == 2) {</span>
+<span class="cm">            logInfo(&quot;Light_UG_Arbeitsraum&quot;, &quot;Light_UG_Arbeitsraum 2a &quot; + Box_Kitchen_Mode.state);</span>
+<span class="cm">            if (Box_Kitchen_Mode.state != 8) {</span>
+<span class="cm">                sendCommand(&quot;Box_Kitchen_Mode&quot;, 8)</span>
+<span class="cm">            }</span>
+<span class="cm">            logInfo(&quot;Light_UG_Arbeitsraum&quot;, &quot;Light_UG_Arbeitsraum 2b &quot; + Box_Kitchen_Mode.state);</span>
+<span class="cm">        }</span>
+<span class="cm">        else {</span>
+<span class="cm">            logInfo(&quot;Light_UG_Arbeitsraum&quot;, &quot;Light_UG_Arbeitsraum 1a &quot; + Box_Kitchen_Mode.state);</span>
+<span class="cm">            if (Box_Kitchen_Mode.state != 0) {</span>
+<span class="cm">                sendCommand(&quot;Box_Kitchen_Mode&quot;, 0)</span>
+<span class="cm">            }</span>
+<span class="cm">            logInfo(&quot;Light_UG_Arbeitsraum&quot;, &quot;Light_UG_Arbeitsraum 1b &quot; + Box_Kitchen_Mode.state);</span>
+<span class="cm">        }*/</span>
+
+    <span class="p">}</span>
+    
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>TODO</p>
+</div>
+</div>
 </div>
 
 
