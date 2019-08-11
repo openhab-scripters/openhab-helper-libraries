@@ -4,26 +4,18 @@ The Date module provides data types and methods for working with DateTime items.
 Types
 =====
 
-    There are three DateTime types made available by this module:
-
-    .. code-block::
-
-        from core.date import javaDateTime # recommended
-        from core.date import pythonDateTime
-        from core.date import jodaDateTime
-
-    It is recommended that you use ``javaDateTime`` from this module for all
+    It is recommended that you use ``java.time.ZonedDateTime`` for all
     operations involving dates or ``DateTime`` items. See the documentation for
     `java.time.ZonedDateTime <https://docs.oracle.com/javase/8/docs/api/java/time/ZonedDateTime.html>`_
     for more information about its useage.
 
     .. warning::
 
-        The use of ``jodaDateTime`` for new rules is not recommended as the Joda
-        package may not be available in future versions of openHAB. You will
-        find that ``javaDateTime`` has many functions in common with
-        ``jodaDateTime``, which should make transitioning fairly straight
-        forward.
+        The use of ``org.joda.DateTime`` for new rules is not recommended as the
+        Joda package may not be available in future versions of openHAB. You
+        will find that ``java.time.ZonedDateTime`` has many functions in common
+        with ``org.joda.DateTime``, which should make transitioning fairly
+        straight forward.
 
     All of the methods in this module can accept any of the following DateTime
     types:
@@ -55,28 +47,26 @@ if 'org.eclipse.smarthome.automation' in sys.modules or 'org.openhab.core.automa
     remove_java_converter(datetime.date)
     remove_java_converter(datetime.datetime)
 
-from java.time import LocalDateTime as javaLocalDateTime, ZonedDateTime as javaDateTime
-from java.time import ZoneId as javaZoneId, ZoneOffset as javaZoneOffset
+from java.time import LocalDateTime, ZonedDateTime
+from java.time import ZoneId, ZoneOffset
 from java.time.format import DateTimeFormatter
 from java.time.temporal.ChronoUnit import DAYS, HOURS, MINUTES, SECONDS
-from datetime import datetime as pythonDateTime, date as pythonDate
-from org.joda.time import DateTime as jodaDateTime, DateTimeZone as jodaDateTimeZone
-from java.util import Calendar as utilCalendar, Date as utilDateTime, TimeZone as utilTimeZone
+from datetime import datetime
+from org.joda.time import DateTime, DateTimeZone
+from java.util import Calendar, Date, TimeZone
 from org.eclipse.smarthome.core.library.types import DateTimeType as eclipseDateTime
 
 try:
     # if the compat1.x bundle is not installed the 1.x DateTimeType is not available
     from org.openhab.core.library.types import DateTimeType as legacyDateTime
 except:
-    pass
+    legacyDateTime = None
 
 __all__ = [
     "format_date",
     "days_between", "hours_between", "minutes_between", "seconds_between",
-    "to_java_zoneddatetime", "toJTime", "javaDateTime",
-    "to_java_calendar", "toJCal",
-    "to_python_datetime", "toPyDT", "pythonDateTime", "pythonTimezone",
-    "to_joda_datetime", "toJodaDT", "jodaDateTime"
+    "to_java_zoneddatetime", "to_java_calendar", "to_python_datetime",
+    "to_joda_datetime"
 ]
 
 
@@ -91,7 +81,7 @@ def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
         .. code-block::
 
             sendCommand("date_item", format_date(date_value))
-            log.info("The time is currently: {}".format(format_date(javaDateTime.now())))
+            log.info("The time is currently: {}".format(format_date(ZonedDateTime.now())))
 
     Args:
         value: Any known DateTime value.
@@ -113,7 +103,7 @@ def days_between(value_from, value_to, calendar_days=False):
     Examples:
         .. code-block::
 
-            span_days = days_between(items["date_item"], javaDateTime.now())
+            span_days = days_between(items["date_item"], ZonedDateTime.now())
 
     Args:
         value_from: Value to start from.
@@ -133,7 +123,7 @@ def hours_between(value_from, value_to):
     Examples:
         .. code-block::
 
-            span_hours = hours_between(items["date_item"], javaDateTime.now())
+            span_hours = hours_between(items["date_item"], ZonedDateTime.now())
 
     Args:
         value_from: Value to start from.
@@ -148,7 +138,7 @@ def minutes_between(value_from, value_to):
     Examples:
         .. code-block::
 
-            span_minutes = minutes_between(items["date_item"], javaDateTime.now())
+            span_minutes = minutes_between(items["date_item"], ZonedDateTime.now())
 
     Args:
         value_from: Value to start from.
@@ -163,7 +153,7 @@ def seconds_between(value_from, value_to):
     Examples:
         .. code-block::
 
-            span_seconds = seconds_between(items["date_item"], javaDateTime.now())
+            span_seconds = seconds_between(items["date_item"], ZonedDateTime.now())
 
     Args:
         value_from: Value to start from.
@@ -173,7 +163,7 @@ def seconds_between(value_from, value_to):
 
 def to_java_zoneddatetime(value):
     """Converts any known DateTime type to a ``java.time.ZonedDateTime`` type.
-    This is the same type as ``date.javaDateTime``.
+    This is the same type as ``date.ZonedDateTime``.
 
     Examples:
         .. code-block::
@@ -191,17 +181,17 @@ def to_java_zoneddatetime(value):
     Raises:
         TypeError: If type of ``value`` is not recognized by this package.
     """
-    if isinstance(value, javaDateTime):
+    if isinstance(value, ZonedDateTime):
         return value
-    timezone_id = javaZoneId.systemDefault()
+    timezone_id = ZoneId.systemDefault()
     # java.time.LocalDateTime
-    if isinstance(value, javaLocalDateTime):
+    if isinstance(value, LocalDateTime):
         return value.atZone(timezone_id)
     # python datetime
-    if isinstance(value, pythonDateTime):
+    if isinstance(value, datetime):
         if value.tzinfo is not None:
-            timezone_id = javaZoneId.ofOffset("GMT", javaZoneOffset.ofTotalSeconds(int(value.utcoffset().total_seconds())))
-        return javaDateTime.of(
+            timezone_id = ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(int(value.utcoffset().total_seconds())))
+        return ZonedDateTime.of(
             value.year,
             value.month,
             value.day,
@@ -212,13 +202,13 @@ def to_java_zoneddatetime(value):
             timezone_id
         )
     # java.util.Calendar
-    if isinstance(value, utilCalendar):
-        return javaDateTime.ofInstant(value.toInstant(), javaZoneId.of(value.getTimeZone().getID()))
+    if isinstance(value, Calendar):
+        return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.of(value.getTimeZone().getID()))
     # java.util.Date
-    if isinstance(value, utilDateTime):
-        return javaDateTime.ofInstant(value.toInstant(), javaZoneId.ofOffset("GMT", javaZoneOffset.ofHours(0 - value.getTimezoneOffset() / 60)))
+    if isinstance(value, Date):
+        return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.ofOffset("GMT", ZoneOffset.ofHours(0 - value.getTimezoneOffset() / 60)))
     # Joda DateTime
-    if isinstance(value, jodaDateTime):
+    if isinstance(value, DateTime):
         return value.toGregorianCalendar().toZonedDateTime()
     # openHAB DateTimeType
     if isinstance(value, eclipseDateTime):
@@ -231,7 +221,7 @@ def to_java_zoneddatetime(value):
 
 def to_python_datetime(value):
     """Converts any known DateTime type to a Python ``datetime.datetime`` type.
-    This is the same type as ``date.pythonDateTime``.
+    This is the same type as ``date.datetime``.
 
     Examples:
         .. code-block::
@@ -249,11 +239,11 @@ def to_python_datetime(value):
     Raises:
         TypeError: If type of ``value`` is not recognized by this package.
     """
-    if isinstance(value, pythonDateTime):
+    if isinstance(value, datetime):
         return value
 
     value_zoneddatetime = to_java_zoneddatetime(value)
-    return pythonDateTime(
+    return datetime(
         value_zoneddatetime.getYear(),
         value_zoneddatetime.getMonthValue(),
         value_zoneddatetime.getDayOfMonth(),
@@ -287,7 +277,7 @@ class pythonTimezone(datetime.tzinfo):
 
 def to_joda_datetime(value):
     """Converts any known DateTime type to a ``org.joda.time.DateTime`` type.
-    This is the same type as ``date.jodaDateTime``.
+    This is the same type as ``date.DateTime``.
 
     Examples:
         .. code-block::
@@ -305,13 +295,13 @@ def to_joda_datetime(value):
     Raises:
         TypeError: If type of ``value`` is not recognized by this package.
     """
-    if isinstance(value, jodaDateTime):
+    if isinstance(value, DateTime):
         return value
 
     value_zoneddatetime = to_java_zoneddatetime(value)
-    return jodaDateTime(
+    return DateTime(
         value_zoneddatetime.toInstant().toEpochMilli(),
-        jodaDateTimeZone.forID(value_zoneddatetime.getZone().getId())
+        DateTimeZone.forID(value_zoneddatetime.getZone().getId())
     )
 
 def to_java_calendar(value):
@@ -333,22 +323,16 @@ def to_java_calendar(value):
     Raises:
         TypeError: If type of ``value`` is not recognized by this package.
     """
-    if isinstance(value, utilCalendar):
+    if isinstance(value, Calendar):
         return value
 
     value_zoneddatetime = to_java_zoneddatetime(value)
-    new_calendar = utilCalendar.getInstance(utilTimeZone.getTimeZone(value_zoneddatetime.getZone().getId()))
-    new_calendar.set(utilCalendar.YEAR, value_zoneddatetime.getYear())
-    new_calendar.set(utilCalendar.MONTH, value_zoneddatetime.getMonthValue() - 1)
-    new_calendar.set(utilCalendar.DAY_OF_MONTH, value_zoneddatetime.getDayOfMonth())
-    new_calendar.set(utilCalendar.HOUR_OF_DAY, value_zoneddatetime.getHour())
-    new_calendar.set(utilCalendar.MINUTE, value_zoneddatetime.getMinute())
-    new_calendar.set(utilCalendar.SECOND, value_zoneddatetime.getSecond())
-    new_calendar.set(utilCalendar.MILLISECOND, int(value_zoneddatetime.getNano() / 1000000))
+    new_calendar = Calendar.getInstance(TimeZone.getTimeZone(value_zoneddatetime.getZone().getId()))
+    new_calendar.set(Calendar.YEAR, value_zoneddatetime.getYear())
+    new_calendar.set(Calendar.MONTH, value_zoneddatetime.getMonthValue() - 1)
+    new_calendar.set(Calendar.DAY_OF_MONTH, value_zoneddatetime.getDayOfMonth())
+    new_calendar.set(Calendar.HOUR_OF_DAY, value_zoneddatetime.getHour())
+    new_calendar.set(Calendar.MINUTE, value_zoneddatetime.getMinute())
+    new_calendar.set(Calendar.SECOND, value_zoneddatetime.getSecond())
+    new_calendar.set(Calendar.MILLISECOND, int(value_zoneddatetime.getNano() / 1000000))
     return new_calendar
-
-# aliases
-toJTime = to_java_zoneddatetime     #: alias of ``to_java_zoneddatetime``.
-toJCal = to_java_calendar           #: alias of ``to_java_calendar``.
-toPyDT = to_python_datetime         #: alias of ``to_python_datetime``.
-toJodaDT = to_joda_datetime         #: alias of ``to_joda_datetime``.
