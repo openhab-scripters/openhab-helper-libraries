@@ -1050,7 +1050,7 @@ Read/Add/Remove Item metadata
 
     .. group-tab:: Python
 
-            See the examples in the module... :doc:`Python/Core/Component Scripts/Packages and Modules/metadata`
+            See the examples in the module... :doc:`../Python/Core/Packages and Modules/metadata`
 
     .. group-tab:: JavaScript
 
