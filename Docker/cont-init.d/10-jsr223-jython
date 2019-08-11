@@ -1,0 +1,52 @@
+#!/bin/bash -x
+
+JYTHON_VERSION="2.7.0"
+JYTHON_HOME="${OPENHAB_CONF}/automation/jython"
+
+export EXTRA_JAVA_OPTS="${EXTRA_JAVA_OPTS} -Xbootclasspath/a:${JYTHON_HOME}/jython.jar -Dpython.home=${JYTHON_HOME} -Dpython.path=${JYTHON_HOME}/Lib:${OPENHAB_CONF}/automation/lib/python"
+
+
+function cleanup_compiled_classes() {
+  # Clears Jython's compiled classes
+  if [ -d "${OPENHAB_CONF}/automation/lib/python" ]; then
+    find ${OPENHAB_CONF}/automation/lib/python -name '*\$py.class' -delete
+  fi
+  if [ -d "${JYTHON_HOME}/Lib" ]; then
+    find ${JYTHON_HOME}/Lib -name '*\$py.class' -delete
+  fi
+}
+
+function download_jython_libraries() {
+  # Download and install Jython
+  if [ ! -d "${JYTHON_HOME}" ]; then
+    mkdir -p "${JYTHON_HOME}"
+    wget -nv -O /tmp/jython-installer.jar http://central.maven.org/maven2/org/python/jython-installer/${JYTHON_VERSION}/jython-installer-${JYTHON_VERSION}.jar
+    java -jar /tmp/jython-installer.jar -s -d ${JYTHON_HOME}/ -t standard -e demo doc src
+    rm /tmp/jython-installer.jar
+    # chmod -R o+w ${JYTHON_HOME}
+    chown -R openhab:openhab ${JYTHON_HOME}
+  fi
+}
+
+function enable_next_generation_rule_engine() {
+  # Enable the Next Generation Rule Engine
+  set +e
+  MISC_LINE=$(grep '^[[:space:]]\?misc' ${OPENHAB_CONF}/services/addons.cfg)
+  if [ $? -eq 0 ]; then
+    # ensure we have ruleengine enabled
+    if [[ ${MISC_LINE} == *"ruleengine"* ]]; then
+      echo "New rule engine is already included in the addons.cfg"
+    else
+      sed -i 's/misc\s\?=\s\?/misc = ruleengine,/' ${OPENHAB_CONF}/services/addons.cfg
+    fi
+  else
+    # Just append last line
+    echo "Append 'misc = ruleengine' to ${OPENHAB_CONF}/services/addons.cfg"
+    echo "misc = ruleengine" >> ${OPENHAB_CONF}/services/addons.cfg
+  fi
+}
+
+
+download_jython_libraries
+cleanup_compiled_classes
+enable_next_generation_rule_engine
