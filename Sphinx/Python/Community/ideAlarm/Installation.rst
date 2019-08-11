@@ -62,7 +62,7 @@ Installation of the ideAlarm package
 * Edit the configuration dictionary ``idealarm_configuration`` that you've previously inserted into the openhab-helper-libraries configuration file.
   See :ref:`Python/Community/IdeAlarm/Configuration:IdeAlarm Configuration` for details.
   Before saving you might want to copy and paste the contents of your configuration file into the form on `PythonBuddy <https://pythonbuddy.com/>`_ to verify that the Python syntax is valid.
-* Save and reload the openhab-helper-libraries configuration as described in :ref:`Python/Reference:Modifying and Reloading Modules`.
+* Save and reload the openhab-helper-libraries configuration as described in :ref:`Python/Reference:Modifying and Reloading Packages or Modules`.
 * Create a custom library script.
 
     * The custom library script defines what custom actions that will occurr in your system for some specific alarm system events.
