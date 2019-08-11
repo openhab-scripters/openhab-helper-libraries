@@ -62,6 +62,10 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 .. |core_step_11| replace::
     Check out the :doc:`First Steps` page for what to do next.
 
+.. |jython_other_verions| replace::
+    A full installation of Jython can also be used, but the paths above would need to be modified.
+    Jython 2.7.1 and 2.7.2a1+ will also work, but 2.7.0 has proven to be very stable.
+
 .. tabs::
 
     .. group-tab:: Python
@@ -76,44 +80,75 @@ Instructions for installation in a Docker container are available :doc:`here <Do
         #. |core_step_8a|
            For example, in ``/automation/lib/python/``, rename the file ``configuration.py.example`` to ``configuration.py``.
            |core_step_8b|
-        #. Add/modify the EXTRA_JAVA_OPTS.
+        #. Add/modify the Python registry file.
            These examples assume that you will be using the standalone Jython 2.7.0 jar in the next step.
-           Changes to the EXTRA_JAVA_OPTS require an openHAB restart.
 
            .. tabs::
 
-               .. group-tab:: Using an ``/etc/default/openhab2`` file
+               .. group-tab:: Package Install
 
-                   This option is typically used with a package repository openHAB installation (includes openHABian).
-                   If creating a new file, remember to set the permissions so that the `openhab` account has at least read access.
-                   If a file already exists and there is an EXTRA_JAVA_OPTS variable, add a space and append everything in quotes.
+                   The paths shown here are for Linux package repository openHAB installations, including openHABian.
 
-                   .. code-block:: none
+                   Edit the file ``/usr/share/openhab2/runtime/lib/ext/registry`` using your preferred text editor,
+                   making directories as needed.
 
-                       EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
+                   If creating a new file, remember to set the permissions so that the ``openhab`` account has at least read access.
+                   If a file already exists and there is a ``python.path`` variable, add a semi-colon and append the following.
 
-               .. group-tab:: Using the ``start.sh`` script
+                   .. code-block:: Text
 
-                   This option is typically used with a manual openHAB installation on Linux.
+                       python.path=/etc/openhab2/automation/lib/python
 
-                   .. code-block:: none
+               .. group-tab:: Manual Install
 
-                       # Add to the top of the file
-                       export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
+                   The paths shown here are the defaults for manual openHAB installations on Linux.
 
-               .. group-tab:: Using the ``start.bat`` script
+                   Edit the file ``/opt/openhab2/runtime/lib/ext/registry`` using your preferred text editor,
+                   making directories as needed.
 
-                   This option is for a manual openHAB installation on Windows.
-                   If you are *not* using OH 2.5, 2.5M2, S1604, or newer, you will first need to update your ``C:\openhab2\runtime\bin\setenv.bat`` file with the `changes in the current file <https://github.com/openhab/openhab-distro/blob/master/distributions/openhab/src/main/resources/bin/setenv.bat#L121>`_.
+                   If creating a new file, remember to set the permissions so that the ``openhab`` account has at least read access.
+                   If a file already exists and there is a ``python.path`` variable, add a semi-colon and append the following.
 
-                   .. code-block:: none
+                   .. code-block:: Text
 
-                       REM Add to the top of the file
-                       set EXTRA_JAVA_OPTS=-Xbootclasspath/a:C:\openhab2\conf\automation\jython\jython-standalone-2.7.0.jar -Dpython.home=C:\openhab2\conf\automation\jython -Dpython.path=C:\openhab2\conf\automation\lib\python
+                       python.path=/opt/openhab2/conf/automation/lib/python
 
-        #. Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to the path specified above in the EXTRA_JAVA_OPTS.
-           A full installation of Jython can also be used, but the paths above would need to be modified.
-           Jython 2.7.1 and 2.7.2a1+ will also work, but 2.7.0 has proven to be very stable.
+               .. group-tab:: Windows Install
+
+                   The paths shown here are examples for Windows openHAB installations.
+
+                   Edit the file ``C:\openhab2\runtime\lib\ext\registry`` using your preferred text editor,
+                   making directories as needed.
+
+                   If a file already exists and there is a ``python.path`` variable, add a semi-colon and append the following.
+
+                   .. code-block:: Text
+
+                       python.path=C:\openhab2\conf\automation\lib\python
+
+        #. .. tabs::
+
+               .. group-tab:: Package Install
+
+                   Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to
+                   ``/usr/share/openhab2/runtime/lib/ext/``
+
+                   |jython_other_verions|
+
+               .. group-tab:: Manual Install
+
+                   Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to
+                   ``/opt/openhab2/runtime/lib/ext/``
+
+                   |jython_other_verions|
+
+               .. group-tab:: Windows Install
+
+                   Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to
+                   ``C:\openhab2\runtime\lib\ext\``
+
+                   |jython_other_verions|
+
         #. Copy the ``/Script Examples/Python/hello_world.py`` script to ``/automation/jsr223/python/personal/``.
         #. |core_step_9|
         #. |core_step_10|

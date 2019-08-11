@@ -17,7 +17,7 @@ Docker
                 
             .. code-block:: bash
 
-                wget https://github.com/OH-Jython-Scripters/openhab2-jython/archive/master.zip
+                wget https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip
                 unzip master.zip
                 mv openhab2-jython-master/automation conf/
 
@@ -31,31 +31,18 @@ Docker
             .. code-block:: bash
 
                 curl http://search.maven.org/remotecontent?filepath=org/python/jython-standalone/2.7.0/jython-standalone-2.7.0.jar -o jython-standalone-2.7.0.jar
-                mkdir conf/automation/jython
-                mv jython-standalone-2.7.0.jar conf/automation/jython/
+                mkdir libext
+                mv jython-standalone-2.7.0.jar libext/
+                echo "python.path=/openhab/conf/automation/lib/python" > libext/registry
 
-            Again, the ``conf`` directory above is the directory that's mounted in openHAB.
+            The directory ``libext`` should be mounted into the openHAB container at ``/openhab/runtime/lib/ext``.
+            The echo command adds the Python path to the registry file that is read when Jython is loaded.
 
         #.  Finally, copy over the ``hello_world.py`` script so we can see things happening in the logs.
 
             .. code-block:: bash
 
                 cp openhab2-jython-master/Script\ Examples/Python/hello_world.py conf/automation/jsr223/python/personal
-
-        Docker Environment
-
-        #.  When starting the docker container, include the environment variable as follows:
-
-            .. code-block:: bash
-
-                -e "EXTRA_JAVA_OPTS=-Xbootclasspath/a:/openhab/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/openhab/conf/automation/jython -Dpython.path=/openhab/conf/automation/lib/python"
-
-            Or, if you are using a compose file, include this:
-
-            .. code-block:: bash
-
-                environment:
-                EXTRA_JAVA_OPTS: "-Xbootclasspath/a:/openhab/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/openhab/conf/automation/jython -Dpython.path=/openhab/conf/automation/lib/python"
 
         #.  Restart openHAB.
             You should see something such as this in the logs:
@@ -70,7 +57,7 @@ Docker
 
                 2018-10-17 02:24:40.077 [INFO ] [eclipse.smarthome.model.script.Rules] - JSR223: This is a 'hello world!' from a Jython rule (decorator): Cron
 
-        Building image from Dockerfile
+        Building image from Dockerfile *(outdated)*
 
         In the `/Docker/Python/` directory, there is an example Dockerfile which will add Jython support to the given container version.
         It includes a script to enable the `Next-Generation Rule Engine`_ in the addons.cfg and adds necessary entries to ``EXTRA_JAVA_OPTS`` (including setting python.path to ``/openhab/conf/automation/lib/python/``).
