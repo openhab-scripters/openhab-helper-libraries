@@ -5,6 +5,7 @@ System init and uninit
 """
 
 from community.eos import log, config
+from community.eos.update import update_eos
 from community.eos.util import *
 from community.eos.constants import *
 
@@ -161,6 +162,7 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
         return
 
     log.info("Eos initialized")
+    update_eos()
 
 
 @log_traceback

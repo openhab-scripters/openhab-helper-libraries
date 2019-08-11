@@ -12,12 +12,14 @@ from core.log import log_traceback
 from core.metadata import get_value
 from core.utils import sendCommandCheckFirst, validate_item
 
+__all__ = [ "update_eos", "update_scene", "update_light", "update_group" ]
+
 
 
 @log_traceback
 def update_eos():
     """
-    Publicly available function to update all Eos controlled lights
+    Public function to update all Eos controlled lights
     """
     update_group(validate_item(config.master_group_name))
 
@@ -32,7 +34,7 @@ def update_scene(item):
         except: continue
 
     for group_item in get_group_items(get_item_eos_group(item)):
-        if get_value(group_item.name, META_NAME_EOS).lower() not in META_STRING_FALSE:
+        if str(get_value(group_item.name, META_NAME_EOS)).lower() not in META_STRING_FALSE:
             # set children to "parent" scene unless following is turned off
             if resolve_type(get_metadata(group_item.name, META_NAME_EOS).get("config", {}).get(META_KEY_FOLLOW_PARENT, True)):
                 if not sendCommandCheckFirst(get_scene_item(group_item), SCENE_PARENT):
@@ -52,7 +54,7 @@ def update_light(item):
     except for the default scenes ``on`` and ``off``. The default values for
     built-in scenes can be customized in ``configuration.py`` if desired.
     """
-    if get_value(item.name, META_NAME_EOS).lower() in META_STRING_FALSE:
+    if str(get_value(item.name, META_NAME_EOS)).lower() in META_STRING_FALSE:
         log.debug("Skipping update for light '{name}' as it is disabled".format(name=item.name))
         return
     else:
@@ -73,7 +75,7 @@ def update_light(item):
 
 @log_traceback
 def update_group(target, only_if_scene_parent=False):
-    if get_value(target.name, META_NAME_EOS).lower() in META_STRING_FALSE:
+    if str(get_value(target.name, META_NAME_EOS)).lower() in META_STRING_FALSE:
         log.debug("Skipping update for group '{name}' as it is disabled".format(name=target.name))
         return
     else:
