@@ -1,0 +1,165 @@
+#!/bin/bash -x
+
+OPENHAB_AUTOMATION="${OPENHAB_CONF}/automation"
+OPENHAB_HL_AUTOMATION="${OPENHAB_AUTOMATION}/openhab-helper-libraries/Core/automation"
+OPENHAB_HL_URL="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip"
+
+declare -A LANGUAGES=( ["groovy"]="groovy" ["javascript"]="js" ["python"]="py" )
+
+function verify_directory_structure() {
+
+  # before making any changes let's first verify that we can make the required changes
+  verify_directory "${OPENHAB_AUTOMATION}"
+  for SUBDIR in jsr223 lib; do
+    verify_directory "${OPENHAB_AUTOMATION}/${SUBDIR}"
+    for LANGUAGE in "${!LANGUAGES[@]}"; do
+      verify_directory "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/community"
+      verify_directory "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/personal"
+
+      verify_symlink "${OPENHAB_AUTOMATION}/${SUBDIR}/${LANGUAGE}/core" "${OPENHAB_HL_AUTOMATION}/${SUBDIR}/${LANGUAGE}/core"
+    done
+  done
+}
+
+function create_directory_structure() {
+  create_directory "${OPENHAB_AUTOMATION}"
+  for SUBDIR in jsr223 lib; do
+    create_directory "${OPENHAB_AUTOMATION}/${SUBDIR}"
+    for LANGUAGE in "${!LANGUAGES[@]}"; do
+      create_directory "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/community"
+      chmod g+w "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/community"
+      create_directory "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/personal"
+      chmod g+w "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/personal"
+
+      create_symlink "${OPENHAB_AUTOMATION}/${SUBDIR}/${LANGUAGE}/core" "${OPENHAB_HL_AUTOMATION}/${SUBDIR}/${LANGUAGE}/core"
+    done
+  done
+}
+
+function verify_directory() {
+  local DIRECTORY=$1
+  if [ -L "${DIRECTORY}" ]; then
+    echo "ERROR: Cannot create directory ${DIRECTORY}. A symlink with that link name already exists."
+    exit 1
+  elif [ -f "${DIRECTORY}" ]; then
+    echo "ERROR: Cannot create directory ${DIRECTORY}. A file with that name already exists."
+    exit 1
+  fi
+}
+
+function create_directory() {
+  local DIRECTORY=$1
+  if [ ! -d "${DIRECTORY}" ]; then
+    mkdir -p "${DIRECTORY}"
+    if [ $? -ne 0 ]; then
+      echo "ERROR: Could not create directory ${DIRECTORY}."
+      exit 1
+    fi
+  else
+    echo "Directory ${DIRECTORY} already exists."
+  fi
+}
+
+function verify_symlink() {
+  local LINK_NAME=$1
+  local TARGET=$2
+  if [ -L "${LINK_NAME}" ]; then
+    local LINK_TARGET="$(readlink ${LINK_NAME})"
+    if [ "${LINK_TARGET}" != "${TARGET}" ]; then
+      echo "ERROR: A symlink with ${LINK_NAME} already exists pointing to a different target."
+      exit 1
+    fi
+  elif [ -e "${LINK_NAME}" ]; then
+    echo "ERROR: File or directory with name ${LINK_NAME} already exists."
+    exit 1
+  fi
+}
+
+function create_symlink() {
+  local LINK_NAME=$1
+  local TARGET=$2
+  if [ ! -L "${LINK_NAME}" ]; then
+    ln -s "${TARGET}" "${LINK_NAME}"
+    if [ $? -ne 0 ]; then
+      echo "ERROR: Could not create symlink ${LINK_NAME} to ${TARGET}."
+      exit 1
+    fi
+  else
+     echo "Symlink ${LINK_NAME} already exists."
+  fi
+}
+
+function create_initial_configuration() {
+  for LANGUAGE in "${!LANGUAGES[@]}"; do
+    if [ ! -f "${OPENHAB_AUTOMATION}/lib/${LANGUAGE}/configuration.${LANGUAGES[$LANGUAGE]}" ]; then
+      cp "${OPENHAB_HL_AUTOMATION}/lib/${LANGUAGE}/configuration.${LANGUAGES[$LANGUAGE]}.example" "${OPENHAB_AUTOMATION}/lib/${LANGUAGE}/configuration.${LANGUAGES[$LANGUAGE]}"
+    fi
+  done
+}
+
+function download_helper_libraries() {
+  # Download the Helper Libraries for openHAB Scripted Automation
+  echo "Downloading openhab-helper-libraries-master archive from Github."
+  wget -nv -O /tmp/openhab-helper-libraries-master.zip "${OPENHAB_HL_URL}"
+  if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to download the helper libraries form Github."
+    exit 1
+  fi
+
+  unzip -q /tmp/openhab-helper-libraries-master.zip -d /tmp -x \
+    "openhab-helper-libraries-master/.github/*" \
+    "openhab-helper-libraries-master/.gitignore" \
+    "openhab-helper-libraries-master/docs/*" \
+    "openhab-helper-libraries-master/Docker/*" \
+    "openhab-helper-libraries-master/Sphinx/*"
+  if [ $? != 0 ]; then
+    echo "ERROR: Failed to extract the helper libraries zip file."
+    exit 1
+  fi
+
+  rm /tmp/openhab-helper-libraries-master.zip
+}
+
+function install_helper_libraries() {
+  mv /tmp/openhab-helper-libraries-master "${OPENHAB_AUTOMATION}/openhab-helper-libraries"
+  # update ownership
+  chown -R openhab:openhab "${OPENHAB_AUTOMATION}"
+}
+
+function enable_next_generation_rule_engine() {
+  # Enable the Next Generation Rule Engine
+  set +e
+  MISC_LINE=$(grep '^[[:space:]]\?misc' ${OPENHAB_CONF}/services/addons.cfg)
+  if [ $? -eq 0 ]; then
+    # ensure we have ruleengine enabled
+    if [[ ${MISC_LINE} == *"ruleengine"* ]]; then
+      echo "New rule engine is already included in the addons.cfg."
+    else
+      sed -i 's/misc\s\?=\s\?/misc = ruleengine,/' ${OPENHAB_CONF}/services/addons.cfg
+    fi
+  else
+    # Just append last line
+    echo "Append 'misc = ruleengine' to ${OPENHAB_CONF}/services/addons.cfg."
+    echo "misc = ruleengine" >> ${OPENHAB_CONF}/services/addons.cfg
+  fi
+}
+
+
+if [ ! -d "${OPENHAB_AUTOMATION}/openhab-helper-libraries" ]; then
+  # verify if installation is possible
+  verify_directory_structure
+  download_helper_libraries
+
+  # make the required changes and install the libraries
+  create_directory_structure
+  install_helper_libraries
+
+  # create initial configuration if required
+  create_initial_configuration
+
+  # enable the next genereation rule engine if required
+  enable_next_generation_rule_engine
+else
+  echo "Helper Libraries for openHAB Scripted Automation already installed."
+fi
+
