@@ -51,7 +51,6 @@ def menu_navigate(root_group_name, host, back_group=None):
     """
     Display the Navigation menu
     """
-    root_group = validate_item(root_group_name, host)
     menu_message = "Eos Editor > Navigation Menu"
     answer = None
     pointed_at = None
@@ -59,6 +58,7 @@ def menu_navigate(root_group_name, host, back_group=None):
     while not exit_loop:
         echo("Loading...")
 
+        root_group = validate_item(root_group_name, host)
         eos_lights = get_light_items(root_group, host)
         eos_groups = get_group_items(root_group)
         other_items = get_other_items(root_group, host)
@@ -308,24 +308,26 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         # returns true if value will be used to evalute the current scene
         property_map = {
             SCENE_TYPE_FIXED: [
-                META_KEY_STATE, META_KEY_MOTION_SOURCE,
-                META_KEY_MOTION_ACTIVE, META_KEY_MOTION_STATE
+                META_KEY_STATE
             ],
             SCENE_TYPE_THRESHOLD: [
                 META_KEY_LEVEL_SOURCE, META_KEY_LEVEL_THRESHOLD,
-                META_KEY_STATE_ABOVE, META_KEY_STATE_BELOW,
-                META_KEY_MOTION_SOURCE, META_KEY_MOTION_ACTIVE,
-                META_KEY_MOTION_STATE
+                META_KEY_STATE_ABOVE, META_KEY_STATE_BELOW
             ],
             SCENE_TYPE_SCALED: [
                 META_KEY_LEVEL_SOURCE, META_KEY_LEVEL_HIGH,
                 META_KEY_LEVEL_LOW, META_KEY_STATE_HIGH, META_KEY_STATE_LOW,
-                META_KEY_STATE_ABOVE, META_KEY_STATE_BELOW,
-                META_KEY_MOTION_SOURCE, META_KEY_MOTION_ACTIVE,
-                META_KEY_MOTION_STATE
+                META_KEY_STATE_ABOVE, META_KEY_STATE_BELOW
             ]
         }
-        return key in property_map.get(scene_type, {}) and light_type and scene
+        if key in [META_KEY_MOTION_SOURCE, META_KEY_MOTION_ACTIVE, META_KEY_MOTION_STATE, META_KEY_MOTION_SCENE] \
+                and META_KEY_MOTION_SOURCE in settings_added:
+            if key == META_KEY_MOTION_SCENE and META_KEY_MOTION_STATE in settings_added:
+                return False
+            else:
+                return True
+        else:
+            return key in property_map.get(scene_type, {}) and light_type and scene
 
     def get_missing_scene_settings():
         # return a list of keys for required settings missing for this scene
@@ -346,6 +348,11 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         for key in scene_settings_map[scene_type]:
             if key not in settings_added:
                 missing.append(key)
+        if META_KEY_MOTION_SOURCE in settings_added:
+            if META_KEY_MOTION_ACTIVE not in settings_added: missing.append(META_KEY_MOTION_ACTIVE)
+            if META_KEY_MOTION_STATE not in settings_added and META_KEY_MOTION_SCENE not in settings_added:
+                missing.append(META_KEY_MOTION_STATE)
+                missing.append(META_KEY_MOTION_SCENE)
         return missing
 
     if not item: return
@@ -798,5 +805,6 @@ def prompt_edit_setting(message, key, host, instructions=[], default=""):
             # META_KEY_STATE_LOW = "state_low"
             # META_KEY_MOTION_ACTIVE = "motion_active"
             # META_KEY_MOTION_STATE = "motion_state"
+            # META_KEY_MOTION_SCENE = "motion_scene"
 
     return answer

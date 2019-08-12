@@ -93,17 +93,13 @@ def update_group(target, only_if_scene_parent=False):
 
 
 def get_state_for_scene(item, scene):
-    """Returns state for scene from ``item`` metadata.
-
-    TODO If ``item`` does not have a definition for ``scene`` and ``scene`` is ``on``
-    or ``off`` it will look for look for a default state in configuration, if
-    one is not found the built-in default state will be used.
-
-    See full documentation for scene definitions here.
+    """
+    Returns state for scene for item.
     """
     def constrain(value, min, max):
         return max if value > max else min if value < min else value
 
+    # get Eos Light Type
     light_type = LIGHT_TYPE_MAP.get(item.type.lower(), None)
     if light_type is None:
         log.error("Couldn't get light type for '{name}'".format(name=item.name))
@@ -111,7 +107,40 @@ def get_state_for_scene(item, scene):
     else:
         if config.log_trace: log.debug("Got light type '{type}' for '{name}'".format(type=light_type, name=item.name))
 
-    scene_type = get_scene_type(item, scene, light_type)
+    state = None
+    data = {}
+    data["item"] = get_metadata(item.name, META_NAME_EOS).get("configuration", {})
+    data["group"] = get_metadata(get_item_eos_group(item).name, META_NAME_EOS).get("configuration", {})
+
+    # check for Motion settings
+    motion_source = validate_item(get_scene_setting(item, scene, META_KEY_MOTION_SOURCE, data=data))
+    if motion_source:
+        motion_active = get_scene_setting(item, scene, META_KEY_MOTION_ACTIVE, data=data)
+        motion_state = get_scene_setting(item, scene, META_KEY_MOTION_STATE, data=data)
+        motion_scene = get_scene_setting(item, scene, META_KEY_MOTION_SCENE, data=data)
+        if motion_active is not None and (motion_state is not None or motion_scene):
+            log.debug("Checking Motion trigger for '{name}' for scene '{scene}'".format(name=item.name, scene=scene))
+            if str(motion_source.state) == str(motion_active):
+                log.debug("Motion trigger is active for '{name}' for scene '{scene}'".format(name=item.name, scene=scene))
+                if motion_state is not None:
+                    log.debug("Motion trigger applying fixed state '{motion}' for '{name}' for scene '{scene}'".format(
+                            motion=motion_state, name=item.name, scene=scene))
+                    state = motion_state
+                elif motion_scene:
+                    log.debug("Motion trigger applying scene '{motion}' for '{name}' for scene '{scene}'".format(
+                            motion=motion_scene, name=item.name, scene=scene))
+                    scene = motion_scene
+            else:
+                log.debug("Motion trigger is not active for '{name}' for scene '{scene}'".format(name=item.name, scene=scene))
+        elif motion_active is None:
+            log.warn("Motion triggers require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
+                    key=META_KEY_MOTION_ACTIVE, name=item.name, scene=scene))
+        elif motion_state is None or not motion_scene:
+            log.warn("Motion triggers require '{key_state}' or {key_scene} setting, nothing found for '{name}' for scene '{scene}'".format(
+                    key_state=META_KEY_MOTION_STATE, key_scene=META_KEY_MOTION_SCENE, name=item.name, scene=scene))
+
+    # get Scene Type
+    scene_type = get_scene_type(item, scene, light_type, data=data)
     if scene_type is None:
         log.error("Couldn't get scene type for '{name}'".format(name=item.name))
         return str(item.state)
@@ -119,39 +148,38 @@ def get_state_for_scene(item, scene):
         if config.log_trace: log.debug("Got scene type '{type}' for '{name}'".format(type=scene_type, name=item.name))
 
     # Fixed State type
-    if scene_type == SCENE_TYPE_FIXED:
-        state = get_scene_setting(item, scene, META_KEY_STATE)
+    if scene_type == SCENE_TYPE_FIXED and state is None:
+        state = get_scene_setting(item, scene, META_KEY_STATE, data=data)
         if state is None:
             log.error("Fixed State type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE, name=item.name, scene=scene))
             return str(item.state)
 
     # Threshold type
-    elif scene_type == SCENE_TYPE_THRESHOLD:
-        if not get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE):
+    elif scene_type == SCENE_TYPE_THRESHOLD and state is None:
+        if not get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE, data=data):
             log.error("Threshold type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_LEVEL_SOURCE, name=item.name, scene=scene))
             return str(item.state)
-        level_value = resolve_type(validate_item(get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE)).state)
+        level_value = resolve_type(validate_item(get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE, data=data)).state)
         if isinstance(level_value, str) and level_value.lower() in ["null", "undef"]:
             log.warn("Level item '{key}' for scene '{scene}' for item '{name}' has no value".format(
-                key=get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE), scene=scene, name=item.name))
+                key=get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE, data=data), scene=scene, name=item.name))
             return str(item.state)
-        if config.log_trace: log.debug("Got value '{value}' for level for scene '{scene}' for item '{name}'".format(value=level_value, scene=scene, name=item.name))
 
-        level_threshold = get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD)
+        level_threshold = get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data)
         if level_threshold is None:
             log.error("Threshold type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_LEVEL_THRESHOLD, name=item.name, scene=scene))
             return str(item.state)
 
-        state_above = get_scene_setting(item, scene, META_KEY_STATE_ABOVE)
+        state_above = get_scene_setting(item, scene, META_KEY_STATE_ABOVE, data=data)
         if state_above is None:
             log.error("Threshold type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE_ABOVE, name=item.name, scene=scene))
             return str(item.state)
 
-        state_below = get_scene_setting(item, scene, META_KEY_STATE_BELOW)
+        state_below = get_scene_setting(item, scene, META_KEY_STATE_BELOW, data=data)
         if state_below is None:
             log.error("Threshold type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE_BELOW, name=item.name, scene=scene))
@@ -160,50 +188,46 @@ def get_state_for_scene(item, scene):
         state = state_above if level_value > level_threshold else state_below
 
     # Scaling type
-    elif scene_type == SCENE_TYPE_SCALED and light_type in [LIGHT_TYPE_DIMMER, LIGHT_TYPE_COLOR]:
-        if not get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE):
+    elif scene_type == SCENE_TYPE_SCALED and light_type in [LIGHT_TYPE_DIMMER, LIGHT_TYPE_COLOR] and state is None:
+        if not get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE, data=data):
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_LEVEL_SOURCE, name=item.name, scene=scene))
             return str(item.state)
-        level_value = resolve_type(validate_item(get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE)).state)
+        level_value = resolve_type(validate_item(get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE, data=data)).state)
         if isinstance(level_value, str) and level_value.lower() in ["null", "undef"]:
             log.warn("Level item '{key}' for scene '{scene}' for item '{name}' has no value".format(
-                key=get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE), scene=scene, name=item.name))
+                key=get_scene_setting(item, scene, META_KEY_LEVEL_SOURCE, data=data), scene=scene, name=item.name))
             return str(item.state)
         level_value = float(level_value)
-        if config.log_trace: log.debug("Got value '{value}' for level for scene '{scene}' for item '{name}'".format(value=level_value, scene=scene, name=item.name))
 
-        level_high = get_scene_setting(item, scene, META_KEY_LEVEL_HIGH)
+        level_high = get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data)
         if level_high is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_LEVEL_HIGH, name=item.name, scene=scene))
             return str(item.state)
         level_high = float(level_high)
 
-        level_low = get_scene_setting(item, scene, META_KEY_LEVEL_LOW)
+        level_low = get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data)
         if level_low is None:
             level_low = 0.0
             log.debug("No value for key '{key}' for scene '{scene}' for item '{name}', using default '{value}'".format(
                 key=META_KEY_LEVEL_LOW, scene=scene, name=item.name, value=level_low))
         level_low = float(level_low)
 
-        state_high = get_scene_setting(item, scene, META_KEY_STATE_HIGH)
+        state_high = get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data)
         if state_high is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE_HIGH, name=item.name, scene=scene))
             return str(item.state)
 
-        state_low = get_scene_setting(item, scene, META_KEY_STATE_LOW)
+        state_low = get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data)
         if state_low is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE_LOW, name=item.name, scene=scene))
             return str(item.state)
 
-        state_above = get_scene_setting(item, scene, META_KEY_STATE_ABOVE) or state_high
-        if config.log_trace: log.debug("Got value '{value}' for key '{key}' for scene '{scene}' for item '{name}'".format(value=state_above, key=META_KEY_STATE_ABOVE, scene=scene, name=item.name))
-
-        state_below = get_scene_setting(item, scene, META_KEY_STATE_BELOW) or state_low
-        if config.log_trace: log.debug("Got value '{value}' for key '{key}' for scene '{scene}' for item '{name}'".format(value=state_below, key=META_KEY_STATE_BELOW, scene=scene, name=item.name))
+        state_above = get_scene_setting(item, scene, META_KEY_STATE_ABOVE, data=data) or state_high
+        state_below = get_scene_setting(item, scene, META_KEY_STATE_BELOW, data=data) or state_low
 
         if level_value > level_high:
             state = state_above
@@ -219,7 +243,7 @@ def get_state_for_scene(item, scene):
                 state.append(scale(float(state_low[1]), float(state_high[1])))
                 state.append(scale(float(state_low[2]), float(state_high[2])))
 
-    else:
+    elif state is None:
         log.error("Invalid scene configuration for '{name}' scene '{scene}'".format(name=item.name, scene=scene))
         return str(item.state)
 

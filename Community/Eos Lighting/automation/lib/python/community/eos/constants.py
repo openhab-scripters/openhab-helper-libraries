@@ -7,11 +7,13 @@ Contants used by all modules
 RULE_REINIT_NAME = "Eos Reload Rule"
 RULE_REINIT_DESC = "This rule allows runtime reloading of the Eos System via a switch item"
 RULE_SCENE_NAME = "Eos Scene Rule"
-RULE_SCENE_DESC = "This rule is triggered when any Eos Scene item changes"
+RULE_SCENE_DESC = "This rule is triggered when any Eos Scene changes"
 RULE_LIGHT_NAME = "Eos Light Rule"
-RULE_LIGHT_DESC = "This rule is triggered when any Eos Light item receives an update"
+RULE_LIGHT_DESC = "This rule is triggered when any Eos Light receives an update"
 RULE_LEVEL_SOURCE_NAME = "Eos Level Source Rule"
-RULE_LEVEL_SOURCE_DESC = "This rule is triggered when any Level Source registered to an enabled Eos Light item receives an update"
+RULE_LEVEL_SOURCE_DESC = "This rule is triggered when any Level Source receives an update"
+RULE_MOTION_SOURCE_NAME = "Eos Motion Source Rule"
+RULE_MOTION_SOURCE_DESC = "This rule is triggered when any Motion Source changes"
 
 CONF_KEY_MASTER_GROUP = "eos_master_group"
 CONF_KEY_SCENE_PREFIX = "eos_scene_item_prefix"
@@ -35,6 +37,7 @@ META_KEY_STATE_LOW = "state_low"
 META_KEY_MOTION_SOURCE = "motion_source"
 META_KEY_MOTION_ACTIVE = "motion_active"
 META_KEY_MOTION_STATE = "motion_state"
+META_KEY_MOTION_SCENE = "motion_scene"
 META_KEY_DEPTH_MAP = {
     META_KEY_LEVEL_SOURCE: [1,2,3,4,5,6,7,8,9,10],
     META_KEY_LEVEL_THRESHOLD: [1,2,3,4,5,6,7,8,9,10],
@@ -47,7 +50,8 @@ META_KEY_DEPTH_MAP = {
     META_KEY_STATE_LOW: [1,2,3,5,7,9],
     META_KEY_MOTION_SOURCE: [1,2,3,4,5,6,7,8,9,10],
     META_KEY_MOTION_ACTIVE: [1,2,3,4,5,6,7,8,9,10],
-    META_KEY_MOTION_STATE: [1,2,3,4,5,6,7,8,9,10],
+    META_KEY_MOTION_STATE: [1,2,3,5,7,9],
+    META_KEY_MOTION_SCENE: [1,2,3,4,5,6,7,8,9,10]
 }
 
 LIGHT_TYPE_SWITCH = "switch"
@@ -69,21 +73,24 @@ _global_settings = {
         SCENE_OFF: { META_KEY_STATE: "OFF" },
         META_KEY_STATE: "OFF",
         META_KEY_STATE_ABOVE: "OFF",
-        META_KEY_STATE_BELOW: "ON"
+        META_KEY_STATE_BELOW: "ON",
+        META_KEY_MOTION_SCENE: "on"
     },
     LIGHT_TYPE_DIMMER: {
         SCENE_ON: { META_KEY_STATE: 100 },
         SCENE_OFF: { META_KEY_STATE: 0 },
         META_KEY_STATE: 0,
         META_KEY_STATE_HIGH: 0,
-        META_KEY_STATE_LOW: 100
+        META_KEY_STATE_LOW: 100,
+        META_KEY_MOTION_SCENE: "on"
     },
     LIGHT_TYPE_COLOR: {
         SCENE_ON: { META_KEY_STATE: 100 },
         SCENE_OFF: { META_KEY_STATE: 0 },
         META_KEY_STATE: 0,
         META_KEY_STATE_HIGH: 0,
-        META_KEY_STATE_LOW: 100
+        META_KEY_STATE_LOW: 100,
+        META_KEY_MOTION_SCENE: "on"
     }
 }
 
@@ -126,6 +133,7 @@ itemtypesGroup = (ohcGroupItem, eshGroupItem)
 __all__ = [
     "RULE_REINIT_NAME", "RULE_REINIT_DESC", "RULE_SCENE_NAME", "RULE_SCENE_DESC",
     "RULE_LIGHT_NAME", "RULE_LIGHT_DESC", "RULE_LEVEL_SOURCE_NAME", "RULE_LEVEL_SOURCE_DESC",
+    "RULE_MOTION_SOURCE_NAME", "RULE_MOTION_SOURCE_DESC",
 
     "CONF_KEY_MASTER_GROUP", "CONF_KEY_SCENE_PREFIX", "CONF_KEY_SCENE_SUFFIX",
     "CONF_KEY_GLOBAL_SETTINGS", "CONF_KEY_REINIT_ITEM", "CONF_KEY_LOG_TRACE",
@@ -135,7 +143,7 @@ __all__ = [
     "META_KEY_LEVEL_HIGH", "META_KEY_LEVEL_LOW", "META_KEY_STATE",
     "META_KEY_STATE_ABOVE", "META_KEY_STATE_BELOW", "META_KEY_STATE_HIGH",
     "META_KEY_STATE_LOW", "META_KEY_MOTION_SOURCE", "META_KEY_MOTION_ACTIVE",
-    "META_KEY_MOTION_STATE", "META_KEY_DEPTH_MAP",
+    "META_KEY_MOTION_STATE", "META_KEY_MOTION_SCENE", "META_KEY_DEPTH_MAP",
 
     "LIGHT_TYPE_SWITCH", "LIGHT_TYPE_DIMMER", "LIGHT_TYPE_COLOR", "LIGHT_TYPE_MAP",
 

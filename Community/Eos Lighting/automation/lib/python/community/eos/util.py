@@ -167,7 +167,7 @@ def get_metadata(item_name, namespace):
     metadata = core_get_metadata(item_name, namespace)
     return {"value": metadata.value, "configuration": parse_config(metadata.configuration)} if metadata else {}
 
-def get_scene_setting(item, scene, key, depth=10):
+def get_scene_setting(item, scene, key, data=None, depth=10):
     """
     Gets a setting value by searching:
     Scene in Item > Item > Scene in Light Type in Group > Light Type in Group >
@@ -175,9 +175,9 @@ def get_scene_setting(item, scene, key, depth=10):
     Light Type in Global > Global
     """
     light_type = LIGHT_TYPE_MAP.get(item.type.lower(), None)
-    item_data = get_metadata(item.name, META_NAME_EOS).get("configuration", {})
+    item_data = data["item"] if data else get_metadata(item.name, META_NAME_EOS).get("configuration", {})
     if config.log_trace: log.debug("Got Item data for '{name}': {data}".format(name=item.name, data=item_data))
-    group_data = get_metadata(get_item_eos_group(item).name, META_NAME_EOS).get("configuration", {})
+    group_data = data["group"] if data else get_metadata(get_item_eos_group(item).name, META_NAME_EOS).get("configuration", {})
     if config.log_trace: log.debug("Got Group data for '{name}': {data}".format(name=get_item_eos_group(item).name, data=group_data))
     global_data = config.global_settings
     if config.log_trace: log.debug("Got Global data: {data}".format(name=light_type, data=global_data))
@@ -220,32 +220,32 @@ def get_scene_setting(item, scene, key, depth=10):
             key=key, scene=scene, name=item.name, source=source, value=value))
     return value
 
-def get_scene_type(item, scene, light_type):
+def get_scene_type(item, scene, light_type, data=None):
     # gets the scene type
     for depth in range(1, 11):
         if light_type == LIGHT_TYPE_SWITCH:
-            if get_scene_setting(item, scene, META_KEY_STATE, depth=depth) is not None:
+            if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
                 return SCENE_TYPE_FIXED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, depth=depth) is not None:
+            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
                 return SCENE_TYPE_THRESHOLD
         elif light_type == LIGHT_TYPE_DIMMER:
-            if get_scene_setting(item, scene, META_KEY_STATE, depth=depth) is not None:
+            if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
                 return SCENE_TYPE_FIXED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_STATE_HIGH, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_STATE_LOW, depth=depth) is not None:
+            elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, depth=depth) is not None \
+            or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, depth=depth) is not None \
+            or get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, depth=depth) is not None \
+            or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, depth=depth) is not None:
                 return SCENE_TYPE_SCALED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, depth=depth) is not None:
+            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
                 return SCENE_TYPE_THRESHOLD
         elif light_type == LIGHT_TYPE_COLOR:
-            if get_scene_setting(item, scene, META_KEY_STATE, depth=depth) is not None:
+            if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
                 return SCENE_TYPE_FIXED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_STATE_HIGH, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_STATE_LOW, depth=depth) is not None:
+            elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, depth=depth) is not None \
+            or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, depth=depth) is not None \
+            or get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, depth=depth) is not None \
+            or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, depth=depth) is not None:
                 return SCENE_TYPE_SCALED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, depth=depth) is not None:
+            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
                 return SCENE_TYPE_THRESHOLD
     return None
