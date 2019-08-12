@@ -1,47 +1,48 @@
 """
-This module includes trigger subclasses and function decorators to simplify
+This module includes function decorators and trigger subclasses to simplify
 Jython rule definitions.
 
-Trigger classes for wrapping Automation API (see :ref:`Guides/Rules:Extensions`
-for more details):
-
-* **ItemStateChangeTrigger** - fires when the specified Item's state changes
-* **ItemStateUpdateTrigger** - fires when the specified Item's state is updated
-* **ItemCommandTrigger** - fires when the specified Item receives a Command
-* **ThingStatusChangeTrigger** - fires when the specified Thing's status changes
-* **ThingStatusUpdateTrigger** - fires when the specified Thing's status is updated
-* **ChannelEventTrigger** - fires when a Channel reports an event
-* **CronTrigger** - fires based on cron expression
-* **GenericEventTrigger** - fires when the specified occurs
-* **ItemEventTrigger** (based on "GenericEventTrigger")
-* **ThingEventTrigger** - fires when a Thing reports an event
-* **DirectoryEventTrigger** - fires when directory contents change
-* **ItemRegistryTrigger** - fires when the specified Item event occurs
-* **ItemAddedTrigger** (based on "ItemRegistryTrigger")
-* **ItemRemovedTrigger** (based on "ItemRegistryTrigger")
-* **ItemUpdatedTrigger** (based on "ItemRegistryTrigger")
-* **StartupTrigger** - fires when the rule is activated (implemented in Jython)
-
-The ``when`` decorator simplifies many of these triggers and allows for them
-to be used with natural language, as used in the rules DSL.
+The ``when`` decorator simplifies many of the triggers and allows for them
+to be used with natural language similar to what is used in the rules DSL.
 (see :ref:`Guides/Rules:Decorators` for more details).
 
 .. code-block::
 
     @when("Time cron 55 55 5 * * ?")
-    @when("Item Test_Switch_1 received command OFF")
-    @when("Item Test_Switch_2 received update ON")
     @when("Item Test_String_1 changed from 'old test string' to 'new test string'")
     @when("Item gMotion_Sensors changed")
     @when("Member of gMotion_Sensors changed from ON to OFF")
     @when("Descendent of gContact_Sensors changed from OPEN to CLOSED")
-    @when("Thing kodi:kodi:familyroom changed from ONLINE to OFFLINE")
-    @when("Thing kodi:kodi:familyroom received update ONLINE")
-    @when("Channel astro:sun:local:eclipse#event triggered START")
-    @when("System started")# requires S1566 or newer ('System shuts down' has not been implemented)
+    @when("Item Test_Switch_2 received update ON")
+    @when("Item Test_Switch_1 received command OFF")
+    @when("Thing kodi:kodi:familyroom changed")
+    @when("Thing kodi:kodi:familyroom changed from ONLINE to OFFLINE")# requires S1636, 2.5M2 or newer
+    @when("Thing kodi:kodi:familyroom received update ONLINE")# requires S1636, 2.5M2 or newer
+    @when("Channel astro:sun:local:eclipse#event triggered START")# must use a Channel of kind Trigger
+    @when("System started")# requires S1566, 2.5M2 or newer ('System shuts down' has not been implemented)
 
-    If using a build of openHAB prior to S1566, see :ref:`Guides/Triggers:System Started` for a ``System started`` workaround.
-    For everyone, see :ref:`Guides/Triggers:System Shuts Down` for a method of executing a function when a script is unloaded, symulating a ``System shuts down`` trigger.
+If using a build of openHAB prior to S1566 or 2.5M2, see :ref:`Guides/Triggers:System Started` for a ``System started`` workaround.
+For everyone, see :ref:`Guides/Triggers:System Shuts Down` for a method of executing a function when a script is unloaded, simulating a ``System shuts down`` trigger.
+
+Trigger classes for wrapping Automation API (see :ref:`Guides/Rules:Extensions`
+for more details):
+
+* **CronTrigger** - fires based on cron expression
+* **ItemStateChangeTrigger** - fires when the specified Item's state changes
+* **ItemStateUpdateTrigger** - fires when the specified Item's state is updated
+* **ItemCommandTrigger** - fires when the specified Item receives a Command
+* **GenericEventTrigger** - fires when the specified occurs
+* **ItemEventTrigger** fires when am Item reports an event (based on "GenericEventTrigger")
+* **ThingEventTrigger** - fires when a Thing reports an event (based on "GenericEventTrigger")
+* **ThingStatusChangeTrigger** - fires when the specified Thing's status changes (requires S1636, 2.5M2 or newer)
+* **ThingStatusUpdateTrigger** - fires when the specified Thing's status is updated (requires S1636, 2.5M2 or newer)
+* **ChannelEventTrigger** - fires when a Channel reports an event
+* **DirectoryEventTrigger** - fires when a directory's contents changes
+* **ItemRegistryTrigger** - fires when the specified Item registry event occurs
+* **ItemAddedTrigger** fires when an Item is added (based on "ItemRegistryTrigger")
+* **ItemRemovedTrigger** fires when an Item is removed (based on "ItemRegistryTrigger")
+* **ItemUpdatedTrigger** fires when an Item is updated (based on "ItemRegistryTrigger")
+* **StartupTrigger** - fires when the rule is activated (implemented in Jython and requires S1566, 2.5M2 or newer)
 """
 
 from core.jsr223.scope import itemRegistry, things, scriptExtension
@@ -501,7 +502,7 @@ class DirectoryEventTrigger(Trigger):
         }
         self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID(core.DIRECTORY_TRIGGER_MODULE_ID).withConfiguration(Configuration(config)).build()
 
-def when(target, target_type=None, trigger_type=None, old_state=None, new_state=None):
+def when(target):#, target_type=None, trigger_type=None, old_state=None, new_state=None):
     """
     This function decorator provides the ability to create rule triggers using language similar to the rules DSL.
 
@@ -510,23 +511,21 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
     Examples:
         .. code-block::
 
-            @when("Item Test_Switch_1 received command OFF")
-            @when("Item Test_Switch_2 received update ON")
+            @when("Time cron 55 55 5 * * ?")
             @when("Item Test_String_1 changed from 'old test string' to 'new test string'")
             @when("Item gMotion_Sensors changed")
-            @when("Member of gMotion_Sensors changed to OFF")
-            @when("Descendent of gContact_Sensors changed to ON")
-            @when("Thing kodi:kodi:familyroom changed") #Thing statuses cannot currently be used in triggers
-            @when("Channel astro:sun:local:eclipse#event triggered START")
-            @when("System started") #'System started' requires S1566 or newer, and 'System shuts down' is not available
-            @when("Time cron 55 55 5 * * ?")
+            @when("Member of gMotion_Sensors changed from ON to OFF")
+            @when("Descendent of gContact_Sensors changed from OPEN to CLOSED")
+            @when("Item Test_Switch_2 received update ON")
+            @when("Item Test_Switch_1 received command OFF")
+            @when("Thing kodi:kodi:familyroom changed")
+            @when("Thing kodi:kodi:familyroom changed from ONLINE to OFFLINE")# requires S1636, 2.5M2 or newer
+            @when("Thing kodi:kodi:familyroom received update ONLINE")# requires S1636, 2.5M2 or newer
+            @when("Channel astro:sun:local:eclipse#event triggered START")# must use a Channel of kind Trigger
+            @when("System started")# requires S1566, 2.5M2 or newer ('System shuts down' has not been implemented)
 
     Args:
         target (str): Trigger expression to parse
-        target_type (str): Target type ("Item", "Channel", etc.)
-        trigger_type (str): Trigger type ("changed", "received command", etc.)
-        old_state (str): Old state for "Item changed from" events
-        new_state (str): New state for "changed to", "Item received update/command", and "Channel triggered" events
     """
 
     try:
@@ -549,6 +548,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                     "-to-" if new_state is not None and trigger_type == "changed" else "",
                     "-" if trigger_type == "received update" and new_state is not None else "",
                     new_state if new_state is not None else "")
+                trigger_name = validate_uid(trigger_name)
                 if trigger_type == "received update":
                     function.triggers.append(ItemStateUpdateTrigger(member.name, state=new_state, triggerName=trigger_name).trigger)
                 elif trigger_type == "received command":
@@ -590,17 +590,14 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         def thing_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
-            trigger_name = "Thing-{}-{}{}{}{}{}".format(
-                trigger_target,
-                trigger_type.replace(" ","-"),
-                "-from-{}".format(old_state) if old_state is not None else "",
-                "-to-" if new_state is not None and trigger_type == "changed" else "",
-                "-" if trigger_type == "received update" and new_state is not None else "",
-                new_state if new_state is not None else "")
-            if trigger_type == "changed":
-                function.triggers.append(ThingStatusChangeTrigger(trigger_target, previousStatus=old_state, status=new_state, triggerName=trigger_name).trigger)
+            if new_state is not None or old_state is not None:
+                if trigger_type == "changed":
+                    function.triggers.append(ThingStatusChangeTrigger(trigger_target, previousStatus=old_state, status=new_state, triggerName=trigger_name).trigger)
+                else:
+                    function.triggers.append(ThingStatusUpdateTrigger(trigger_target, status=new_state, triggerName=trigger_name).trigger)
             else:
-                function.triggers.append(ThingStatusUpdateTrigger(trigger_target, status=new_state, triggerName=trigger_name).trigger)
+                event_types = "ThingStatusInfoChangedEvent" if trigger_type == "changed" else "ThingStatusInfoEvent"
+                function.triggers.append(ThingEventTrigger(trigger_target, event_types, triggerName=trigger_name).trigger)
             log.debug("when: Created thing_trigger: [{}]".format(trigger_name))
             return function
 
@@ -611,8 +608,13 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
             log.debug("when: Created channel_trigger: [{}]".format(trigger_name))
             return function
 
+        target_type = None
         trigger_target = None
+        trigger_type = None
+        old_state = None
+        new_state = None
         trigger_name = None
+
         if isValidExpression(target):
             # a simple cron target was used, so add a default target_type and trigger_target (Time cron XXXXX)
             target_type = "Time"
@@ -622,7 +624,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
         else:
             inputList = split(target)
             if len(inputList) > 1:
-                # target_type target [trigger_type] [from] [old_state] [to] [new_state]
+                # target_type trigger_target [trigger_type] [from] [old_state] [to] [new_state]
                 while len(inputList) > 0:
                     if target_type is None:
                         if " ".join(inputList[0:2]) in ["Member of", "Descendent of"]:
@@ -694,8 +696,6 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
                 if trigger_type is None:
                     trigger_type = "changed"
 
-            trigger_name = trigger_name or target
-
         # validate the inputs, and if anything isn't populated correctly throw an exception
         if target_type is None or target_type not in ["Item", "Member of", "Descendent of", "Thing", "Channel", "System", "Time"]:
             raise ValueError("when: \"{}\" could not be parsed. target_type is missing or invalid. Valid target_type values are: Item, Member of, Descendent of, Thing, Channel, System, and Time.".format(target))
@@ -726,6 +726,7 @@ def when(target, target_type=None, trigger_type=None, old_state=None, new_state=
 
         log.debug("when: target=[{}], target_type={}, trigger_target={}, trigger_type={}, old_state={}, new_state={}".format(target, target_type, trigger_target, trigger_type, old_state, new_state))
 
+        trigger_name = validate_uid(trigger_name or target)
         if target_type in ["Item", "Member of", "Descendent of"]:
             if trigger_target in ["added", "removed", "modified"]:
                 return item_registry_trigger
