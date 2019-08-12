@@ -51,7 +51,6 @@ from java.time import LocalDateTime, ZonedDateTime
 from java.time import ZoneId, ZoneOffset
 from java.time.format import DateTimeFormatter
 from java.time.temporal.ChronoUnit import DAYS, HOURS, MINUTES, SECONDS
-from datetime import datetime
 from org.joda.time import DateTime, DateTimeZone
 from java.util import Calendar, Date, TimeZone
 from org.eclipse.smarthome.core.library.types import DateTimeType as eclipseDateTime
@@ -71,7 +70,8 @@ __all__ = [
 
 
 def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
-    """Returns string of ``value`` formatted according to ``format_string``.
+    """
+    Returns string of ``value`` formatted according to ``format_string``.
 
     This function can be used when updating Items in openHAB or to format any
     DateTime value for output. The default format string follows the same
@@ -97,7 +97,8 @@ def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
     return to_java_zoneddatetime(value).format(DateTimeFormatter.ofPattern(format_string))
 
 def days_between(value_from, value_to, calendar_days=False):
-    """Returns the number of days between ``value_from`` and ``value_to``.
+    """
+    Returns the number of days between ``value_from`` and ``value_to``.
     Will return a negative number if ``value_from`` is after ``value__to``.
 
     Examples:
@@ -117,7 +118,8 @@ def days_between(value_from, value_to, calendar_days=False):
         return DAYS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def hours_between(value_from, value_to):
-    """Returns the number of hours between ``value_from`` and ``value_to``.
+    """
+    Returns the number of hours between ``value_from`` and ``value_to``.
     Will return a negative number if ``value_from`` is after ``value__to``.
 
     Examples:
@@ -132,7 +134,8 @@ def hours_between(value_from, value_to):
     return HOURS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def minutes_between(value_from, value_to):
-    """Returns the number of minutes between ``value_from`` and ``value_to``.
+    """
+    Returns the number of minutes between ``value_from`` and ``value_to``.
     Will return a negative number if ``value_from`` is after ``value__to``.
 
     Examples:
@@ -147,7 +150,8 @@ def minutes_between(value_from, value_to):
     return MINUTES.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def seconds_between(value_from, value_to):
-    """Returns the number of seconds between ``value_from`` and ``value_to``.
+    """
+    Returns the number of seconds between ``value_from`` and ``value_to``.
     Will return a negative number if ``value_from`` is after ``value__to``.
 
     Examples:
@@ -162,8 +166,8 @@ def seconds_between(value_from, value_to):
     return SECONDS.between(to_java_zoneddatetime(value_from), to_java_zoneddatetime(value_to))
 
 def to_java_zoneddatetime(value):
-    """Converts any known DateTime type to a ``java.time.ZonedDateTime`` type.
-    This is the same type as ``date.ZonedDateTime``.
+    """
+    Converts any known DateTime type to a ``java.time.ZonedDateTime`` type.
 
     Examples:
         .. code-block::
@@ -188,7 +192,7 @@ def to_java_zoneddatetime(value):
     if isinstance(value, LocalDateTime):
         return value.atZone(timezone_id)
     # python datetime
-    if isinstance(value, datetime):
+    if isinstance(value, datetime.datetime):
         if value.tzinfo is not None:
             timezone_id = ZoneId.ofOffset("GMT", ZoneOffset.ofTotalSeconds(int(value.utcoffset().total_seconds())))
         return ZonedDateTime.of(
@@ -220,8 +224,8 @@ def to_java_zoneddatetime(value):
     raise TypeError("Unknown type: {}".format(str(type(value))))
 
 def to_python_datetime(value):
-    """Converts any known DateTime type to a Python ``datetime.datetime`` type.
-    This is the same type as ``date.datetime``.
+    """
+    Converts any known DateTime type to a Python ``datetime.datetime`` type.
 
     Examples:
         .. code-block::
@@ -239,11 +243,11 @@ def to_python_datetime(value):
     Raises:
         TypeError: If type of ``value`` is not recognized by this package.
     """
-    if isinstance(value, datetime):
+    if isinstance(value, datetime.datetime):
         return value
 
     value_zoneddatetime = to_java_zoneddatetime(value)
-    return datetime(
+    return datetime.datetime(
         value_zoneddatetime.getYear(),
         value_zoneddatetime.getMonthValue(),
         value_zoneddatetime.getDayOfMonth(),
@@ -251,18 +255,19 @@ def to_python_datetime(value):
         value_zoneddatetime.getMinute(),
         value_zoneddatetime.getSecond(),
         int(value_zoneddatetime.getNano() / 1000),
-        pythonTimezone(int(value_zoneddatetime.getOffset().getTotalSeconds() / 60))
+        _pythonTimezone(int(value_zoneddatetime.getOffset().getTotalSeconds() / 60))
     )
 
-class pythonTimezone(datetime.tzinfo):
-    """Python tzinfo with ``offset`` in minutes and name ``name``.
-
-    Args:
-        offset (int): Timezone offset from UTC in minutes.
-        name (str): Display name of this instance.
-    """
+class _pythonTimezone(datetime.tzinfo):
 
     def __init__(self, offset=0, name=""):
+        """
+        Python tzinfo with ``offset`` in minutes and name ``name``.
+    
+        Args:
+            offset (int): Timezone offset from UTC in minutes.
+            name (str): Display name of this instance.
+        """
         self.__offset = offset
         self.__name = name
 
@@ -276,8 +281,8 @@ class pythonTimezone(datetime.tzinfo):
         return datetime.timedelta(0)
 
 def to_joda_datetime(value):
-    """Converts any known DateTime type to a ``org.joda.time.DateTime`` type.
-    This is the same type as ``date.DateTime``.
+    """
+    Converts any known DateTime type to a ``org.joda.time.DateTime`` type.
 
     Examples:
         .. code-block::
@@ -305,7 +310,8 @@ def to_joda_datetime(value):
     )
 
 def to_java_calendar(value):
-    """Converts any known DateTime type to a ``java.util.Calendar`` type.
+    """
+    Converts any known DateTime type to a ``java.util.Calendar`` type.
 
     Examples:
         .. code-block::
