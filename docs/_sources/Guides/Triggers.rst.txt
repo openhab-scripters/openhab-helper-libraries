@@ -2,12 +2,46 @@
 Triggers
 ********
 
+    The following is a list of available triggers for use with the ``when`` decorator.
+    Any text in ``CAPITAL LETTERS`` should be replaced with a value specific to your use case and anything in square brackets (``[]``) is optional.
 
-    The following is a list of available triggers for use with the ``when`` Decorator.
-    Any text in ``CAPITAL LETTERS`` should be replaced with a value specific to your use case, and anything in square brackets (``[]``) is optional.
+    If you are looking for more information on the use of these triggers, see :ref:`Guides/Rules:Extensions`.
+    You can also find language specific documentation and examples inside the Core Triggers libraries.
 
-    If you are looking for more information on these triggers as :ref:`Guides/Rules:Extensions`,
-    it can be found in the Core Triggers documentation for the language of your choice.
+
+Cron
+====
+
+    Cron triggers can be used to trigger rules at specific times.
+    There are a few built-in expressions; their use is shown in the examples.
+    Several tools are available to help with composing cron expressions such as `CronMaker`_ or `FreeFormatter`_.
+    More information can be found in the `openHAB documentation`_.
+
+    .. _CronMaker: http://www.cronmaker.com/
+    .. _FreeFormatter: http://www.freeformatter.com/cron-expression-generator-quartz.html
+    .. _openHAB documentation: https://www.openhab.org/docs/configuration/rules-dsl.html#time-based-triggers
+
+    .. tabs::
+
+        .. group-tab:: Python
+
+            .. code-block::
+
+                @when("Time cron 55 55 5 * * ?")
+
+        .. group-tab:: JavaScript
+
+            Decorators have not yet been created for the JavaScript helper libraries.
+
+        .. group-tab:: Groovy
+
+            Decorators have not yet been created for the Groovy helper libraries.
+
+        .. group-tab:: Rules DSL
+
+            .. code-block:: java
+
+                Time cron "55 55 5 * * ?"
 
 
 Items and Groups
@@ -79,9 +113,11 @@ Items and Groups
 Thing Event
 ===========
 
-    Thing status changes can also be used to trigger rules.
+    Thing status updates and changes can also be used to trigger rules.
     A list of all available statuses can be found `here <https://www.openhab.org/docs/concepts/things.html>`_.
-    If you need to trigger on a specific status, you can get the status name via ``event.statusInfo.status`` and check if it is the status that you needed.
+    The use of Thing statuses in a trigger requires S1636, 2.5M2, or newer.
+    When using a Thing event trigger, you can use ``event.statusInfo.status`` to get the triggering Thing's status.
+    In most cases, the status will need to be converted to a string for comparison.
 
     .. tabs::
 
@@ -151,41 +187,6 @@ Channel Event
     .. warning::
 
         If the event used in the ``when`` decorator has special characters, including spaces, it must be surrounded in single quotes ``'like this'`` to prevent errors.
-
-
-Cron
-====
-
-    Cron triggers can be used to trigger rules at specific times.
-    There are a few built-in expressions; their use is shown in the examples.
-    Several tools are available to help with composing cron expressions such as `CronMaker`_ or `FreeFormatter`_.
-    More information can be found in the `openHAB documentation`_.
-
-    .. _CronMaker: http://www.cronmaker.com/
-    .. _FreeFormatter: http://www.freeformatter.com/cron-expression-generator-quartz.html
-    .. _openHAB documentation: https://www.openhab.org/docs/configuration/rules-dsl.html#time-based-triggers
-
-    .. tabs::
-
-        .. group-tab:: Python
-
-            .. code-block::
-
-                @when("Time cron 55 55 5 * * ?")
-
-        .. group-tab:: JavaScript
-
-            Decorators have not yet been created for the JavaScript helper libraries.
-
-        .. group-tab:: Groovy
-
-            Decorators have not yet been created for the Groovy helper libraries.
-
-        .. group-tab:: Rules DSL
-
-            .. code-block:: java
-
-                Time cron "55 55 5 * * ?"
 
 
 System Started

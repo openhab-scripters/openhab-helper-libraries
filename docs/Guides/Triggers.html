@@ -103,10 +103,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Rules.html">Rules</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Triggers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cron">Cron</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#items-and-groups">Items and Groups</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#thing-event">Thing Event</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#channel-event">Channel Event</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cron">Cron</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#system-started">System Started</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#system-shuts-down">System Shuts Down</a></li>
 </ul>
@@ -196,11 +196,60 @@
   <div class="section" id="triggers">
 <h1>Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline">¶</a></h1>
 <blockquote>
-<div><p>The following is a list of available triggers for use with the <code class="docutils literal notranslate"><span class="pre">when</span></code> Decorator.
-Any text in <code class="docutils literal notranslate"><span class="pre">CAPITAL</span> <span class="pre">LETTERS</span></code> should be replaced with a value specific to your use case, and anything in square brackets (<code class="docutils literal notranslate"><span class="pre">[]</span></code>) is optional.</p>
-<p>If you are looking for more information on these triggers as <a class="reference internal" href="Rules.html#extensions"><span class="std std-ref">Extensions</span></a>,
-it can be found in the Core Triggers documentation for the language of your choice.</p>
+<div><p>The following is a list of available triggers for use with the <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator.
+Any text in <code class="docutils literal notranslate"><span class="pre">CAPITAL</span> <span class="pre">LETTERS</span></code> should be replaced with a value specific to your use case and anything in square brackets (<code class="docutils literal notranslate"><span class="pre">[]</span></code>) is optional.</p>
+<p>If you are looking for more information on the use of these triggers, see <a class="reference internal" href="Rules.html#extensions"><span class="std std-ref">Extensions</span></a>.
+You can also find language specific documentation and examples inside the Core Triggers libraries.</p>
 </div></blockquote>
+<div class="section" id="cron">
+<h2>Cron<a class="headerlink" href="#cron" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Cron triggers can be used to trigger rules at specific times.
+There are a few built-in expressions; their use is shown in the examples.
+Several tools are available to help with composing cron expressions such as <a class="reference external" href="http://www.cronmaker.com/">CronMaker</a> or <a class="reference external" href="http://www.freeformatter.com/cron-expression-generator-quartz.html">FreeFormatter</a>.
+More information can be found in the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-dsl.html#time-based-triggers">openHAB documentation</a>.</p>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 55 55 5 * * ?&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Time</span> <span class="n">cron</span> <span class="s">&quot;55 55 5 * * ?&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</div>
 <div class="section" id="items-and-groups">
 <h2>Items and Groups<a class="headerlink" href="#items-and-groups" title="Permalink to this headline">¶</a></h2>
 <blockquote>
@@ -288,9 +337,11 @@ You can use <code class="docutils literal notranslate"><span class="pre">event.i
 <div class="section" id="thing-event">
 <h2>Thing Event<a class="headerlink" href="#thing-event" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>Thing status changes can also be used to trigger rules.
+<div><p>Thing status updates and changes can also be used to trigger rules.
 A list of all available statuses can be found <a class="reference external" href="https://www.openhab.org/docs/concepts/things.html">here</a>.
-If you need to trigger on a specific status, you can get the status name via <code class="docutils literal notranslate"><span class="pre">event.statusInfo.status</span></code> and check if it is the status that you needed.</p>
+The use of Thing statuses in a trigger requires S1636, 2.5M2, or newer.
+When using a Thing event trigger, you can use <code class="docutils literal notranslate"><span class="pre">event.statusInfo.status</span></code> to get the triggering Thing’s status.
+In most cases, the status will need to be converted to a string for comparison.</p>
 <div class="sphinx-tabs docutils container">
 <div class="ui top attached tabular menu sphinx-menu docutils container">
 <div class="active item sphinx-data-tab-UHl0aG9u docutils container">
@@ -394,55 +445,6 @@ The binding documentation will identify which Channels, if any, are trigger Chan
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>If the event used in the <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator has special characters, including spaces, it must be surrounded in single quotes <code class="docutils literal notranslate"><span class="pre">'like</span> <span class="pre">this'</span></code> to prevent errors.</p>
-</div>
-</div></blockquote>
-</div>
-<div class="section" id="cron">
-<h2>Cron<a class="headerlink" href="#cron" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><p>Cron triggers can be used to trigger rules at specific times.
-There are a few built-in expressions; their use is shown in the examples.
-Several tools are available to help with composing cron expressions such as <a class="reference external" href="http://www.cronmaker.com/">CronMaker</a> or <a class="reference external" href="http://www.freeformatter.com/cron-expression-generator-quartz.html">FreeFormatter</a>.
-More information can be found in the <a class="reference external" href="https://www.openhab.org/docs/configuration/rules-dsl.html#time-based-triggers">openHAB documentation</a>.</p>
-<div class="sphinx-tabs docutils container">
-<div class="ui top attached tabular menu sphinx-menu docutils container">
-<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
-<div class="docutils container">
-<p>Python</p>
-</div>
-</div>
-<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<div class="docutils container">
-<p>JavaScript</p>
-</div>
-</div>
-<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
-<div class="docutils container">
-<p>Groovy</p>
-</div>
-</div>
-<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="docutils container">
-<p>Rules DSL</p>
-</div>
-</div>
-</div>
-<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 55 55 5 * * ?&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
-</div>
-<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
-<p>Decorators have not yet been created for the Groovy helper libraries.</p>
-</div>
-<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Time</span> <span class="n">cron</span> <span class="s">&quot;55 55 5 * * ?&quot;</span>
-</pre></div>
-</div>
-</div>
 </div>
 </div></blockquote>
 </div>
