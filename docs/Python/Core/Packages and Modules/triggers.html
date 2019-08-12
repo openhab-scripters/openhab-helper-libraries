@@ -202,47 +202,47 @@
             
   <div class="section" id="module-core.triggers">
 <span id="triggers"></span><h1>triggers<a class="headerlink" href="#module-core.triggers" title="Permalink to this headline">¶</a></h1>
-<p>This module includes trigger subclasses and function decorators to simplify
+<p>This module includes function decorators and trigger subclasses to simplify
 Jython rule definitions.</p>
-<p>Trigger classes for wrapping Automation API (see <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a>
-for more details):</p>
-<ul class="simple">
-<li><p><strong>ItemStateChangeTrigger</strong> - fires when the specified Item’s state changes</p></li>
-<li><p><strong>ItemStateUpdateTrigger</strong> - fires when the specified Item’s state is updated</p></li>
-<li><p><strong>ItemCommandTrigger</strong> - fires when the specified Item receives a Command</p></li>
-<li><p><strong>ThingStatusChangeTrigger</strong> - fires when the specified Thing’s status changes</p></li>
-<li><p><strong>ThingStatusUpdateTrigger</strong> - fires when the specified Thing’s status is updated</p></li>
-<li><p><strong>ChannelEventTrigger</strong> - fires when a Channel reports an event</p></li>
-<li><p><strong>CronTrigger</strong> - fires based on cron expression</p></li>
-<li><p><strong>GenericEventTrigger</strong> - fires when the specified occurs</p></li>
-<li><p><strong>ItemEventTrigger</strong> (based on “GenericEventTrigger”)</p></li>
-<li><p><strong>ThingEventTrigger</strong> - fires when a Thing reports an event</p></li>
-<li><p><strong>DirectoryEventTrigger</strong> - fires when directory contents change</p></li>
-<li><p><strong>ItemRegistryTrigger</strong> - fires when the specified Item event occurs</p></li>
-<li><p><strong>ItemAddedTrigger</strong> (based on “ItemRegistryTrigger”)</p></li>
-<li><p><strong>ItemRemovedTrigger</strong> (based on “ItemRegistryTrigger”)</p></li>
-<li><p><strong>ItemUpdatedTrigger</strong> (based on “ItemRegistryTrigger”)</p></li>
-<li><p><strong>StartupTrigger</strong> - fires when the rule is activated (implemented in Jython)</p></li>
-</ul>
-<p>The <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator simplifies many of these triggers and allows for them
-to be used with natural language, as used in the rules DSL.
+<p>The <code class="docutils literal notranslate"><span class="pre">when</span></code> decorator simplifies many of the triggers and allows for them
+to be used with natural language similar to what is used in the rules DSL.
 (see <a class="reference internal" href="../../../Guides/Rules.html#decorators"><span class="std std-ref">Decorators</span></a> for more details).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 55 55 5 * * ?&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received command OFF&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_2 received update ON&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_String_1 changed from &#39;old test string&#39; to &#39;new test string&#39;&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item gMotion_Sensors changed&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of gMotion_Sensors changed from ON to OFF&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of gContact_Sensors changed from OPEN to CLOSED&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed from ONLINE to OFFLINE&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom received update ONLINE&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel astro:sun:local:eclipse#event triggered START&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span><span class="c1"># requires S1566 or newer (&#39;System shuts down&#39; has not been implemented)</span>
-
-<span class="n">If</span> <span class="n">using</span> <span class="n">a</span> <span class="n">build</span> <span class="n">of</span> <span class="n">openHAB</span> <span class="n">prior</span> <span class="n">to</span> <span class="n">S1566</span><span class="p">,</span> <span class="n">see</span> <span class="p">:</span><span class="n">ref</span><span class="p">:</span><span class="sb">`Guides/Triggers:System Started`</span> <span class="k">for</span> <span class="n">a</span> <span class="sb">``</span><span class="n">System</span> <span class="n">started</span><span class="sb">``</span> <span class="n">workaround</span><span class="o">.</span>
-<span class="n">For</span> <span class="n">everyone</span><span class="p">,</span> <span class="n">see</span> <span class="p">:</span><span class="n">ref</span><span class="p">:</span><span class="sb">`Guides/Triggers:System Shuts Down`</span> <span class="k">for</span> <span class="n">a</span> <span class="n">method</span> <span class="n">of</span> <span class="n">executing</span> <span class="n">a</span> <span class="n">function</span> <span class="n">when</span> <span class="n">a</span> <span class="n">script</span> <span class="ow">is</span> <span class="n">unloaded</span><span class="p">,</span> <span class="n">symulating</span> <span class="n">a</span> <span class="sb">``</span><span class="n">System</span> <span class="n">shuts</span> <span class="n">down</span><span class="sb">``</span> <span class="n">trigger</span><span class="o">.</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_2 received update ON&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received command OFF&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed from ONLINE to OFFLINE&quot;</span><span class="p">)</span><span class="c1"># requires S1636, 2.5M2 or newer</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom received update ONLINE&quot;</span><span class="p">)</span><span class="c1"># requires S1636, 2.5M2 or newer</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel astro:sun:local:eclipse#event triggered START&quot;</span><span class="p">)</span><span class="c1"># must use a Channel of kind Trigger</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span><span class="c1"># requires S1566, 2.5M2 or newer (&#39;System shuts down&#39; has not been implemented)</span>
 </pre></div>
 </div>
+<p>If using a build of openHAB prior to S1566 or 2.5M2, see <a class="reference internal" href="../../../Guides/Triggers.html#system-started"><span class="std std-ref">System Started</span></a> for a <code class="docutils literal notranslate"><span class="pre">System</span> <span class="pre">started</span></code> workaround.
+For everyone, see <a class="reference internal" href="../../../Guides/Triggers.html#system-shuts-down"><span class="std std-ref">System Shuts Down</span></a> for a method of executing a function when a script is unloaded, simulating a <code class="docutils literal notranslate"><span class="pre">System</span> <span class="pre">shuts</span> <span class="pre">down</span></code> trigger.</p>
+<p>Trigger classes for wrapping Automation API (see <a class="reference internal" href="../../../Guides/Rules.html#extensions"><span class="std std-ref">Extensions</span></a>
+for more details):</p>
+<ul class="simple">
+<li><p><strong>CronTrigger</strong> - fires based on cron expression</p></li>
+<li><p><strong>ItemStateChangeTrigger</strong> - fires when the specified Item’s state changes</p></li>
+<li><p><strong>ItemStateUpdateTrigger</strong> - fires when the specified Item’s state is updated</p></li>
+<li><p><strong>ItemCommandTrigger</strong> - fires when the specified Item receives a Command</p></li>
+<li><p><strong>GenericEventTrigger</strong> - fires when the specified occurs</p></li>
+<li><p><strong>ItemEventTrigger</strong> fires when am Item reports an event (based on “GenericEventTrigger”)</p></li>
+<li><p><strong>ThingEventTrigger</strong> - fires when a Thing reports an event (based on “GenericEventTrigger”)</p></li>
+<li><p><strong>ThingStatusChangeTrigger</strong> - fires when the specified Thing’s status changes (requires S1636, 2.5M2 or newer)</p></li>
+<li><p><strong>ThingStatusUpdateTrigger</strong> - fires when the specified Thing’s status is updated (requires S1636, 2.5M2 or newer)</p></li>
+<li><p><strong>ChannelEventTrigger</strong> - fires when a Channel reports an event</p></li>
+<li><p><strong>DirectoryEventTrigger</strong> - fires when a directory’s contents changes</p></li>
+<li><p><strong>ItemRegistryTrigger</strong> - fires when the specified Item registry event occurs</p></li>
+<li><p><strong>ItemAddedTrigger</strong> fires when an Item is added (based on “ItemRegistryTrigger”)</p></li>
+<li><p><strong>ItemRemovedTrigger</strong> fires when an Item is removed (based on “ItemRegistryTrigger”)</p></li>
+<li><p><strong>ItemUpdatedTrigger</strong> fires when an Item is updated (based on “ItemRegistryTrigger”)</p></li>
+<li><p><strong>StartupTrigger</strong> - fires when the rule is activated (implemented in Jython and requires S1566, 2.5M2 or newer)</p></li>
+</ul>
 <dl class="class">
 <dt id="core.triggers.ItemStateUpdateTrigger">
 <em class="property">class </em><code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">ItemStateUpdateTrigger</code><span class="sig-paren">(</span><em class="sig-param">itemName</em>, <em class="sig-param">state=None</em>, <em class="sig-param">triggerName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.ItemStateUpdateTrigger" title="Permalink to this definition">¶</a></dt>
@@ -623,31 +623,27 @@ The available Thing <code class="docutils literal notranslate"><span class="pre"
 
 <dl class="function">
 <dt id="core.triggers.when">
-<code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">when</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">target_type=None</em>, <em class="sig-param">trigger_type=None</em>, <em class="sig-param">old_state=None</em>, <em class="sig-param">new_state=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.when" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">core.triggers.</code><code class="sig-name descname">when</code><span class="sig-paren">(</span><em class="sig-param">target</em><span class="sig-paren">)</span><a class="headerlink" href="#core.triggers.when" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function decorator provides the ability to create rule triggers using language similar to the rules DSL.</p>
 <p>See <a class="reference internal" href="../../../Guides/Rules.html#decorators"><span class="std std-ref">Decorators</span></a> for examples of how to use this decorator</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received command OFF&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_2 received update ON&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 55 55 5 * * ?&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_String_1 changed from &#39;old test string&#39; to &#39;new test string&#39;&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item gMotion_Sensors changed&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of gMotion_Sensors changed to OFF&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of gContact_Sensors changed to ON&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed&quot;</span><span class="p">)</span> <span class="c1">#Thing statuses cannot currently be used in triggers</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel astro:sun:local:eclipse#event triggered START&quot;</span><span class="p">)</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span> <span class="c1">#&#39;System started&#39; requires S1566 or newer, and &#39;System shuts down&#39; is not available</span>
-<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Time cron 55 55 5 * * ?&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of gMotion_Sensors changed from ON to OFF&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Descendent of gContact_Sensors changed from OPEN to CLOSED&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_2 received update ON&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Test_Switch_1 received command OFF&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom changed from ONLINE to OFFLINE&quot;</span><span class="p">)</span><span class="c1"># requires S1636, 2.5M2 or newer</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Thing kodi:kodi:familyroom received update ONLINE&quot;</span><span class="p">)</span><span class="c1"># requires S1636, 2.5M2 or newer</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Channel astro:sun:local:eclipse#event triggered START&quot;</span><span class="p">)</span><span class="c1"># must use a Channel of kind Trigger</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;System started&quot;</span><span class="p">)</span><span class="c1"># requires S1566, 2.5M2 or newer (&#39;System shuts down&#39; has not been implemented)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>str</em>) – Trigger expression to parse</p></li>
-<li><p><strong>target_type</strong> (<em>str</em>) – Target type (“Item”, “Channel”, etc.)</p></li>
-<li><p><strong>trigger_type</strong> (<em>str</em>) – Trigger type (“changed”, “received command”, etc.)</p></li>
-<li><p><strong>old_state</strong> (<em>str</em>) – Old state for “Item changed from” events</p></li>
-<li><p><strong>new_state</strong> (<em>str</em>) – New state for “changed to”, “Item received update/command”, and “Channel triggered” events</p></li>
-</ul>
+<dd class="field-odd"><p><strong>target</strong> (<em>str</em>) – Trigger expression to parse</p>
 </dd>
 </dl>
 </dd></dl>
