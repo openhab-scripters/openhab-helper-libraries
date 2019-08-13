@@ -157,7 +157,7 @@ def menu_navigate(root_group_name, host, back_group=None):
         elif [item for item in eos_lights if item["name"] == answer]:
             # selected a light
             item = validate_item([item for item in eos_lights if item["name"] == answer][0]["name"], host)
-            item, data = menu_eos(item, build_data(item, host), host, 2, is_light=True) or (None, None)
+            item, data = menu_eos(item, build_data(item, host), host, 6, is_light=True) or (None, None)
             if data:
                 if not save_metadata(item, host, data):
                     pass                                    # TODO something went wrong
@@ -171,7 +171,7 @@ def menu_navigate(root_group_name, host, back_group=None):
             # selected a non-eos item
             item = validate_item([item for item in other_items if item["name"] == answer][0]["name"], host)
             item, data = menu_eos(item, build_data(item, host),
-                    host, 6 if item["type"] in itemtypesGroup else 2,
+                    host, 8 if item["type"] in itemtypesGroup else 6,
                     is_light=True if item["type"] in itemtypesLight else False,
                     is_group=True if item["type"] in itemtypesGroup else False
                 ) or (None, None)
@@ -183,7 +183,7 @@ def menu_navigate(root_group_name, host, back_group=None):
             del item, data
         elif answer == "eos_menu_configure":
             # edit Eos metadata
-            item, data = menu_eos(root_group, build_data(root_group, host), host, 6, is_group=True) or (None, None)
+            item, data = menu_eos(root_group, build_data(root_group, host), host, 8, is_group=True) or (None, None)
             if data:
                 if not save_metadata(item, host, data):
                     pass                                    # TODO something went wrong
@@ -276,36 +276,41 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
     """
     def data_at_depth(depth):
         # return the dict at the specified depth
-        if depth == 2:
-            return data["item"]
+        def _validate_key(d, k):
+            if k not in d:
+                d[k] = {}
+            return d[k]
+
+        if depth == 1:
+            return _validate_key(data["item"], scene)
+        elif depth in [2, 3, 4, 5]:
+            return _validate_key(data_at_depth(depth+5), scene)
         elif depth == 6:
+            return data["item"]
+        elif depth in [7, 9]:
+            return _validate_key(data_at_depth(depth+1), light_type)
+        elif depth == 8:
             return data["group"]
         elif depth == 10:
             return data["global"]
-        elif depth == 1:
-            if scene not in data_at_depth(depth+1):
-                data_at_depth(depth+1)[scene] = {}
-            return data_at_depth(depth+1)[scene]
-        elif depth in [3, 4, 7, 8]:
-            if scene not in data_at_depth(depth+2):
-                data_at_depth(depth+2)[scene] = {}
-            return data_at_depth(depth+2)[scene]
-        elif depth == 5 or depth == 9:
-            if light_type not in data_at_depth(depth+1):
-                data_at_depth(depth+1)[light_type] = {}
-            return data_at_depth(depth+1)[light_type]
 
     def get_scene_depth_for_type():
         # determine the depth a scene should be at
         if is_light:
             return 1
         elif is_type:
-            return 3
+            return 2
         elif is_group:
-            return 4
+            return 3
 
     def value_applies(key):
         # returns true if value will be used to evalute the current scene
+        def _get_setting_depth(key):
+            for scan_depth in range(depth, 11):
+                if get_scene_setting(scene, light_type, key, data, depth=scan_depth, min_depth=scan_depth) is not None:
+                    break
+            return scan_depth
+
         property_map = {
             SCENE_TYPE_FIXED: [
                 META_KEY_STATE
@@ -321,9 +326,17 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             ]
         }
         if key in [META_KEY_MOTION_SOURCE, META_KEY_MOTION_ACTIVE, META_KEY_MOTION_STATE, META_KEY_MOTION_SCENE] \
-                and META_KEY_MOTION_SOURCE in settings_added:
-            if key == META_KEY_MOTION_SCENE and META_KEY_MOTION_STATE in settings_added:
-                return False
+                and get_scene_setting(scene, light_type, META_KEY_MOTION_SOURCE, data, min_depth=depth) is not None:
+            if key == META_KEY_MOTION_SCENE:
+                if _get_setting_depth(META_KEY_MOTION_SCENE) <= _get_setting_depth(META_KEY_MOTION_STATE):
+                    return True
+                else:
+                    return False
+            elif key == META_KEY_MOTION_STATE:
+                if _get_setting_depth(META_KEY_MOTION_STATE) < _get_setting_depth(META_KEY_MOTION_SCENE):
+                    return True
+                else:
+                    return False
             else:
                 return True
         else:
@@ -349,7 +362,8 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             if key not in settings_added:
                 missing.append(key)
         if META_KEY_MOTION_SOURCE in settings_added:
-            if META_KEY_MOTION_ACTIVE not in settings_added: missing.append(META_KEY_MOTION_ACTIVE)
+            if META_KEY_MOTION_ACTIVE not in settings_added:
+                missing.append(META_KEY_MOTION_ACTIVE)
             if META_KEY_MOTION_STATE not in settings_added and META_KEY_MOTION_SCENE not in settings_added:
                 missing.append(META_KEY_MOTION_STATE)
                 missing.append(META_KEY_MOTION_SCENE)
@@ -568,9 +582,9 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         menu_choices.append(Separator(line=" "))
         if not view_only:
             menu_choices.append(Choice(title="Save" if (is_light or is_group) else "Apply", value="eos_menu_save"))
-        if scene and scene in data_at_depth(depth+(1 if is_light else 2)) and not view_only:
+        if scene and scene in data_at_depth(depth+5) and not view_only:
             if answer == "eos_menu_remove_scene": pointed_at = len(menu_choices)
-            menu_choices.append(Choice(title="Remove scene from {}".format("Light" if depth < 3 else "Light Type" if depth < 5 else "Group"), value="eos_menu_remove_scene"))
+            menu_choices.append(Choice(title="Remove scene from {}".format("Light" if depth==1 else "Light Type" if depth==2 else "Group"), value="eos_menu_remove_scene"))
         menu_choices.append(Choice(
                 title=[
                     ("class:text", "Done" if view_only else "Cancel"),
@@ -609,7 +623,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             data["group"]["follow_parent"] = not data["group"].get("follow_parent", True)
         elif answer[:len("eos_menu_light_type_")] == "eos_menu_light_type_":
             # edit data for light type
-            item, data = menu_eos(item, data, host, 5,
+            item, data = menu_eos(item, data, host, 7,
                     light_type=answer[len("eos_menu_light_type_"):],
                     is_type=True
                 ) or (item, data)
@@ -665,7 +679,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             # remove scene
             save = True
             exit_loop = True
-            data_at_depth(depth+(1 if is_light else 2)).pop(scene, None)
+            data_at_depth(depth+5).pop(scene, None)
 
     clear()
     return (item, data) if save else False

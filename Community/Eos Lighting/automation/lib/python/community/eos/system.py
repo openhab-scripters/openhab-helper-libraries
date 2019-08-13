@@ -41,9 +41,9 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
                     if item.name not in levelTriggers:
                         log.debug("Adding '{key}' item trigger for '{level}'".format(level=item.name, key=key))
                         levelTriggers[item.name] = when("Item {name} received update".format(name=item.name))
-                    else:
-                        log.error("Failed to add '{key}' item trigger for '{level}', item does not exist".format(level=config[key], key=key))
-                        all_items_valid = False
+                else:
+                    log.error("Failed to add '{key}' item trigger for '{level}', item does not exist".format(level=config[key], key=key))
+                    all_items_valid = False
             elif key == META_KEY_MOTION_SOURCE:
                 item = validate_item(config[key])
                 if item is not None:
@@ -121,6 +121,7 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
     if hasattr(rule_scene_changed, "triggers"): delattr(rule_scene_changed, "triggers")
     if hasattr(rule_light_update, "triggers"): delattr(rule_light_update, "triggers")
     if hasattr(rule_level_source_update, "triggers"): delattr(rule_level_source_update, "triggers")
+    if hasattr(rule_motion_source_changed, "triggers"): delattr(rule_motion_source_changed, "triggers")
 
     # add rule to reload Eos if item exists
     if config.reinit_item_name:

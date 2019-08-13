@@ -27,14 +27,14 @@ META_KEY_DEPTH_MAP = {
     META_KEY_LEVEL_THRESHOLD: [1,2,3,4,5,6,7,8,9,10],
     META_KEY_LEVEL_HIGH: [1,2,3,4,5,6,7,8,9,10],
     META_KEY_LEVEL_LOW: [1,2,3,4,5,6,7,8,9,10],
-    META_KEY_STATE: [1,2,3,5,7,9],
-    META_KEY_STATE_ABOVE: [1,2,3,5,7,9],
-    META_KEY_STATE_BELOW: [1,2,3,5,7,9],
-    META_KEY_STATE_HIGH: [1,2,3,5,7,9],
-    META_KEY_STATE_LOW: [1,2,3,5,7,9],
+    META_KEY_STATE: [1,2,4,6,7,9],
+    META_KEY_STATE_ABOVE: [1,2,4,6,7,9],
+    META_KEY_STATE_BELOW: [1,2,4,6,7,9],
+    META_KEY_STATE_HIGH: [1,2,4,6,7,9],
+    META_KEY_STATE_LOW: [1,2,4,6,7,9],
     META_KEY_MOTION_SOURCE: [1,2,3,4,5,6,7,8,9,10],
     META_KEY_MOTION_ACTIVE: [1,2,3,4,5,6,7,8,9,10],
-    META_KEY_MOTION_STATE: [1,2,3,5,7,9],
+    META_KEY_MOTION_STATE: [1,2,4,6,7,9],
     META_KEY_MOTION_SCENE: [1,2,3,4,5,6,7,8,9,10]
 }
 
@@ -57,25 +57,23 @@ _global_settings = {
         SCENE_OFF: { META_KEY_STATE: "OFF" },
         META_KEY_STATE: "OFF",
         META_KEY_STATE_ABOVE: "OFF",
-        META_KEY_STATE_BELOW: "ON",
-        META_KEY_MOTION_SCENE: "on"
+        META_KEY_STATE_BELOW: "ON"
     },
     LIGHT_TYPE_DIMMER: {
         SCENE_ON: { META_KEY_STATE: 100 },
         SCENE_OFF: { META_KEY_STATE: 0 },
         META_KEY_STATE: 0,
         META_KEY_STATE_HIGH: 0,
-        META_KEY_STATE_LOW: 100,
-        META_KEY_MOTION_SCENE: "on"
+        META_KEY_STATE_LOW: 100
     },
     LIGHT_TYPE_COLOR: {
         SCENE_ON: { META_KEY_STATE: 100 },
         SCENE_OFF: { META_KEY_STATE: 0 },
         META_KEY_STATE: 0,
         META_KEY_STATE_HIGH: 0,
-        META_KEY_STATE_LOW: 100,
-        META_KEY_MOTION_SCENE: "on"
-    }
+        META_KEY_STATE_LOW: 100
+    },
+    META_KEY_MOTION_SCENE: "on"
 }
 
 __all__ = [
@@ -107,8 +105,8 @@ META_KEY_LIST = [META_KEY_LEVEL_SOURCE, META_KEY_LEVEL_THRESHOLD, META_KEY_LEVEL
     META_KEY_MOTION_SOURCE, META_KEY_MOTION_ACTIVE, META_KEY_MOTION_STATE, META_KEY_MOTION_SCENE]
 META_KEY_OPTION_LIST = [META_KEY_FOLLOW_PARENT]
 
-DEPTH_NAME_MAP = ["", "item-scene", "item", "group-type-scene", "group-scene", "group-type", "group",
-    "global-type-scene", "global-scene", "global-type", "global"]
+DEPTH_NAME_MAP = ["", "item-scene", "group-type-scene", "group-scene", "global-type-scene", "global-scene",
+        "item", "group-type", "group", "global-type", "global"]
 
 LIGHT_TYPE_LIST = [LIGHT_TYPE_SWITCH, LIGHT_TYPE_DIMMER, LIGHT_TYPE_COLOR]
 
