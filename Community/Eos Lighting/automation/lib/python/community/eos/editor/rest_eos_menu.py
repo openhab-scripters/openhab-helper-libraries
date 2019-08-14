@@ -809,6 +809,7 @@ def prompt_edit_setting(message, key, host, instructions=[], default=""):
                 answer = [literal_eval(part.strip()) for part in str(answer).split(",")]
             except:
                 answer = [part.strip() for part in str(answer).split(",")]
+            valid = True
         else:
             valid = True
         # TODO keys that still need validation:

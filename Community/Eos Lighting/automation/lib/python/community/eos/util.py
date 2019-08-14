@@ -176,11 +176,11 @@ def get_scene_setting(item, scene, key, data=None, depth=10):
     """
     light_type = LIGHT_TYPE_MAP.get(item.type.lower(), None)
     item_data = data["item"] if data else get_metadata(item.name, META_NAME_EOS).get("configuration", {})
-    if config.log_trace: log.debug("Got Item data for '{name}': {data}".format(name=item.name, data=item_data))
+    #if config.log_trace: log.debug("Got Item data for '{name}': {data}".format(name=item.name, data=item_data))
     group_data = data["group"] if data else get_metadata(get_item_eos_group(item).name, META_NAME_EOS).get("configuration", {})
-    if config.log_trace: log.debug("Got Group data for '{name}': {data}".format(name=get_item_eos_group(item).name, data=group_data))
+    #if config.log_trace: log.debug("Got Group data for '{name}': {data}".format(name=get_item_eos_group(item).name, data=group_data))
     global_data = config.global_settings
-    if config.log_trace: log.debug("Got Global data: {data}".format(name=light_type, data=global_data))
+    #if config.log_trace: log.debug("Got Global data: {data}".format(name=light_type, data=global_data))
     value = None
     if depth >= 1 and 1 in META_KEY_DEPTH_MAP[key] and item_data.get(scene, {}).get(key, None) is not None:
         source = "Scene in Item"

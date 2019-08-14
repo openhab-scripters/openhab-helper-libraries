@@ -110,7 +110,10 @@ def get_state_for_scene(item, scene):
     state = None
     data = {}
     data["item"] = get_metadata(item.name, META_NAME_EOS).get("configuration", {})
+    if config.log_trace: log.debug("Got Item data for '{name}': {data}".format(name=item.name, data=data["item"]))
     data["group"] = get_metadata(get_item_eos_group(item).name, META_NAME_EOS).get("configuration", {})
+    if config.log_trace: log.debug("Got Group data for '{name}': {data}".format(name=get_item_eos_group(item).name, data=data["group"]))
+    if config.log_trace: log.debug("Got Global data: {data}".format(name=light_type, data=config.global_settings))
 
     # check for Motion settings
     motion_source = validate_item(get_scene_setting(item, scene, META_KEY_MOTION_SOURCE, data=data))
@@ -200,34 +203,34 @@ def get_state_for_scene(item, scene):
             return str(item.state)
         level_value = float(level_value)
 
-        level_high = get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data)
+        level_high = resolve_type(get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data))
         if level_high is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_LEVEL_HIGH, name=item.name, scene=scene))
             return str(item.state)
         level_high = float(level_high)
 
-        level_low = get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data)
+        level_low = resolve_type(get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data))
         if level_low is None:
             level_low = 0.0
             log.debug("No value for key '{key}' for scene '{scene}' for item '{name}', using default '{value}'".format(
                 key=META_KEY_LEVEL_LOW, scene=scene, name=item.name, value=level_low))
         level_low = float(level_low)
 
-        state_high = get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data)
+        state_high = resolve_type(get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data))
         if state_high is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE_HIGH, name=item.name, scene=scene))
             return str(item.state)
 
-        state_low = get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data)
+        state_low = resolve_type(get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data))
         if state_low is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE_LOW, name=item.name, scene=scene))
             return str(item.state)
 
-        state_above = get_scene_setting(item, scene, META_KEY_STATE_ABOVE, data=data) or state_high
-        state_below = get_scene_setting(item, scene, META_KEY_STATE_BELOW, data=data) or state_low
+        state_above = resolve_type(get_scene_setting(item, scene, META_KEY_STATE_ABOVE, data=data)) or state_high
+        state_below = resolve_type(get_scene_setting(item, scene, META_KEY_STATE_BELOW, data=data)) or state_low
 
         if level_value > level_high:
             state = state_above

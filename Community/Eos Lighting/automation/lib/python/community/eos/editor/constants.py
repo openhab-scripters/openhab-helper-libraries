@@ -73,6 +73,7 @@ _global_settings = {
         META_KEY_STATE_HIGH: 0,
         META_KEY_STATE_LOW: 100
     },
+    META_KEY_MOTION_ACTIVE: "ON",
     META_KEY_MOTION_SCENE: "on"
 }
 
