@@ -22,6 +22,7 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     Getting Started/Installation.rst
     Getting Started/File Locations.rst
     Getting Started/First Steps.rst
+    Getting Started/VS Code
 
 
 .. toctree::
