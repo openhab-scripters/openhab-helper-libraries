@@ -84,8 +84,6 @@ def get_group_items(group):
             if item["type"] in itemtypesGroup
                 and get_scene_item(group) is not None
         ] if "members" in group else []
-                # removed because we want any groups that might have lights we can configure
-                #and len(get_light_items(item)) > 0
 
 def resolve_type(value):
     """Attempts to resolve the type of ``value``.

@@ -7,7 +7,7 @@ Contants used by all modules
 RULE_REINIT_NAME = "Eos Reload Rule"
 RULE_REINIT_DESC = "This rule allows runtime reloading of the Eos System via a switch item"
 RULE_SCENE_NAME = "Eos Scene Rule"
-RULE_SCENE_DESC = "This rule is triggered when any Eos Scene changes"
+RULE_SCENE_DESC = "This rule is triggered when any Eos Scene receives a command"
 RULE_LIGHT_NAME = "Eos Light Rule"
 RULE_LIGHT_DESC = "This rule is triggered when any Eos Light receives an update"
 RULE_LEVEL_SOURCE_NAME = "Eos Level Source Rule"

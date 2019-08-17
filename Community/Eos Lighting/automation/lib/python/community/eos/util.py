@@ -88,7 +88,7 @@ def get_light_items(group):
         ] if hasattr(group, "members") else []
 
 
-def get_group_items(group, include_no_lights=False):
+def get_group_items(group):
     """Finds all group items in a group.
 
     Returns a list of valid Eos groups.
@@ -97,7 +97,6 @@ def get_group_items(group, include_no_lights=False):
         item for item in group.members
             if isinstance(item, itemtypesGroup)
                 and get_scene_item(group) is not None
-                #and (len(get_light_items(item)) > 0 or include_no_lights)
         ] if hasattr(group, "members") else []
 
 

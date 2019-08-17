@@ -22,7 +22,7 @@ from core.log import log_traceback
 __all__ = [ "init", "uninit" ]
 
 @log_traceback
-def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_update, rule_motion_source_changed):
+def init(rule_reinit, rule_scene_command, rule_light_update, rule_level_source_update, rule_motion_source_changed):
     """Initialize Eos.
 
     This creates a rule with triggers for the scene item in
@@ -62,11 +62,11 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
             log.debug("Scanning group '{group}' for scene and light items".format(group=group.name))
             itemScene = get_scene_item(group)
             if itemScene:
+                # add scene trigger
+                when("Item {name} received command".format(name=itemScene.name))(rule_scene_command)
+                log.debug("Added scene item trigger for '{name}'".format(name=itemScene.name))
                 # gen triggers for Level and Motion sources in metadata
                 _gen_triggers_for_sources(get_metadata(group.name, META_NAME_EOS).get("configuration", {}))
-                # add scene trigger
-                when("Item {name} changed".format(name=itemScene.name))(rule_scene_changed)
-                log.debug("Added scene item trigger for '{name}'".format(name=itemScene.name))
                 # add lights triggers
                 for light in get_light_items(group):
                     if str(get_value(light.name, META_NAME_EOS)).lower() in META_STRING_FALSE:
@@ -77,7 +77,7 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
                         log.debug("Adding light item trigger for '{name}'".format(name=light.name))
                         when("Item {name} received update".format(name=light.name))(rule_light_update)
                 # recurse into groups
-                for group in get_group_items(group, include_no_lights=True):
+                for group in get_group_items(group):
                     _gen_triggers_for_group(group)
             else:
                 log.warn("No lights or groups in '{group}' will be discovered because it has no scene item".format(group=group.name))
@@ -118,7 +118,7 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
 
     # if we are reinit-ing {rule}.triggers will be NoneType
     if hasattr(rule_reinit, "triggers"): delattr(rule_reinit, "triggers")
-    if hasattr(rule_scene_changed, "triggers"): delattr(rule_scene_changed, "triggers")
+    if hasattr(rule_scene_command, "triggers"): delattr(rule_scene_command, "triggers")
     if hasattr(rule_light_update, "triggers"): delattr(rule_light_update, "triggers")
     if hasattr(rule_level_source_update, "triggers"): delattr(rule_level_source_update, "triggers")
     if hasattr(rule_motion_source_changed, "triggers"): delattr(rule_motion_source_changed, "triggers")
@@ -142,9 +142,9 @@ def init(rule_reinit, rule_scene_changed, rule_light_update, rule_level_source_u
     if hasattr(rule_light_update, "triggers"): # do not proceed if there are no lights
         # create scene changed update
         log.debug("Creating {rule}".format(rule=RULE_SCENE_NAME))
-        rule(RULE_SCENE_NAME, RULE_SCENE_DESC)(rule_scene_changed)
-        if hasattr(rule_scene_changed, "UID"):
-            log.debug("{rule} UID is '{uid}'".format(rule=RULE_SCENE_NAME, uid=rule_scene_changed.UID))
+        rule(RULE_SCENE_NAME, RULE_SCENE_DESC)(rule_scene_command)
+        if hasattr(rule_scene_command, "UID"):
+            log.debug("{rule} UID is '{uid}'".format(rule=RULE_SCENE_NAME, uid=rule_scene_command.UID))
         else:
             log.error("Failed to create {rule}".format(rule=RULE_SCENE_NAME))
             log.error("Eos failed to initialize")

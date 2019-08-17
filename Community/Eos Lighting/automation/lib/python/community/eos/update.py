@@ -10,7 +10,7 @@ from community.eos.constants import *
 
 from core.log import log_traceback
 from core.metadata import get_value
-from core.utils import sendCommandCheckFirst, validate_item
+from core.utils import sendCommand, sendCommandCheckFirst, validate_item
 
 __all__ = [ "update_eos", "update_scene", "update_light", "update_group" ]
 
@@ -36,11 +36,9 @@ def update_scene(item):
     for group_item in get_group_items(get_item_eos_group(item)):
         if str(get_value(group_item.name, META_NAME_EOS)).lower() not in META_STRING_FALSE:
             # set children to "parent" scene unless following is turned off
-            if resolve_type(get_metadata(group_item.name, META_NAME_EOS).get("config", {}).get(META_KEY_FOLLOW_PARENT, True)):
-                if not sendCommandCheckFirst(get_scene_item(group_item), SCENE_PARENT):
-                    # update if scene is already "parent", otherwise
-                    # scene change will fire for the group
-                    update_group(group_item, True)
+            if resolve_type(get_metadata(group_item.name, META_NAME_EOS).get("configuration", {}).get(META_KEY_FOLLOW_PARENT, True)):
+                log.debug("Setting '{group}' to follow '{name}' scene".format(group=group_item.name, name=item.name))
+                sendCommand(get_scene_item(group_item).name, SCENE_PARENT)
             else:
                 update_group(group_item, True)
 

@@ -13,12 +13,12 @@ def eos_rule_reinit(event):
     """Eos System Reload Rule"""
     log.debug("{rule} triggered by '{name}'".format(rule=RULE_REINIT_NAME, name=event.itemName))
     uninit()
-    init(eos_rule_reinit, eos_rule_scene_changed, eos_rule_light_update, eos_rule_level_source_update, eos_rule_motion_source_changed)
+    init(eos_rule_reinit, eos_rule_scene_command, eos_rule_light_update, eos_rule_level_source_update, eos_rule_motion_source_changed)
 
 
-def eos_rule_scene_changed(event):
-    """Eos Scene Changed Rule"""
-    log.debug("{rule} triggered by '{name}' with scene '{scene}'".format(rule=RULE_SCENE_NAME, name=event.itemName, scene=event.itemState))
+def eos_rule_scene_command(event):
+    """Eos Scene Received Command Rule"""
+    log.debug("{rule} triggered by '{name}' with scene '{scene}'".format(rule=RULE_SCENE_NAME, name=event.itemName, scene=event.itemCommand))
     update_scene(itemRegistry.get(event.itemName))
 
 
@@ -42,7 +42,7 @@ def eos_rule_motion_source_changed(event):
 
 @log_traceback
 def scriptLoaded(*args):
-    init(eos_rule_reinit, eos_rule_scene_changed, eos_rule_light_update, eos_rule_level_source_update, eos_rule_motion_source_changed)
+    init(eos_rule_reinit, eos_rule_scene_command, eos_rule_light_update, eos_rule_level_source_update, eos_rule_motion_source_changed)
 
 @log_traceback
 def scriptUnloaded(*args):
