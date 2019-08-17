@@ -392,7 +392,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         echo("Building Menu...")
 
         item_eos_group = get_item_eos_group(item, host)
-        scene_type = get_scene_type(scene, light_type, data, min_depth=depth) if scene else None
+        scene_type = get_scene_type(scene, light_type, data) if scene and is_light else None
 
         menu_choices = []
         menu_choices.append(Separator(line=" "))
@@ -497,7 +497,8 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                 menu_choices.append(Choice(     # Light Type Scenes in Group
                         title=[
                             ("class:text", "{:{width}}".format(key, width=col_left_width)),
-                            ("class:value", "{:{width}}".format(str(get_scene_type(key, light_type, data)).capitalize(), width=col_right_width)),
+                            ("class:value", "{:{width}}".format(
+                                str(get_scene_type(key, light_type, data)).capitalize() if is_light else "", width=col_right_width)),
                             ("class:disabled", " group-type"),
                         ],
                         value="eos_menu_scene_{}".format(key)
@@ -508,7 +509,8 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                 menu_choices.append(Choice(     # Group Scenes
                         title=[
                             ("class:text", "{:{width}}".format(key, width=col_left_width)),
-                            ("class:value", "{:{width}}".format(str(get_scene_type(key, light_type, data)).capitalize(), width=col_right_width)),
+                            ("class:value", "{:{width}}".format(
+                                str(get_scene_type(key, light_type, data)).capitalize() if is_light else "", width=col_right_width)),
                             ("class:disabled", " group"),
                         ],
                         value="eos_menu_scene_{}".format(key)
@@ -519,7 +521,8 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                 menu_choices.append(Choice(     # Light Type Scenes in Global
                         title=[
                             ("class:text", "{:{width}}".format(key, width=col_left_width)),
-                            ("class:value", "{:{width}}".format(str(get_scene_type(key, light_type, data)).capitalize(), width=col_right_width)),
+                            ("class:value", "{:{width}}".format(
+                                str(get_scene_type(key, light_type, data)).capitalize() if is_light else "", width=col_right_width)),
                             ("class:disabled", " global-type"),
                         ],
                         value="eos_menu_scene_{}".format(key)
@@ -530,7 +533,8 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                 menu_choices.append(Choice(     # Global Scenes
                         title=[
                             ("class:text", "{:{width}}".format(key, width=col_left_width)),
-                            ("class:value", "{:{width}}".format(str(get_scene_type(key, light_type, data)).capitalize(), width=col_right_width)),
+                            ("class:value", "{:{width}}".format(
+                                str(get_scene_type(key, light_type, data)).capitalize() if is_light else "", width=col_right_width)),
                             ("class:disabled", " global"),
                         ],
                         value="eos_menu_scene_{}".format(key)

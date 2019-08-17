@@ -166,7 +166,7 @@ def get_metadata(item_name, namespace):
     metadata = core_get_metadata(item_name, namespace)
     return {"value": metadata.value, "configuration": parse_config(metadata.configuration)} if metadata else {}
 
-def get_scene_setting(item, scene, key, data=None, depth=10):
+def get_scene_setting(item, scene, key, data=None, max_depth=10):
     """
     Gets a setting value by searching:
     Scene in Item > Scene in Light Type in Group > Scene in Group >
@@ -181,34 +181,34 @@ def get_scene_setting(item, scene, key, data=None, depth=10):
     global_data = config.global_settings
     #if config.log_trace: log.debug("Got Global data: {data}".format(name=light_type, data=global_data))
     value = None
-    if depth >= 1 and 1 in META_KEY_DEPTH_MAP[key] and item_data.get(scene, {}).get(key, None) is not None:
+    if max_depth >= 1 and 1 in META_KEY_DEPTH_MAP[key] and item_data.get(scene, {}).get(key, None) is not None:
         source = "Scene in Item"
         value = item_data.get(scene, {}).get(key, None)
-    elif depth >= 2 and 2 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(scene, {}).get(key, None) is not None:
+    elif max_depth >= 2 and 2 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(scene, {}).get(key, None) is not None:
         source = "Scene in Light Type in Group"
         value = group_data.get(light_type, {}).get(scene, {}).get(key, None)
-    elif depth >= 3 and 3 in META_KEY_DEPTH_MAP[key] and group_data.get(scene, {}).get(key, None) is not None:
+    elif max_depth >= 3 and 3 in META_KEY_DEPTH_MAP[key] and group_data.get(scene, {}).get(key, None) is not None:
         source = "Scene in Group"
         value = group_data.get(scene, {}).get(key, None)
-    elif depth >= 4 and 4 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(scene, {}).get(key, None) is not None:
+    elif max_depth >= 4 and 4 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(scene, {}).get(key, None) is not None:
         source = "Scene in Light Type in Global"
         value = global_data.get(light_type, {}).get(scene, {}).get(key, None)
-    elif depth >= 5 and 5 in META_KEY_DEPTH_MAP[key] and global_data.get(scene, {}).get(key, None) is not None:
+    elif max_depth >= 5 and 5 in META_KEY_DEPTH_MAP[key] and global_data.get(scene, {}).get(key, None) is not None:
         source = "Scene in Global"
         value = global_data.get(scene, {}).get(key, None)
-    elif depth >= 6 and 6 in META_KEY_DEPTH_MAP[key] and item_data.get(key, None) is not None:
+    elif max_depth >= 6 and 6 in META_KEY_DEPTH_MAP[key] and item_data.get(key, None) is not None:
         source = "Item"
         value = item_data.get(key, None)
-    elif depth >= 7 and 7 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(key, None) is not None:
+    elif max_depth >= 7 and 7 in META_KEY_DEPTH_MAP[key] and group_data.get(light_type, {}).get(key, None) is not None:
         source = "Light Type in Group"
         value = group_data.get(light_type, {}).get(key, None)
-    elif depth >= 8 and 8 in META_KEY_DEPTH_MAP[key] and group_data.get(key, None) is not None:
+    elif max_depth >= 8 and 8 in META_KEY_DEPTH_MAP[key] and group_data.get(key, None) is not None:
         source = "Group"
         value = group_data.get(key, None)
-    elif depth >= 9 and 9 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(key, None) is not None:
+    elif max_depth >= 9 and 9 in META_KEY_DEPTH_MAP[key] and global_data.get(light_type, {}).get(key, None) is not None:
         source = "Light Type in Global"
         value = global_data.get(light_type, {}).get(key, None)
-    elif depth >= 10 and 10 in META_KEY_DEPTH_MAP[key] and global_data.get(key, None) is not None:
+    elif max_depth >= 10 and 10 in META_KEY_DEPTH_MAP[key] and global_data.get(key, None) is not None:
         source = "Global"
         value = global_data.get(key, None)
     else:
@@ -220,31 +220,40 @@ def get_scene_setting(item, scene, key, data=None, depth=10):
     return value
 
 def get_scene_type(item, scene, light_type, data=None):
-    # gets the scene type
-    for depth in range(1, 11):
-        if light_type == LIGHT_TYPE_SWITCH:
-            if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
-                return SCENE_TYPE_FIXED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
-                return SCENE_TYPE_THRESHOLD
-        elif light_type == LIGHT_TYPE_DIMMER:
-            if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
-                return SCENE_TYPE_FIXED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, depth=depth) is not None:
-                return SCENE_TYPE_SCALED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
-                return SCENE_TYPE_THRESHOLD
-        elif light_type == LIGHT_TYPE_COLOR:
-            if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
-                return SCENE_TYPE_FIXED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, depth=depth) is not None \
-            or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, depth=depth) is not None:
-                return SCENE_TYPE_SCALED
-            elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
-                return SCENE_TYPE_THRESHOLD
-    return None
+    """
+    Returns the scene type or ``None``.
+
+    Scans depths 1-5 (scene settings) attempting to infer the scene type, if
+    unable it then scans depths 6-10 (non scene specific settings) to infer
+    scene type.
+    """
+    def _scan_settings(min_depth, max_depth):
+        for depth in range(min_depth, max_depth+1):
+            if light_type == LIGHT_TYPE_SWITCH:
+                if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
+                    return SCENE_TYPE_FIXED
+                elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
+                    return SCENE_TYPE_THRESHOLD
+            elif light_type == LIGHT_TYPE_DIMMER:
+                if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
+                    return SCENE_TYPE_FIXED
+                elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, depth=depth) is not None \
+                or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, depth=depth) is not None \
+                or get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, depth=depth) is not None \
+                or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, depth=depth) is not None:
+                    return SCENE_TYPE_SCALED
+                elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
+                    return SCENE_TYPE_THRESHOLD
+            elif light_type == LIGHT_TYPE_COLOR:
+                if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
+                    return SCENE_TYPE_FIXED
+                elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, depth=depth) is not None \
+                or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, depth=depth) is not None \
+                or get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, depth=depth) is not None \
+                or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, depth=depth) is not None:
+                    return SCENE_TYPE_SCALED
+                elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
+                    return SCENE_TYPE_THRESHOLD
+        return None
+
+    return _scan_settings(1, 5) or _scan_settings(6, 10)
