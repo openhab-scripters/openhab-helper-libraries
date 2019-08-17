@@ -7,7 +7,6 @@ Hello World
     .. group-tab:: Python
 
         .. literalinclude:: ../../Script Examples/Python/hello_world.py
-            :lines: 5-
 
     .. group-tab:: JavaScript
 

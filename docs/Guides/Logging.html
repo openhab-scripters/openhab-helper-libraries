@@ -33,6 +33,8 @@
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
@@ -104,7 +106,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Logging</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#rule-decorator">Rule Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#core-log">core.log</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#log-action">Log Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logaction">LogAction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#slf4j">SLF4J</a></li>
 </ul>
 </li>
@@ -231,10 +233,10 @@ If this is modified, be sure to <a class="reference external" href="https://www.
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<p>Decorators have not yet been created for the JavaScript helper libraries.</p>
+<p>Decorators have not been created for the JavaScript helper libraries.</p>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
-<p>Decorators have not yet been created for the Groovy helper libraries.</p>
+<p>Decorators have not been created for the Groovy helper libraries.</p>
 </div>
 </div>
 </div></blockquote>
@@ -278,21 +280,21 @@ If this is modified, be sure to <a class="reference external" href="https://www.
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<p>The <cite>core.log</cite> does not yet exist for this language.</p>
+<p>The <cite>core.log</cite> library does not exist for this language.</p>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
-<p>The <cite>core.log</cite> does not yet exist for this language.</p>
+<p>The <cite>core.log</cite> library does not exist for this language.</p>
 </div>
 </div>
 </div></blockquote>
 </div>
-<div class="section" id="log-action">
-<h2>Log Action<a class="headerlink" href="#log-action" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="logaction">
+<h2>LogAction<a class="headerlink" href="#logaction" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>The openHAB log action, as used in the Rules DSL, can be imported and used to write to the logs from a script or rule.
+<div><p>The openHAB LogAction, as used in the Rules DSL, can be imported and used to write to the logs from a script or rule.
 Since LogAction uses SLF4J, it supports parameterized logging.
-Parameterized logging is beneficial, since the values in the parameterized are not processed unless the logger is visible in the current logging level.
-This means that the complicated logging you do in debug does not affect the performance of your system when the logging level is set to info.</p>
+Parameterized logging is beneficial, since the values in the parameters are not processed unless the logger is visible in the current logging level.
+This means that the complicated logging you do in <code class="docutils literal notranslate"><span class="pre">debug</span></code> does not affect the performance of your system when the logging level is set to <code class="docutils literal notranslate"><span class="pre">info</span></code>.</p>
 <div class="sphinx-tabs docutils container">
 <div class="ui top attached tabular menu sphinx-menu docutils container">
 <div class="active item sphinx-data-tab-UHl0aG9u docutils container">
@@ -327,10 +329,13 @@ This means that the complicated logging you do in debug does not affect the perf
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">logInfo</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s2">&quot;org.eclipse.smarthome.model.script.actions.LogAction&quot;</span><span class="p">).</span><span class="nx">logInfo</span><span class="p">;</span>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">OPENHAB_CONF</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s2">&quot;java.lang.System&quot;</span><span class="p">).</span><span class="nx">getenv</span><span class="p">(</span><span class="s2">&quot;OPENHAB_CONF&quot;</span><span class="p">);</span>
+<span class="nx">load</span><span class="p">(</span><span class="nx">OPENHAB_CONF</span> <span class="o">+</span> <span class="s1">&#39;/automation/lib/javascript/core/actions.js&#39;</span><span class="p">);</span>
 
-<span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Rules&quot;</span><span class="p">,</span> <span class="s2">&quot;This is a test [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;Example info log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logWarn</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;Example warning log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logError</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;Example error log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logDebug</span><span class="p">(</span><span class="s2">&quot;EXAMPLE&quot;</span><span class="p">,</span> <span class="s2">&quot;Example debug log [{}]&quot;</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -401,7 +406,12 @@ SLF4J supports parameterized logging.</p>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA==-1 docutils container">
-<p>Documentation has not yet been created for this functionality.</p>
+<p>var LoggerFactory = Java.type(‘org.slf4j.LoggerFactory’);
+var log = LoggerFactory.getLogger(“jsr223.javascript.EXAMPLE”);</p>
+<p>log.info(“Example info log [{}]”, 5 + 5);
+log.warn(“Example warning log [{}]”, 5 + 5);
+log.error(“Example error log [{}]”, 5 + 5);
+log.debug(“Example debug log [{}]”, 5 + 5);</p>
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">

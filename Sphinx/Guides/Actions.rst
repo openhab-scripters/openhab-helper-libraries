@@ -8,7 +8,7 @@ Use `Core & Cloud Actions <https://www.openhab.org/docs/configuration/actions.ht
 --------------------------------------------------------------------------------------------------------
 
 For ScriptExecution, see :ref:`Guides/But How Do I:Use a timer`.
-For LogAction, see :doc:`Logging`.
+For LogAction, see :ref:`Guides/Logging:LogAction`.
 
 .. tabs::
 
@@ -52,7 +52,33 @@ For LogAction, see :doc:`Logging`.
 
         .. code-block:: JavaScript
 
-            TODO
+            var OPENHAB_CONF = Java.type('java.lang.System').getenv('OPENHAB_CONF');
+            load(OPENHAB_CONF + '/automation/lib/javascript/core/actions.js');
+
+            Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://host.example.com",5000);
+
+            HTTP.sendHttpPutRequest("someURL.example.com, "application/json", '{"this": "that"}');
+
+            if (Ping.checkVitality("10.5.5.5", 0, 5000)) {
+                LogAction.logInfo("Rules", "Server is online");
+            } else {
+                LogAction.logInfo("Rules", "Server is offline");
+            }
+
+            Audio.playSound("doorbell.mp3");// using the default audiosink
+            Audio.playSound("my:audio:sink", "doorbell.mp3");// specifying an audiosink
+            Audio.playStream("http://myAudioServer.example.com/myAudioFile.mp3");// using the default audiosink
+            Audio.playStream("my:audio:sink", "http://myAudioServer.example.com/myAudioFile.mp3");// specifying an audiosink
+
+            NotificationAction.sendNotification("someone@example.com", "This is the message");
+            NotificationAction.sendBroadcastNotification("This is the message");
+            NotificationAction.sendLogNotification("This is the message");
+
+            LogAction.logInfo("Rules", Transformation.transform("JSONPATH", "$.test", test));
+
+            Voice.say("This will be said");
+
+            LogAction.logInfo("Rules", Things.getThingStatusInfo("zwave:device:c5155aa4:node5").toString());
 
     .. group-tab:: Groovy
 
@@ -62,7 +88,7 @@ For LogAction, see :doc:`Logging`.
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -89,7 +115,15 @@ Others not listed are similar
 
         .. code-block:: JavaScript
 
-            TODO
+            var OPENHAB_CONF = Java.type('java.lang.System').getenv('OPENHAB_CONF');
+            load(OPENHAB_CONF + '/automation/lib/javascript/core/actions.js');
+
+            LogAction.logInfo("Rules", PersistenceExtensions.previousState(ir.getItem("Weather_SolarRadiation"), True).state.toString());
+
+            var DateTime = Java.type('org.joda.time.DateTime');
+
+            LogAction.logInfo("Rules", PersistenceExtensions.changedSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)));
+            LogAction.logInfo("Rules", PersistenceExtensions.maximumSince(ir.getItem("Weather_SolarRadiation"), DateTime.now().minusHours(1)).state.toString());
 
     .. group-tab:: Groovy
 
@@ -99,7 +133,7 @@ Others not listed are similar
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO
 
@@ -137,21 +171,56 @@ Use an Addon/Bundle Action
 
             log = logging.getLogger("{}.astro_test".format(LOG_PREFIX))
 
-            # Use the Astro action class to get the sunset start time.
-            log.info("Sunrise: {}".format(Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time))
+            # Use the Astro action to get the sunset start time.
+            log.info("Sunset: {}".format(Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time))
 
         `MQTT2 <https://www.openhab.org/addons/bindings/mqtt/>`_
 
         .. code-block::
 
             # no import needed
-            actions.get("mqtt", "mqtt:systemBroker:embedded-mqtt-broker").publishMQTT("test/system/started", "true");
+            actions.get("mqtt", "mqtt:systemBroker:embedded-mqtt-broker").publishMQTT("test/system/started", "true")
 
     .. group-tab:: JavaScript
 
         .. code-block:: JavaScript
 
-            TODO
+        `Telegram <https://www.openhab.org/addons/actions/telegram/#telegram-actions>`_
+
+        .. code-block::
+
+            var OPENHAB_CONF = Java.type('java.lang.System').getenv('OPENHAB_CONF');
+            load(OPENHAB_CONF + '/automation/lib/javascript/core/actions.js');
+
+            Telegram.sendTelegram("MyBot", "Test");
+
+        `Mail <https://www.openhab.org/addons/actions/mail/#mail-actions>`_
+
+        .. code-block::
+
+            var OPENHAB_CONF = Java.type('java.lang.System').getenv('OPENHAB_CONF');
+            load(OPENHAB_CONF + '/automation/lib/javascript/core/actions.js');
+
+            Mail.sendMail("someone@example.com", "This is the subject", "This is the message");
+
+        `Astro <https://www.openhab.org/addons/actions/astro/#astro-actions>`_
+
+        .. code-block::
+
+            var OPENHAB_CONF = Java.type('java.lang.System').getenv('OPENHAB_CONF');
+            load(OPENHAB_CONF + '/automation/lib/javascript/core/actions.js');
+
+            var Date = Java.type('java.util.Date')
+
+            // Use the Astro action to get the sunset start time.
+            LogAction.logInfo("Rules", "Sunset: {}".format(Astro.getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time));
+
+        `MQTT2 <https://www.openhab.org/addons/bindings/mqtt/>`_
+
+        .. code-block::
+
+            // no import needed
+            actions.get("mqtt", "mqtt:systemBroker:embedded-mqtt-broker").publishMQTT("test/system/started", "true");
 
     .. group-tab:: Groovy
 
@@ -161,6 +230,6 @@ Use an Addon/Bundle Action
 
     .. group-tab:: Rules DSL
 
-        .. code-block:: java
+        .. code-block:: Xtend
 
             TODO

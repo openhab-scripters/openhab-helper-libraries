@@ -3,7 +3,7 @@
 :Version: **4.0.0**
 
 Multi Zone Home Alarm package for openHAB. This software is distributed as a
-community submission to the `openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_. 
+community submission to the `openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_.
 
 
 About
@@ -26,12 +26,12 @@ If you are creating a new installation, you can ignore what follows.
     **Version 4.0.0**
         **BREAKING CHANGE**: The script is now distributed as a part of
         `openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_.
-        If lucid had been previously installed, it should be completely removed. 
+        If lucid had been previously installed, it should be completely removed.
 
     **Version 3.0.0**
         **BREAKING CHANGE** ideAlarm requires at least `lucid V 1.0.0 <https://github.com/OH-Jython-Scripters/lucid>`_.
 
-        **BREAKING CHANGE** if you are using a `custom helper functions script for various alarm events <https://github.com/OH-Jython-Scripters/ideAlarm/wiki/Event-Helpers#custom-helper-functions-for-various-alarm-events>`_ you should revise it so that it's working with the new version of lucid. 
+        **BREAKING CHANGE** if you are using a `custom helper functions script for various alarm events <https://github.com/OH-Jython-Scripters/ideAlarm/wiki/Event-Helpers#custom-helper-functions-for-various-alarm-events>`_ you should revise it so that it's working with the new version of lucid.
         Please have a look at the `lucid release notices <https://github.com/OH-Jython-Scripters/lucid/blob/master/RELEASE_NOTICES_PLEASE_READ.md>`_ and optionally look at the `example event helpers script <https://github.com/OH-Jython-Scripters/ideAlarm/blob/master/automation/lib/python/idealarm/custom_verbose_example.py>`_.
 
     **Version 2.0.0**
@@ -69,7 +69,7 @@ from org.joda.time import DateTime
 from core.jsr223 import scope
 from core.date import format_date
 from core.log import logging, LOG_PREFIX
-from core.utils import getItemValue, postUpdateCheckFirst, sendCommandCheckFirst, kw
+from core.utils import getItemValue, post_update_if_different, send_command_if_different, kw
 from core.actions import PersistenceExtensions
 from configuration import idealarm_configuration, customDateTimeFormats, customGroupNames
 from personal.idealarm import custom
@@ -218,12 +218,12 @@ class IdeAlarmZone(object):
         if newArmingMode == ARMINGMODE['ARMED_AWAY'] \
         and self.getZoneStatus() is not None and self.getZoneStatus() != ZONESTATUS['ARMING']:
             self.setZoneStatus(ZONESTATUS['ARMING'])
-            postUpdateCheckFirst("Z{}_Exit_Timer".format(self.zoneNumber), scope.ON)
+            post_update_if_different("Z{}_Exit_Timer".format(self.zoneNumber), scope.ON)
             return
         self._armingMode = newArmingMode
 
         # Sync the Item
-        postUpdateCheckFirst(self.armingModeItem, newArmingMode, sendCommand)
+        post_update_if_different(self.armingModeItem, newArmingMode, sendCommand)
 
         # Call custom function if available
         if 'onArmingModeChange' in dir(custom):
@@ -250,16 +250,16 @@ class IdeAlarmZone(object):
         if newZoneStatus in [ZONESTATUS['NORMAL']]:
 
             # Cancel all timers so they won't fire
-            postUpdateCheckFirst("Z{}_Entry_Timer".format(self.zoneNumber), scope.OFF)
-            postUpdateCheckFirst("Z{}_Exit_Timer".format(self.zoneNumber), scope.OFF)
-            postUpdateCheckFirst("Z{}_Alert_Max_Timer".format(self.zoneNumber), scope.OFF)
+            post_update_if_different("Z{}_Entry_Timer".format(self.zoneNumber), scope.OFF)
+            post_update_if_different("Z{}_Exit_Timer".format(self.zoneNumber), scope.OFF)
+            post_update_if_different("Z{}_Alert_Max_Timer".format(self.zoneNumber), scope.OFF)
 
             # Cancel sirens
             for alertDevice in self.alertDevices:
-                sendCommandCheckFirst(alertDevice, scope.OFF)
+                send_command_if_different(alertDevice, scope.OFF)
 
         # Sync the Zone Status Item
-        postUpdateCheckFirst(self.statusItem, newZoneStatus, sendCommand)
+        post_update_if_different(self.statusItem, newZoneStatus, sendCommand)
 
         # Call custom function if available
         if 'onZoneStatusChange' in dir(custom):
@@ -330,11 +330,11 @@ class IdeAlarmZone(object):
         # We need to make some noise here!
         if not self.alarmTestMode:
             for alertDevice in self.alertDevices:
-                sendCommandCheckFirst(alertDevice, scope.ON)
+                send_command_if_different(alertDevice, scope.ON)
             self.log.info('You should be able to hear the sirens now...')
         else:
             self.log.info('ALARM_TEST_MODE is activated. No sirens!')
-        postUpdateCheckFirst("Z{}_Alert_Max_Timer".format(self.zoneNumber), scope.ON)
+        post_update_if_different("Z{}_Alert_Max_Timer".format(self.zoneNumber), scope.ON)
 
     def onExitTimer(self):
         '''
@@ -349,7 +349,7 @@ class IdeAlarmZone(object):
         '''
         # Cancel alert devices, e.g. the sirens
         for alertDevice in self.alertDevices:
-            sendCommandCheckFirst(alertDevice, scope.OFF)
+            send_command_if_different(alertDevice, scope.OFF)
         self.log.debug('Alert devices have been switched off due to they\'ve reached their time limit')
 
     def getNagSensors(self, timerTimedOut=False):
@@ -362,9 +362,9 @@ class IdeAlarmZone(object):
             if sensor.isEnabled() and sensor.isActive() and sensor.nag and self.getArmingMode() == ARMINGMODE['DISARMED']:
                 nagSensors.append(sensor)
         if len(nagSensors) == 0:
-            postUpdateCheckFirst("Z{}_Nag_Timer".format(self.zoneNumber), scope.OFF) # Cancel the nag timer
+            post_update_if_different("Z{}_Nag_Timer".format(self.zoneNumber), scope.OFF) # Cancel the nag timer
         else:
-            postUpdateCheckFirst("Z{}_Nag_Timer".format(self.zoneNumber), scope.ON)
+            post_update_if_different("Z{}_Nag_Timer".format(self.zoneNumber), scope.ON)
             if timerTimedOut and 'onNagTimer' in dir(custom):
                 self.log.debug('Calling custom onNagTimer function')
                 custom.onNagTimer(self, nagSensors)
@@ -386,7 +386,7 @@ class IdeAlarmZone(object):
                 self.openSections += 1
                 self.log.debug(u"Open sensor: {}".format(sensor.name.decode('utf8')))
         self.log.debug(u"Number of open sections in {} is: {}".format(self.name.decode('utf8'), self.openSections))
-        postUpdateCheckFirst("Z{}_Open_Sections".format(self.zoneNumber), self.openSections)
+        post_update_if_different("Z{}_Open_Sections".format(self.zoneNumber), self.openSections)
         return self.openSections
 
     def onSensorChange(self, sensor):
@@ -402,7 +402,7 @@ class IdeAlarmZone(object):
 
         self.setZoneStatus(ZONESTATUS['TRIPPED'])
         self.log.info(u"{} was tripped, starting entry timer".format(sensor.name.decode('utf8')))
-        postUpdateCheckFirst("Z{}_Entry_Timer".format(self.zoneNumber), scope.ON)
+        post_update_if_different("Z{}_Entry_Timer".format(self.zoneNumber), scope.ON)
 
 class IdeAlarm(object):
     '''

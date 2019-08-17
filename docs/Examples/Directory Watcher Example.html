@@ -25,14 +25,22 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Extension Provider Usage Example" href="Extension Provider Usage Example.html" />
@@ -190,9 +198,52 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.examples.directory_watcher_example">
-<span id="directory-watcher-example"></span><h1>Directory Watcher Example<a class="headerlink" href="#module-scripts.examples.directory_watcher_example" title="Permalink to this headline">¶</a></h1>
-<p>Example of a rule that watches for files created in a specified directory. Requires 100_DirectoryTrigger.py component.</p>
+  <div class="section" id="directory-watcher-example">
+<h1>Directory Watcher Example<a class="headerlink" href="#directory-watcher-example" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>Javascript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Example of a rule that watches for files created in a specified directory. Requires 100_DirectoryTrigger.py component.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">DirectoryEventTrigger</span><span class="p">,</span> <span class="n">ENTRY_CREATE</span>
+<span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Directory watcher example&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DirectoryWatcherExampleRule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getEventTriggers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="n">DirectoryEventTrigger</span><span class="p">(</span><span class="s2">&quot;/tmp&quot;</span><span class="p">,</span> <span class="n">event_kinds</span><span class="o">=</span><span class="p">[</span><span class="n">ENTRY_CREATE</span><span class="p">])</span> <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.directory_watcher_example&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Detected new file: [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<p>TODO</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>TODO</p>
+</div>
+</div>
 </div>
 
 

@@ -33,6 +33,8 @@
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
@@ -197,7 +199,7 @@
 <div class="section" id="use-core-cloud-actions">
 <h2>Use <a class="reference external" href="https://www.openhab.org/docs/configuration/actions.html#core-actions">Core &amp; Cloud Actions</a><a class="headerlink" href="#use-core-cloud-actions" title="Permalink to this headline">¶</a></h2>
 <p>For ScriptExecution, see <a class="reference internal" href="But How Do I.html#use-a-timer"><span class="std std-ref">Use a timer</span></a>.
-For LogAction, see <a class="reference internal" href="Logging.html"><span class="doc">Logging</span></a>.</p>
+For LogAction, see <a class="reference internal" href="Logging.html#logaction"><span class="std std-ref">LogAction</span></a>.</p>
 <div class="sphinx-tabs docutils container">
 <div class="ui top attached tabular menu sphinx-menu docutils container">
 <div class="active item sphinx-data-tab-UHl0aG9u docutils container">
@@ -257,7 +259,33 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">OPENHAB_CONF</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s1">&#39;java.lang.System&#39;</span><span class="p">).</span><span class="nx">getenv</span><span class="p">(</span><span class="s1">&#39;OPENHAB_CONF&#39;</span><span class="p">);</span>
+<span class="nx">load</span><span class="p">(</span><span class="nx">OPENHAB_CONF</span> <span class="o">+</span> <span class="s1">&#39;/automation/lib/javascript/core/actions.js&#39;</span><span class="p">);</span>
+
+<span class="nx">Exec</span><span class="p">.</span><span class="nx">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://host.example.com&quot;</span><span class="p">,</span><span class="mi">5000</span><span class="p">);</span>
+
+<span class="nx">HTTP</span><span class="p">.</span><span class="nx">sendHttpPutRequest</span><span class="p">(</span><span class="s2">&quot;someURL.example.com, &quot;</span><span class="nx">application</span><span class="o">/</span><span class="nx">json</span><span class="s2">&quot;, &#39;{&quot;</span><span class="k">this</span><span class="s2">&quot;: &quot;</span><span class="nx">that</span><span class="s2">&quot;}&#39;);</span>
+
+<span class="s2">if (Ping.checkVitality(&quot;</span><span class="mf">10.5.5.5</span><span class="s2">&quot;, 0, 5000)) {</span>
+<span class="s2">    LogAction.logInfo(&quot;</span><span class="nx">Rules</span><span class="s2">&quot;, &quot;</span><span class="nx">Server</span> <span class="nx">is</span> <span class="nx">online</span><span class="s2">&quot;);</span>
+<span class="s2">} else {</span>
+<span class="s2">    LogAction.logInfo(&quot;</span><span class="nx">Rules</span><span class="s2">&quot;, &quot;</span><span class="nx">Server</span> <span class="nx">is</span> <span class="nx">offline</span><span class="s2">&quot;);</span>
+<span class="s2">}</span>
+
+<span class="s2">Audio.playSound(&quot;</span><span class="nx">doorbell</span><span class="p">.</span><span class="nx">mp3</span><span class="s2">&quot;);// using the default audiosink</span>
+<span class="s2">Audio.playSound(&quot;</span><span class="nx">my</span><span class="o">:</span><span class="nx">audio</span><span class="o">:</span><span class="nx">sink</span><span class="s2">&quot;, &quot;</span><span class="nx">doorbell</span><span class="p">.</span><span class="nx">mp3</span><span class="s2">&quot;);// specifying an audiosink</span>
+<span class="s2">Audio.playStream(&quot;</span><span class="nx">http</span><span class="o">:</span><span class="c1">//myAudioServer.example.com/myAudioFile.mp3&quot;);// using the default audiosink</span>
+<span class="nx">Audio</span><span class="p">.</span><span class="nx">playStream</span><span class="p">(</span><span class="s2">&quot;my:audio:sink&quot;</span><span class="p">,</span> <span class="s2">&quot;http://myAudioServer.example.com/myAudioFile.mp3&quot;</span><span class="p">);</span><span class="c1">// specifying an audiosink</span>
+
+<span class="nx">NotificationAction</span><span class="p">.</span><span class="nx">sendNotification</span><span class="p">(</span><span class="s2">&quot;someone@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the message&quot;</span><span class="p">);</span>
+<span class="nx">NotificationAction</span><span class="p">.</span><span class="nx">sendBroadcastNotification</span><span class="p">(</span><span class="s2">&quot;This is the message&quot;</span><span class="p">);</span>
+<span class="nx">NotificationAction</span><span class="p">.</span><span class="nx">sendLogNotification</span><span class="p">(</span><span class="s2">&quot;This is the message&quot;</span><span class="p">);</span>
+
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Rules&quot;</span><span class="p">,</span> <span class="nx">Transformation</span><span class="p">.</span><span class="nx">transform</span><span class="p">(</span><span class="s2">&quot;JSONPATH&quot;</span><span class="p">,</span> <span class="s2">&quot;$.test&quot;</span><span class="p">,</span> <span class="nx">test</span><span class="p">));</span>
+
+<span class="nx">Voice</span><span class="p">.</span><span class="nx">say</span><span class="p">(</span><span class="s2">&quot;This will be said&quot;</span><span class="p">);</span>
+
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Rules&quot;</span><span class="p">,</span> <span class="nx">Things</span><span class="p">.</span><span class="nx">getThingStatusInfo</span><span class="p">(</span><span class="s2">&quot;zwave:device:c5155aa4:node5&quot;</span><span class="p">).</span><span class="nx">toString</span><span class="p">());</span>
 </pre></div>
 </div>
 </div>
@@ -267,7 +295,7 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -310,7 +338,15 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">OPENHAB_CONF</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s1">&#39;java.lang.System&#39;</span><span class="p">).</span><span class="nx">getenv</span><span class="p">(</span><span class="s1">&#39;OPENHAB_CONF&#39;</span><span class="p">);</span>
+<span class="nx">load</span><span class="p">(</span><span class="nx">OPENHAB_CONF</span> <span class="o">+</span> <span class="s1">&#39;/automation/lib/javascript/core/actions.js&#39;</span><span class="p">);</span>
+
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Rules&quot;</span><span class="p">,</span> <span class="nx">PersistenceExtensions</span><span class="p">.</span><span class="nx">previousState</span><span class="p">(</span><span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;Weather_SolarRadiation&quot;</span><span class="p">),</span> <span class="nx">True</span><span class="p">).</span><span class="nx">state</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+
+<span class="kd">var</span> <span class="nx">DateTime</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">type</span><span class="p">(</span><span class="s1">&#39;org.joda.time.DateTime&#39;</span><span class="p">);</span>
+
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Rules&quot;</span><span class="p">,</span> <span class="nx">PersistenceExtensions</span><span class="p">.</span><span class="nx">changedSince</span><span class="p">(</span><span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;Weather_SolarRadiation&quot;</span><span class="p">),</span> <span class="nx">DateTime</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">minusHours</span><span class="p">(</span><span class="mi">1</span><span class="p">)));</span>
+<span class="nx">LogAction</span><span class="p">.</span><span class="nx">logInfo</span><span class="p">(</span><span class="s2">&quot;Rules&quot;</span><span class="p">,</span> <span class="nx">PersistenceExtensions</span><span class="p">.</span><span class="nx">maximumSince</span><span class="p">(</span><span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;Weather_SolarRadiation&quot;</span><span class="p">),</span> <span class="nx">DateTime</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">minusHours</span><span class="p">(</span><span class="mi">1</span><span class="p">)).</span><span class="nx">state</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
 </pre></div>
 </div>
 </div>
@@ -320,7 +356,7 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
@@ -372,18 +408,47 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.astro_test&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
 
-<span class="c1"># Use the Astro action class to get the sunset start time.</span>
-<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sunrise: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Astro</span><span class="o">.</span><span class="n">getAstroSunsetStart</span><span class="p">(</span><span class="n">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="mf">38.897096</span><span class="p">,</span> <span class="o">-</span><span class="mf">77.036545</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
+<span class="c1"># Use the Astro action to get the sunset start time.</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sunset: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Astro</span><span class="o">.</span><span class="n">getAstroSunsetStart</span><span class="p">(</span><span class="n">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="mf">38.897096</span><span class="p">,</span> <span class="o">-</span><span class="mf">77.036545</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">))</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="https://www.openhab.org/addons/bindings/mqtt/">MQTT2</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># no import needed</span>
-<span class="n">actions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mqtt&quot;</span><span class="p">,</span> <span class="s2">&quot;mqtt:systemBroker:embedded-mqtt-broker&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">publishMQTT</span><span class="p">(</span><span class="s2">&quot;test/system/started&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">);</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mqtt&quot;</span><span class="p">,</span> <span class="s2">&quot;mqtt:systemBroker:embedded-mqtt-broker&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">publishMQTT</span><span class="p">(</span><span class="s2">&quot;test/system/started&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.openhab.org/addons/actions/telegram/#telegram-actions">Telegram</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">OPENHAB_CONF</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.lang.System&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;OPENHAB_CONF&#39;</span><span class="p">);</span>
+<span class="n">load</span><span class="p">(</span><span class="n">OPENHAB_CONF</span> <span class="o">+</span> <span class="s1">&#39;/automation/lib/javascript/core/actions.js&#39;</span><span class="p">);</span>
+
+<span class="n">Telegram</span><span class="o">.</span><span class="n">sendTelegram</span><span class="p">(</span><span class="s2">&quot;MyBot&quot;</span><span class="p">,</span> <span class="s2">&quot;Test&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.openhab.org/addons/actions/mail/#mail-actions">Mail</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">OPENHAB_CONF</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.lang.System&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;OPENHAB_CONF&#39;</span><span class="p">);</span>
+<span class="n">load</span><span class="p">(</span><span class="n">OPENHAB_CONF</span> <span class="o">+</span> <span class="s1">&#39;/automation/lib/javascript/core/actions.js&#39;</span><span class="p">);</span>
+
+<span class="n">Mail</span><span class="o">.</span><span class="n">sendMail</span><span class="p">(</span><span class="s2">&quot;someone@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the subject&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the message&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.openhab.org/addons/actions/astro/#astro-actions">Astro</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">OPENHAB_CONF</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.lang.System&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;OPENHAB_CONF&#39;</span><span class="p">);</span>
+<span class="n">load</span><span class="p">(</span><span class="n">OPENHAB_CONF</span> <span class="o">+</span> <span class="s1">&#39;/automation/lib/javascript/core/actions.js&#39;</span><span class="p">);</span>
+
+<span class="n">var</span> <span class="n">Date</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.Date&#39;</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Use</span> <span class="n">the</span> <span class="n">Astro</span> <span class="n">action</span> <span class="n">to</span> <span class="n">get</span> <span class="n">the</span> <span class="n">sunset</span> <span class="n">start</span> <span class="n">time</span><span class="o">.</span>
+<span class="n">LogAction</span><span class="o">.</span><span class="n">logInfo</span><span class="p">(</span><span class="s2">&quot;Rules&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunset: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Astro</span><span class="o">.</span><span class="n">getAstroSunsetStart</span><span class="p">(</span><span class="n">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="mf">38.897096</span><span class="p">,</span> <span class="o">-</span><span class="mf">77.036545</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">));</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.openhab.org/addons/bindings/mqtt/">MQTT2</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">no</span> <span class="kn">import</span> <span class="nn">needed</span>
+<span class="n">actions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mqtt&quot;</span><span class="p">,</span> <span class="s2">&quot;mqtt:systemBroker:embedded-mqtt-broker&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">publishMQTT</span><span class="p">(</span><span class="s2">&quot;test/system/started&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -393,7 +458,7 @@ For LogAction, see <a class="reference internal" href="Logging.html"><span class
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>

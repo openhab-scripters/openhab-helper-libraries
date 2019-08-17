@@ -25,14 +25,22 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_tabs/tabs.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/segment.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/menu.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/semantic-ui-2.4.1/tab.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_tabs/tabs.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Timer Example" href="Timer Example.html" />
@@ -190,32 +198,99 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.examples.testing_example">
-<span id="testing-example"></span><h1>Testing Example<a class="headerlink" href="#module-scripts.examples.testing_example" title="Permalink to this headline">¶</a></h1>
-<p>Examples of unit testing.</p>
-<dl class="simple">
-<dt>Required Items:</dt><dd><p>Number TestNumber1
-Number TestNumber2</p>
-</dd>
-</dl>
-<dl class="class">
-<dt id="scripts.examples.testing_example.MyUnitTest">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.examples.testing_example.</code><code class="sig-name descname">MyUnitTest</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#scripts.examples.testing_example.MyUnitTest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
-<dl class="method">
-<dt id="scripts.examples.testing_example.MyUnitTest.setUp">
-<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scripts.examples.testing_example.MyUnitTest.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
-</dd></dl>
+  <div class="section" id="testing-example">
+<h1>Testing Example<a class="headerlink" href="#testing-example" title="Permalink to this headline">¶</a></h1>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>Javascript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Example of unit testing.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">core.items</span>
+<span class="kn">from</span> <span class="nn">core.log</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">LOG_PREFIX</span>
+<span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.testing</span> <span class="kn">import</span> <span class="n">run_test</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="kn">from</span> <span class="nn">core.utils</span> <span class="kn">import</span> <span class="n">getItemValue</span>
 
-<dl class="method">
-<dt id="scripts.examples.testing_example.MyUnitTest.tearDown">
-<code class="sig-name descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scripts.examples.testing_example.MyUnitTest.tearDown" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for deconstructing the test fixture after testing it.</p>
-</dd></dl>
+<span class="n">RESPONSE_TIME</span> <span class="o">=</span> <span class="mi">5</span>
 
-</dd></dl>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;{}.testing_2_example&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">LOG_PREFIX</span><span class="p">))</span>
 
+<span class="k">class</span> <span class="nc">ItemPostUpdater</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item1</span><span class="p">,</span> <span class="n">item2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item1</span> <span class="o">=</span> <span class="n">item1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item2</span> <span class="o">=</span> <span class="n">item2</span>
+
+        <span class="c1"># create the rule.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myrule</span><span class="o">=</span><span class="n">rule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">item1</span><span class="o">.</span><span class="n">name</span><span class="p">)(</span>
+            <span class="n">when</span><span class="p">(</span><span class="s2">&quot;Item {} received update&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item1</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+            <span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="c1"># this method gets called when the rule executes</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;rule {} triggered by {}, state {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">itemName</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">itemState</span><span class="p">))</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">postUpdate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">getItemValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">MyUnitTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="n">ITEM1NAME</span> <span class="o">=</span> <span class="s2">&quot;TestNumber1&quot;</span>
+    <span class="n">ITEM2NAME</span> <span class="o">=</span> <span class="s2">&quot;TestNumber2&quot;</span>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item1</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ITEM1NAME</span><span class="p">,</span> <span class="s2">&quot;Number&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item2</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ITEM2NAME</span><span class="p">,</span> <span class="s2">&quot;Number&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="n">ItemPostUpdater</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">item2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item1</span><span class="p">)</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">postUpdate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item1</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">RESPONSE_TIME</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item2</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">floatValue</span><span class="p">(),</span> <span class="mf">10.0</span><span class="p">)</span>
+
+
+<span class="c1"># results are also logged to the openHAB log file</span>
+<span class="c1"># status can be used to take actions like sending notifications</span>
+<span class="c1"># results are a JSON formatted string (will probably change to return Python dict instead)</span>
+
+<span class="k">def</span> <span class="nf">scriptLoaded</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">run_test</span><span class="p">(</span><span class="n">MyUnitTest</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YXNjcmlwdA== docutils container">
+<p>TODO</p>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<p>TODO</p>
+</div>
+</div>
 </div>
 
 
