@@ -45,7 +45,7 @@ eos_style = Style([
 ])
 
 col_left_width = 17
-col_right_width = 15
+col_right_width = 25
 
 def menu_navigate(root_group_name, host, back_group=None):
     """
@@ -307,7 +307,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         # returns true if value will be used to evalute the current scene
         def _get_setting_depth(key):
             for scan_depth in range(depth, 11):
-                if get_scene_setting(scene, light_type, key, data, depth=scan_depth, min_depth=scan_depth) is not None:
+                if get_scene_setting(scene, light_type, key, data, max_depth=scan_depth, min_depth=scan_depth) is not None:
                     break
             return scan_depth
 
@@ -358,7 +358,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             ]
         }
         missing = []
-        for key in scene_settings_map[scene_type]:
+        for key in scene_settings_map.get(scene_type, {}):
             if key not in settings_added:
                 missing.append(key)
         if META_KEY_MOTION_SOURCE in settings_added:
@@ -392,7 +392,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         echo("Building Menu...")
 
         item_eos_group = get_item_eos_group(item, host)
-        scene_type = get_scene_type(scene, light_type, data) if scene and is_light else None
+        scene_type = get_scene_type(scene, light_type, data) if scene and depth==1 else "unknown"
 
         menu_choices = []
         menu_choices.append(Separator(line=" "))
@@ -551,7 +551,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         for scan_depth in range(depth, 11):
             for key in META_KEY_LIST:
                 if key not in settings_added:
-                    value = get_scene_setting(scene, light_type, key, data, depth=scan_depth, min_depth=scan_depth)
+                    value = get_scene_setting(scene, light_type, key, data, max_depth=scan_depth, min_depth=scan_depth)
                     if value is not None:
                         settings_added.append(key)
                         if answer == "eos_menu_setting_{}".format(key): pointed_at = len(menu_choices)
@@ -614,9 +614,9 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         elif answer == "eos_menu_edit_scene_name":
             # edit scene name
             new_scene = prompt_text("Enter a new scene name:", default=scene)
-            if new_scene:
-                data_at_depth(depth)[new_scene] = data_at_depth(depth)[scene]
-                del data_at_depth(depth)[scene]
+            if new_scene and new_scene.lower() != scene:
+                data_at_depth(depth+5)[new_scene] = data_at_depth(depth+5)[scene]
+                del data_at_depth(depth+5)[scene]
                 scene = new_scene
             del new_scene
         elif answer == "eos_menu_enabled":
@@ -797,23 +797,16 @@ def prompt_edit_setting(message, key, host, instructions=[], default=""):
             valid = True
         elif key in [META_KEY_LEVEL_SOURCE, META_KEY_MOTION_SOURCE]:
             valid = True if validate_item(answer, host) else False
-            if not valid:
-                err_msg = "Value of {key} must be an item that exists!".format(key=key)
-                default = answer
+            if not valid: err_msg = "Value of {key} must be an item that exists!".format(key=key)
         elif key in [META_KEY_LEVEL_HIGH, META_KEY_LEVEL_LOW, META_KEY_LEVEL_THRESHOLD]:
-            try:
-                valid = True if isinstance(literal_eval(str(answer)), (int, float)) else False
-                answer = literal_eval(str(answer))
-            except:
-                pass
+            answer = resolve_type(answer)
+            valid = True if isinstance(answer, (int, float)) else False
             if not valid: err_msg = "Value of {key} must be a number!".format(key=key)
         elif len(str(answer).split(",")) == 3:
             # list for color state
-            try:
-                answer = [literal_eval(part.strip()) for part in str(answer).split(",")]
-            except:
-                answer = [part.strip() for part in str(answer).split(",")]
-            valid = True
+            hsb = [resolve_type(part.strip()) for part in str(answer).split(",") if isinstance(resolve_type(part.strip()), (int, float))]
+            valid = True if len(hsb)==3 else False
+            if not valid: err_msg = "HSB states must be 3 numbers"
         else:
             valid = True
         # TODO keys that still need validation:
@@ -825,5 +818,7 @@ def prompt_edit_setting(message, key, host, instructions=[], default=""):
             # META_KEY_MOTION_ACTIVE = "motion_active"
             # META_KEY_MOTION_STATE = "motion_state"
             # META_KEY_MOTION_SCENE = "motion_scene"
+
+        if not valid: default = answer
 
     return answer
