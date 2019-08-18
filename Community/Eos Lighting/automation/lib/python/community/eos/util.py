@@ -60,6 +60,9 @@ def get_scene_item(group):
     if not items:
         if config.log_trace: log.debug("Group '{group}' does not contain a scene item".format(group=group.name))
         return None
+    elif len(items) > 1 and "restore" in group.name.lower():
+        # probably a restore on startup group, skip
+        return None
     elif len(items) > 1:
         itemList = ""
         for item in items: itemList = "{list}'{name}', ".format(list=itemList, name=item.name)
@@ -217,7 +220,7 @@ def get_scene_setting(item, scene, key, data=None, max_depth=10):
         return None
     if config.log_trace: log.debug("Got setting '{key}' for scene '{scene}' for item '{name}' from {source}: {value}".format(
             key=key, scene=scene, name=item.name, source=source, value=value))
-    return value
+    return resolve_type(value)
 
 def get_scene_type(item, scene, light_type, data=None):
     """
@@ -229,30 +232,20 @@ def get_scene_type(item, scene, light_type, data=None):
     """
     def _scan_settings(min_depth, max_depth):
         for depth in range(min_depth, max_depth+1):
-            if light_type == LIGHT_TYPE_SWITCH:
-                if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
-                    return SCENE_TYPE_FIXED
-                elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
+            if get_scene_setting(item, scene, META_KEY_STATE, data=data, max_depth=depth) is not None:
+                return SCENE_TYPE_FIXED
+            elif light_type == LIGHT_TYPE_SWITCH:
+                if get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, max_depth=depth) is not None:
                     return SCENE_TYPE_THRESHOLD
-            elif light_type == LIGHT_TYPE_DIMMER:
-                if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
-                    return SCENE_TYPE_FIXED
-                elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, depth=depth) is not None \
-                or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, depth=depth) is not None \
-                or get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, depth=depth) is not None \
-                or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, depth=depth) is not None:
+            elif light_type in [LIGHT_TYPE_DIMMER, LIGHT_TYPE_COLOR]:
+                if get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, max_depth=depth) is not None \
+                or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, max_depth=depth) is not None:
                     return SCENE_TYPE_SCALED
-                elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
-                    return SCENE_TYPE_THRESHOLD
-            elif light_type == LIGHT_TYPE_COLOR:
-                if get_scene_setting(item, scene, META_KEY_STATE, data=data, depth=depth) is not None:
-                    return SCENE_TYPE_FIXED
-                elif get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data, depth=depth) is not None \
-                or get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data, depth=depth) is not None \
-                or get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, depth=depth) is not None \
-                or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, depth=depth) is not None:
+                elif max_depth < 5 \
+                and (get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data, max_depth=depth) is not None \
+                or get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data, max_depth=depth) is not None):
                     return SCENE_TYPE_SCALED
-                elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, depth=depth) is not None:
+                elif get_scene_setting(item, scene, META_KEY_LEVEL_THRESHOLD, data=data, max_depth=depth) is not None:
                     return SCENE_TYPE_THRESHOLD
         return None
 

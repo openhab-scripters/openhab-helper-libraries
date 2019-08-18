@@ -201,34 +201,34 @@ def get_state_for_scene(item, scene):
             return str(item.state)
         level_value = float(level_value)
 
-        level_high = resolve_type(get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data))
+        level_high = get_scene_setting(item, scene, META_KEY_LEVEL_HIGH, data=data)
         if level_high is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_LEVEL_HIGH, name=item.name, scene=scene))
             return str(item.state)
         level_high = float(level_high)
 
-        level_low = resolve_type(get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data))
+        level_low = get_scene_setting(item, scene, META_KEY_LEVEL_LOW, data=data)
         if level_low is None:
             level_low = 0.0
             log.debug("No value for key '{key}' for scene '{scene}' for item '{name}', using default '{value}'".format(
                 key=META_KEY_LEVEL_LOW, scene=scene, name=item.name, value=level_low))
         level_low = float(level_low)
 
-        state_high = resolve_type(get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data))
+        state_high = get_scene_setting(item, scene, META_KEY_STATE_HIGH, data=data)
         if state_high is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE_HIGH, name=item.name, scene=scene))
             return str(item.state)
 
-        state_low = resolve_type(get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data))
+        state_low = get_scene_setting(item, scene, META_KEY_STATE_LOW, data=data)
         if state_low is None:
             log.error("Scaling type scenes require '{key}' setting, nothing found for '{name}' for scene '{scene}'".format(
                 key=META_KEY_STATE_LOW, name=item.name, scene=scene))
             return str(item.state)
 
-        state_above = resolve_type(get_scene_setting(item, scene, META_KEY_STATE_ABOVE, data=data)) or state_high
-        state_below = resolve_type(get_scene_setting(item, scene, META_KEY_STATE_BELOW, data=data)) or state_low
+        state_above = get_scene_setting(item, scene, META_KEY_STATE_ABOVE, data=data) or state_high
+        state_below = get_scene_setting(item, scene, META_KEY_STATE_BELOW, data=data) or state_low
 
         if level_value > level_high:
             state = state_above
@@ -251,7 +251,7 @@ def get_state_for_scene(item, scene):
     if light_type == LIGHT_TYPE_SWITCH and isinstance(state, (str)) and state.upper() in ["ON", "OFF"]:
         state = state.upper()
     elif light_type == LIGHT_TYPE_DIMMER and isinstance(state, (int, float)):
-        state = str(int(round(state)))
+        state = str(constrain(int(round(state)), 0, 1000000))
     elif light_type == LIGHT_TYPE_COLOR and isinstance(state, (int, float, list)):
         if isinstance(state, (int, float)):
             oldState = str("0,0,0" if isinstance(item.state, typesUnDef) else item.state).split(",")
@@ -259,9 +259,13 @@ def get_state_for_scene(item, scene):
         else:
             if state[0] > 359: state[0] -= 359
             elif state[0] < 0: state[0] += 359
-            constrain(state[1], 0, 100)
-            constrain(state[2], 0, 100)
-            state = ",".join([str(i) for i in state])
+            state[1] = constrain(state[1], 0, 100)
+            state[2] = constrain(state[2], 0, 100)
+            if state[2] == 0:
+                # needed because some devices will return '0,0,0' if V=0
+                state = "0,0,0"
+            else:
+                state = ",".join([str(i) for i in state])
     else:
         log.warn("New state '{state}' for '{name}' scene '{scene}' is not valid for item type '{type}'".format(
             state=state, name=item.name, scene=scene, type=item.type))
