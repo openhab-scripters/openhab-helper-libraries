@@ -56,12 +56,13 @@ def menu_navigate(root_group_name, host, back_group=None):
     pointed_at = None
     exit_loop = False
     while not exit_loop:
-        echo("Loading...")
+        echo("Building Menu...")
 
         root_group = validate_item(root_group_name, host)
         eos_lights = get_light_items(root_group, host)
         eos_groups = get_group_items(root_group)
         other_items = get_other_items(root_group, host)
+        item_eos_group = get_item_eos_group(root_group, host)
 
         menu_choices = []
         menu_choices.append(Separator(line=" "))
@@ -73,6 +74,15 @@ def menu_navigate(root_group_name, host, back_group=None):
                 ],
                 disabled=True
             ))
+        if item_eos_group:
+            menu_choices.append(Choice(     # Item Eos Group
+                    title=[
+                        ("class:{}".format("disabled"), "{:{width}}".format("Eos Group", width=col_left_width)),
+                        ("class:value", "{:{width}}".format(item_eos_group["name"], width=col_right_width))
+                    ],
+                    value="eos_menu_eos_group",
+                    disabled=True
+                ))
         menu_choices.append(Separator(line=" "))
         if eos_lights:
             menu_choices.append(Separator(line="    Eos Lights"))
@@ -110,7 +120,7 @@ def menu_navigate(root_group_name, host, back_group=None):
                             ("class:itemname", " {}".format(item["name"])),
                             ("class:itemlabel", "{}".format(" \"{}\"".format(item["label"]) if "label" in item else "")),
                         ],
-                        disabled=True if item["type"] == "Group" else False,        # TODO implement group adding
+                        disabled="not implemented yet" if item["type"] == "Group" else False,        # TODO implement group adding
                         value=item["name"]
                     ))
             menu_choices.append(Separator(line=" "))
@@ -667,7 +677,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             del new_value
         elif answer == "eos_menu_add_setting":
             # add a new setting to this item
-            new_key = prompt_select_setting(keys_to_hide=[key for key in data_at_depth(depth) if key in META_KEY_LIST])
+            new_key = prompt_select_setting(depth, keys_to_hide=[key for key in data_at_depth(depth) if key in META_KEY_LIST])
             if new_key in META_KEY_LIST:
                 new_value = prompt_edit_setting("Enter a new value for {}:".format(new_key), new_key, host)
                 if new_value is not None:
@@ -757,7 +767,7 @@ def prompt_scene_name(message, instructions=[], default=""):
         else:
             return None
 
-def prompt_select_setting(keys_to_hide=[]):
+def prompt_select_setting(depth, keys_to_hide=[]):
     """
     Prompt to select a setting to add
     """
@@ -771,7 +781,7 @@ def prompt_select_setting(keys_to_hide=[]):
         ))
     menu_choices.append(Separator(line=" "))
     for key in META_KEY_LIST:
-        if key not in keys_to_hide:
+        if key not in keys_to_hide and depth in META_KEY_DEPTH_MAP[key]:
             menu_choices.append(str(key))
     menu_choices.append(Separator(line=" "))
     menu_choices.append(Choice(title="Cancel", value="eos_menu_cancel"))
