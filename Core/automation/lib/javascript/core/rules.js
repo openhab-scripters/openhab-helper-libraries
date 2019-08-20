@@ -96,9 +96,9 @@ return RuleBuilder.create(ruleDto.uid)
 			var ruid = uuid.randomUUID() + "-" + obj.name.replace(/[^\w]/g, "-");
 			logInfo("################  JSRule Line: "+__LINE__+"  ################# ruid:" + ruid);
 			//var rule = new SimpleRule({ setUID: function(i) { uid = i; } })
-			var rule = new SimpleRule(){
+			var rule = new SimpleRule({
 				execute: obj.execute //DOES THIS WORK? AND IF YES, WHY? => execute is found in implemented SimpleRuleActionHandler
-			};
+			});
 			var triggers = obj.triggers ? obj.triggers : obj.getEventTrigger();
 
 			rule.setTemplateUID(ruid);
@@ -108,6 +108,9 @@ return RuleBuilder.create(ruleDto.uid)
 			}
 			if (obj.name) {
 				rule.setName(obj.name);
+			}
+			if (obj.conditions){
+				rule.setConditions(obj.conditions);
 			}
 
 			//1. Register rule here
@@ -136,7 +139,7 @@ return RuleBuilder.create(ruleDto.uid)
 		var rname =  obj.name ? obj.name.replace(/[^\w]/g, "-") : "nameless-generic";
 		var ruid = obj.uid ? obj.uid : uuid.randomUUID() + "-" + rname;
 		var triggers = obj.triggers ? obj.triggers : obj.getEventTrigger();
-		var execX = new SimpleRule(){execute: obj.execute};//Not good!!
+		var execX = new SimpleRule({execute: obj.execute});//Not good!!
 		return RuleBuilder.create(ruid)
 			.withActions(execX.getActions() ? execX.getActions() : null)
 			//.withActions(obj.execute ? [obj.execute] : null) //org.openhab.core.automation.module.script.rulesupport.shared.ScriptedAutomationManager L164
