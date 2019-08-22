@@ -227,16 +227,18 @@ def save_metadata(item, host, data):
             if d[k] in [{}, None]:
                 d.pop(k, None)
 
-    purge_empty(data)
+    value = str(data.pop("enabled"))
 
-    item_type = "item" if item["type"] in itemtypesLight else "group"
+    if item["type"] in itemtypesLight:
+        configuration = data["item"]
+    else:
+        configuration = [data["raw_groups"][i]["data"] for i in range(len(data["raw_groups"])) if data["raw_groups"][i]["name"] == item["name"]][0]
 
-    if item_type == "item": data[item_type].pop("light_type", None)
-    value = str(data[item_type].pop("enabled"))
+    purge_empty(configuration)
 
     return set_metadata(
             item["name"], META_NAME_EOS, host,
-            configuration=data[item_type],
+            configuration=configuration,
             value=value,
             overwrite=True
         )
@@ -245,37 +247,52 @@ def build_data(item, host):
     """
     Builds data structure for the eos menu
     """
+    def _get_group_data(group):
+        """
+        Get all group ancestor's data, top level group settings are lowest priority
+        """
+        data["raw_groups"].append({"name": group["name"], "data": get_metadata(group["name"], META_NAME_EOS, host).get("config", {})})
+        if get_item_eos_group(group, host):
+            _get_group_data(get_item_eos_group(group, host))
+
     clear()
     echo("Loading Data...")
 
-    data = {"item": {}, "group": {}, "global": get_global_settings()}
+    data = {
+        "item": {},
+        "group": {},
+        "raw_groups": [],
+        "global": get_global_settings()}
 
-    item_type = "item" if item["type"] in itemtypesLight else "group"
     is_light = item["type"] in itemtypesLight
     is_group = item["type"] in itemtypesGroup
 
     item_metadata = get_metadata(item["name"], META_NAME_EOS, host)
-    data[item_type] = item_metadata.get("config", {})
 
     if is_light:
-        data["item"]["light_type"] = LIGHT_TYPE_MAP.get(item.get("type", "").lower(), None)
-        data["group"] = get_metadata(get_item_eos_group(item, host)["name"], META_NAME_EOS, host).get("config", {})
+        data["item"] = item_metadata.get("config", {})
+        data["light_type"] = LIGHT_TYPE_MAP.get(item.get("type", "").lower(), None)
+        _get_group_data(get_item_eos_group(item, host))
+
+    if is_group:
+        _get_group_data(item)
+
 
     # get enabled option
-    data[item_type]["enabled"] = item_metadata.get("value", True)
-    if isinstance(data[item_type]["enabled"], str):
-        if data[item_type]["enabled"].lower() in META_STRING_FALSE:
-            data[item_type]["enabled"] = False
+    data["enabled"] = item_metadata.get("value", True)
+    if isinstance(data["enabled"], str):
+        if data["enabled"].lower() in META_STRING_FALSE:
+            data["enabled"] = False
         else:
-            data[item_type]["enabled"] = True
+            data["enabled"] = True
 
     # make sure follow parent is bool
     if is_group:
-        if isinstance(data[item_type].get("follow_parent", None), str):
-            if data[item_type]["follow_parent"].lower() in META_STRING_FALSE:
-                data[item_type]["follow_parent"] = False
+        if isinstance(data.get("follow_parent", None), str):
+            if data["follow_parent"].lower() in META_STRING_FALSE:
+                data["follow_parent"] = False
             else:
-                data[item_type]["follow_parent"] = True
+                data["follow_parent"] = True
 
     return data
 
@@ -300,9 +317,16 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
         elif depth in [7, 9]:
             return _validate_key(data_at_depth(depth+1), light_type)
         elif depth == 8:
-            return data["group"]
+            return [data["raw_groups"][i]["data"] for i in range(len(data["raw_groups"])) if data["raw_groups"][i]["name"] == item["name"]][0]
         elif depth == 10:
             return data["global"]
+
+    def build_group_data():
+        # builds the data dict used in Eos
+        del data["group"]
+        data["group"] = {}
+        for i in range(len(data["raw_groups"])):
+            data["group"] = update_dict(data["group"], data["raw_groups"][i]["data"])
 
     def get_scene_depth_for_type():
         # determine the depth a scene should be at
@@ -385,9 +409,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
     if not view_only: # don't waste memory if we won't be editing
         item = copy.deepcopy(item)
         data = copy.deepcopy(data)
-    #item_type = "group" if item["type"] in itemtypesGroup else "item"
-    item_type = "group" if is_group else "item"
-    light_type = light_type or data["item"].get("light_type", None)
+    light_type = light_type or data.get("light_type", None)
 
     menu_message = "Eos Editor > {} {}".format(
             "View" if view_only else "Edit",
@@ -403,6 +425,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
 
         item_eos_group = get_item_eos_group(item, host)
         scene_type = get_scene_type(scene, light_type, data) if scene and depth==1 else "unknown"
+        build_group_data()
 
         menu_choices = []
         menu_choices.append(Separator(line=" "))
@@ -461,7 +484,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             menu_choices.append(Choice(     # Item Enabled
                     title=[
                         ("class:text", "{:{width}}".format("Enabled", width=col_left_width)),
-                        ("class:value", "{:{width}}".format(str(data[item_type]["enabled"]), width=col_right_width))
+                        ("class:value", "{:{width}}".format(str(data["enabled"]), width=col_right_width))
                     ],
                     value="eos_menu_enabled"
                 ))
@@ -470,7 +493,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                 menu_choices.append(Choice(     # Group Follow Parent
                         title=[
                             ("class:text", "{:{width}}".format("Follow Parent", width=col_left_width)),
-                            ("class:value", "{:{width}}".format(str(data["group"].get("follow_parent", True)), width=col_right_width))
+                            ("class:value", "{:{width}}".format(str(data.get("follow_parent", True)), width=col_right_width))
                         ],
                         value="eos_menu_follow_parent"
                     ))
@@ -509,7 +532,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                             ("class:text", "{:{width}}".format(key, width=col_left_width)),
                             ("class:value", "{:{width}}".format(
                                 str(get_scene_type(key, light_type, data)).capitalize() if is_light else "", width=col_right_width)),
-                            ("class:disabled", " group-type"),
+                            ("class:disabled", " group-type {}".format(get_source_group(None, light_type, key, item["name"], data))),
                         ],
                         value="eos_menu_scene_{}".format(key)
                     ))
@@ -521,7 +544,7 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                             ("class:text", "{:{width}}".format(key, width=col_left_width)),
                             ("class:value", "{:{width}}".format(
                                 str(get_scene_type(key, light_type, data)).capitalize() if is_light else "", width=col_right_width)),
-                            ("class:disabled", " group"),
+                            ("class:disabled", " group {}".format(get_source_group(None, None, key, item["name"], data))),
                         ],
                         value="eos_menu_scene_{}".format(key)
                     ))
@@ -572,7 +595,8 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
                                     ("class:{}".format("valueapplies" if value_applies(key) else "value"),
                                         "{:{width}} ".format("\"{}\"".format(value) if isinstance(value, str) else str(value),
                                         width=col_right_width)),
-                                    ("class:disabled", DEPTH_NAME_MAP[scan_depth]),
+                                    ("class:disabled", "{} {}".format(DEPTH_NAME_MAP[scan_depth],
+                                        get_source_group(key, light_type, scene, item["name"], data) if scan_depth in [2,3,7,8] else "")),
                                 ],
                                 value="eos_menu_setting_{}".format(key),
                                 disabled=view_only
@@ -625,16 +649,16 @@ def menu_eos(item, data, host, depth, light_type=False, is_light=False,
             # edit scene name
             new_scene = prompt_text("Enter a new scene name:", default=scene)
             if new_scene and new_scene.lower() != scene:
-                data_at_depth(depth+5)[new_scene] = data_at_depth(depth+5)[scene]
-                del data_at_depth(depth+5)[scene]
+                data_at_depth(depth+5)[new_scene] = data_at_depth(depth+5).get(scene, {})
+                if scene in data_at_depth(depth+5): del data_at_depth(depth+5)[scene]
                 scene = new_scene
             del new_scene
         elif answer == "eos_menu_enabled":
             # toggle enabled
-            data[item_type]["enabled"] = not data[item_type]["enabled"]
+            data["enabled"] = not data["enabled"]
         elif answer == "eos_menu_follow_parent":
             # toggle follow parent
-            data["group"]["follow_parent"] = not data["group"].get("follow_parent", True)
+            data["follow_parent"] = not data.get("follow_parent", True)
         elif answer[:len("eos_menu_light_type_")] == "eos_menu_light_type_":
             # edit data for light type
             item, data = menu_eos(item, data, host, 7,

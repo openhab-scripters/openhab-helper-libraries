@@ -6,8 +6,10 @@ Contants used by all modules
 
 RULE_REINIT_NAME = "Eos Reload Rule"
 RULE_REINIT_DESC = "This rule allows runtime reloading of the Eos System via a switch item"
-RULE_SCENE_NAME = "Eos Scene Rule"
-RULE_SCENE_DESC = "This rule is triggered when any Eos Scene receives a command"
+RULE_SCENE_COMMAND_NAME = "Eos Scene Command Rule"
+RULE_SCENE_COMMAND_DESC = "This rule is triggered when any Eos Scene receives a command"
+RULE_SCENE_CHANGED_NAME = "Eos Scene Changed Rule"
+RULE_SCENE_CHANGED_DESC = "This rule is triggered when any Eos Scene changes"
 RULE_LIGHT_NAME = "Eos Light Rule"
 RULE_LIGHT_DESC = "This rule is triggered when any Eos Light receives an update"
 RULE_LEVEL_SOURCE_NAME = "Eos Level Source Rule"
@@ -130,7 +132,8 @@ itemtypesColor = (ohcColorItem, eshColorItem)
 itemtypesGroup = (ohcGroupItem, eshGroupItem)
 
 __all__ = [
-    "RULE_REINIT_NAME", "RULE_REINIT_DESC", "RULE_SCENE_NAME", "RULE_SCENE_DESC",
+    "RULE_REINIT_NAME", "RULE_REINIT_DESC", "RULE_SCENE_COMMAND_NAME",
+    "RULE_SCENE_COMMAND_DESC", "RULE_SCENE_CHANGED_NAME", "RULE_SCENE_CHANGED_DESC",
     "RULE_LIGHT_NAME", "RULE_LIGHT_DESC", "RULE_LEVEL_SOURCE_NAME", "RULE_LEVEL_SOURCE_DESC",
     "RULE_MOTION_SOURCE_NAME", "RULE_MOTION_SOURCE_DESC",
 

@@ -36,7 +36,13 @@ contents are also shown here:
     that are visible to all items. Eos comes with a few Global settings already
     defined to get you started, if you want to remove any of them just set the
     value to ``None`` here. Any settings you put here will be added to the
-    built-in Global settings shown below.
+    built-in Global settings shown below and will overwrite any existing
+    values.
+
+    Because groups inherit settings from their parent group, you can also put
+    settings in the *master group* with the same effects. This allows you to
+    use the *Eos Editor* to define the scenes and settings you want to be
+    global, instead of writing them out here.
 
   .. code-block::
 

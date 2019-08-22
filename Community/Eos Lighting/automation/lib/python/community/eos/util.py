@@ -11,12 +11,12 @@ from core.utils import validate_item
 from core.metadata import get_value, get_metadata as core_get_metadata
 
 from ast import literal_eval
-import copy
+import copy, collections
 
 __all__ = [
     "resolve_type", "validate_item_name", "get_scene_item", "get_light_items",
     "get_group_items", "get_item_eos_group", "get_scene_for_item", "get_metadata",
-    "get_scene_setting", "get_scene_type"
+    "update_dict", "build_data", "get_scene_setting", "get_scene_type"
 ]
 
 
@@ -110,7 +110,8 @@ def get_item_eos_group(item):
     """
     groups = [group for group in item.groupNames if get_scene_item(validate_item(group))]
     if not groups:
-        log.error("No Eos group found for item '{name}'".format(name=item.name))
+        if item.name != config.master_group_name:
+            log.error("No Eos group found for item '{name}'".format(name=item.name))
         return None
     elif len(groups) > 1:
         groupList = ""
@@ -169,6 +170,44 @@ def get_metadata(item_name, namespace):
     metadata = core_get_metadata(item_name, namespace)
     return {"value": metadata.value, "configuration": parse_config(metadata.configuration)} if metadata else {}
 
+def update_dict(d, u):
+    """
+    Recursively update dict ``d`` with dict ``u``
+    """
+    for k in u:
+        dv = d.get(k, {})
+        if not isinstance(dv, collections.Mapping):
+            d[k] = u[k]
+        elif isinstance(u[k], collections.Mapping):
+            d[k] = update_dict(dv, u[k])
+        else:
+            d[k] = u[k]
+    return d
+
+def build_data(item):
+    """
+    Builds a dict of all item, group, and global settings to use when
+    evaluating a scene.
+    """
+    def _get_parent_group_data(group):
+        """
+        Get all group ancestor's data, top level group settings are lowest priority
+        """
+        group_data = {}
+        if get_item_eos_group(group):
+            group_data = _get_parent_group_data(get_item_eos_group(group))
+        group_data = update_dict(
+                group_data,
+                get_metadata(group.name, META_NAME_EOS).get("configuration", {})
+            )
+        return group_data
+
+    data = {}
+    data["item"] = get_metadata(item.name, META_NAME_EOS).get("configuration", {})
+    data["group"] = _get_parent_group_data(get_item_eos_group(item))
+    data["global"] = config.global_settings
+    return data
+
 def get_scene_setting(item, scene, key, data=None, max_depth=10):
     """
     Gets a setting value by searching:
@@ -177,11 +216,11 @@ def get_scene_setting(item, scene, key, data=None, max_depth=10):
     Light Type in Group > Group > Light Type in Global > Global
     """
     light_type = LIGHT_TYPE_MAP.get(item.type.lower(), None)
-    item_data = data["item"] if data else get_metadata(item.name, META_NAME_EOS).get("configuration", {})
+    item_data = data["item"]
     #if config.log_trace: log.debug("Got Item data for '{name}': {data}".format(name=item.name, data=item_data))
-    group_data = data["group"] if data else get_metadata(get_item_eos_group(item).name, META_NAME_EOS).get("configuration", {})
+    group_data = data["group"]
     #if config.log_trace: log.debug("Got Group data for '{name}': {data}".format(name=get_item_eos_group(item).name, data=group_data))
-    global_data = config.global_settings
+    global_data = data["global"]
     #if config.log_trace: log.debug("Got Global data: {data}".format(name=light_type, data=global_data))
     value = None
     if max_depth >= 1 and 1 in META_KEY_DEPTH_MAP[key] and item_data.get(scene, {}).get(key, None) is not None:

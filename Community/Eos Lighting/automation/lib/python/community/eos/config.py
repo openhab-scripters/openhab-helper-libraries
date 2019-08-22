@@ -10,12 +10,7 @@ from community.eos import constants
 
 import sys, copy, collections
 
-_master_group_name = ""
-_scene_item_prefix = ""
-_scene_item_suffix = ""
-_reinit_item_name = ""
-
-__all__ = [  ]
+__all__ = [ "load" ]
 
 
 def _get_conf_value(name, valid_types=None, default=None):
@@ -43,27 +38,28 @@ def _get_conf_value(name, valid_types=None, default=None):
         log.debug("No '{name}' specified in configuration".format(name=name))
         return default
 
-def _load():
+def update_dict(d, u):
+    """
+    Recursively update dict ``d`` with dict ``u``
+    """
+    for k in u:
+        dv = d.get(k, {})
+        if not isinstance(dv, collections.Mapping):
+            d[k] = u[k]
+        elif isinstance(u[k], collections.Mapping):
+            d[k] = update_dict(dv, u[k])
+        else:
+            d[k] = u[k]
+    return d
+
+def load():
+    this = sys.modules[__name__]
     this.master_group_name = _get_conf_value(CONF_KEY_MASTER_GROUP, str, "")
     this.scene_item_prefix = _get_conf_value(CONF_KEY_SCENE_PREFIX, str, "")
     this.scene_item_suffix = _get_conf_value(CONF_KEY_SCENE_SUFFIX, str, "")
     this.reinit_item_name = _get_conf_value(CONF_KEY_REINIT_ITEM, str, "")
     this.log_trace = _get_conf_value(CONF_KEY_LOG_TRACE, None, False)
-
-    # recursively update global settings with dict from config
-    def update(d, u):
-        for k in u:
-            dv = d.get(k, {})
-            if not isinstance(dv, collections.Mapping):
-                d[k] = u[k]
-            elif isinstance(u[k], collections.Mapping):
-                d[k] = update(dv, u[k])
-            else:
-                d[k] = u[k]
-        return d
-    global_settings = copy.deepcopy(constants._global_settings)
-    this.global_settings = update(global_settings, _get_conf_value(CONF_KEY_GLOBAL_SETTINGS, dict, {}))
-
-
-this = sys.modules[__name__]
-_load()
+    this.global_settings = update_dict(
+            copy.deepcopy(constants._global_settings),
+            _get_conf_value(CONF_KEY_GLOBAL_SETTINGS, dict, {})
+        )

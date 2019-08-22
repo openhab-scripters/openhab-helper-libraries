@@ -4,6 +4,7 @@ Eos Lighting
 System init and uninit
 """
 
+from community import eos
 from community.eos import log, config
 from community.eos.update import update_eos
 from community.eos.util import *
@@ -22,7 +23,7 @@ from core.log import log_traceback
 __all__ = [ "init", "uninit" ]
 
 @log_traceback
-def init(rule_reinit, rule_scene_command, rule_light_update, rule_level_source_update, rule_motion_source_changed):
+def init(rule_reinit, rule_scene_command, rule_scene_changed, rule_light_update, rule_level_source_update, rule_motion_source_changed):
     """Initialize Eos.
 
     This creates a rule with triggers for the scene item in
@@ -62,9 +63,10 @@ def init(rule_reinit, rule_scene_command, rule_light_update, rule_level_source_u
             log.debug("Scanning group '{group}' for scene and light items".format(group=group.name))
             itemScene = get_scene_item(group)
             if itemScene:
-                # add scene trigger
+                # add scene triggers
                 when("Item {name} received command".format(name=itemScene.name))(rule_scene_command)
-                log.debug("Added scene item trigger for '{name}'".format(name=itemScene.name))
+                when("Item {name} changed".format(name=itemScene.name))(rule_scene_changed)
+                log.debug("Added scene item triggers for '{name}'".format(name=itemScene.name))
                 # gen triggers for Level and Motion sources in metadata
                 _gen_triggers_for_sources(get_metadata(group.name, META_NAME_EOS).get("configuration", {}))
                 # add lights triggers
@@ -83,6 +85,9 @@ def init(rule_reinit, rule_scene_command, rule_light_update, rule_level_source_u
                 log.warn("No lights or groups in '{group}' will be discovered because it has no scene item".format(group=group.name))
 
     log.info("Eos initializing...")
+    log.info("Eos Version {}".format(eos.__version__))
+
+    config.load()
 
     if not config.master_group_name:
         log.error("No '{name}' specified in configuration".format(name=CONF_KEY_MASTER_GROUP))
@@ -108,7 +113,7 @@ def init(rule_reinit, rule_scene_command, rule_light_update, rule_level_source_u
         log.error("Eos failed to initialize")
         return
 
-    for objRule in [objRule for objRule in ruleRegistry.getAll() if objRule.name in [RULE_REINIT_NAME, RULE_SCENE_NAME, RULE_LIGHT_NAME, RULE_LEVEL_SOURCE_NAME]]:
+    for objRule in [objRule for objRule in ruleRegistry.getAll() if objRule.name in [RULE_REINIT_NAME, RULE_SCENE_COMMAND_NAME, RULE_SCENE_CHANGED_NAME, RULE_LIGHT_NAME, RULE_LEVEL_SOURCE_NAME]]:
         log.warn("Found existing {rule} with UID '{uid}'".format(rule=objRule.name, uid=objRule.UID))
         ruleRegistry.remove(objRule.UID)
         #try: ruleRegistry.remove(objRule.UID)
@@ -119,6 +124,7 @@ def init(rule_reinit, rule_scene_command, rule_light_update, rule_level_source_u
     # if we are reinit-ing {rule}.triggers will be NoneType
     if hasattr(rule_reinit, "triggers"): delattr(rule_reinit, "triggers")
     if hasattr(rule_scene_command, "triggers"): delattr(rule_scene_command, "triggers")
+    if hasattr(rule_scene_changed, "triggers"): delattr(rule_scene_changed, "triggers")
     if hasattr(rule_light_update, "triggers"): delattr(rule_light_update, "triggers")
     if hasattr(rule_level_source_update, "triggers"): delattr(rule_level_source_update, "triggers")
     if hasattr(rule_motion_source_changed, "triggers"): delattr(rule_motion_source_changed, "triggers")
@@ -133,20 +139,30 @@ def init(rule_reinit, rule_scene_command, rule_light_update, rule_level_source_u
         else:
             log.error("Failed to create {rule}".format(rule=RULE_REINIT_NAME))
 
-    # generate triggers for all scene, light, and level source items
+    # generate triggers for all scene, light, level source, and motion source items
     levelTriggers = {}
     motionTriggers = {}
     _gen_triggers_for_sources(config.global_settings)
     _gen_triggers_for_group(master_group_item)
 
     if hasattr(rule_light_update, "triggers"): # do not proceed if there are no lights
-        # create scene changed update
-        log.debug("Creating {rule}".format(rule=RULE_SCENE_NAME))
-        rule(RULE_SCENE_NAME, RULE_SCENE_DESC)(rule_scene_command)
+        # create scene command rule
+        log.debug("Creating {rule}".format(rule=RULE_SCENE_COMMAND_NAME))
+        rule(RULE_SCENE_COMMAND_NAME, RULE_SCENE_COMMAND_DESC)(rule_scene_command)
         if hasattr(rule_scene_command, "UID"):
-            log.debug("{rule} UID is '{uid}'".format(rule=RULE_SCENE_NAME, uid=rule_scene_command.UID))
+            log.debug("{rule} UID is '{uid}'".format(rule=RULE_SCENE_COMMAND_NAME, uid=rule_scene_command.UID))
         else:
-            log.error("Failed to create {rule}".format(rule=RULE_SCENE_NAME))
+            log.error("Failed to create {rule}".format(rule=RULE_SCENE_COMMAND_NAME))
+            log.error("Eos failed to initialize")
+            return
+
+        # create scene changed rule
+        log.debug("Creating {rule}".format(rule=RULE_SCENE_CHANGED_NAME))
+        rule(RULE_SCENE_CHANGED_NAME, RULE_SCENE_CHANGED_DESC)(rule_scene_changed)
+        if hasattr(rule_scene_changed, "UID"):
+            log.debug("{rule} UID is '{uid}'".format(rule=RULE_SCENE_CHANGED_NAME, uid=rule_scene_changed.UID))
+        else:
+            log.error("Failed to create {rule}".format(rule=RULE_SCENE_CHANGED_NAME))
             log.error("Eos failed to initialize")
             return
 
@@ -184,7 +200,6 @@ def init(rule_reinit, rule_scene_command, rule_light_update, rule_level_source_u
 
     else:
         log.warn("No lights found")
-        return
 
     log.info("Eos initialized")
     update_eos()
@@ -198,7 +213,7 @@ def uninit():
     """
     log.info("Eos uninitializing...")
 
-    for objRule in [objRule for objRule in ruleRegistry.getAll() if objRule.name in [RULE_REINIT_NAME, RULE_SCENE_NAME, RULE_LIGHT_NAME, RULE_LEVEL_SOURCE_NAME]]:
+    for objRule in [objRule for objRule in ruleRegistry.getAll() if objRule.name in [RULE_REINIT_NAME, RULE_SCENE_COMMAND_NAME, RULE_SCENE_CHANGED_NAME, RULE_LIGHT_NAME, RULE_LEVEL_SOURCE_NAME]]:
         log.info("Removing {rule} with UID '{uid}'".format(rule=objRule.name, uid=objRule.UID))
         ruleRegistry.remove(objRule.UID)
         #try: ruleRegistry.remove(objRule.UID)

@@ -17,9 +17,12 @@ from rest_metadata import get_metadata, get_value
 from rest_utils import validate_item
 
 
-__all__ = ["get_conf_value", "validate_item_name", "get_scene_item", "get_light_items",
+__all__ = [
+    "get_conf_value", "validate_item_name", "get_scene_item", "get_light_items",
     "get_group_items", "resolve_type", "get_item_eos_group", "get_other_items",
-    "get_global_settings", "get_scene_setting", "get_scene_type"]
+    "update_dict", "get_global_settings", "get_source_group", "get_scene_setting",
+    "get_scene_type"
+]
 
 
 def get_conf_value(name, valid_types=None, default=None):
@@ -138,20 +141,63 @@ def get_other_items(group, host):
     others.pop(get_scene_item(group)["name"], None)
     return [others[key] for key in others]
 
+def update_dict(d, u):
+    """
+    Recursively update dict ``d`` with dict ``u``
+    """
+    for k in u:
+        dv = d.get(k, {})
+        if not isinstance(dv, collections.Mapping):
+            d[k] = u[k]
+        elif isinstance(u[k], collections.Mapping):
+            d[k] = update_dict(dv, u[k])
+        else:
+            d[k] = u[k]
+    return d
+
 def get_global_settings():
-    def update(d, u):
-        for k, v in six.iteritems(u):
-            dv = d.get(k, {})
-            if not isinstance(dv, collections.Mapping):
-                d[k] = v
-            elif isinstance(v, collections.Mapping):
-                d[k] = update(dv, v)
-            else:
-                d[k] = v
-        return d
     import constants
     global_settings = copy.deepcopy(constants._global_settings)
-    return update(global_settings, get_conf_value(CONF_KEY_GLOBAL_SETTINGS, dict, {}))
+    return update_dict(global_settings, get_conf_value(CONF_KEY_GLOBAL_SETTINGS, dict, {}))
+
+def get_source_group(key, light_type, scene, item_name, data):
+    # get the group name that a setting is inherited from
+    raw_data = data["raw_groups"]
+
+    if key:
+        if scene:
+            for i in range(len(raw_data)):
+                this_data = raw_data[i]["data"]
+                if light_type in this_data:
+                    if scene in this_data[light_type]:
+                        if key in this_data[light_type][scene]:
+                            if resolve_type(this_data[light_type][scene][key]) is not None:
+                                return "({})".format(raw_data[i]["name"]) if raw_data[i]["name"] != item_name else ""
+                if scene in this_data:
+                    if key in this_data[scene]:
+                        if resolve_type(this_data[scene][key]) is not None:
+                            return "({})".format(raw_data[i]["name"]) if raw_data[i]["name"] != item_name else ""
+
+        for i in range(len(raw_data)):
+            this_data = raw_data[i]["data"]
+            if light_type in this_data:
+                if key in this_data[light_type]:
+                    if resolve_type(this_data[light_type][key]) is not None:
+                        return "({})".format(raw_data[i]["name"]) if raw_data[i]["name"] != item_name else ""
+            if key in this_data:
+                if resolve_type(this_data[key]) is not None:
+                    return "({})".format(raw_data[i]["name"]) if raw_data[i]["name"] != item_name else ""
+    else:
+        for i in range(len(raw_data)):
+            this_data = raw_data[i]["data"]
+            if light_type in this_data:
+                if scene in this_data[light_type]:
+                    return "({})".format(raw_data[i]["name"]) if raw_data[i]["name"] != item_name else ""
+            if scene in this_data:
+                return "({})".format(raw_data[i]["name"]) if raw_data[i]["name"] != item_name else ""
+
+    return ""
+
 
 def get_scene_setting(scene, light_type, key, data, max_depth=10, min_depth=1):
     # Gets a setting value by searching:

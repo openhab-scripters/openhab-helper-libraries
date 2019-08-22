@@ -118,6 +118,9 @@ Search Pattern
     Eos will always use the setting at the shallowest depth, regardless of
     where other scene settings were found.
 
+    Group settings will be inherited from parent groups recursively. Settings
+    in child groups will override settings from the parent group.
+
 
 Options
 =======

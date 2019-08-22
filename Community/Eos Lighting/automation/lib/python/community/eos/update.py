@@ -27,7 +27,8 @@ def update_eos():
 @log_traceback
 def update_scene(item):
     """
-    Updates all lights and subgroups
+    Updates all lights and subgroups, and propagates scene change to children
+    with ``follow_parent`` set to ``True``.
     """
     for light_item in get_light_items(get_item_eos_group(item)):
         try: update_light(light_item)
@@ -47,10 +48,6 @@ def update_scene(item):
 def update_light(item):
     """
     Sends commands to lights based on scene.
-
-    TODO If light does not have metadata for the scene no command will be sent,
-    except for the default scenes ``on`` and ``off``. The default values for
-    built-in scenes can be customized in ``configuration.py`` if desired.
     """
     if str(get_value(item.name, META_NAME_EOS)).lower() in META_STRING_FALSE:
         log.debug("Skipping update for light '{name}' as it is disabled".format(name=item.name))
@@ -106,12 +103,11 @@ def get_state_for_scene(item, scene):
         if config.log_trace: log.debug("Got light type '{type}' for '{name}'".format(type=light_type, name=item.name))
 
     state = None
-    data = {}
-    data["item"] = get_metadata(item.name, META_NAME_EOS).get("configuration", {})
-    if config.log_trace: log.debug("Got Item data for '{name}': {data}".format(name=item.name, data=data["item"]))
-    data["group"] = get_metadata(get_item_eos_group(item).name, META_NAME_EOS).get("configuration", {})
-    if config.log_trace: log.debug("Got Group data for '{name}': {data}".format(name=get_item_eos_group(item).name, data=data["group"]))
-    if config.log_trace: log.debug("Got Global data: {data}".format(name=light_type, data=config.global_settings))
+    data = build_data(item)
+    if config.log_trace:
+        log.debug("Got Item data for '{name}': {data}".format(name=item.name, data=data["item"]))
+        log.debug("Got Group data for '{name}': {data}".format(name=get_item_eos_group(item).name, data=data["group"]))
+        log.debug("Got Global data: {data}".format(name=light_type, data=data["global"]))
 
     # check for Motion settings
     motion_source = validate_item(get_scene_setting(item, scene, META_KEY_MOTION_SOURCE, data=data))

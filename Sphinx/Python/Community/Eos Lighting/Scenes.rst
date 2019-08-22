@@ -7,11 +7,21 @@ Scenes
     the group's scene item. You can use *Selection* widgets in the sitemap, or
     another part of your home automation to send the scene commands.
 
-    When a group's scene changes the scene will be evaluated for every enabled
-    light in the group, and any enabled groups will have their scene item set
-    to the ``"parent"`` scene unless they have
+    When a group's scene item receives a command, a scene update will be
+    processed for the group, and any enabled groups will have their scene item
+    set to the ``"parent"`` scene unless they have
     :ref:`follow_parent <Python/Community/Eos Lighting/Settings:Options>`
     disabled.
+
+    If a group's scene item's state changes, a scene update will be processed
+    for the group, but the new scene will not be propagated to child groups.
+    This can be used, for example, to set the master scene based on Time of Day
+    without changing any group scenes that have been set to something other
+    than ``"parent"``.
+
+    A scene update involves evaluating the scene for every enabled light in
+    the group and triggering a scene update for any enabled groups that have
+    their scene set to ``"parent"``.
 
 Built-in Scenes
 ===============
