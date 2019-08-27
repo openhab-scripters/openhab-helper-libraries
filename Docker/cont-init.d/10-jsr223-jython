@@ -1,52 +1,199 @@
-#!/bin/bash -x
+#!/bin/bash
 
-JYTHON_VERSION="2.7.0"
-JYTHON_HOME="${OPENHAB_CONF}/automation/jython"
+## Jython Version
+# The Jython verion to install when using the default download location.
+#
+# For example:
+# JYTHON_VERSION="2.7.1"
+#
+# Leave empty to use the default version (2.7.0)
+JYTHON_VERSION=
 
-export EXTRA_JAVA_OPTS="${EXTRA_JAVA_OPTS} -Xbootclasspath/a:${JYTHON_HOME}/jython.jar -Dpython.home=${JYTHON_HOME} -Dpython.path=${JYTHON_HOME}/Lib:${OPENHAB_CONF}/automation/lib/python"
 
+## Additional Python Modules
+# List of additional python module(s) that need to be installed.
+#
+# NOTE: Due to bugs in the Jython 2.7.0 and 2.7.1 installer, pip is only installed when
+#       using a Debian based image on x86 architecture. When using an Alpine based image or
+#       when using ARM (e.g. Raspberry Pi) architecture pip will not be installed and this
+#       parameter is ignored.
+#
+# For example:
+# PYPI_MODULES="requests python-dateutil"
+#
+# Leave empty when no additional python module need to be installed.
+PYPI_MODULES=
+
+
+## Jython Installer Download Location
+# The location from where to download the Jython Installer.
+#
+# For example:
+# JYTHON_INSTALLER_URI=http://www.example.com/jython-installer-2.7.0.jar
+#
+# Or file location inside the container:
+# JYTHON_INSTALLER_URI=/openhab/jython-installer/jython-installer-2.7.0.jar
+#
+# Leave empty to use the default location.
+JYTHON_INSTALLER_URI=
+
+
+## Jython Installer Options
+# Specifiy the command line options that will be used when running the jython-installer.jar.
+#
+# For example:
+# JYTHON_INSTALLER_OPTIONS="-t standard -e demo doc src ensurepip"
+#
+# Leave empty to use the default options.
+JYTHON_INSTALLER_OPTIONS=
+
+
+
+####################################################################################
+# End of configuration
+####################################################################################
+
+IFS=" "
+set +e
+
+function beginswith() { case $2 in "$1"*) true;; *) false;; esac; }
+function contains() { case $2 in *"$1"*) true;; *) false;; esac; }
+
+function check_addons_config() {
+  # Check if the Next Generation Rule Engine is enabled
+  MISC_LINE=$(grep '^[[:space:]]\?misc' $1)
+  if [ $? -eq 0 ]; then
+    # ensure we have ruleengine enabled
+    if [[ ${MISC_LINE} == *"ruleengine"* ]]; then
+      return 0
+    fi
+  fi
+
+  return 1
+}
+
+function check_next_generation_rule_engine() {
+
+  if check_addons_config "${OPENHAB_CONF}/services/addons.cfg"; then
+    echo "New rule engine is already enabled in the addons.cfg."
+  elif check_addons_config "$OPENHAB_USERDATA/config/org/openhab/addons.config"; then
+    echo "New rule engine is already enabled in the addons.config."
+  else
+    echo "Please enable the Next Generation Rule Engine."
+    echo "See https://www.openhab.org/docs/configuration/rules-ng.html"
+  fi
+}
 
 function cleanup_compiled_classes() {
   # Clears Jython's compiled classes
   if [ -d "${OPENHAB_CONF}/automation/lib/python" ]; then
-    find ${OPENHAB_CONF}/automation/lib/python -name '*\$py.class' -delete
+    find "${OPENHAB_CONF}/automation/lib/python" -name '*\$py.class' -delete
   fi
   if [ -d "${JYTHON_HOME}/Lib" ]; then
-    find ${JYTHON_HOME}/Lib -name '*\$py.class' -delete
+    find "${JYTHON_HOME}/Lib" -name '*\$py.class' -delete
+  fi
+}
+
+function create_directory() {
+  local DIRECTORY=$1
+  if [ ! -d "${DIRECTORY}" ]; then
+    mkdir -p "${DIRECTORY}"
+    if [ $? -ne 0 ]; then
+      echo "ERROR: Could not create directory ${DIRECTORY}."
+      exit 1
+    fi
+  else
+    echo "Directory ${DIRECTORY} already exists."
   fi
 }
 
 function download_jython_libraries() {
-  # Download and install Jython
-  if [ ! -d "${JYTHON_HOME}" ]; then
-    mkdir -p "${JYTHON_HOME}"
-    wget -nv -O /tmp/jython-installer.jar http://central.maven.org/maven2/org/python/jython-installer/${JYTHON_VERSION}/jython-installer-${JYTHON_VERSION}.jar
-    java -jar /tmp/jython-installer.jar -s -d ${JYTHON_HOME}/ -t standard -e demo doc src
-    rm /tmp/jython-installer.jar
-    # chmod -R o+w ${JYTHON_HOME}
-    chown -R openhab:openhab ${JYTHON_HOME}
+  # Download or copy Jython installer
+  if [ -z "${JYTHON_INSTALLER_URI}" ]; then
+    JYTHON_INSTALLER_URI=${JYTHON_DEFAULT_INSTALLER_URI}
   fi
-}
 
-function enable_next_generation_rule_engine() {
-  # Enable the Next Generation Rule Engine
-  set +e
-  MISC_LINE=$(grep '^[[:space:]]\?misc' ${OPENHAB_CONF}/services/addons.cfg)
-  if [ $? -eq 0 ]; then
-    # ensure we have ruleengine enabled
-    if [[ ${MISC_LINE} == *"ruleengine"* ]]; then
-      echo "New rule engine is already included in the addons.cfg"
-    else
-      sed -i 's/misc\s\?=\s\?/misc = ruleengine,/' ${OPENHAB_CONF}/services/addons.cfg
+  if beginswith http "${JYTHON_INSTALLER_URI}"; then
+    wget -nv -O /tmp/jython-installer.jar "${JYTHON_INSTALLER_URI}"
+    if [ $? -ne 0 ]; then
+      echo "ERROR: Failed to download the helper libraries form ${JYTHON_INSTALLER_URI}"
+      exit 1
     fi
   else
-    # Just append last line
-    echo "Append 'misc = ruleengine' to ${OPENHAB_CONF}/services/addons.cfg"
-    echo "misc = ruleengine" >> ${OPENHAB_CONF}/services/addons.cfg
+    cp "${JYTHON_INSTALLER_URI}" /tmp/jython-installer.jar
+    if [ $? -ne 0 ]; then
+      echo "ERROR: Failed to copy the helper libraries form ${JYTHON_INSTALLER_URI} to /tmp/jython-installer.jar"
+      exit 1
+    fi
+  fi
+}
+
+function install_additional_python_modules() {
+  if [ ! -z "${PYPI_MODULES}" ]; then
+    if is_pip_installed; then
+      "${JYTHON_HOME}/bin/jython" -m pip install ${PYPI_MODULES}
+      chown -R openhab:openhab "${JYTHON_HOME}/Lib"
+      if [ $? -ne 0 ]; then
+        echo "ERROR: Failed to install additional python packages."
+        exit 1
+      fi
+    else
+      echo "ERROR: Cannot install additional Python modules because pip is not installed."
+    fi
+  fi
+}
+
+function install_jython_libraries() {
+  create_directory "${JYTHON_HOME}"
+
+  if [ -z ${JYTHON_INSTALLER_OPTIONS} ]; then
+    JYTHON_INSTALLER_OPTIONS=${JYTHON_DEFAULT_INSTALLER_OPTIONS}
+    if ! is_distro_pip_compatible; then
+      echo "The distro and/or platform architecture is not compatible with pip!"
+      echo "Pip will not be installed."
+      JYTHON_INSTALLER_OPTIONS="${JYTHON_INSTALLER_OPTIONS} ensurepip"
+    fi
+  fi
+
+  java -jar /tmp/jython-installer.jar -s -d "${JYTHON_HOME}/" ${JYTHON_INSTALLER_OPTIONS}
+  rm /tmp/jython-installer.jar
+  chown -R openhab:openhab "${JYTHON_HOME}"
+}
+
+function is_distro_pip_compatible() {
+  if [ "${ARCH}" != "x86_64" ] || contains alpline "${DOCKER_REPO}"; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+function is_pip_installed() {
+  if [ -e "${JYTHON_HOME}/bin/pip" ]; then
+    return 0
+  else
+    return 1
   fi
 }
 
 
-download_jython_libraries
+if [ -z ${JYTHON_VERSION} ]; then
+  JYTHON_VERSION="2.7.0"
+fi
+
+JYTHON_DEFAULT_INSTALLER_URI=http://central.maven.org/maven2/org/python/jython-installer/${JYTHON_VERSION}/jython-installer-${JYTHON_VERSION}.jar
+JYTHON_DEFAULT_INSTALLER_OPTIONS="-t standard -e demo doc src"
+
+JYTHON_HOME="${OPENHAB_CONF}/automation/jython"
+export EXTRA_JAVA_OPTS="${EXTRA_JAVA_OPTS} -Xbootclasspath/a:${JYTHON_HOME}/jython.jar -Dpython.home=${JYTHON_HOME} -Dpython.path=${JYTHON_HOME}/Lib:${OPENHAB_CONF}/automation/lib/python"
+
+
+if [ ! -d "${JYTHON_HOME}" ]; then
+  download_jython_libraries
+  install_jython_libraries
+fi
+
+check_next_generation_rule_engine
+install_additional_python_modules
 cleanup_compiled_classes
-enable_next_generation_rule_engine
+
