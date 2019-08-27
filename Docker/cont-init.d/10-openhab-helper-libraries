@@ -2,12 +2,12 @@
 
 OPENHAB_AUTOMATION="${OPENHAB_CONF}/automation"
 OPENHAB_HL_AUTOMATION="${OPENHAB_AUTOMATION}/openhab-helper-libraries/Core/automation"
+OPENHAB_HL_AUTOMATION_RELATIVE="../../openhab-helper-libraries/Core/automation"
 OPENHAB_HL_URL="https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip"
 
 declare -A LANGUAGES=( ["groovy"]="groovy" ["javascript"]="js" ["python"]="py" )
 
 function verify_directory_structure() {
-
   # before making any changes let's first verify that we can make the required changes
   verify_directory "${OPENHAB_AUTOMATION}"
   for SUBDIR in jsr223 lib; do
@@ -16,7 +16,7 @@ function verify_directory_structure() {
       verify_directory "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/community"
       verify_directory "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/personal"
 
-      verify_symlink "${OPENHAB_AUTOMATION}/${SUBDIR}/${LANGUAGE}/core" "${OPENHAB_HL_AUTOMATION}/${SUBDIR}/${LANGUAGE}/core"
+      verify_symlink "${OPENHAB_AUTOMATION}/${SUBDIR}/${LANGUAGE}" "core" "${OPENHAB_HL_AUTOMATION_RELATIVE}/${SUBDIR}/${LANGUAGE}/core"
     done
   done
 }
@@ -31,7 +31,7 @@ function create_directory_structure() {
       create_directory "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/personal"
       chmod g+w "${OPENHAB_AUTOMATION}/${SUBDIR}/$LANGUAGE/personal"
 
-      create_symlink "${OPENHAB_AUTOMATION}/${SUBDIR}/${LANGUAGE}/core" "${OPENHAB_HL_AUTOMATION}/${SUBDIR}/${LANGUAGE}/core"
+      create_symlink "${OPENHAB_AUTOMATION}/${SUBDIR}/${LANGUAGE}" "core" "${OPENHAB_HL_AUTOMATION_RELATIVE}/${SUBDIR}/${LANGUAGE}/core"
     done
   done
 }
@@ -61,25 +61,31 @@ function create_directory() {
 }
 
 function verify_symlink() {
-  local LINK_NAME=$1
-  local TARGET=$2
-  if [ -L "${LINK_NAME}" ]; then
-    local LINK_TARGET="$(readlink ${LINK_NAME})"
-    if [ "${LINK_TARGET}" != "${TARGET}" ]; then
-      echo "ERROR: A symlink with ${LINK_NAME} already exists pointing to a different target."
+  local LINK_DIR=$1
+  local LINK_NAME=$2
+  local TARGET=$3
+  if [ -d ${LINK_DIR} ]; then
+    cd "${LINK_DIR}"
+    if [ -L "${LINK_NAME}" ]; then
+      local LINK_TARGET="$(readlink ${LINK_NAME})"
+      if [ "${LINK_TARGET}" != "${TARGET}" ]; then
+        echo "ERROR: A symlink with ${LINK_NAME} already exists pointing to a different target."
+        exit 1
+      fi
+    elif [ -e "${LINK_NAME}" ]; then
+      echo "ERROR: File or directory with name ${LINK_NAME} already exists."
       exit 1
     fi
-  elif [ -e "${LINK_NAME}" ]; then
-    echo "ERROR: File or directory with name ${LINK_NAME} already exists."
-    exit 1
   fi
 }
 
 function create_symlink() {
-  local LINK_NAME=$1
-  local TARGET=$2
+  local LINK_DIR=$1
+  local LINK_NAME=$2
+  local TARGET=$3
+  cd "${LINK_DIR}"
   if [ ! -L "${LINK_NAME}" ]; then
-    ln -s "${TARGET}" "${LINK_NAME}"
+    ln -rs "${TARGET}" "${LINK_NAME}"
     if [ $? -ne 0 ]; then
       echo "ERROR: Could not create symlink ${LINK_NAME} to ${TARGET}."
       exit 1
@@ -93,6 +99,12 @@ function create_initial_configuration() {
   for LANGUAGE in "${!LANGUAGES[@]}"; do
     if [ ! -f "${OPENHAB_AUTOMATION}/lib/${LANGUAGE}/configuration.${LANGUAGES[$LANGUAGE]}" ]; then
       cp "${OPENHAB_HL_AUTOMATION}/lib/${LANGUAGE}/configuration.${LANGUAGES[$LANGUAGE]}.example" "${OPENHAB_AUTOMATION}/lib/${LANGUAGE}/configuration.${LANGUAGES[$LANGUAGE]}"
+    fi
+  done
+
+  for DIRECTORY in community personal; do
+    if [ ! -f "${OPENHAB_AUTOMATION}/lib/python/${DIRECTORY}/__init__.py" ]; then
+      touch "${OPENHAB_AUTOMATION}/lib/python/${DIRECTORY}/__init__.py"
     fi
   done
 }
@@ -126,26 +138,35 @@ function install_helper_libraries() {
   chown -R openhab:openhab "${OPENHAB_AUTOMATION}"
 }
 
-function enable_next_generation_rule_engine() {
-  # Enable the Next Generation Rule Engine
-  set +e
-  MISC_LINE=$(grep '^[[:space:]]\?misc' ${OPENHAB_CONF}/services/addons.cfg)
+function check_addons_config() {
+  # Check if the Next Generation Rule Engine is enabled
+  MISC_LINE=$(grep '^[[:space:]]\?misc' $1)
   if [ $? -eq 0 ]; then
     # ensure we have ruleengine enabled
     if [[ ${MISC_LINE} == *"ruleengine"* ]]; then
-      echo "New rule engine is already included in the addons.cfg."
-    else
-      sed -i 's/misc\s\?=\s\?/misc = ruleengine,/' ${OPENHAB_CONF}/services/addons.cfg
+      return 0
     fi
+  fi
+
+  return 1
+}
+
+function check_next_generation_rule_engine() {
+
+  if check_addons_config "${OPENHAB_CONF}/services/addons.cfg"; then
+    echo "New rule engine is already enabled in the addons.cfg."
+  elif check_addons_config "$OPENHAB_USERDATA/config/org/openhab/addons.config"; then
+    echo "New rule engine is already enabled in the addons.config."
   else
-    # Just append last line
-    echo "Append 'misc = ruleengine' to ${OPENHAB_CONF}/services/addons.cfg."
-    echo "misc = ruleengine" >> ${OPENHAB_CONF}/services/addons.cfg
+    echo "Please enable the Next Generation Rule Engine."
+    echo "See https://www.openhab.org/docs/configuration/rules-ng.html"
   fi
 }
 
 
 if [ ! -d "${OPENHAB_AUTOMATION}/openhab-helper-libraries" ]; then
+  CURRENT_DIR=$(pwd)
+
   # verify if installation is possible
   verify_directory_structure
   download_helper_libraries
@@ -157,8 +178,10 @@ if [ ! -d "${OPENHAB_AUTOMATION}/openhab-helper-libraries" ]; then
   # create initial configuration if required
   create_initial_configuration
 
-  # enable the next genereation rule engine if required
-  enable_next_generation_rule_engine
+  # check if the ng-rule engine is enabled
+  check_next_generation_rule_engine
+
+  cd "${CURRENT_DIR}"
 else
   echo "Helper Libraries for openHAB Scripted Automation already installed."
 fi
