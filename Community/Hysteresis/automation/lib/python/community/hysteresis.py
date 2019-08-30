@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 """
+Author: Rich Koshak
+The Hysteresis module provides an implementation that will tell you whether a
+value is below, above, or inbetween a target value plus or minus an offset.
+
+Functions
+========
+    - hysteresis: Returns a value indicating if the value is above, below, or 
+      within the hysteresis gap.
+
 License
 ========
 Copyright (c) 2019 Richard Koshak
