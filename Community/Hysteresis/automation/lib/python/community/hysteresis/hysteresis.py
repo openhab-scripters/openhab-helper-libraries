@@ -8,8 +8,8 @@ This program and accomanying materials are made available under the terms of
 the Eclipse Public License 2.0 which is available at 
 http://www.eclipse.org/legal/epl-2.0
 
-from org.eclipse.smarthome.core.library.types import QuantityType, DecimalType, PercentType
 """
+from org.eclipse.smarthome.core.library.types import QuantityType, DecimalType, PercentType
 
 @log_traceback
 def hysteresis(target, value, low=0, high=0):
