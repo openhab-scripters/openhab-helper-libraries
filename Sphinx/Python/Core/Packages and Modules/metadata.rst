@@ -1,45 +1,6 @@
 metadata
 ========
 
-Structure
----------
-
-In Jython, a Metadata object will look like this:
-
-.. code-block::
-
-    Metadata [key=Namespace_Name:Item_Name, value=namespace value, configuration=[Key_1="key 1 value", Key_2=5.5, Key_3=false]]
-
-Metadata objects are uniquely defined by an Item name and a namespace name, and contain a "value" and the "configuration".
-The "value" is not very useful, as it only holds a single value.
-The "configuration" provides the actual metadata as a dictionary.
-
-.. code-block:: none
-
-    └── Item
-        ├── Namespace 1
-        │   ├── Value
-        │   └── Configuration
-        │       ├── Key 1
-        │       │   └── Value
-        │       ├── Key 2
-        │       │   └── Value
-        │       └── Key 3
-        │           └── Value
-        ├── Namespace 2
-        │   ├── Value
-        │   └── Configuration
-        │       ├── Key 1
-        │       │   └── Value
-        │       └── Key 2
-        │           └── Value
-        └── Namespace 3
-            ├── Value
-            └── Configuration
-                └── Key 1
-                    └── Value
-
-
 Module
 ------
 
