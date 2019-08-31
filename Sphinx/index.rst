@@ -33,6 +33,7 @@ The one exception is that custom module handlers, including the StartupTrigger, 
     Guides/Triggers.rst
     Guides/Logging.rst
     Guides/Actions.rst
+    Guides/Metadata.rst
     Guides/Event Object Attributes.rst
     Examples/Examples.rst
     Guides/But How Do I.rst
