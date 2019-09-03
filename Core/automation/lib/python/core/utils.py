@@ -19,6 +19,11 @@ try:
 except:
     from org.eclipse.smarthome.core.thing import ChannelUID
 
+try:
+    from org.openhab.core.library.types import QuantityType, DecimalType, PercentType
+except:
+    from org.eclipse.smarthome.core.library.types import QuantityType, DecimalType, PercentType
+
 from core.log import logging, LOG_PREFIX
 from core.jsr223 import scope
 from core.actions import PersistenceExtensions
@@ -269,3 +274,40 @@ def validate_uid(uid):
         uid = "{}_{}".format("jython", uid)
     uid = re.sub(r"__+", "_", uid)
     return uid
+
+def hysteresis(target, value, low=0, high=0):
+    """
+    Checks if the value is below, above or between the hysteresis gap defined
+    by the target-low <= value <= target+high. The function accepts Python 
+    primitives, QuantityTypes, DecimalTypes, or PercentTypes or any combination
+    of the four types. When using QuantityTypes, the default units of the Units
+    of Measure is used.
+
+    Arguments:
+        - target: The target value that defines the setpoint for the comparison.
+        - value: The value to determine where it is in the hysteresis.
+        - low: Value subtracted from target to define the lower bounds of the 
+        hysteresis gap. Defaults to 0.
+        - high: Value added to target to define the upper bounds of the 
+        hystersis gap. Defaults to 0
+
+    Returns:
+        - 1 if value is >= target+high
+        - 0 if the value is between target-low and target+high or if low and 
+        high are both zero and value == target
+        - (-1) if value is <= target-low
+    """
+    target, value, low, high = [x.floatValue() 
+                                if isinstance(x, (QuantityType, DecimalType, 
+                                    PercentType))
+                                else x
+                                for x in [target, value, low, high]]
+
+    if value == target or target - low < value < target + high: 
+        rval = 0
+    elif value <= (target - low): 
+        rval = -1
+    else: 
+        rval = 1
+    
+    return rval
