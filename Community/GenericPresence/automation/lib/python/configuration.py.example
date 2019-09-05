@@ -1,0 +1,12 @@
+# List of the Items or Groups that represent the presence of each person or
+# overall. If there is more than one sensor to represent a single person,
+# use a Group with an aggregation function (e.g Group:Switch:OR(ON, OFF)
+# gRichPresent).
+presence_sensors = ["gPresent", "gRichPresent", "gJennPresent"]
+
+# List of the corresponding proxy Items. The list must be the same length as
+# presence_sensors.
+presence_items = ["vPresent", "vRichPresent", "gJennPresent"]
+
+# Amount of time the group needs to be OFF before setting the proxy to OFF.
+presence_flap_time = 2 # in minutes
