@@ -19,11 +19,6 @@ try:
 except:
     from org.eclipse.smarthome.core.thing import ChannelUID
 
-try:
-    from org.openhab.core.library.types import QuantityType, DecimalType, PercentType
-except:
-    from org.eclipse.smarthome.core.library.types import QuantityType, DecimalType, PercentType
-
 from core.log import logging, LOG_PREFIX
 from core.jsr223 import scope
 from core.actions import PersistenceExtensions
@@ -298,8 +293,9 @@ def hysteresis(target, value, low=0, high=0):
         - (-1) if value is <= target-low
     """
     target, value, low, high = [x.floatValue()
-                                if isinstance(x, (QuantityType, DecimalType,
-                                    PercentType))
+                                if isinstance(x, (scope.QuantityType,
+                                                  scope.DecimalType,
+                                                  scope.PercentType))
                                 else x
                                 for x in [target, value, low, high]]
 
