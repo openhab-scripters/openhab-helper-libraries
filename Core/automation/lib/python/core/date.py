@@ -27,7 +27,7 @@ Functions
 """
 
 import sys
-import datetime
+import time, datetime
 
 if 'org.eclipse.smarthome.automation' in sys.modules or 'org.openhab.core.automation' in sys.modules:
     # Workaround for Jython JSR223 bug where dates and datetimes are converted
@@ -56,7 +56,7 @@ __all__ = [
     "format_date",
     "days_between", "hours_between", "minutes_between", "seconds_between",
     "to_java_zoneddatetime", "to_java_calendar", "to_python_datetime",
-    "to_joda_datetime"
+    "to_joda_datetime", "str_to_python_datetime", "millis", "joda_now", "elapsed"
 ]
 
 
@@ -181,6 +181,9 @@ def to_java_zoneddatetime(value):
     # java.time.LocalDateTime
     if isinstance(value, LocalDateTime):
         return value.atZone(timezone_id)
+    # Joda DateTime String
+    if isinstance(value, basestring):
+        value = str_to_python_datetime(value)
     # python datetime
     if isinstance(value, datetime.datetime):
         if value.tzinfo is not None:
@@ -232,6 +235,9 @@ def to_python_datetime(value):
     Raises:
         TypeError: If the type of ``value`` is not supported by this module
     """
+    # Joda DateTime String
+    if isinstance(value, basestring):
+        value = str_to_python_datetime(value)
     if isinstance(value, datetime.datetime):
         return value
 
@@ -289,13 +295,17 @@ def to_joda_datetime(value):
     Raises:
         TypeError: If type of ``value`` is not suported by this package.
     """
+    # Joda DateTime String
+    if isinstance(value, basestring):
+        value = str_to_python_datetime(value)
     if isinstance(value, DateTime):
         return value
 
     value_zoneddatetime = to_java_zoneddatetime(value)
+    value_zoneID = value_zoneddatetime.getZone().getId().replace('GMT','')
     return DateTime(
         value_zoneddatetime.toInstant().toEpochMilli(),
-        DateTimeZone.forID(value_zoneddatetime.getZone().getId())
+        DateTimeZone.forID(value_zoneID)
     )
 
 def to_java_calendar(value):
@@ -370,3 +380,112 @@ def human_readable_seconds(seconds):
         " and " if number_of_seconds > 0 and (number_of_minutes > 0 or number_of_hours > 0 or number_of_days > 0) else "",
         seconds_string if number_of_seconds > 0 else ""
     )
+
+def str_to_python_datetime(time_str):
+    """
+    Convert a Joda ZonedDateTime String to a python datetime object
+
+    Arguments:
+        time_str: string representation of joda zoned datetimetype
+                  '2019-09-03T15:22:33.650-05:00'
+
+    Returns:           
+        datetime.datetime: Timezone aware python datetime object
+        (If there is an exception while converting, None is returned)
+    """
+    try:
+        naive_time = time_str[:23]                  # removes '-05:00' (TZ) from joda zdtt str
+        tz_hr, tz_min = time_str[23:].split(':')    # Splits TZ into hr, min
+        offset = int(tz_hr) * 60 + int(tz_min)      # Gets minutes of offset
+        naive_pdt = datetime.datetime.strptime(naive_time, '%Y-%m-%dT%H:%M:%S.%f')
+        return naive_pdt.replace(tzinfo=_pythonTimezone(offset))
+    except:
+        return None
+    
+def millis():
+    """
+    Get the current time in millis (unix epoch) as an int to 
+    simplify generic timing applications
+    
+    Arguments:
+        none
+    
+    Returns: 
+        int: current time in millis since unix epoch
+    """
+    return int(round(time.time() * 1000))
+
+def joda_now(string=True):
+    """
+    Get the Joda DateTime as a string or an object to be used in 
+    updating an OpenHAB DateTime item
+    
+    Arguments:
+        string: Boolean, defaults to True
+    
+    Returns:
+        string: If 'string' == True, returns string representation of 
+                Joda DateTime ('2019-09-03T15:22:33.650-05:00')
+        DateTime: If 'string' == False, returns a Joda DateTime object
+    """
+    if string == True:
+        return str(to_joda_datetime(ZonedDateTime.now()))
+    else: 
+        return to_joda_datetime(ZonedDateTime.now())
+
+def elapsed(start, end=joda_now(), format='digital'):
+    """
+    Arguments:
+        start:  Start time in any datetime type or joda zdtt string (Required)
+        end:    End time, optional. If not included the current time will be used
+        format: 'digital' - Returns string '(-)HH:MM:SS' or '(-)Dd HH:MM:SS' [DEFAULT]
+                'text'    - Returns human readable string '2 days, 3 hours, 45 minutes'
+                'seconds' - Returns the seconds as a float (with ms precision)
+    
+    Returns:
+        (see args)
+
+    Code Block:
+
+        from personal.<this_script> import elapsed, joda_now
+
+        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now())))  
+        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(False), format='text')))  
+        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(), format='seconds')))  
+
+        Output:
+        Elapsed: 405d 13:37:17
+        Elapsed: 405 days, 13 hours and 37 minutes
+        Elapsed: 35041036.273
+
+    """
+    e_digital = '00:00:00'      
+    e_text    = '0 seconds'
+    e_seconds = 0.0
+
+    start_pdt = to_python_datetime(start)
+    end_pdt = to_python_datetime(end)
+    td = (end_pdt - start_pdt)          # Total time delay (as timedelta)
+
+    ts = e_seconds = td.total_seconds() # Retains ms precision
+    sign = '-' if (ts < 0) else ''      # Get the sign of 'ts'          
+    ts = int(abs(ts))                   # Make 'ts' a positive integer
+
+    days, seconds = divmod(ts, 86400)
+    minutes, seconds = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    seconds = int(round(float(seconds) + (float(td.microseconds) / 1000.0 / 1000.0)))
+    
+    # Format the digital elapsed output
+    if days > 0:
+        e_digital = "{}{}d {:02d}:{:02d}:{:02d}".format(sign, days, hours, minutes, seconds)
+    else:
+        e_digital = "{}{:02d}:{:02d}:{:02d}".format(sign, hours, minutes, seconds)
+
+    # Format the human readable elapsed output
+    e_text = human_readable_seconds(ts)
+    if sign == '-': e_text = "Negative " + e_text
+
+    if   format == 'seconds':   return e_seconds # Retains ms precision
+    elif format == 'text':      return e_text
+    else:                       return e_digital
