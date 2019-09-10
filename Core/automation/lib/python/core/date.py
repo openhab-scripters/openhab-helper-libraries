@@ -406,6 +406,11 @@ def joda_now(string=False):
         DateTime: If 'string' == False, returns a Joda DateTime object
         string: If 'string' == True, returns string representation of 
                 Joda DateTime ('2019-09-03T15:22:33.650+05:00')
+    
+    Code Block:
+        from core.date import joda_now
+        
+        events.postUpdate("SomeDateTimeItem", joda_now(True))
     """
     if string == True:
         return str(to_joda_datetime(ZonedDateTime.now()))
@@ -425,10 +430,12 @@ def elapsed(start, end=joda_now(), format='digital'):
         (see args)
 
     Code Block:
-        from personal.<this_script> import elapsed, joda_now
-        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(True))))  
-        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(), format='text')))  
-        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(), format='seconds')))  
+        from core.date import elapsed, joda_now
+        
+        example.log.info("Elapsed: {}".format(elapsed(items.SomeDateTimeItem)))  
+        example.log.info("Elapsed: {}".format(elapsed(items.SomeDateTimeItem, joda_now(True), format='text')))  
+        example.log.info("Elapsed: {}".format(elapsed(items.SomeDateTimeItem, joda_now(), format='seconds')))  
+        
         Output:
         Elapsed: 405d 13:37:17
         Elapsed: 405 days, 13 hours and 37 minutes
