@@ -175,15 +175,15 @@ def to_java_zoneddatetime(value):
     Raises:
         TypeError: If the type of ``value`` is not supported by this module
     """
+    # Joda DateTime String
+    if isinstance(value, basestring):
+        value = str_to_java_zoneddatetime(value)
     if isinstance(value, ZonedDateTime):
         return value
     timezone_id = ZoneId.systemDefault()
     # java.time.LocalDateTime
     if isinstance(value, LocalDateTime):
         return value.atZone(timezone_id)
-    # Joda DateTime String
-    if isinstance(value, basestring):
-        value = str_to_python_datetime(value)
     # python datetime
     if isinstance(value, datetime.datetime):
         if value.tzinfo is not None:
@@ -237,7 +237,7 @@ def to_python_datetime(value):
     """
     # Joda DateTime String
     if isinstance(value, basestring):
-        value = str_to_python_datetime(value)
+        value = str_to_java_zoneddatetime(value)
     if isinstance(value, datetime.datetime):
         return value
 
@@ -297,15 +297,15 @@ def to_joda_datetime(value):
     """
     # Joda DateTime String
     if isinstance(value, basestring):
-        value = str_to_python_datetime(value)
+        value = str_to_java_zoneddatetime(value)
     if isinstance(value, DateTime):
         return value
 
     value_zoneddatetime = to_java_zoneddatetime(value)
-    value_zoneID = value_zoneddatetime.getZone().getId().replace('GMT','')
+    value_zoneId = value_zoneddatetime.getZone().getId().replace('GMT','')
     return DateTime(
         value_zoneddatetime.toInstant().toEpochMilli(),
-        DateTimeZone.forID(value_zoneID)
+        DateTimeZone.forID(value_zoneId)
     )
 
 def to_java_calendar(value):
@@ -383,7 +383,7 @@ def human_readable_seconds(seconds):
 
 def str_to_python_datetime(time_str):
     """
-    Convert a Joda ZonedDateTime String to a python datetime object
+    Convert a Joda DateTime String to a python datetime object
 
     Arguments:
         time_str: string representation of joda zoned datetimetype
@@ -401,7 +401,24 @@ def str_to_python_datetime(time_str):
         return naive_pdt.replace(tzinfo=_pythonTimezone(offset))
     except:
         return None
-    
+
+def str_to_java_zoneddatetime(time_str):
+    """
+    Convert a Joda DateTime String to a Java ZonedDateTime object
+
+    Arguments:
+        time_str: string representation of joda datetime type
+                  '2019-09-03T15:22:33.650-05:00'
+
+    Returns:           
+        ZonedDateTime: Java ZonedDateTime object
+        (If there is an exception while converting, None is returned)
+    """
+    try:
+        return ZonedDateTime.parse(time_str)
+    except:
+        return None
+
 def millis():
     """
     Get the current time in millis (unix epoch) as an int to 
@@ -415,18 +432,18 @@ def millis():
     """
     return int(round(time.time() * 1000))
 
-def joda_now(string=True):
+def joda_now(string=False):
     """
-    Get the Joda DateTime as a string or an object to be used in 
-    updating an OpenHAB DateTime item
+    Get the Joda DateTime object or Joda DateTime
+    string to be used in updating OpenHAB DateTime items
     
     Arguments:
-        string: Boolean, defaults to True
+        string: Boolean, defaults to False
     
     Returns:
-        string: If 'string' == True, returns string representation of 
-                Joda DateTime ('2019-09-03T15:22:33.650-05:00')
         DateTime: If 'string' == False, returns a Joda DateTime object
+        string: If 'string' == True, returns string representation of 
+                Joda DateTime ('2019-09-03T15:22:33.650+05:00')
     """
     if string == True:
         return str(to_joda_datetime(ZonedDateTime.now()))
