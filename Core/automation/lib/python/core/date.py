@@ -57,7 +57,7 @@ __all__ = [
     "format_date",
     "days_between", "hours_between", "minutes_between", "seconds_between",
     "to_java_zoneddatetime", "to_java_calendar", "to_python_datetime",
-    "to_joda_datetime", "str_to_python_datetime", "millis", "joda_now", "elapsed"
+    "to_joda_datetime", "millis", "joda_now", "elapsed"
 ]
 
 
