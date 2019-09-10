@@ -424,8 +424,8 @@ def elapsed(start, end=joda_now(), format='digital'):
 
         from personal.<this_script> import elapsed, joda_now
 
-        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now())))  
-        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(False), format='text')))  
+        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(True))))  
+        example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(), format='text')))  
         example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(), format='seconds')))  
 
         Output:
