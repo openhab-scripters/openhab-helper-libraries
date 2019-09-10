@@ -414,7 +414,7 @@ def elapsed(start, end=joda_now(), format='digital'):
         start:  Start time in any datetime type or joda zdtt string (Required)
         end:    End time, optional. If not included the current time will be used
         format: 'digital' - Returns string '(-)HH:MM:SS' or '(-)Dd HH:MM:SS' [DEFAULT]
-                'text'    - Returns human readable string '2 days, 3 hours, 45 minutes'
+                'text'    - Returns human readable string '2 days, 3 hours and 45 minutes'
                 'seconds' - Returns the seconds as a float (with ms precision)
     
     Returns:
@@ -442,7 +442,7 @@ def elapsed(start, end=joda_now(), format='digital'):
     end_pdt = to_python_datetime(end)
     td = (end_pdt - start_pdt)          # Total time delay (as timedelta)
 
-    ts = e_seconds = td.total_seconds() # Retains ms precision
+    ts = e_seconds = td.total_seconds() # Retains ms precision (total seconds)
     sign = '-' if (ts < 0) else ''      # Get the sign of 'ts'          
     ts = int(abs(ts))                   # Make 'ts' a positive integer
 
