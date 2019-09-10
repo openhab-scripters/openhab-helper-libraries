@@ -21,6 +21,7 @@ Types
         datetime.datetime (Python)
         org.eclipse.smarthome.core.library.types.DateTimeType
         org.openhab.core.library.types.DateTimeType
+        DateTimeFormatter.ISO_ZONED_DATE_TIME (String)
 
 Functions
 =========
@@ -173,11 +174,12 @@ def to_java_zoneddatetime(value):
         does not have timezone information, the system default will be used.
 
     Raises:
+        DateTimeParseException: If ``value`` is a string and can't be parsed
         TypeError: If the type of ``value`` is not supported by this module
     """
-    # Joda DateTime String
+    # org.joda.time.DateTime String
     if isinstance(value, basestring):
-        value = str_to_java_zoneddatetime(value)
+        return ZonedDateTime.parse(value)
     if isinstance(value, ZonedDateTime):
         return value
     timezone_id = ZoneId.systemDefault()
@@ -235,9 +237,6 @@ def to_python_datetime(value):
     Raises:
         TypeError: If the type of ``value`` is not supported by this module
     """
-    # Joda DateTime String
-    if isinstance(value, basestring):
-        value = str_to_java_zoneddatetime(value)
     if isinstance(value, datetime.datetime):
         return value
 
@@ -295,9 +294,6 @@ def to_joda_datetime(value):
     Raises:
         TypeError: If type of ``value`` is not suported by this package.
     """
-    # Joda DateTime String
-    if isinstance(value, basestring):
-        value = str_to_java_zoneddatetime(value)
     if isinstance(value, DateTime):
         return value
 
@@ -380,44 +376,6 @@ def human_readable_seconds(seconds):
         " and " if number_of_seconds > 0 and (number_of_minutes > 0 or number_of_hours > 0 or number_of_days > 0) else "",
         seconds_string if number_of_seconds > 0 else ""
     )
-
-def str_to_python_datetime(time_str):
-    """
-    Convert a Joda DateTime String to a python datetime object
-
-    Arguments:
-        time_str: string representation of joda zoned datetimetype
-                  '2019-09-03T15:22:33.650-05:00'
-
-    Returns:           
-        datetime.datetime: Timezone aware python datetime object
-        (If there is an exception while converting, None is returned)
-    """
-    try:
-        naive_time = time_str[:23]                  # removes '-05:00' (TZ) from joda zdtt str
-        tz_hr, tz_min = time_str[23:].split(':')    # Splits TZ into hr, min
-        offset = int(tz_hr) * 60 + int(tz_min)      # Gets minutes of offset
-        naive_pdt = datetime.datetime.strptime(naive_time, '%Y-%m-%dT%H:%M:%S.%f')
-        return naive_pdt.replace(tzinfo=_pythonTimezone(offset))
-    except:
-        return None
-
-def str_to_java_zoneddatetime(time_str):
-    """
-    Convert a Joda DateTime String to a Java ZonedDateTime object
-
-    Arguments:
-        time_str: string representation of joda datetime type
-                  '2019-09-03T15:22:33.650-05:00'
-
-    Returns:           
-        ZonedDateTime: Java ZonedDateTime object
-        (If there is an exception while converting, None is returned)
-    """
-    try:
-        return ZonedDateTime.parse(time_str)
-    except:
-        return None
 
 def millis():
     """
