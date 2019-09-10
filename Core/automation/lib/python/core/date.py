@@ -1,13 +1,18 @@
 """
 This module provides functions for date and time conversions.
+
 Types
 =====
+
     It is recommended that you use ``java.time.ZonedDateTime`` for all
     operations involving dates or ``DateTime`` Items. See the documentation for
     `java.time.ZonedDateTime <https://docs.oracle.com/javase/8/docs/api/java/time/ZonedDateTime.html>`_
     for more information about its useage.
+
     The functions in this module can accept any of the following date types:
+
     .. code-block::
+
         java.time.ZonedDateTime
         java.time.LocalDateTime
         java.util.Calendar
@@ -17,6 +22,7 @@ Types
         org.eclipse.smarthome.core.library.types.DateTimeType
         org.openhab.core.library.types.DateTimeType
         DateTimeFormatter.ISO_ZONED_DATE_TIME (String)
+
 Functions
 =========
 """
@@ -58,18 +64,23 @@ __all__ = [
 def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
     """
     Returns string of ``value`` formatted according to ``format_string``.
+
     This function can be used when updating Items in openHAB or to format any
     date value for output. The default format string follows the same ISO8601
     format used in openHAB.
+
     Examples:
         .. code-block::
+
             sendCommand("date_item", format_date(date_value))
             log.info("The time is currently: {}".format(format_date(ZonedDateTime.now())))
+
     Arguments:
         value: Any supported date value
         format_string (str): Pattern to format ``value`` with.
             See `java.time.format.DateTimeFormatter <https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html>`_
             for format string tokens.
+
     Returns:
         A string representation of ``value`` according to ``format_string``.
         If ``value`` does not have timezone information, the system default
@@ -81,9 +92,12 @@ def days_between(value_from, value_to, calendar_days=False):
     """
     Returns the number of days between ``value_from`` and ``value_to``.
     Will return a negative number if ``value_from`` is after ``value__to``.
+
     Examples:
         .. code-block::
+
             span_days = days_between(items["date_item"], ZonedDateTime.now())
+
     Arguments:
         value_from: Value to start from
         value_to: Value to measure to
@@ -99,9 +113,12 @@ def hours_between(value_from, value_to):
     """
     Returns the number of hours between ``value_from`` and ``value_to``.
     Will return a negative number if ``value_from`` is after ``value__to``.
+
     Examples:
         .. code-block::
+
             span_hours = hours_between(items["date_item"], ZonedDateTime.now())
+
     Arguments:
         value_from: Value to start from
         value_to: Value to measure to
@@ -112,9 +129,12 @@ def minutes_between(value_from, value_to):
     """
     Returns the number of minutes between ``value_from`` and ``value_to``.
     Will return a negative number if ``value_from`` is after ``value__to``.
+
     Examples:
         .. code-block::
+
             span_minutes = minutes_between(items["date_item"], ZonedDateTime.now())
+
     Arguments:
         value_from: Value to start from
         value_to: Value to measure to
@@ -125,9 +145,12 @@ def seconds_between(value_from, value_to):
     """
     Returns the number of seconds between ``value_from`` and ``value_to``.
     Will return a negative number if ``value_from`` is after ``value__to``.
+
     Examples:
         .. code-block::
+
             span_seconds = seconds_between(items["date_item"], ZonedDateTime.now())
+
     Arguments:
         value_from: Value to start from
         value_to: Value to measure to
@@ -137,14 +160,19 @@ def seconds_between(value_from, value_to):
 def to_java_zoneddatetime(value):
     """
     Converts any of the supported date types to ``java.time.ZonedDateTime``.
+
     Examples:
         .. code-block::
+
             java_time = to_java_zoneddatetime(items["date_item"])
+
     Arguments:
         value: Any supported date value
+
     Returns:
         A ``java.time.ZonedDateTime`` representing ``value``. If ``value``
         does not have timezone information, the system default will be used.
+
     Raises:
         DateTimeParseException: If ``value`` is a string and can't be parsed
         TypeError: If the type of ``value`` is not supported by this module
@@ -193,14 +221,19 @@ def to_java_zoneddatetime(value):
 def to_python_datetime(value):
     """
     Converts any of the supported date types to Python ``datetime.datetime``.
+
     Examples:
         .. code-block::
+
             python_time = to_python_datetime(items["date_item"])
+
     Arguments:
         value: Any supported date value
+
     Returns:
         A Python ``datetime.datetime`` representing ``value``. If ``value``
         does not have timezone information, the system default will be used.
+
     Raises:
         TypeError: If the type of ``value`` is not supported by this module
     """
@@ -224,6 +257,7 @@ class _pythonTimezone(datetime.tzinfo):
     def __init__(self, offset=0, name=""):
         """
         Python tzinfo with ``offset`` in minutes and name ``name``.
+
         Arguments:
             offset (int): Timezone offset from UTC in minutes.
             name (str): Display name of this instance.
@@ -243,15 +277,20 @@ class _pythonTimezone(datetime.tzinfo):
 def to_joda_datetime(value):
     """
     Converts any of the supported date types to ``org.joda.time.DateTime``.
+
     Examples:
         .. code-block::
+
             joda_time = to_joda_datetime(items["date_item"])
+
     Arguments:
         value: Any supported date value
+
     Returns:
         | An ``org.joda.time.DateTime`` representing ``value``.
         | If ``value`` does not have timezone information, the system default
           will be used.
+
     Raises:
         TypeError: If type of ``value`` is not suported by this package.
     """
@@ -259,7 +298,7 @@ def to_joda_datetime(value):
         return value
 
     value_zoneddatetime = to_java_zoneddatetime(value)
-    value_zoneId = value_zoneddatetime.getZone().getId()
+    value_zoneId = value_zoneddatetime.getZone().getId().replace('GMT','')
     return DateTime(
         value_zoneddatetime.toInstant().toEpochMilli(),
         DateTimeZone.forID(value_zoneId)
@@ -268,14 +307,19 @@ def to_joda_datetime(value):
 def to_java_calendar(value):
     """
     Converts any of the supported date types to ``java.util.Calendar``.
+
     Examples:
         .. code-block::
+
             calendar_time = to_java_calendar(items["date_item"])
+
     Arguments:
         value: Any supported date value
+
     Returns:
         A ``java.util.Calendar`` representing ``value``. If ``value`` does not
         have timezone information, the system default will be used.
+
     Raises:
         TypeError: If type of ``value`` is not supported by this package.
     """
@@ -299,12 +343,16 @@ def to_java_calendar(value):
 def human_readable_seconds(seconds):
     """
     Converts seconds into a human readable string of days, hours, minutes and seconds.
+
     Examples:
         .. code-block::
+
             message = human_readable_seconds(55555)
             # 15 hours, 25 minutes and 55 seconds
+
     Arguments:
         seconds: The number of seconds
+
     Returns:
         string: A string in the format ``{} days, {} hours, {} minutes and {} seconds``
     """
@@ -331,6 +379,7 @@ def human_readable_seconds(seconds):
         " and " if number_of_seconds > 0 and (number_of_minutes > 0 or number_of_hours > 0 or number_of_days > 0) else "",
         seconds_string if number_of_seconds > 0 else ""
     )
+
 
 def millis():
     """
@@ -374,6 +423,7 @@ def elapsed(start, end=joda_now(), format='digital'):
     
     Returns:
         (see args)
+
     Code Block:
         from personal.<this_script> import elapsed, joda_now
         example.log.info("Elapsed: {}".format(elapsed(items.SomeItem, joda_now(True))))  
