@@ -1,12 +1,29 @@
-# List of the Items or Groups that represent the presence of each person or
-# overall. If there is more than one sensor to represent a single person,
-# use a Group with an aggregation function (e.g Group:Switch:OR(ON, OFF)
-# gRichPresent).
-presence_sensors = ["gPresent", "gRichPresent", "gJennPresent"]
+# List of all the sensors, proxies, and timeouts to apply the generic presence
+# rule to.
+# sensor:  A single Switch Item or a Group:Switch that represents the presence
+#          status of the sensors that detect a given person or general
+#          presence.
+#
+# proxy:   The proxy Switch Item that represents the determined presence status
+#          of that person or generally.
+#
+# timeout: The number of minutes to wait after a sensor changes to OFF before
+#          changing the proxy Item to OFF. Changes to ON immediately apply.
+#
+# In the example below:
+#
+# gPresent is a Group:Switch:OR(ON,OFF) that includes all the sensors that
+# indicate the home is occupied in general.
+#
+# gRichPresent is a Group:Switch:OR(ON,OFF) that includes all the sensors that
+# indicate that person Rich is home.
+#
+# gJennPresent is a Group:Switch:OR(ON,OFF) that includes all the sensors that
+# indicate that person Jenn is home.
+#
+# Note, a sensor can be a member of more than one Group.
 
-# List of the corresponding proxy Items. The list must be the same length as
-# presence_sensors.
-presence_items = ["vPresent", "vRichPresent", "gJennPresent"]
-
-# Amount of time the group needs to be OFF before setting the proxy to OFF.
-presence_flap_time = 2 # in minutes
+                  # Sensor           proxy              Timeout
+presence_config = { "gPresent":     ("vPresent",        2),
+                    "gRichPresent": ("vRichPresent",    3),
+                    "gJennPresent": ("vJennPresent",    2) }
