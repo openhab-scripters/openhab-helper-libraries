@@ -417,7 +417,7 @@ def joda_now(string=False):
     else: 
         return to_joda_datetime(ZonedDateTime.now())
 
-def elapsed(start, end=joda_now(), format='digital'):
+def elapsed(start, end=None, format='digital'):
     """
     Arguments:
         start:  Start time in any datetime type or joda zdtt string (Required)
@@ -445,6 +445,8 @@ def elapsed(start, end=joda_now(), format='digital'):
     e_text    = '0 seconds'
     e_seconds = 0.0
 
+    if end == None: end = joda_now()    # Make end time the current time
+    
     start_pdt = to_python_datetime(start)
     end_pdt = to_python_datetime(end)
     td = (end_pdt - start_pdt)          # Total time delay (as timedelta)
