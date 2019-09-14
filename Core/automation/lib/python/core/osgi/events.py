@@ -1,7 +1,7 @@
 """
 This module provides an OSGi EventAdmin event monitor and rule trigger. This
-can trigger off any OSGi event (including ESH events). Rule manager events are
-filtered to avoid circular loops in the rule execution.
+can trigger off any OSGi event. Rule manager events are filtered to avoid
+circular loops in the rule execution.
 
 .. code-block::
 
@@ -13,9 +13,8 @@ filtered to avoid circular loops in the rule execution.
             event = inputs['event']
             # do something with event
 """
-
-from core.jsr223 import scope
-scope.scriptExtension.importPreset(None)
+from core.jsr223.scope import scriptExtension, Trigger
+scriptExtension.importPreset(None)
 
 import uuid
 import java.util
@@ -31,7 +30,7 @@ from core.log import logging, LOG_PREFIX
 
 log = logging.getLogger("{}.core.osgi.events".format(LOG_PREFIX))
 
-scope.scriptExtension.importPreset("RuleSupport")
+scriptExtension.importPreset("RuleSupport")
 
 def hashtable(*key_values):
     """
@@ -97,13 +96,13 @@ class OsgiEventAdmin(object):
 # trigger.
 osgi_triggers = {}
 
-class OsgiEventTrigger(scope.Trigger):
+class OsgiEventTrigger(Trigger):
     """Filter is a predicate taking an event argument and returning True (keep) or False (drop)"""
     def __init__(self, filter=None):
         self.filter = filter or (lambda event: True)
         triggerId = type(self).__name__ + "-" + uuid.uuid1().hex
         config = Configuration()
-        scope.Trigger.__init__(self, triggerId, core.OSGI_TRIGGER_ID, config)
+        Trigger.__init__(self, triggerId, core.OSGI_TRIGGER_ID, config)
         global osgi_triggers
         osgi_triggers[self.id] = self
 
