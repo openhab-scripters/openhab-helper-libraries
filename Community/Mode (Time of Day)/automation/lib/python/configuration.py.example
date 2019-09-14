@@ -12,8 +12,8 @@ Here is an example using a Channel (Morning) and using both a Time and a
 Channel (Night):
 
 mode_dict = OrderedDict([
-    ("Morning", {"Channel": "astro:sun:local:civilDawn#event", "Event": "START"}),
-    ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "Channel": "astro:sun:local:civilDawn#event", "Event": "START"})
+    ("Morning", {"channel": "astro:sun:local:civilDawn#event", "event": "START"}),
+    ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"})
 ])
 """
 
