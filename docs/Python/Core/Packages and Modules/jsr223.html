@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>jsr223 &mdash; openHAB Helper Libraries  documentation</title>
+  <title>core.jsr223 &mdash; openHAB Helper Libraries  documentation</title>
   
 
   
@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="links" href="links.html" />
-    <link rel="prev" title="items" href="items.html" /> 
+    <link rel="next" title="core.links" href="links.html" />
+    <link rel="prev" title="core.items" href="items.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -108,18 +110,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Reference.html">Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../Core.html">Core</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../Core.html#packages-and-modules">Packages and Modules</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="osgi.html">osgi</a></li>
-<li class="toctree-l3"><a class="reference internal" href="actions.html">actions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="date.html">date</a></li>
-<li class="toctree-l3"><a class="reference internal" href="items.html">items</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">jsr223</a></li>
-<li class="toctree-l3"><a class="reference internal" href="links.html">links</a></li>
-<li class="toctree-l3"><a class="reference internal" href="log.html">log</a></li>
-<li class="toctree-l3"><a class="reference internal" href="metadata.html">metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rules.html">rules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html">testing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triggers.html">triggers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="osgi.html">core.osgi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="actions.html">core.actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="date.html">core.date</a></li>
+<li class="toctree-l3"><a class="reference internal" href="items.html">core.items</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">core.jsr223</a></li>
+<li class="toctree-l3"><a class="reference internal" href="links.html">core.links</a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html">core.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata.html">core.metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rules.html">core.rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html">core.testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triggers.html">core.triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">core.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Core.html#component-scripts">Component Scripts</a></li>
@@ -185,7 +187,7 @@
         
           <li><a href="../../Core.html">Core</a> &raquo;</li>
         
-      <li>jsr223</li>
+      <li>core.jsr223</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -200,13 +202,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-core.jsr223">
-<span id="jsr223"></span><h1>jsr223<a class="headerlink" href="#module-core.jsr223" title="Permalink to this headline">¶</a></h1>
-<p>One of the challenges of scripted automation with Jython is that modules
+  <div class="section" id="id1">
+<h1><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Core/automation/lib/python/core/jsr223.py">core.jsr223</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-core.jsr223"></span><p>One of the challenges of scripted automation with Jython is that modules
 imported into scripts do not have direct access to the JSR223 scope types and
 objects. This module allows imported modules to access that data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In Jython module, not script...</span>
-<span class="kn">from</span> <span class="nn">core.jsr223.scope</span> <span class="kn">import</span> <span class="n">events</span>
+<span class="kn">from</span> <span class="nn">core_mock.jsr223.scope</span> <span class="kn">import</span> <span class="n">events</span>
 
 <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="n">events</span><span class="o">.</span><span class="n">postUpdate</span><span class="p">(</span><span class="s2">&quot;TestString1&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>

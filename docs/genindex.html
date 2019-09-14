@@ -97,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -104,6 +105,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Guides/But How Do I.html">But How Do I…?</a></li>
@@ -196,7 +198,6 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -215,16 +216,20 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Python/Core/Packages and Modules/items.html#core.items.add_item">add_item() (in module core.items)</a>
+</li>
+      <li><a href="Python/Core/Packages and Modules/links.html#core.links.add_link">add_link() (in module core.links)</a>
+</li>
       <li><a href="Python/Core/Packages and Modules/rules.html#core.rules.addRule">addRule() (in module core.rules)</a>
 </li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-alarm"><strong>Alarm</strong></a>
 </li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-alarm-state"><strong>Alarm State</strong></a>
 </li>
-      <li><a href="Python/Community/ideAlarm/Glossary.html#term-alert"><strong>Alert</strong></a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Python/Community/ideAlarm/Glossary.html#term-alert"><strong>Alert</strong></a>
+</li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-armed-away"><strong>Armed Away</strong></a>
 </li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-armed-home"><strong>Armed Home</strong></a>
@@ -232,8 +237,6 @@
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-arming"><strong>Arming</strong></a>
 </li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-arming-mode"><strong>Arming Mode</strong></a>
-</li>
-      <li><a href="Python/Community/ClickaTell.html#community.clickatell.Clickatell.auth">auth() (community.clickatell.Clickatell method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -243,17 +246,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ChannelEventTrigger">ChannelEventTrigger (class in core.triggers)</a>
 </li>
-      <li><a href="Python/Community/ClickaTell.html#community.clickatell.Clickatell">Clickatell (class in community.clickatell)</a>
-</li>
-      <li><a href="Python/Community/ClickaTell.html#community.clickatell.ClickatellAuthenticationError">ClickatellAuthenticationError</a>
-</li>
-      <li><a href="Python/Community/ClickaTell.html#community.clickatell.ClickatellError">ClickatellError</a>
-</li>
       <li><a href="Python/Community/AutoRemote.html#module-community.autoremote">community.autoremote (module)</a>
 </li>
       <li><a href="Python/Community/ClickaTell.html#module-community.clickatell">community.clickatell (module)</a>
-</li>
-      <li><a href="Python/Community/Esper.html#module-community.esper">community.esper (module)</a>
 </li>
       <li><a href="Python/Community/ideAlarm.html#module-community.idealarm">community.idealarm (module)</a>
 </li>
@@ -267,10 +262,10 @@
 </li>
       <li><a href="Python/Core/Packages and Modules/items.html#module-core.items">core.items (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Core/Packages and Modules/jsr223.html#module-core.jsr223">core.jsr223 (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Core/Packages and Modules/links.html#module-core.links">core.links (module)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/log.html#module-core.log">core.log (module)</a>
@@ -289,11 +284,7 @@
 </li>
       <li><a href="Python/Core/Packages and Modules/utils.html#module-core.utils">core.utils (module)</a>
 </li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.countOpenSections">countOpenSections() (community.idealarm.IdeAlarmZone method)</a>
-</li>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.CronTrigger">CronTrigger (class in core.triggers)</a>
-</li>
-      <li><a href="Python/Community/ClickaTell.html#community.clickatell.Clickatell.curl">curl() (community.clickatell.Clickatell method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -311,27 +302,19 @@
 </li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-disarming"><strong>Disarming</strong></a>
 </li>
-      <li><a href="Python/Core/Packages and Modules/date.html#core.date.pythonTimezone.dst">dst() (core.date.pythonTimezone method)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Examples/Component Scripts/Echo Thing.html#scripts.examples.components.300_EchoThing.EchoThingHandler">EchoThingHandler (class in scripts.examples.components.300_EchoThing)</a>
-</li>
-      <li><a href="Python/Examples/Component Scripts/Echo Thing.html#scripts.examples.components.300_EchoThing.EchoThingHandlerFactory">EchoThingHandlerFactory (class in scripts.examples.components.300_EchoThing)</a>
-</li>
       <li><a href="Python/Core/Packages and Modules/log.html#core.log.Slf4jHandler.emit">emit() (core.log.Slf4jHandler method)</a>
+</li>
+      <li><a href="Python/Community/ideAlarm/Glossary.html#term-entry-delay"><strong>Entry delay</strong></a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Community/ideAlarm/Glossary.html#term-entry-delay"><strong>Entry delay</strong></a>
-</li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-error"><strong>Error</strong></a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarm.execute">execute() (community.idealarm.IdeAlarm method)</a>
 </li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-exit-delay"><strong>Exit delay</strong></a>
 </li>
@@ -340,6 +323,10 @@
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Python/Core/Packages and Modules/osgi.html#core.osgi.find_services">find_services() (in module core.osgi)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Core/Packages and Modules/date.html#core.date.format_date">format_date() (in module core.date)</a>
 </li>
@@ -351,50 +338,24 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.GenericEventTrigger">GenericEventTrigger (class in core.triggers)</a>
 </li>
-      <li><a href="Python/Core/Component Scripts/200_JythonExtensionProvider.html#scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider.get">get() (scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider method)</a>
-</li>
       <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.get_all_namespaces">get_all_namespaces() (in module core.metadata)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.get_key_value">get_key_value() (in module core.metadata)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.get_metadata">get_metadata() (in module core.metadata)</a>
 </li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarm.get_triggers">get_triggers() (community.idealarm.IdeAlarm method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Python/Core/Packages and Modules/osgi.html#core.osgi.get_service">get_service() (in module core.osgi)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.get_value">get_value() (in module core.metadata)</a>
 </li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarm.getAlertingZonesCount">getAlertingZonesCount() (community.idealarm.IdeAlarm method)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.getArmingMode">getArmingMode() (community.idealarm.IdeAlarmZone method)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonExtensionProvider.html#scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider.getDefaultPresets">getDefaultPresets() (scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Core/Packages and Modules/utils.html#core.utils.getItemValue">getItemValue() (in module core.utils)</a>
 </li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmSensor.getLastUpdate">getLastUpdate() (community.idealarm.IdeAlarmSensor method)</a>
-
-      <ul>
-        <li><a href="Python/Core/Packages and Modules/utils.html#core.utils.getLastUpdate">(in module core.utils)</a>
+      <li><a href="Python/Core/Packages and Modules/utils.html#core.utils.getLastUpdate">getLastUpdate() (in module core.utils)</a>
 </li>
-      </ul></li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.getNagSensors">getNagSensors() (community.idealarm.IdeAlarmZone method)</a>
+      <li><a href="Python/Community/Sonos.html#community.sonos.speak.greeting">greeting() (in module community.sonos.speak)</a>
 </li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.getOpenSensors">getOpenSensors() (community.idealarm.IdeAlarmZone method)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonExtensionProvider.html#scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider.getPresets">getPresets() (scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider method)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarm.getSensors">getSensors() (community.idealarm.IdeAlarm method)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonExtensionProvider.html#scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider.getTypes">getTypes() (scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider method)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarm.getZoneStatus">getZoneStatus() (community.idealarm.IdeAlarm method)</a>
-
-      <ul>
-        <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.getZoneStatus">(community.idealarm.IdeAlarmZone method)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -407,6 +368,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Core/Packages and Modules/date.html#core.date.hours_between">hours_between() (in module core.date)</a>
 </li>
+      <li><a href="Python/Core/Packages and Modules/date.html#core.date.human_readable_seconds">human_readable_seconds() (in module core.date)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -415,73 +378,25 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-idealarm"><strong>ideAlarm</strong></a>
 </li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarm">IdeAlarm (class in community.idealarm)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmError">IdeAlarmError</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmSensor">IdeAlarmSensor (class in community.idealarm)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone">IdeAlarmZone (class in community.idealarm)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonExtensionProvider.html#scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider.importPreset">importPreset() (scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider method)</a>
-</li>
       <li><a href="Python/Core/Packages and Modules/utils.html#core.utils.iround">iround() (in module core.utils)</a>
 </li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmSensor.isActive">isActive() (community.idealarm.IdeAlarmSensor method)</a>
-
-      <ul>
-        <li><a href="Python/Community/ideAlarm.html#community.idealarm.isActive">(in module community.idealarm)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarm.isArmed">isArmed() (community.idealarm.IdeAlarm method)</a>
-
-      <ul>
-        <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.isArmed">(community.idealarm.IdeAlarmZone method)</a>
-</li>
-      </ul></li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarm.isDisArmed">isDisArmed() (community.idealarm.IdeAlarm method)</a>
-
-      <ul>
-        <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.isDisArmed">(community.idealarm.IdeAlarmZone method)</a>
-</li>
-      </ul></li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmSensor.isEnabled">isEnabled() (community.idealarm.IdeAlarmSensor method)</a>
+      <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemAddedTrigger">ItemAddedTrigger (class in core.triggers)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemCommandTrigger">ItemCommandTrigger (class in core.triggers)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemEventTrigger">ItemEventTrigger (class in core.triggers)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemRegistryTrigger">ItemRegistryTrigger (class in core.triggers)</a>
+</li>
+      <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemRemovedTrigger">ItemRemovedTrigger (class in core.triggers)</a>
+</li>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemStateChangeTrigger">ItemStateChangeTrigger (class in core.triggers)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemStateUpdateTrigger">ItemStateUpdateTrigger (class in core.triggers)</a>
 </li>
-  </ul></td>
-</tr></table>
-
-<h2 id="J">J</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Core/Component Scripts/200_JythonBindingInfoProvider.html#scripts.core.components.200_JythonBindingInfoProvider.JythonBindingInfoProvider">JythonBindingInfoProvider (class in scripts.core.components.200_JythonBindingInfoProvider)</a>
-</li>
-      <li><a href="Python/Examples/Component Scripts/Jython Console Commnd.html#scripts.examples.components.300_JythonConsoleCommand.JythonCommand">JythonCommand (class in scripts.examples.components.300_JythonConsoleCommand)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/100_DirectoryTrigger.html#scripts.core.components.100_DirectoryTrigger.JythonDirectoryWatcher">JythonDirectoryWatcher (class in scripts.core.components.100_DirectoryTrigger)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonExtensionProvider.html#scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider">JythonExtensionProvider (class in scripts.core.components.200_JythonExtensionProvider)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Core/Component Scripts/200_JythonItemChannelLinkProvider.html#scripts.core.components.200_JythonItemChannelLinkProvider.JythonItemChannelLinkProvider">JythonItemChannelLinkProvider (class in scripts.core.components.200_JythonItemChannelLinkProvider)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonItemProvider.html#scripts.core.components.200_JythonItemProvider.JythonItemProvider">JythonItemProvider (class in scripts.core.components.200_JythonItemProvider)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonThingProvider.html#scripts.core.components.200_JythonThingProvider.JythonThingProvider">JythonThingProvider (class in scripts.core.components.200_JythonThingProvider)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonThingTypeProvider.html#scripts.core.components.200_JythonThingTypeProvider.JythonThingTypeProvider">JythonThingTypeProvider (class in scripts.core.components.200_JythonThingTypeProvider)</a>
-</li>
-      <li><a href="Python/Core/Component Scripts/200_JythonTransform.html#scripts.core.components.200_JythonTransform.JythonTransformationService">JythonTransformationService (class in scripts.core.components.200_JythonTransform)</a>
+      <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemUpdatedTrigger">ItemUpdatedTrigger (class in core.triggers)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -521,19 +436,11 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.onAlertMaxTimer">onAlertMaxTimer() (community.idealarm.IdeAlarmZone method)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.onEntryTimer">onEntryTimer() (community.idealarm.IdeAlarmZone method)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.onExitTimer">onExitTimer() (community.idealarm.IdeAlarmZone method)</a>
+      <li><a href="Python/Community/ideAlarm/Glossary.html#term-openhab"><strong>openHAB</strong></a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.onSensorChange">onSensorChange() (community.idealarm.IdeAlarmZone method)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.onToggleSwitch">onToggleSwitch() (community.idealarm.IdeAlarmZone method)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm/Glossary.html#term-openhab"><strong>openHAB</strong></a>
+      <li><a href="Python/Core/Packages and Modules/osgi/events.html#core.osgi.events.OsgiEventTrigger">OsgiEventTrigger (class in core.osgi.events)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -551,21 +458,23 @@
 </li>
       <li><a href="Python/Core/Packages and Modules/utils.html#core.utils.postUpdateCheckFirst">postUpdateCheckFirst() (in module core.utils)</a>
 </li>
-      <li><a href="Python/Core/Packages and Modules/date.html#core.date.pythonTimezone">pythonTimezone (class in core.date)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.remove_key_value">remove_key_value() (in module core.metadata)</a>
+      <li><a href="Python/Core/Packages and Modules/osgi.html#core.osgi.register_service">register_service() (in module core.osgi)</a>
 </li>
-      <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.remove_metadata">remove_metadata() (in module core.metadata)</a>
+      <li><a href="Python/Core/Packages and Modules/items.html#core.items.remove_item">remove_item() (in module core.items)</a>
+</li>
+      <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.remove_key_value">remove_key_value() (in module core.metadata)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Community/ClickaTell.html#community.clickatell.require_auth">require_auth() (in module community.clickatell)</a>
+      <li><a href="Python/Core/Packages and Modules/links.html#core.links.remove_link">remove_link() (in module core.links)</a>
+</li>
+      <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.remove_metadata">remove_metadata() (in module core.metadata)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/rules.html#core.rules.rule">rule() (in module core.rules)</a>
 </li>
@@ -577,9 +486,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Community/Delete and Rediscover Z-Wave Things.html#module-scripts.community.delete_zwave_things.delete_zwave_things">scripts.community.delete_zwave_things.delete_zwave_things (module)</a>
 </li>
-      <li><a href="Python/Community/Esper.html#module-scripts.community.esper.components.000_Esper">scripts.community.esper.components.000_Esper (module)</a>
-</li>
       <li><a href="Python/Community/OpenWeatherMap.html#module-scripts.community.openweathermap.owm_daily_forecast">scripts.community.openweathermap.owm_daily_forecast (module)</a>
+</li>
+      <li><a href="Python/Community/Mode (Time of Day).html#module-scripts.community.update_mode.update_mode">scripts.community.update_mode.update_mode (module)</a>
 </li>
       <li><a href="Python/Community/WeatherStationUploader.html#module-scripts.community.weatherstationuploader.weatherStationUploader">scripts.community.weatherstationuploader.weatherStationUploader (module)</a>
 </li>
@@ -613,9 +522,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Python/Examples/Component Scripts/Log Action.html#module-scripts.examples.components.300_LogAction">scripts.examples.components.300_LogAction (module)</a>
 </li>
-      <li><a href="Examples/Design Patterns/Mode (Time of Day).html#module-scripts.examples.mode_example">scripts.examples.mode_example (module)</a>
+      <li><a href="Python/Community/Sonos.html#module-scripts.personal.sonos.greeting">scripts.personal.sonos.greeting (module)</a>
 </li>
-      <li><a href="Python/Examples/Alexa Speak and Respond.html#module-scripts.examples.speak_and_respond">scripts.examples.speak_and_respond (module)</a>
+      <li><a href="Python/Community/Sonos.html#module-scripts.personal.sonos.tts">scripts.personal.sonos.tts (module)</a>
+</li>
+      <li><a href="Python/Community/Alexa Speak and Respond.html#module-scripts.personal.speak_and_respond.speak_and_respond">scripts.personal.speak_and_respond.speak_and_respond (module)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/date.html#core.date.seconds_between">seconds_between() (in module core.date)</a>
 </li>
@@ -625,8 +536,6 @@
 </li>
       <li><a href="Python/Core/Packages and Modules/utils.html#core.utils.sendCommandCheckFirst">sendCommandCheckFirst() (in module core.utils)</a>
 </li>
-      <li><a href="Python/Community/AutoRemote.html#community.autoremote.sendMessage">sendMessage() (in module community.autoremote)</a>
-</li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-sensor"><strong>Sensor</strong></a>
 </li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-sensor-class"><strong>Sensor class</strong></a>
@@ -635,11 +544,9 @@
 </li>
       <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.set_metadata">set_metadata() (in module core.metadata)</a>
 </li>
+      <li><a href="Python/Core/Packages and Modules/rules.html#core.rules.set_uid_prefix">set_uid_prefix() (in module core.rules)</a>
+</li>
       <li><a href="Python/Core/Packages and Modules/metadata.html#core.metadata.set_value">set_value() (in module core.metadata)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.setArmingMode">setArmingMode() (community.idealarm.IdeAlarmZone method)</a>
-</li>
-      <li><a href="Python/Community/ideAlarm.html#community.idealarm.IdeAlarmZone.setZoneStatus">setZoneStatus() (community.idealarm.IdeAlarmZone method)</a>
 </li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-siren"><strong>Siren</strong></a>
 </li>
@@ -653,6 +560,8 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Python/Core/Packages and Modules/testing.html#core.testing.TestRunner">TestRunner (class in core.testing)</a>
+</li>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ThingEventTrigger">ThingEventTrigger (class in core.triggers)</a>
 </li>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ThingStatusChangeTrigger">ThingStatusChangeTrigger (class in core.triggers)</a>
@@ -669,14 +578,6 @@
 </li>
       <li><a href="Python/Core/Packages and Modules/date.html#core.date.to_python_datetime">to_python_datetime() (in module core.date)</a>
 </li>
-      <li><a href="Python/Core/Packages and Modules/date.html#core.date.toJCal">toJCal() (in module core.date)</a>
-</li>
-      <li><a href="Python/Core/Packages and Modules/date.html#core.date.toJodaDT">toJodaDT() (in module core.date)</a>
-</li>
-      <li><a href="Python/Core/Packages and Modules/date.html#core.date.toJTime">toJTime() (in module core.date)</a>
-</li>
-      <li><a href="Python/Core/Packages and Modules/date.html#core.date.toPyDT">toPyDT() (in module core.date)</a>
-</li>
       <li><a href="Python/Community/ideAlarm/Glossary.html#term-trigger"><strong>Trigger</strong></a>
 </li>
       <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ChannelEventTrigger.trigger">trigger (core.triggers.ChannelEventTrigger attribute)</a>
@@ -684,15 +585,25 @@
       <ul>
         <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.CronTrigger.trigger">(core.triggers.CronTrigger attribute)</a>
 </li>
+        <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.DirectoryEventTrigger.trigger">(core.triggers.DirectoryEventTrigger attribute)</a>
+</li>
         <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.GenericEventTrigger.trigger">(core.triggers.GenericEventTrigger attribute)</a>
+</li>
+        <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemAddedTrigger.trigger">(core.triggers.ItemAddedTrigger attribute)</a>
 </li>
         <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemCommandTrigger.trigger">(core.triggers.ItemCommandTrigger attribute)</a>
 </li>
         <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemEventTrigger.trigger">(core.triggers.ItemEventTrigger attribute)</a>
 </li>
+        <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemRegistryTrigger.trigger">(core.triggers.ItemRegistryTrigger attribute)</a>
+</li>
+        <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemRemovedTrigger.trigger">(core.triggers.ItemRemovedTrigger attribute)</a>
+</li>
         <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemStateChangeTrigger.trigger">(core.triggers.ItemStateChangeTrigger attribute)</a>
 </li>
         <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemStateUpdateTrigger.trigger">(core.triggers.ItemStateUpdateTrigger attribute)</a>
+</li>
+        <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.ItemUpdatedTrigger.trigger">(core.triggers.ItemUpdatedTrigger attribute)</a>
 </li>
         <li><a href="Python/Core/Packages and Modules/triggers.html#core.triggers.StartupTrigger.trigger">(core.triggers.StartupTrigger attribute)</a>
 </li>
@@ -711,19 +622,13 @@
 </li>
       <li><a href="Python/Community/Sonos.html#community.sonos.speak.tts">tts() (in module community.sonos.speak)</a>
 </li>
-      <li><a href="Python/Core/Packages and Modules/date.html#core.date.pythonTimezone.tzname">tzname() (core.date.pythonTimezone method)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Core/Component Scripts/200_JythonExtensionProvider.html#scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider.unload">unload() (scripts.core.components.200_JythonExtensionProvider.JythonExtensionProvider method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Core/Packages and Modules/date.html#core.date.pythonTimezone.utcoffset">utcoffset() (core.date.pythonTimezone method)</a>
+      <li><a href="Python/Core/Packages and Modules/osgi.html#core.osgi.unregister_service">unregister_service() (in module core.osgi)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -735,8 +640,6 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Python/Core/Packages and Modules/utils.html#core.utils.validate_item">validate_item() (in module core.utils)</a>
-</li>
       <li><a href="Python/Core/Packages and Modules/utils.html#core.utils.validate_uid">validate_uid() (in module core.utils)</a>
 </li>
   </ul></td>

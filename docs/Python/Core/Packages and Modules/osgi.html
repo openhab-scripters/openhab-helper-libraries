@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>osgi &mdash; openHAB Helper Libraries  documentation</title>
+  <title>core.osgi &mdash; openHAB Helper Libraries  documentation</title>
   
 
   
@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="events" href="osgi/events.html" />
+    <link rel="next" title="core.osgi.events" href="osgi/events.html" />
     <link rel="prev" title="Core" href="../../Core.html" /> 
 </head>
 
@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -108,21 +110,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Reference.html">Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../Core.html">Core</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../Core.html#packages-and-modules">Packages and Modules</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">osgi</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="osgi/events.html">events</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">core.osgi</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="osgi/events.html">core.osgi.events</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="actions.html">actions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="date.html">date</a></li>
-<li class="toctree-l3"><a class="reference internal" href="items.html">items</a></li>
-<li class="toctree-l3"><a class="reference internal" href="jsr223.html">jsr223</a></li>
-<li class="toctree-l3"><a class="reference internal" href="links.html">links</a></li>
-<li class="toctree-l3"><a class="reference internal" href="log.html">log</a></li>
-<li class="toctree-l3"><a class="reference internal" href="metadata.html">metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rules.html">rules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html">testing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triggers.html">triggers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="actions.html">core.actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="date.html">core.date</a></li>
+<li class="toctree-l3"><a class="reference internal" href="items.html">core.items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jsr223.html">core.jsr223</a></li>
+<li class="toctree-l3"><a class="reference internal" href="links.html">core.links</a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html">core.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metadata.html">core.metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rules.html">core.rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html">core.testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triggers.html">core.triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">core.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Core.html#component-scripts">Component Scripts</a></li>
@@ -188,7 +190,7 @@
         
           <li><a href="../../Core.html">Core</a> &raquo;</li>
         
-      <li>osgi</li>
+      <li>core.osgi</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -203,13 +205,86 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-core.osgi">
-<span id="osgi"></span><h1>osgi<a class="headerlink" href="#module-core.osgi" title="Permalink to this headline">¶</a></h1>
-<p>Provides utility functions for retrieving, registering and removing OSGi
+  <div class="section" id="id1">
+<h1><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Core/automation/lib/python/core/osgi/__init__.py">core.osgi</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-core.osgi"></span><p>Provides utility functions for retrieving, registering and removing OSGi
 services.</p>
+<dl class="function">
+<dt id="core.osgi.get_service">
+<code class="sig-prename descclassname">core.osgi.</code><code class="sig-name descname">get_service</code><span class="sig-paren">(</span><em class="sig-param">class_or_name</em><span class="sig-paren">)</span><a class="headerlink" href="#core.osgi.get_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function gets the specified OSGi service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>class_or_name</strong> (<em>class</em><em> or </em><em>str</em>) – the class or class name of the service to
+get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the requested OSGi service or None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>OSGi service or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.osgi.find_services">
+<code class="sig-prename descclassname">core.osgi.</code><code class="sig-name descname">find_services</code><span class="sig-paren">(</span><em class="sig-param">class_name</em>, <em class="sig-param">filter</em><span class="sig-paren">)</span><a class="headerlink" href="#core.osgi.find_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function finds the specified OSGi service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>class_or_name</strong> (<em>class</em><em> or </em><em>str</em>) – the class or class name of the service to
+get</p></li>
+<li><p><strong>filter</strong> (<em>str</em>) – the filter expression or None for all services</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of matching OSGi services</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.osgi.register_service">
+<code class="sig-prename descclassname">core.osgi.</code><code class="sig-name descname">register_service</code><span class="sig-paren">(</span><em class="sig-param">service</em>, <em class="sig-param">interface_names</em>, <em class="sig-param">properties=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.osgi.register_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function registers the specified service object with the specified
+properties under the specified class names into the Framework.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>service</strong> (<em>java.lang.Object</em>) – the service to register</p></li>
+<li><p><strong>interface_names</strong> (<em>list</em>) – a list of class names</p></li>
+<li><p><strong>properties</strong> (<em>dict</em>) – a dict of properties for the service</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a ServiceRegistration object used to update or
+unregister the service</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ServiceRegistration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.osgi.unregister_service">
+<code class="sig-prename descclassname">core.osgi.</code><code class="sig-name descname">unregister_service</code><span class="sig-paren">(</span><em class="sig-param">service</em><span class="sig-paren">)</span><a class="headerlink" href="#core.osgi.unregister_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function unregisters an OSGi service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>service</strong> (<em>java.lang.Object</em>) – the service to unregister</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="osgi/events.html">events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osgi/events.html">core.osgi.events</a></li>
 </ul>
 </div>
 </div>

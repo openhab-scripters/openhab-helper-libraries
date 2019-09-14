@@ -106,6 +106,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -113,6 +114,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -233,9 +235,11 @@ This is the default logger used in the examples and the helper libraries.</p></l
 Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into your openHAB’s site configuration directory (<a class="reference external" href="https://www.openhab.org/docs/installation/linux.html#file-locations">Linux</a>, <a class="reference external" href="https://www.openhab.org/docs/installation/windows.html#file-locations">Windows</a>).
 This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a> and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
 If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p></li>
-<li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
+<li><p>There is a main configuration file for each scripting language’s helper libraries that must be renamed.
 For example, in <code class="docutils literal notranslate"><span class="pre">/automation/lib/python/</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.py.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.py</span></code>.
 These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
+<li><p>The ‘’/automation/lib/python/personal/__init.py.example`` file must be renamed to <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>.
+If you modify it, take care not to overwrite the file during upgrades.</p></li>
 <li><p>Add/modify the EXTRA_JAVA_OPTS.
 These examples assume that you will be using the standalone Jython 2.7.0 jar in the next step.
 Changes to the EXTRA_JAVA_OPTS require an openHAB restart.</p>
@@ -308,7 +312,7 @@ This is the default logger used in the examples and the helper libraries.</p></l
 Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into your openHAB’s site configuration directory (<a class="reference external" href="https://www.openhab.org/docs/installation/linux.html#file-locations">Linux</a>, <a class="reference external" href="https://www.openhab.org/docs/installation/windows.html#file-locations">Windows</a>).
 This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a> and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
 If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p></li>
-<li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
+<li><p>There is a main configuration file for each scripting language’s helper libraries that must be renamed.
 For example, in <code class="docutils literal notranslate"><span class="pre">/automation/lib/javascript/</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.js.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.js</span></code>.
 These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
 <li><p>Copy the <code class="docutils literal notranslate"><span class="pre">/Script</span> <span class="pre">Examples/Javascript/HelloWorld.js</span></code> script to <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/javascript/personal/</span></code>.</p></li>
@@ -334,7 +338,7 @@ This is the default logger used in the examples and the helper libraries.</p></l
 Using the <code class="docutils literal notranslate"><span class="pre">openhab</span></code> account, copy the <em>contents</em> of the <code class="docutils literal notranslate"><span class="pre">/Core/</span></code> directory into your openHAB’s site configuration directory (<a class="reference external" href="https://www.openhab.org/docs/installation/linux.html#file-locations">Linux</a>, <a class="reference external" href="https://www.openhab.org/docs/installation/windows.html#file-locations">Windows</a>).
 This will create a directory structure as described in <a class="reference internal" href="File Locations.html"><span class="doc">File Locations</span></a> and will contain all of the Core files for each language, including the startup delay scripts that ensure openHAB has started completely before loading other scripts.
 If you do not plan to use all of the languages, you may want to remove the directories for them under <code class="docutils literal notranslate"><span class="pre">/automation/jsr223/</span></code> and <code class="docutils literal notranslate"><span class="pre">/automation/lib/</span></code>.</p></li>
-<li><p>There is a main configuration file for each scripting language’s helper libraries that will need to be renamed.
+<li><p>There is a main configuration file for each scripting language’s helper libraries that must be renamed.
 For example, in <code class="docutils literal notranslate"><span class="pre">/automation/lib/groovy/</span></code>, rename the file <code class="docutils literal notranslate"><span class="pre">configuration.groovy.example</span></code> to <code class="docutils literal notranslate"><span class="pre">configuration.groovy</span></code>.
 These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.</p></li>
 <li><p>Download the <a class="reference external" href="https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.12.zip">Groovy binary</a>.</p></li>

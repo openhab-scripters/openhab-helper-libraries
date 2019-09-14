@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>events &mdash; openHAB Helper Libraries  documentation</title>
+  <title>core.osgi.events &mdash; openHAB Helper Libraries  documentation</title>
   
 
   
@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="actions" href="../actions.html" />
-    <link rel="prev" title="osgi" href="../osgi.html" /> 
+    <link rel="next" title="core.actions" href="../actions.html" />
+    <link rel="prev" title="core.osgi" href="../osgi.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -108,21 +110,21 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../Reference.html">Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../Core.html">Core</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../Core.html#packages-and-modules">Packages and Modules</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../osgi.html">osgi</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">events</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../osgi.html">core.osgi</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">core.osgi.events</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../actions.html">actions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../date.html">date</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../items.html">items</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../jsr223.html">jsr223</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../links.html">links</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../log.html">log</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../metadata.html">metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../rules.html">rules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../testing.html">testing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../triggers.html">triggers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../utils.html">utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../actions.html">core.actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../date.html">core.date</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../items.html">core.items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jsr223.html">core.jsr223</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../links.html">core.links</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log.html">core.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../metadata.html">core.metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../rules.html">core.rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html">core.testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../triggers.html">core.triggers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils.html">core.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Core.html#component-scripts">Component Scripts</a></li>
@@ -188,9 +190,9 @@
         
           <li><a href="../../../Core.html">Core</a> &raquo;</li>
         
-          <li><a href="../osgi.html">osgi</a> &raquo;</li>
+          <li><a href="../osgi.html">core.osgi</a> &raquo;</li>
         
-      <li>events</li>
+      <li>core.osgi.events</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -205,11 +207,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-core.osgi.events">
-<span id="events"></span><h1>events<a class="headerlink" href="#module-core.osgi.events" title="Permalink to this headline">¶</a></h1>
-<p>This module provides an OSGi EventAdmin event monitor and rule trigger. This
-can trigger off any OSGi event (including ESH events). Rule manager events are
-filtered to avoid circular loops in the rule execution.</p>
+  <div class="section" id="id1">
+<h1><a class="reference external" href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Core/automation/lib/python/core/osgi/events.py">core.osgi.events</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-core.osgi.events"></span><p>This module provides an OSGi EventAdmin event monitor and rule trigger. This
+can trigger off any OSGi event. Rule manager events are filtered to avoid
+circular loops in the rule execution.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleRule</span><span class="p">(</span><span class="n">SimpleRule</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span> <span class="n">core</span><span class="o">.</span><span class="n">osgi</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">OsgiEventTrigger</span><span class="p">()</span> <span class="p">]</span>
@@ -230,6 +232,13 @@ filtered to avoid circular loops in the rule execution.</p>
 <dd class="field-even"><p>initialized Hashtable</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="core.osgi.events.OsgiEventTrigger">
+<em class="property">class </em><code class="sig-prename descclassname">core.osgi.events.</code><code class="sig-name descname">OsgiEventTrigger</code><span class="sig-paren">(</span><em class="sig-param">filter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#core.osgi.events.OsgiEventTrigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">core_mock.jsr223.scope.Trigger</span></code></p>
+<p>Filter is a predicate taking an event argument and returning True (keep) or False (drop)</p>
 </dd></dl>
 
 </div>

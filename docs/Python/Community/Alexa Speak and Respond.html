@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Reference" href="../../JavaScript/Reference.html" />
-    <link rel="prev" title="Log Action" href="Component Scripts/Log Action.html" /> 
+    <link rel="next" title="Area Triggers and Actions" href="Area Triggers and Actions.html" />
+    <link rel="prev" title="Community" href="../Community.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -107,19 +109,25 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../Reference.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Core.html">Core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Community.html">Community</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../Examples.html#component-scripts">Component Scripts</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#scripts">Scripts</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Alexa Speak and Respond</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#purpose">Purpose</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#requires">Requires</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Community.html">Community</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Alexa Speak and Respond</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#purpose">Purpose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requires">Requires</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="Area Triggers and Actions.html">Area Triggers and Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AutoRemote.html">AutoRemote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ClickaTell.html">ClickaTell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mode (Time of Day).html">Mode (Time of Day)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OpenWeatherMap.html">OpenWeatherMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sonos.html">Sonos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WeatherStationUploader.html">WeatherStationUploader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ideAlarm.html">ideAlarm</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../Examples.html">Examples</a></li>
 </ul>
 <p class="caption"><span class="caption-text">JavaScript</span></p>
 <ul>
@@ -175,7 +183,7 @@
     
       <li><a href="../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../Examples.html">Examples</a> &raquo;</li>
+          <li><a href="../Community.html">Community</a> &raquo;</li>
         
       <li>Alexa Speak and Respond</li>
     
@@ -192,19 +200,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.examples.speak_and_respond">
-<span id="alexa-speak-and-respond"></span><h1>Alexa Speak and Respond<a class="headerlink" href="#module-scripts.examples.speak_and_respond" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-scripts.personal.speak_and_respond.speak_and_respond">
+<span id="alexa-speak-and-respond"></span><h1>Alexa Speak and Respond<a class="headerlink" href="#module-scripts.personal.speak_and_respond.speak_and_respond" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="purpose">
 <h2>Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
-<p>This script will parse all Alexa voice commands, and if they match the text in the rule, it will send a command to an Item
-linked to that Alexa device’s TTS Channel. For example, I can ask Alexa “Are the doors locked?”, and the device that I asked
-will respond with “all doors are locked” or a list of the unlocked doors. Additional phrases can be added.</p>
+<p>This is an example script that can be modified to suit your implementation. It
+will parse all Alexa voice commands and, if they match the text in the rule,
+it will send a command to an Item linked to that Alexa device’s TTS Channel.
+For example, I can ask Alexa “Are the doors locked?” and the device that I
+asked will respond with “all doors are locked” or a list of the unlocked doors.
+Additional phrases can be added.</p>
 </div>
 <div class="section" id="requires">
 <h2>Requires<a class="headerlink" href="#requires" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p><a class="reference external" href="https://www.openhab.org/addons/bindings/amazonechocontrol/">Amazon Echo Control</a> binding</p></li>
-<li><p>A routine setup in the Alexa app that captures the same text you are capturing (I used a volume adjustment for the action)</p></li>
+<li><p><a class="reference external" href="https://www.openhab.org/addons/bindings/amazonechocontrol/">Amazon Echo Control</a>
+binding</p></li>
+<li><p>A routine setup in the Alexa app that captures the same text you are
+capturing (I used a volume adjustment for the action)</p></li>
+<li><p>This file will need to be renamed (remove the ‘.example’)</p></li>
 <li><p>Items:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Group</span>    <span class="n">gAlexa_LastVoiceCommand</span>    <span class="s2">&quot;Last Voice Command&quot;</span>
 <span class="n">String</span>    <span class="n">DiningRoom_Dot_LastVoiceCommand</span>    <span class="s2">&quot;Dining Room: Last Voice Command [</span><span class="si">%s</span><span class="s2">]&quot;</span>    <span class="p">(</span><span class="n">gAlexa_LastVoiceCommand</span><span class="p">)</span>    <span class="p">{</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand&quot;</span><span class="p">}</span>
@@ -215,20 +229,21 @@ will respond with “all doors are locked” or a list of the unlocked doors. Ad
 </div>
 </li>
 </ul>
-<p>The getLockStates function can be removed or replaced. It uses a group (gSecurity) that contains all of my outer doors.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_lock_states()</span></code> function can be removed or replaced. It uses a group
+(<code class="docutils literal notranslate"><span class="pre">gSecurity</span></code>) that contains all of my outer doors.</p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
 <span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
 
-<span class="k">def</span> <span class="nf">getLockStates</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">get_lock_states</span><span class="p">():</span>
     <span class="k">return</span> <span class="s2">&quot;all doors are locked&quot;</span> <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="s2">&quot;gSecurity&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ON</span> <span class="k">else</span> <span class="s2">&quot;the following doors are not locked, </span><span class="se">\n</span><span class="s2">{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">unlockedLock</span><span class="p">:</span> <span class="n">unlockedLock</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">lock</span><span class="p">:</span> <span class="n">lock</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">OFF</span><span class="p">,</span> <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gSecurity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getAllMembers</span><span class="p">()))))</span>
 
 <span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Alert: Voice command alert&quot;</span><span class="p">)</span>
 <span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Member of gAlexa_LastVoiceCommand received update&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">lastVoiceCommandAlert</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-    <span class="n">lastVoiceCommandAlert</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;LastVoiceCommand received [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemState</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">last_voice_command_alert</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">last_voice_command_alert</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;LastVoiceCommand received [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemState</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">itemState</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;are the doors locked&quot;</span><span class="p">:</span>
-        <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemName</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;LastVoiceCommand&quot;</span><span class="p">,</span> <span class="s2">&quot;TTS&quot;</span><span class="p">),</span> <span class="n">getLockStates</span><span class="p">())</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">sendCommand</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">itemName</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;LastVoiceCommand&quot;</span><span class="p">,</span> <span class="s2">&quot;TTS&quot;</span><span class="p">),</span> <span class="n">get_lock_states</span><span class="p">())</span>
     <span class="c1">#elif event.itemState.toString() == &quot;are the windows closed&quot;:</span>
         <span class="c1"># do stuff here</span>
 </pre></div>
@@ -245,7 +260,7 @@ will respond with “all doors are locked” or a list of the unlocked doors. Ad
         <div align="right">
           
             <br/>
-            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Examples/Alexa Speak and Respond.rst" class="fa fa-github"> Edit on GitHub</a>
+            <a href="https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Sphinx/Python/Community/Alexa Speak and Respond.rst" class="fa fa-github"> Edit on GitHub</a>
           
         </div>
       

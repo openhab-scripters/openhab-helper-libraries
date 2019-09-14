@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -108,13 +110,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../Reference.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Core.html">Core</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../Community.html">Community</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Alexa Speak and Respond.html">Alexa Speak and Respond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Area Triggers and Actions.html">Area Triggers and Actions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="AutoRemote.html">AutoRemote</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ClickaTell.html">ClickaTell</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mode (Time of Day).html">Mode (Time of Day)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="OpenWeatherMap.html">OpenWeatherMap</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Sonos</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-community.sonos.playSound">Packages and Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scripts">Scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-scripts.personal.sonos.tts">tts.py.example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-scripts.personal.sonos.greeting">greeting.py.example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#packages-and-modules">Packages and Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-community.sonos.playSound">playSound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-community.sonos.speak">speak</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="WeatherStationUploader.html">WeatherStationUploader</a></li>
@@ -196,34 +210,102 @@
             
   <div class="section" id="sonos">
 <h1>Sonos<a class="headerlink" href="#sonos" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="scripts">
+<h2>Scripts<a class="headerlink" href="#scripts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.personal.sonos.tts">
+<span id="tts-py-example"></span><h3>tts.py.example<a class="headerlink" href="#module-scripts.personal.sonos.tts" title="Permalink to this headline">¶</a></h3>
+<p>This script creates a rule that will trigger when a StringItem is updated and
+speak the string as TTS.</p>
+</div>
+<div class="section" id="module-scripts.personal.sonos.greeting">
+<span id="greeting-py-example"></span><h3>greeting.py.example<a class="headerlink" href="#module-scripts.personal.sonos.greeting" title="Permalink to this headline">¶</a></h3>
+<p>This script speaks a random greeting every minute on your Sonos speaker system.
+To use this, you should set up astro.py as described in
+<a class="reference internal" href="../../Examples/Design Patterns/Mode (Time of Day).html#mode-time-of-day"><span class="std std-ref">Mode (Time of Day)</span></a>. It also
+assumes that you’ve set up an openHAB ContactItems to represent the presence of
+people to be greeted. Each of the Items should belong to the group
+<code class="docutils literal notranslate"><span class="pre">G_Presence_Family</span></code>. Finally, make sure that you add the contents of the
+<code class="docutils literal notranslate"><span class="pre">configuration.py.example</span></code> file into your own <code class="docutils literal notranslate"><span class="pre">configuration.py</span></code> file.</p>
+</div>
+</div>
+<div class="section" id="packages-and-modules">
+<h2>Packages and Modules<a class="headerlink" href="#packages-and-modules" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="module-community.sonos.playSound">
-<span id="packages-and-modules"></span><h2>Packages and Modules<a class="headerlink" href="#module-community.sonos.playSound" title="Permalink to this headline">¶</a></h2>
+<span id="playsound"></span><h3>playSound<a class="headerlink" href="#module-community.sonos.playSound" title="Permalink to this headline">¶</a></h3>
+<p>This module provides functions for playing sounds.</p>
 <dl class="function">
 <dt id="community.sonos.playSound.playsound">
 <code class="sig-prename descclassname">community.sonos.playSound.</code><code class="sig-name descname">playsound</code><span class="sig-paren">(</span><em class="sig-param">fileName</em>, <em class="sig-param">ttsPrio=1</em>, <em class="sig-param">**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#community.sonos.playSound.playsound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Play a sound mp3 file function. First argument is positional and mandatory.
-Remaining arguments are optionally keyword arguments.
-Example: playsound(“Hello.mp3”)
-Example: playsound(“Hello.mp3”, PRIO[‘HIGH’], room=’Kitchen’, volume=42)
-&#64;param param1: Sound file name to play (positional argument) (files need to be put in the folder conf/sounds)
-&#64;param param2: Priority as defined by PRIO. Defaults to PRIO[‘MODERATE’]
-&#64;param room: Room to play in. Defaults to “All”.
-&#64;return: this is a description of what is returned</p>
+Remaining arguments are optionally keyword arguments.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">playsound</span><span class="p">(</span><span class="s2">&quot;Hello.mp3&quot;</span><span class="p">)</span>
+<span class="n">playsound</span><span class="p">(</span><span class="s2">&quot;Hello.mp3&quot;</span><span class="p">,</span> <span class="n">PRIO</span><span class="p">[</span><span class="s1">&#39;HIGH&#39;</span><span class="p">],</span> <span class="n">room</span><span class="o">=</span><span class="s1">&#39;Kitchen&#39;</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fileName</strong> (<em>str</em>) – Sound file name to play (files need to be put in the
+folder <code class="docutils literal notranslate"><span class="pre">/conf/sounds/</span></code>)</p></li>
+<li><p><strong>ttsPrio</strong> (<em>str</em>) – (optional) priority as defined by PRIO (defaults to
+PRIO[‘MODERATE’])</p></li>
+<li><p><strong>**keywords</strong> – <code class="docutils literal notranslate"><span class="pre">room</span></code> (room to play in defaults to <code class="docutils literal notranslate"><span class="pre">All</span></code>) and
+<code class="docutils literal notranslate"><span class="pre">ttsVol</span></code> (volume)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code>, if sound was sent, else <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
-<span class="target" id="module-community.sonos.speak"></span><dl class="function">
+</div>
+<div class="section" id="module-community.sonos.speak">
+<span id="speak"></span><h3>speak<a class="headerlink" href="#module-community.sonos.speak" title="Permalink to this headline">¶</a></h3>
+<p>This module provides functions for use with TTS.</p>
+<dl class="function">
 <dt id="community.sonos.speak.tts">
 <code class="sig-prename descclassname">community.sonos.speak.</code><code class="sig-name descname">tts</code><span class="sig-paren">(</span><em class="sig-param">ttsSay</em>, <em class="sig-param">ttsPrio=1</em>, <em class="sig-param">**keywords</em><span class="sig-paren">)</span><a class="headerlink" href="#community.sonos.speak.tts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Text To Speak function. First argument is positional and mandatory.
-Remaining arguments are optionally keyword arguments.
-Example: tts(“Hello”)
-Example: tts(“Hello”, PRIO[‘HIGH’], ttsRoom=’Kitchen’, ttsVol=42, ttsLang=’en-GB’, ttsVoice=’Brian’)
-&#64;param param1: Text to speak (positional argument)
-&#64;param param2: Priority as defined by PRIO. Defaults to PRIO[‘MODERATE’]
-&#64;param ttsRoom: Room to speak in
-&#64;return: this is a description of what is returned</p>
+Remaining arguments are optionally keyword arguments.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tts</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="n">tts</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="n">PRIO</span><span class="p">[</span><span class="s1">&#39;HIGH&#39;</span><span class="p">],</span> <span class="n">ttsRoom</span><span class="o">=</span><span class="s1">&#39;Kitchen&#39;</span><span class="p">,</span> <span class="n">ttsVol</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">ttsLang</span><span class="o">=</span><span class="s1">&#39;en-GB&#39;</span><span class="p">,</span> <span class="n">ttsVoice</span><span class="o">=</span><span class="s1">&#39;Brian&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ttsSay</strong> (<em>str</em>) – text to speak</p></li>
+<li><p><strong>ttsPrio</strong> (<em>str</em>) – (optional) priority as defined by PRIO (defaults to
+PRIO[‘MODERATE’])</p></li>
+<li><p><strong>**keywords</strong> – <code class="docutils literal notranslate"><span class="pre">ttsRoom</span></code> (room to speak in), <code class="docutils literal notranslate"><span class="pre">ttsVol</span></code> (volume),
+<code class="docutils literal notranslate"><span class="pre">ttsLang</span></code> (language), <code class="docutils literal notranslate"><span class="pre">ttsVoice</span></code> (voice), <code class="docutils literal notranslate"><span class="pre">ttsEngine</span></code>
+(engine)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code>, if sound was sent, else <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
+<dl class="function">
+<dt id="community.sonos.speak.greeting">
+<code class="sig-prename descclassname">community.sonos.speak.</code><code class="sig-name descname">greeting</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#community.sonos.speak.greeting" title="Permalink to this definition">¶</a></dt>
+<dd><p>To use this, you should set up astro.py as described <a class="reference external" href="https://github.com/OH-Jython-Scripters/Script%20Examples/astro.py">here</a>
+It will take care of updating the item <code class="docutils literal notranslate"><span class="pre">V_TimeOfDay</span></code> for you. You can
+customize and/or translate these greetings in your configuration file.</p>
+</dd></dl>
+
+</div>
 </div>
 </div>
 
