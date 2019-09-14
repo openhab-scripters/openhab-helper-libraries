@@ -14,14 +14,14 @@ statement = admin.createEPL("""
 """)
 
 def event_listener(new_events, *args):
-    print "event_listener", new_events[0].underlying
+    print("event_listener", new_events[0].underlying)
 
 statement.addListener(event_listener)
 
 def tick_generator():
     now = 0
     previous_state = None
-    for i in xrange(10):
+    for i in range(10):
         state = 5.3 + random()
         tick = HashMap()
         tick.put("time",  Date(now))
@@ -34,9 +34,9 @@ def tick_generator():
 
 runtime = esper.getEPRuntime()
 
-print "START -------"
+print("START -------")
 for tick in tick_generator():
     runtime.sendEvent(tick, "ItemStateUpdate")
-print "END ---------"
+print("END ---------")
 
 statement.destroy()
