@@ -1,7 +1,6 @@
 """
 Component script for Esper
 """
-
 scriptExtension.importPreset(None)
 
 import json
