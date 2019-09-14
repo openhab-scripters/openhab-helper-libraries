@@ -1,8 +1,12 @@
 """
-Utilities
-
 This module provides miscellaneous utility functions that are used across the core packages and modules.
 """
+__all__ = [
+    "kw", "iround", "getItemValue", "getLastUpdate", "sendCommand",
+    "postUpdate", "post_update_if_different", "postUpdateCheckFirst",
+    "send_command_if_different", "sendCommandCheckFirst",
+    "validate_channel_uid", "validate_uid"
+]
 
 import random
 import time
@@ -20,24 +24,24 @@ except:
     from org.eclipse.smarthome.core.thing import ChannelUID
 
 from core.log import logging, LOG_PREFIX
-from core.jsr223 import scope
+from core.jsr223.scope import itemRegistry, NULL, UNDEF, ON, OFF, OPEN, CLOSED, events, things
 from core.actions import PersistenceExtensions
 
 from org.joda.time import DateTime
 from org.joda.time.format import DateTimeFormat
 
-log = logging.getLogger('{}.core.utils'.format(LOG_PREFIX))
+log = logging.getLogger("{}.core.utils".format(LOG_PREFIX))
 
 def kw(dict, value):
     """
     In a given dictionary, get the first key that has a value matching the one provided.
 
     Args:
-        dict: the dictionary to search
-        value: the value to match to a key
+        dict (dict): the dictionary to search
+        value (str): the value to match to a key
 
     Returns:
-        string: string representing the first key with a matching vlaue, or
+        str or None: string representing the first key with a matching vlaue, or
             None if the value is not found
     """
     for k, v in dict.iteritems():
@@ -58,7 +62,7 @@ def iround(x):
     y = round(x) - .5
     return int(y) + (y > 0)
 
-def getItemValue(itemName, defVal):
+def getItemValue(item_or_item_name, defVal):
     """
     Returns the Item's value if the Item exists and is initialized, otherwise
     returns the default value. ``itemRegistry.getItem`` will return an object
@@ -66,42 +70,43 @@ def getItemValue(itemName, defVal):
     will throw an ItemNotFoundException if the Item is not in the registry.
 
     Args:
-        itemName: name of the Item
-        defVal: the default value
+        item_or_item_name (Item or str): name of the Item
+        defVal (int, float, ON, OFF, OPEN, CLOSED, str, DateTime): the default
+            value
 
     Returns:
-        int, float, ON, OFF, OPEN, CLOSED, str, or DateTime: the state if the
-            Item converted to the type of default value, or the default value
-            if the Item's state is NULL or UNDEF
+        int, float, ON, OFF, OPEN, CLOSED, str, DateTime, or None: the state if
+            the Item converted to the type of default value, or the default
+            value if the Item's state is NULL or UNDEF
     """
-    item = scope.itemRegistry.getItem(itemName)
+    item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
     if type(defVal) is int:
-        return item.state.intValue() if item.state not in [scope.NULL, scope.UNDEF] else defVal
+        return item.state.intValue() if item.state not in [NULL, UNDEF] else defVal
     elif type(defVal) is float:
-        return item.state.floatValue() if item.state not in [scope.NULL, scope.UNDEF] else defVal
-    elif defVal in [scope.ON, scope.OFF, scope.OPEN, scope.CLOSED]:
-        return item.state if item.state not in [scope.NULL, scope.UNDEF] else defVal
+        return item.state.floatValue() if item.state not in [NULL, UNDEF] else defVal
+    elif defVal in [ON, OFF, OPEN, CLOSED]:
+        return item.state if item.state not in [NULL, UNDEF] else defVal
     elif type(defVal) is str:
-        return item.state.toFullString() if item.state not in [scope.NULL, scope.UNDEF] else defVal
+        return item.state.toFullString() if item.state not in [NULL, UNDEF] else defVal
     elif type(defVal) is DateTime:
         # We return a org.joda.time.DateTime from a org.eclipse.smarthome.core.library.types.DateTimeType
-        return DateTime(item.state.calendar.timeInMillis) if item.state not in [scope.NULL, scope.UNDEF] else defVal
+        return DateTime(item.state.calendar.timeInMillis) if item.state not in [NULL, UNDEF] else defVal
     else:
         log.warn("The type of the passed default value is not handled")
         return None
 
-def getLastUpdate(itemName):
+def getLastUpdate(item_or_item_name):
     """
     Returns the Item's last update datetime as an 'org.joda.time.DateTime <http://joda-time.sourceforge.net/apidocs/org/joda/time/DateTime.html>`_.
 
     Args:
-        itemName: name of the Item
+        item_or_item_name (Item or str): name of the Item
 
     Returns:
         DateTime: DateTime representing the time of the Item's last update
     """
     try:
-        item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
+        item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
         lastUpdate = PersistenceExtensions.lastUpdate(item)
         if lastUpdate is None:
             log.warning("No existing lastUpdate data for item: [{}], so returning 1970-01-01T00:00:00Z".format(item.name))
@@ -113,29 +118,29 @@ def getLastUpdate(itemName):
         log.warning("Exception when getting lastUpdate data for item: [{}], so returning 1970-01-01T00:00:00Z".format(item.name))
         return DateTime(0)
 
-def sendCommand(itemName, newValue):
+def sendCommand(item_or_item_name, new_value):
     """
     Sends a command to an item regardless of its current state.
 
     Args:
-        itemName (string or Item): name of the Item
-        newValue: command to send to the Item
+        item_or_item_name (Item or str): name of the Item
+        new_value (Command): Command to send to the Item
     """
-    item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
-    scope.events.sendCommand(item, newValue)
+    item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
+    events.sendCommand(item, new_value)
 
-def postUpdate(itemName, newValue):
+def postUpdate(item_or_item_name, new_value):
     """
     Posts an update to an item regardless of its current state.
 
     Args:
-        itemName (string or Item): name of the Item
-        newValue: state to update the Item with
+        item_name (Item or str): Item or name of the Item
+        new_value (State): state to update the Item with
     """
-    item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
-    scope.events.postUpdate(item, newValue)
+    item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
+    events.postUpdate(item, new_value)
 
-def post_update_if_different(itemName, newValue, sendACommand=False, floatPrecision=None):
+def post_update_if_different(item_or_item_name, new_value, sendACommand=False, floatPrecision=None):
     """
     Checks if the current state of the item is different than the desired new
     state. If the target state is the same, no update is posted.
@@ -157,72 +162,76 @@ def post_update_if_different(itemName, newValue, sendACommand=False, floatPrecis
     to round the value before comparing.
 
     Args:
-        itemName (string or Item): name of the Item
-        newValue: state to update the Item with (must be of a type supported
-            by the Item)
-        sendACommand (boolean): send a command rather than an update
-        floatPrecision (int): the precision of the Item's state to use when
-            comparing
+        item_or_item_name (Item or str): name of the Item
+        new_value (State or Command): state to update the Item with, or Command
+            if using sendACommand (must be of a type supported by the Item)
+        sendACommand (Boolean): (optional) ``True`` to send a command instead
+            of an update
+        floatPrecision (int): (optional) the precision of the Item's state to
+            use when comparing values
+
+    Returns:
+        bool: ``True``, if the command or update was sent, else ``False``
     """
     compareValue = None
-    item = scope.itemRegistry.getItem(itemName) if isinstance(itemName, basestring) else itemName
+    item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
 
     if sendACommand:
-        compareValue = TypeParser.parseCommand(item.acceptedCommandTypes, str(newValue))
+        compareValue = TypeParser.parseCommand(item.acceptedCommandTypes, str(new_value))
     else:
-        compareValue = TypeParser.parseState(item.acceptedDataTypes, str(newValue))
+        compareValue = TypeParser.parseState(item.acceptedDataTypes, str(new_value))
 
     if compareValue is not None:
-        if item.state != compareValue or (type(newValue) is float and floatPrecision is not None and round(item.state.floatValue(), floatPrecision) != newValue):
+        if item.state != compareValue or (type(new_value) is float and floatPrecision is not None and round(item.state.floatValue(), floatPrecision) != new_value):
             if sendACommand:
-                sendCommand(item, newValue)
-                log.debug("New sendCommand value for [{}] is [{}]".format(item.name, newValue))
+                sendCommand(item, new_value)
+                log.debug("New sendCommand value for [{}] is [{}]".format(item.name, new_value))
             else:
-                postUpdate(item, newValue)
-                log.debug("New postUpdate value for [{}] is [{}]".format(item.name, newValue))
+                postUpdate(item, new_value)
+                log.debug("New postUpdate value for [{}] is [{}]".format(item.name, new_value))
             return True
         else:
-            log.debug("Not {} {} to {} since it is the same as the current state".format("sending command" if sendACommand else "posting update", newValue, item.name))
+            log.debug("Not {} {} to {} since it is the same as the current state".format("sending command" if sendACommand else "posting update", new_value, item.name))
             return False
     else:
-        log.warn("[{}] is not an accepted {} for [{}]".format(newValue, "command type" if sendACommand else "state", item.name))
+        log.warn("[{}] is not an accepted {} for [{}]".format(new_value, "command type" if sendACommand else "state", item.name))
         return False
 
 # backwards compatibility
 postUpdateCheckFirst = post_update_if_different
 
-def send_command_if_different(itemName, newValue, floatPrecision=None):
+def send_command_if_different(item_or_item_name, new_value, floatPrecision=None):
     """
     See postUpdateCheckFirst
     """
-    return postUpdateCheckFirst(itemName, newValue, sendACommand=True, floatPrecision=floatPrecision)
+    return postUpdateCheckFirst(item_or_item_name, new_value, sendACommand=True, floatPrecision=floatPrecision)
 
 # backwards compatibility
 sendCommandCheckFirst = send_command_if_different
 
 def validate_item(item_or_item_name):
     """
-    Validates whether an Item exists or if an Item name is valid.
+    This function validates whether an Item exists or if an Item name is valid.
 
     Args:
-        item_or_item_name (string or Item): name of the Item
+        item_or_item_name (Item or str): name of the Item
 
     Returns:
-        Item or None: validated Item, or None if the Item does not exist or the
-            Item name is not in a valid format
+        Item or None: None, if the Item does not exist or the Item name is not
+        in a valid format, else validated Item
     """
     item = item_or_item_name
     if isinstance(item, basestring):
-        if scope.itemRegistry.getItems(item) == []:
+        if itemRegistry.getItems(item) == []:
             log.warn("[{}] is not in the ItemRegistry".format(item))
             return None
         else:
-            item = scope.itemRegistry.getItem(item_or_item_name)
+            item = itemRegistry.getItem(item_or_item_name)
     elif not hasattr(item_or_item_name, 'name'):
-        log.warn("[{}] is not a string or Item".format(item))
+        log.warn("[{}] is not a Item or string".format(item))
         return None
 
-    if scope.itemRegistry.getItems(item.name) == []:
+    if itemRegistry.getItems(item.name) == []:
         log.warn("[{}] is not in the ItemRegistry".format(item.name))
         return None
 
@@ -230,14 +239,15 @@ def validate_item(item_or_item_name):
 
 def validate_channel_uid(channel_uid_or_string):
     """
-    Validates whether a ChannelUID exists or if a ChannelUID is valid.
+    This function validates whether a ChannelUID exists or if a ChannelUID is
+        valid.
 
     Args:
-    channel_uid_or_string (string or ChannelUID): the ChannelUID
+        channel_uid_or_string (ChannelUID or string): the ChannelUID
 
     Returns:
-        ChannelUID or None: validated ChannelUID, or None if the ChannelUID
-            does not exist or the ChannelUID is not in a valid format
+        ChannelUID or None: None, if the ChannelUID does not exist or the
+        ChannelUID is not in a valid format, else validated ChannelUID
     """
     channel_uid = channel_uid_or_string
     if isinstance(channel_uid_or_string, basestring):
@@ -245,20 +255,20 @@ def validate_channel_uid(channel_uid_or_string):
     elif not isinstance(channel_uid_or_string, ChannelUID):
         log.warn("[{}] is not a string or ChannelUID".format(channel_uid_or_string))
         return None
-    if scope.things.getChannel(channel_uid) is None:
+    if things.getChannel(channel_uid) is None:
         log.warn("[{}] is not a valid Channel".format(channel_uid))
         return None
     return channel_uid
 
 def validate_uid(uid):
     """
-    Validates whether a UID is valid.
+    This function validates UIDs.
 
     Args:
-    uid (string) or None: the UID to validate or None
+        uid (string or None): the UID to validate or None
 
     Returns:
-        string: valid UID
+        string: a valid UID
     """
     if uid is None:
         uid = uuid.uuid1().hex
