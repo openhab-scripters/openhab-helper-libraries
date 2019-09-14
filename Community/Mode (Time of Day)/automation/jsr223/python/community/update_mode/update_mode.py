@@ -1,22 +1,26 @@
 """
-PURPOSE
+Purpose
 -------
 
-This script will create a rule that will adjust a StringItem named 'Mode'
-based on the time of day. If the 'Mode' Item is manually changed to a state
-that is not a key found in configuration.mode_dict, such as 'Party', the Mode
-will not be updated automatically and will need to be manually changed back.
-The Modes can be configured with Times and/or Channels. If both are used, the
-first one that occurs will trigger the Mode. If a Time, the Mode will be set
-after saving the file. If not, the Mode will need to be manuallly set the
-first time, or just wait for the first trigger.
+This is an example script that can be modified to suit your implementation. It
+will create a rule that will adjust a StringItem named ``Mode`` based on the
+time of day. Your modes are configured in ``configuration.mode_dict``. Each
+``Mode`` can be configured with Times and/or Channels. If both are used, the
+first one that occurs will trigger the ``Mode``. If just a Time is used, the
+``Mode`` will be set after saving the script or an openHAB restart. If a
+Channel is used, you will need to wait for the next trigger or manually update
+the``Mode``. If the ``Mode`` Item is manually changed to a state that is not a
+key found in the ``configuration.mode_dict``, such as ``Party``, the
+``Mode`` will not be updated automatically and will need to be manually changed
+back to a mode in the dict for the automation to take pver again.
 
-REQUIRES
+
+Requires
 --------
 
-* a 'Mode' Item (the script will create it for you, if it does not exist)
-* the mode_dict OrderedDict added to ``configuration.py`` and populated with
-  times for your modes
+* A ``Mode`` Item (the script will create it for you, if it does not exist)
+* The ``mode_dict`` OrderedDict added to ``configuration.py`` and populated
+  with times for your modes
 """
 from core.rules import rule
 from core.triggers import when
@@ -38,10 +42,10 @@ if not itemRegistry.getItems("Mode"):
 def mode_trigger_generator(mode_dict):
     def generated_triggers(function):
         for mode in list(mode_dict.keys()):
-            if mode_dict[mode].get("Second") is not None and mode_dict[mode].get("Minute") is not None and mode_dict[mode].get("Hour") is not None:
-                when("Time cron {} {} {} * * ?".format(mode_dict[mode]["Second"], mode_dict[mode]["Minute"], mode_dict[mode]["Hour"]))(function)
-            if mode_dict[mode].get("Channel") is not None and mode_dict[mode].get("Event") is not None:
-                when("Channel {} triggered {}".format(mode_dict[mode]["Channel"], mode_dict[mode]["Event"]))(function)
+            if mode_dict[mode].get("second") is not None and mode_dict[mode].get("minute") is not None and mode_dict[mode].get("hour") is not None:
+                when("Time cron {} {} {} * * ?".format(mode_dict[mode]["second"], mode_dict[mode]["minute"], mode_dict[mode]["hour"]))(function)
+            if mode_dict[mode].get("channel") is not None and mode_dict[mode].get("event") is not None:
+                when("Channel {} triggered {}".format(mode_dict[mode]["channel"], mode_dict[mode]["event"]))(function)
         return function
     return generated_triggers
 
@@ -53,27 +57,27 @@ def update_mode(event):
     new_mode = last_mode_of_day
     for i, (mode, value) in enumerate(mode_dict.iteritems()):
         if mode != last_mode_of_day:
-            if not event and mode_dict[mode].get("Hour") is not None and Interval(
+            if not event and mode_dict[mode].get("hour") is not None and Interval(
                     DateTime.now().withTime(
-                        value["Hour"],
-                        value["Minute"],
-                        value["Second"],
+                        value["hour"],
+                        value["minute"],
+                        value["second"],
                         0
                     ),
                     DateTime.now().withTime(
-                        mode_dict.items()[i + 1][1]["Hour"],
-                        mode_dict.items()[i + 1][1]["Minute"],
-                        mode_dict.items()[i + 1][1]["Second"],
+                        mode_dict.items()[i + 1][1]["hour"],
+                        mode_dict.items()[i + 1][1]["minute"],
+                        mode_dict.items()[i + 1][1]["second"],
                         0
                     )
                 ).contains(DateTime.now()):
                     new_mode = mode
                     break
-            elif hasattr(event, "channel") and mode_dict[mode].get("Channel") is not None and event.channel == ChannelUID(mode_dict[mode].get("Channel")) and event.event == mode_dict[mode].get("Event"):
+            elif hasattr(event, "channel") and mode_dict[mode].get("channel") is not None and event.channel == ChannelUID(mode_dict[mode].get("channel")) and event.event == mode_dict[mode].get("event"):
                 new_mode = mode
                 break
 
-    if items["Mode"] != StringType(new_mode) and (str(items["Mode"]) in mode_dict.keys() + [last_mode_of_day] or isinstance(items["Mode"], UnDefType)):
+    if items["Mode"] != StringType(new_mode) and (str(items["Mode"]) in mode_dict.keys() or isinstance(items["Mode"], UnDefType)):
         update_mode.log.debug("Mode changed from [{}] to [{}]".format(items["Mode"], new_mode))
         events.sendCommand("Mode", new_mode)
     else:
