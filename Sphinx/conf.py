@@ -71,13 +71,31 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # autodoc default options for directives
 autodoc_default_options = {
-    'members': True,
+    #'members': True,
     'member-order': 'bysource',
     'show-inheritance': True
 }
 
-# base modules that should be mock'd
-autodoc_mock_imports = ['org', 'java', 'configuration']
+# base modules that should be mock'd (new)
+autodoc_mock_imports = [
+    'org',
+    'com',
+    'java',
+    'configuration',
+    'core_mock',
+    'ConfigDescriptionParameter',
+    'ConfigDescriptionParameterBuilder',
+    'automationManager',
+    'com.espertech.esper.client',
+    'meteocalc',
+    'urllib2',
+    'StringIO',
+    'scriptExtension',
+    'itemRegistry',
+    'Visibility',
+    'personal.idealarm',
+    'community.esper'
+]
 
 # -- Mock --------------------------------------------------------------------
 
@@ -85,32 +103,16 @@ autodoc_mock_imports = ['org', 'java', 'configuration']
 
 import mock
 
-# list of modules to spoof
+# list of modules to spoof (old)
 # use this only for specific imports that arent working. entire modules can be
 # spoofed using autodoc_mock_imports in the section above
 MOCK_MODULES = [
-    'core.jsr223.scope',
-    'core.JythonItemProvider',
-    'core.JythonItemChannelLinkProvider',
-    'core.JythonExtensionProvider',
     'TriggerHandlerFactory',
     'ActionHandler',
     'ActionType',
-    'Visibility',
-    'ConfigDescriptionParameter',
-    'ConfigDescriptionParameterBuilder',
-    'automationManager',
-    'core.rules_mock',
-    'core.triggers_mock',
-    'core.actions_mock',
-    'core.date_mock',
-    'personal.idealarm',
-    'com.espertech.esper.client',
-    'meteocalc',
-    'urllib2',
-    'StringIO',
-    'scriptExtension'
+    'reload'
 ]
+
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
