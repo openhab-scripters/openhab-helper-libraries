@@ -1,13 +1,12 @@
-'''
+"""
 This script speaks a random greeting every minute on your Sonos speaker system.
-To use this, you should set up astro.py as described here
-https://github.com/OH-Jython-Scripters/openhab2-jython/blob/master/Script%20Examples/Python/Design%20Pattern%20-%20Time%20of%20Day.
-It also assumes that you've set up an openHAB contact items to represent the presence of
-persons to be greeted. Each item should belong to the item group "G_Presence_Family".
-
-Finally make sure that you add the contents of the configuration.py.example file
-into your own configuration file:
-'''
+To use this, you should set up astro.py as described in
+:ref:`Examples/Design Patterns/Mode (Time of Day):Mode (Time of Day)`. It also
+assumes that you've set up an openHAB ContactItems to represent the presence of
+people to be greeted. Each of the Items should belong to the group
+``G_Presence_Family``. Finally, make sure that you add the contents of the
+``configuration.py.example`` file into your own ``configuration.py`` file.
+"""
 import random
 
 from core.rules import rule

@@ -1,3 +1,7 @@
+"""
+This script creates a rule that will trigger when a StringItem is updated and
+speak the string as TTS.
+"""
 from core.rules import rule
 from core.triggers import when
 from community.sonos.speak import tts

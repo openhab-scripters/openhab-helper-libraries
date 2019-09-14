@@ -1,3 +1,6 @@
+"""
+This module provides functions for use with TTS.
+"""
 from core.actions import Voice
 from core.utils import getItemValue
 from configuration import sonos, customItemNames
@@ -11,12 +14,23 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
     '''
     Text To Speak function. First argument is positional and mandatory.
     Remaining arguments are optionally keyword arguments.
-    Example: tts("Hello")
-    Example: tts("Hello", PRIO['HIGH'], ttsRoom='Kitchen', ttsVol=42, ttsLang='en-GB', ttsVoice='Brian')
-    @param param1: Text to speak (positional argument)
-    @param param2: Priority as defined by PRIO. Defaults to PRIO['MODERATE']
-    @param ttsRoom: Room to speak in
-    @return: this is a description of what is returned
+
+    Examples:
+        .. code-block::
+
+            tts("Hello")
+            tts("Hello", PRIO['HIGH'], ttsRoom='Kitchen', ttsVol=42, ttsLang='en-GB', ttsVoice='Brian')
+
+    Args:
+        ttsSay (str): text to speak
+        ttsPrio (str): (optional) priority as defined by PRIO (defaults to
+            PRIO['MODERATE'])
+        **keywords: ``ttsRoom`` (room to speak in), ``ttsVol`` (volume),
+            ``ttsLang`` (language), ``ttsVoice`` (voice), ``ttsEngine``
+            (engine)
+
+    Returns:
+        bool: ``True``, if sound was sent, else ``False``
     '''
     log = logging.getLogger(LOG_PREFIX + ".community.sonos.speak")
 
@@ -70,10 +84,11 @@ def tts(ttsSay, ttsPrio=PRIO['MODERATE'], **keywords):
     return True
 
 def greeting():
-    # To use this, you should set up astro.py as described
-    # here https://github.com/OH-Jython-Scripters/Script%20Examples/astro.py
-    # It will take care of updating the item 'V_TimeOfDay' for you
-    # You can customize and/or translate these greetings in your configuration file.
+    """
+    To use this, you should set up astro.py as described `here <https://github.com/OH-Jython-Scripters/Script%20Examples/astro.py>`_
+    It will take care of updating the item ``V_TimeOfDay`` for you. You can
+    customize and/or translate these greetings in your configuration file.
+    """
     timeOfDay = getItemValue('V_TimeOfDay', TIMEOFDAY['DAY'])
     try:
        from configuration import timeofdayGreetings

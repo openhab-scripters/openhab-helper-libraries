@@ -1,3 +1,6 @@
+"""
+This module provides functions for playing sounds.
+"""
 from core.actions import Audio
 from core.utils import getItemValue
 from configuration import sonos, customItemNames
@@ -8,16 +11,27 @@ PRIO = {'LOW': 0, 'MODERATE': 1, 'HIGH': 2, 'EMERGENCY': 3}
 TIMEOFDAY = {'NIGHT': 0, 'MORNING': 1, 'DAY': 2, 'EVENING': 3} # Regardless of the sun
 
 def playsound(fileName, ttsPrio=PRIO['MODERATE'], **keywords):
-    '''
+    """
     Play a sound mp3 file function. First argument is positional and mandatory.
     Remaining arguments are optionally keyword arguments.
-    Example: playsound("Hello.mp3")
-    Example: playsound("Hello.mp3", PRIO['HIGH'], room='Kitchen', volume=42)
-    @param param1: Sound file name to play (positional argument) (files need to be put in the folder conf/sounds)
-    @param param2: Priority as defined by PRIO. Defaults to PRIO['MODERATE']
-    @param room: Room to play in. Defaults to "All".
-    @return: this is a description of what is returned
-    '''
+
+    Examples:
+        .. code-block::
+
+            playsound("Hello.mp3")
+            playsound("Hello.mp3", PRIO['HIGH'], room='Kitchen', volume=42)
+
+    Args:
+        fileName (str): Sound file name to play (files need to be put in the
+            folder ``/conf/sounds/``)
+        ttsPrio (str): (optional) priority as defined by PRIO (defaults to
+            PRIO['MODERATE'])
+        **keywords: ``room`` (room to play in defaults to ``All``) and
+            ``ttsVol`` (volume)
+
+    Returns:
+        bool: ``True``, if sound was sent, else ``False``
+    """
     log = logging.getLogger(LOG_PREFIX + ".community.sonos.playsound")
 
     def getDefaultRoom():
