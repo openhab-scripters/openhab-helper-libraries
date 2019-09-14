@@ -11,7 +11,6 @@ objects. This module allows imported modules to access that data.
     def update_data(data):
         events.postUpdate("TestString1", str(data))
 """
-
 import sys
 import types
 

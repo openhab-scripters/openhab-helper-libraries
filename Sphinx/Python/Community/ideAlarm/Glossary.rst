@@ -1,6 +1,6 @@
-=================
-ideAlarm Glossary
-=================
+========
+Glossary
+========
 
 .. glossary::
 

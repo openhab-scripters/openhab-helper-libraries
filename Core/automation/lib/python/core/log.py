@@ -4,7 +4,6 @@ with the slf4j library used by openHAB. The ``configuration`` module provides
 a ``LOG_PREFIX`` variable that is used as the default logger throughout the
 core modules and scripts.
 """
-
 import logging
 import functools
 import traceback

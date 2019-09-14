@@ -1,30 +1,13 @@
 """
-This module includes function decorators and trigger subclasses to simplify
+This module includes function decorators and Trigger subclasses to simplify
 Jython rule definitions.
 
-The ``when`` decorator simplifies many of the triggers and allows for them
-to be used with natural language similar to what is used in the rules DSL.
-(see :ref:`Guides/Rules:Decorators` for more details).
-
-.. code-block::
-
-    @when("Time cron 55 55 5 * * ?")
-    @when("Item Test_String_1 changed from 'old test string' to 'new test string'")
-    @when("Item gMotion_Sensors changed")
-    @when("Member of gMotion_Sensors changed from ON to OFF")
-    @when("Descendent of gContact_Sensors changed from OPEN to CLOSED")
-    @when("Item Test_Switch_2 received update ON")
-    @when("Item Test_Switch_1 received command OFF")
-    @when("Thing kodi:kodi:familyroom changed")
-    @when("Thing kodi:kodi:familyroom changed from ONLINE to OFFLINE")# requires S1636, 2.5M2 or newer
-    @when("Thing kodi:kodi:familyroom received update ONLINE")# requires S1636, 2.5M2 or newer
-    @when("Channel astro:sun:local:eclipse#event triggered START")# must use a Channel of kind Trigger
-    @when("System started")# requires S1566, 2.5M2 or newer ('System shuts down' has not been implemented)
-
-If using a build of openHAB prior to S1566 or 2.5M2, see :ref:`Guides/Triggers:System Started` for a ``System started`` workaround.
-For everyone, see :ref:`Guides/Triggers:System Shuts Down` for a method of executing a function when a script is unloaded, simulating a ``System shuts down`` trigger.
-
-Trigger classes for wrapping Automation API (see :ref:`Guides/Rules:Extensions`
+If using a build of openHAB **prior** to S1566 or 2.5M2, see
+:ref:`Guides/Triggers:System Started` for a ``System started`` workaround. For
+everyone, see :ref:`Guides/Triggers:System Shuts Down` for a method of
+executing a function when a script is unloaded, simulating a
+``System shuts down`` trigger. Along with the ``when`` decorator, this module
+includes the following Trigger subclasses (see :ref:`Guides/Rules:Extensions`
 for more details):
 
 * **CronTrigger** - fires based on cron expression
@@ -32,19 +15,18 @@ for more details):
 * **ItemStateUpdateTrigger** - fires when the specified Item's state is updated
 * **ItemCommandTrigger** - fires when the specified Item receives a Command
 * **GenericEventTrigger** - fires when the specified occurs
-* **ItemEventTrigger** fires when am Item reports an event (based on "GenericEventTrigger")
-* **ThingEventTrigger** - fires when a Thing reports an event (based on "GenericEventTrigger")
-* **ThingStatusChangeTrigger** - fires when the specified Thing's status changes (requires S1636, 2.5M2 or newer)
-* **ThingStatusUpdateTrigger** - fires when the specified Thing's status is updated (requires S1636, 2.5M2 or newer)
+* **ItemEventTrigger** - fires when am Item reports an event (based on ``GenericEventTrigger``)
+* **ThingEventTrigger** - fires when a Thing reports an event (based on ``GenericEventTrigger``)
+* **ThingStatusChangeTrigger** - fires when the specified Thing's status changes **(requires S1636, 2.5M2 or newer)**
+* **ThingStatusUpdateTrigger** - fires when the specified Thing's status is updated **(requires S1636, 2.5M2 or newer)**
 * **ChannelEventTrigger** - fires when a Channel reports an event
 * **DirectoryEventTrigger** - fires when a directory's contents changes
 * **ItemRegistryTrigger** - fires when the specified Item registry event occurs
-* **ItemAddedTrigger** fires when an Item is added (based on "ItemRegistryTrigger")
-* **ItemRemovedTrigger** fires when an Item is removed (based on "ItemRegistryTrigger")
-* **ItemUpdatedTrigger** fires when an Item is updated (based on "ItemRegistryTrigger")
-* **StartupTrigger** - fires when the rule is activated (implemented in Jython and requires S1566, 2.5M2 or newer)
+* **ItemAddedTrigger** - fires when an Item is added (based on ``ItemRegistryTrigger``)
+* **ItemRemovedTrigger** - fires when an Item is removed (based on ``ItemRegistryTrigger``)
+* **ItemUpdatedTrigger** - fires when an Item is updated (based on ``ItemRegistryTrigger``)
+* **StartupTrigger** - fires when the rule is activated **(implemented in Jython and requires S1566, 2.5M2 or newer)**
 """
-
 from core.jsr223.scope import itemRegistry, things, scriptExtension
 scriptExtension.importPreset(None)# fix for Jython > 2.7.0
 
@@ -87,426 +69,17 @@ from org.quartz.CronExpression import isValidExpression
 
 log = logging.getLogger("{}.core.triggers".format(LOG_PREFIX))
 
-class ItemStateUpdateTrigger(Trigger):
+def when(target):
     """
-    This class builds an ItemStateUpdateTrigger Module to be used when creating a Rule.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ItemStateUpdateTrigger("MyItem", "ON", "MyItem-received-update-ON").trigger]
-            MyRule.triggers.append(ItemStateUpdateTrigger("MyOtherItem", "OFF", "MyOtherItem-received-update-OFF").trigger)
-
-    Args:
-        itemName (str): Name of item to watch for updates
-        state (str): Trigger only when updated TO this state
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, itemName, state=None, triggerName=None):
-        triggerName = validate_uid(triggerName)
-        config = { "itemName": itemName }
-        if state is not None:
-            config["state"] = state
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateUpdateTrigger").withConfiguration(Configuration(config)).build()
-
-class ItemStateChangeTrigger(Trigger):
-    """
-    This class builds an ItemStateChangeTrigger Module to be used when creating a Rule.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ItemStateChangeTrigger("MyItem", "OFF", "ON", "MyItem-changed-from-OFF-to-ON").trigger]
-            MyRule.triggers.append(ItemStateChangeTrigger("MyOtherItem", "ON", "OFF","MyOtherItem-changed-from-ON-to-OFF").trigger)
-
-    Args:
-        itemName (str): Name of item to watch for changes
-        previousState (str): Trigger only when changing FROM this state
-        state (str): Trigger only when changing TO this state
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule
-    """
-    def __init__(self, itemName, previousState=None, state=None, triggerName=None):
-        triggerName = validate_uid(triggerName)
-        config = { "itemName": itemName }
-        if state is not None:
-            config["state"] = state
-        if previousState is not None:
-            config["previousState"] = previousState
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateChangeTrigger").withConfiguration(Configuration(config)).build()
-
-class ItemCommandTrigger(Trigger):
-    """
-    This class builds an ItemCommandTrigger Module to be used when creating a Rule.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ItemCommandTrigger("MyItem", "ON", "MyItem-received-command-ON").trigger]
-            MyRule.triggers.append(ItemCommandTrigger("MyOtherItem", "OFF", "MyOtherItem-received-command-OFF").trigger)
-
-    Args:
-        itemName (str): Name of item to watch for commands
-        command (str): Trigger only when this command is received
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule
-    """
-    def __init__(self, itemName, command=None, triggerName=None):
-        triggerName = validate_uid(triggerName)
-        config = { "itemName": itemName }
-        if command is not None:
-            config["command"] = command
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemCommandTrigger").withConfiguration(Configuration(config)).build()
-
-class ThingStatusUpdateTrigger(Trigger):
-    """
-    This class builds a ThingStatusUpdateTrigger Module to be used when creating a Rule.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ThingStatusUpdateTrigger("kodi:kodi:familyroom", "ONLINE").trigger]
-
-    Args:
-        channelUID (str): Thing to watch for status updates
-        status (str): Trigger only when Thing is updated to this status
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, thingUID, status=None, triggerName=None):
-        triggerName = validate_uid(triggerName)
-        config = { "thingUID": thingUID }
-        if status is not None:
-            config["status"] = status
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ThingStatusUpdateTrigger").withConfiguration(Configuration(config)).build()
-
-class ThingStatusChangeTrigger(Trigger):
-    """
-    This class builds a ThingStatusChangeTrigger Module to be used when creating a Rule.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ThingStatusChangeTrigger("kodi:kodi:familyroom", "ONLINE", "OFFLINE).trigger]
-
-    Args:
-        channelUID (str): Thing to watch for status changes
-        previousStatus (str): Trigger only when Thing is changed from this status
-        status (str): Trigger only when Thing is changed to this status
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, thingUID, previousStatus=None, status=None, triggerName=None):
-        triggerName = validate_uid(triggerName)
-        config = { "thingUID": thingUID }
-        if previousStatus is not None:
-            config["previousStatus"] = previousStatus
-        if status is not None:
-            config["status"] = status
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ThingStatusChangeTrigger").withConfiguration(Configuration(config)).build()
-
-class ChannelEventTrigger(Trigger):
-    """
-    This class builds a ChannelEventTrigger Module to be used when creating a Rule.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ChannelEventTrigger("astro:sun:local:eclipse#event", "START", "solar-eclipse-event-start").trigger]
-
-    Args:
-        channelUID (str): Channel to watch for trigger events
-        event (str): Trigger only when Channel triggers this event
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, channelUID, event=None, triggerName=None):
-        triggerName = validate_uid(triggerName)
-        config = { "channelUID": channelUID }
-        if event is not None:
-            config["event"] = event
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ChannelEventTrigger").withConfiguration(Configuration(config)).build()
-
-class GenericEventTrigger(Trigger):
-    """
-    This class builds a GenericEventTrigger Module to be used when creating a Rule.
-    It allows you to trigger on any event that comes through the Event Bus.
-    It's one of the the most powerful triggers, but it is also the most complicated to configure.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [GenericEventTrigger("smarthome/items/Test_Switch_1/", "ItemStateEvent", "smarthome/items/*", "Test_Switch_1-received-update").trigger]
-
-    Args:
-        eventSource (str): Source to watch for trigger events
-        eventTypes (str or list): Types of events to watch
-        eventTopic (str): Topic to watch
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, eventSource, eventTypes, eventTopic="smarthome/*", triggerName=None):
-        triggerName = validate_uid(triggerName)
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
-            "eventTopic": eventTopic,
-            "eventSource": "smarthome/{}/".format(eventSource),
-            "eventTypes": eventTypes
-        })).build()
-
-class ItemEventTrigger(Trigger):
-    """
-    This class is the same as the ``GenericEventTrigger``, but simplifies it a bit for use with Items.
-    The available Item ``eventTypes`` are:
-
-    .. code-block:: none
-
-        "ItemStateEvent" (Item state update)
-        "ItemCommandEvent" (Item received Command)
-        "ItemStateChangedEvent" (Item state changed)
-        "GroupItemStateChangedEvent" (GroupItem state changed)
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ItemEventTrigger("Test_Switch_1", "ItemStateEvent", "smarthome/items/*").trigger]
-
-    Args:
-        eventSource (str): Source to watch for trigger events
-        eventTypes (str or list): Types of events to watch
-        eventTopic (str): Topic to watch (no need to change default)
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, eventSource, eventTypes, eventTopic="smarthome/items/*", triggerName=None):
-        triggerName = validate_uid(triggerName)
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
-            "eventTopic": eventTopic,
-            "eventSource": "smarthome/items/{}/".format(eventSource),
-            "eventTypes": eventTypes
-        })).build()
-
-class ThingEventTrigger(Trigger):
-    """
-    This class is the same as the ``GenericEventTrigger``, but simplifies it a bit for use with Things.
-    The available Thing ``eventTypes`` are:
-
-    .. code-block:: none
-
-        "ThingAddedEvent"
-        "ThingRemovedEvent"
-        "ThingStatusInfoChangedEvent"
-        "ThingStatusInfoEvent"
-        "ThingUpdatedEvent"
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ThingEventTrigger("kodi:kodi:familyroom", "ThingStatusInfoEvent").trigger]
-
-    Args:
-        eventSource (str): Source to watch for trigger events
-        eventTypes (str or list): Types of events to watch
-        eventTopic (str): Topic to watch (no need to change default)
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, thingUID, eventTypes, eventTopic="smarthome/things/*", triggerName=None):
-        triggerName = validate_uid(triggerName)
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
-            "eventTopic": eventTopic,
-            "eventSource": "smarthome/things/{}/".format(thingUID),
-            "eventTypes": eventTypes
-        })).build()
-
-EVERY_SECOND = "0/1 * * * * ?"
-EVERY_10_SECONDS = "0/10 * * * * ?"
-EVERY_MINUTE = "0 * * * * ?"
-EVERY_HOUR = "0 0 * * * ?"
-
-class CronTrigger(Trigger):
-    """
-    This class builds a CronTrigger Module to be used when creating a Rule.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [CronTrigger("0 55 17 * * ?").trigger]
-
-    Args:
-        cronExpression (str): A valid `cron expression <http://www.quartz-scheduler.org/documentation/quartz-2.2.2/tutorials/tutorial-lesson-06.html>`_
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, cronExpression, triggerName=None):
-        triggerName = validate_uid(triggerName)
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("timer.GenericCronTrigger").withConfiguration(Configuration({"cronExpression": cronExpression})).build()
-
-class StartupTrigger(Trigger):
-    """
-    This class builds a StartupTrigger Module to be used when creating a Rule.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [StartupTrigger().trigger]
-
-    Args:
-        triggerName (str): Name of this trigger
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, triggerName=None):
-        triggerName = validate_uid(triggerName)
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("jsr223.StartupTrigger").withConfiguration(Configuration()).build()
-
-class ItemRegistryTrigger(OsgiEventTrigger):
-    """
-    This class builds an ItemRegistryTrigger Module to be used when creating a Rule.
-    Requires the 100_OsgiEventTrigger.py component script.
-    The available Item registry ``event_names`` are:
-
-    .. code-block:: none
-
-        "ItemAddedEvent"
-        "ItemRemovedEvent"
-        "ItemUpdatedEvent"
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ItemRegistryTrigger("ItemAddedEvent").trigger]
-
-    Args:
-        event_name (str): Name of the event to watch
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self, event_name):
-        OsgiEventTrigger.__init__(self)
-        self.event_name = event_name
-
-    def event_filter(self, event):
-        return event.get('type') == self.event_name
-
-    def event_transformer(self, event):
-        return json.loads(event['payload'])
-
-class ItemAddedTrigger(ItemRegistryTrigger):
-    """
-    This class is the same as the ``ItemRegistryTrigger``, but simplifies it a bit for when an Item is added.
-    This trigger will fire when any Item is added.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ItemAddedTrigger().trigger]
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self):
-        ItemRegistryTrigger.__init__(self, "ItemAddedEvent")
-
-class ItemRemovedTrigger(ItemRegistryTrigger):
-    """
-    This class is the same as the ``ItemRegistryTrigger``, but simplifies it a bit for when an Item is removed.
-    This trigger will fire when any Item is removed.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ItemRemovedTrigger().trigger]
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self):
-        ItemRegistryTrigger.__init__(self, "ItemRemovedEvent")
-
-class ItemUpdatedTrigger(ItemRegistryTrigger):
-    """
-    This class is the same as the ``ItemRegistryTrigger``, but simplifies it a bit for when an Item is updated.
-    This trigger will fire when any Item is updated.
-
-    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
-
-    Examples:
-        .. code-block::
-
-            MyRule.triggers = [ItemUpdatedTrigger().trigger]
-
-    Attributes:
-        trigger (Trigger): Trigger object to be added to a Rule.
-    """
-    def __init__(self):
-        ItemRegistryTrigger.__init__(self, "ItemUpdatedEvent")
-
-class DirectoryEventTrigger(Trigger):
-    def __init__(self, path, event_kinds=[ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY], watch_subdirectories=False):
-        triggerName = validate_uid(type(self).__name__)
-        config = {
-            'path': path,
-            'event_kinds': str(event_kinds),
-            'watch_subdirectories': watch_subdirectories,
-        }
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID(core.DIRECTORY_TRIGGER_MODULE_ID).withConfiguration(Configuration(config)).build()
-
-def when(target):#, target_type=None, trigger_type=None, old_state=None, new_state=None):
-    """
-    This function decorator provides the ability to create rule triggers using language similar to the rules DSL.
-
-    See :ref:`Guides/Rules:Decorators` for examples of how to use this decorator
+    This function decorator creates triggers attribute in the decorated
+    function that is used by the ``rule`` decorator when creating a rule.
+
+    The ``when`` decorator simplifies the use of many of the triggers in this
+    module and allows for them to be used with natural language similar to what
+    is used in the rules DSL.
+
+    See :ref:`Guides/Rules:Decorators` for examples of how to use this
+    decorator.
 
     Examples:
         .. code-block::
@@ -525,9 +98,9 @@ def when(target):#, target_type=None, trigger_type=None, old_state=None, new_sta
             @when("System started")# requires S1566, 2.5M2 or newer ('System shuts down' has not been implemented)
 
     Args:
-        target (str): Trigger expression to parse
+        target (string): the `rules DSL-like formatted trigger expression <https://www.openhab.org/docs/configuration/rules-dsl.html#rule-triggers>`_
+            to parse
     """
-
     try:
         def item_trigger(function):
             if not hasattr(function, 'triggers'):
@@ -755,3 +328,440 @@ def when(target):#, target_type=None, trigger_type=None, old_state=None, new_sta
     except:
         import traceback
         log.debug(traceback.format_exc())
+
+class ItemStateUpdateTrigger(Trigger):
+    """
+    This class builds an ItemStateUpdateTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemStateUpdateTrigger("MyItem", "ON", "MyItem-received-update-ON").trigger]
+            MyRule.triggers.append(ItemStateUpdateTrigger("MyOtherItem", "OFF", "MyOtherItem-received-update-OFF").trigger)
+
+    Args:
+        itemName (string): name of item to watch for updates
+        state (string): (optional) trigger only when updated TO this state
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, itemName, state=None, triggerName=None):
+        triggerName = validate_uid(triggerName)
+        config = { "itemName": itemName }
+        if state is not None:
+            config["state"] = state
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateUpdateTrigger").withConfiguration(Configuration(config)).build()
+
+class ItemStateChangeTrigger(Trigger):
+    """
+    This class builds an ItemStateChangeTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemStateChangeTrigger("MyItem", "OFF", "ON", "MyItem-changed-from-OFF-to-ON").trigger]
+            MyRule.triggers.append(ItemStateChangeTrigger("MyOtherItem", "ON", "OFF","MyOtherItem-changed-from-ON-to-OFF").trigger)
+
+    Args:
+        itemName (string): name of item to watch for changes
+        previousState (string): (optional) trigger only when changing FROM this
+            state
+        state (string): (optional) trigger only when changing TO this state
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, itemName, previousState=None, state=None, triggerName=None):
+        triggerName = validate_uid(triggerName)
+        config = { "itemName": itemName }
+        if state is not None:
+            config["state"] = state
+        if previousState is not None:
+            config["previousState"] = previousState
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemStateChangeTrigger").withConfiguration(Configuration(config)).build()
+
+class ItemCommandTrigger(Trigger):
+    """
+    This class builds an ItemCommandTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemCommandTrigger("MyItem", "ON", "MyItem-received-command-ON").trigger]
+            MyRule.triggers.append(ItemCommandTrigger("MyOtherItem", "OFF", "MyOtherItem-received-command-OFF").trigger)
+
+    Args:
+        itemName (string): name of item to watch for commands
+        command (string): (optional) trigger only when this command is received
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, itemName, command=None, triggerName=None):
+        triggerName = validate_uid(triggerName)
+        config = { "itemName": itemName }
+        if command is not None:
+            config["command"] = command
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ItemCommandTrigger").withConfiguration(Configuration(config)).build()
+
+class ThingStatusUpdateTrigger(Trigger):
+    """
+    This class builds a ThingStatusUpdateTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ThingStatusUpdateTrigger("kodi:kodi:familyroom", "ONLINE").trigger]
+
+    Args:
+        thingUID (string): name of the Thing to watch for status updates
+        status (string): (optional) trigger only when Thing is updated to this
+            status
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule.
+    """
+    def __init__(self, thingUID, status=None, triggerName=None):
+        triggerName = validate_uid(triggerName)
+        config = { "thingUID": thingUID }
+        if status is not None:
+            config["status"] = status
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ThingStatusUpdateTrigger").withConfiguration(Configuration(config)).build()
+
+class ThingStatusChangeTrigger(Trigger):
+    """
+    This class builds a ThingStatusChangeTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ThingStatusChangeTrigger("kodi:kodi:familyroom", "ONLINE", "OFFLINE).trigger]
+
+    Args:
+        thingUID (string): name of the Thing to watch for status changes
+        previousStatus (string): (optional) trigger only when Thing is changed
+            from this status
+        status (string): (optional) trigger only when Thing is changed to this
+            status
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, thingUID, previousStatus=None, status=None, triggerName=None):
+        triggerName = validate_uid(triggerName)
+        config = { "thingUID": thingUID }
+        if previousStatus is not None:
+            config["previousStatus"] = previousStatus
+        if status is not None:
+            config["status"] = status
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ThingStatusChangeTrigger").withConfiguration(Configuration(config)).build()
+
+class ChannelEventTrigger(Trigger):
+    """
+    This class builds a ChannelEventTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ChannelEventTrigger("astro:sun:local:eclipse#event", "START", "solar-eclipse-event-start").trigger]
+
+    Args:
+        channelUID (string): name of the Channel to watch for trigger events
+        event (string): (optional) trigger only when Channel triggers this
+            event
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, channelUID, event=None, triggerName=None):
+        triggerName = validate_uid(triggerName)
+        config = { "channelUID": channelUID }
+        if event is not None:
+            config["event"] = event
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.ChannelEventTrigger").withConfiguration(Configuration(config)).build()
+
+class GenericEventTrigger(Trigger):
+    """
+    This class builds a GenericEventTrigger Module to be used when creating a Rule.
+    It allows you to trigger on any event that comes through the Event Bus.
+    It's one of the the most powerful triggers, but it is also the most complicated to configure.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [GenericEventTrigger("smarthome/items/Test_Switch_1/", "ItemStateEvent", "smarthome/items/*", "Test_Switch_1-received-update").trigger]
+
+    Args:
+        eventSource (string): source to watch for trigger events
+        eventTypes (string or list): types of events to watch
+        eventTopic (string): (optional) topic to watch
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, eventSource, eventTypes, eventTopic="smarthome/*", triggerName=None):
+        triggerName = validate_uid(triggerName)
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
+            "eventTopic": eventTopic,
+            "eventSource": "smarthome/{}/".format(eventSource),
+            "eventTypes": eventTypes
+        })).build()
+
+class ItemEventTrigger(Trigger):
+    """
+    This class is the same as the ``GenericEventTrigger``, but simplifies it a bit for use with Items.
+    The available Item ``eventTypes`` are:
+
+    .. code-block:: none
+
+        "ItemStateEvent" (Item state update)
+        "ItemCommandEvent" (Item received Command)
+        "ItemStateChangedEvent" (Item state changed)
+        "GroupItemStateChangedEvent" (GroupItem state changed)
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemEventTrigger("Test_Switch_1", "ItemStateEvent", "smarthome/items/*").trigger]
+
+    Args:
+        eventSource (string): source to watch for trigger events
+        eventTypes (string or list): types of events to watch
+        eventTopic (string): (optional) topic to watch (no need to change
+            default)
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, eventSource, eventTypes, eventTopic="smarthome/items/*", triggerName=None):
+        triggerName = validate_uid(triggerName)
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
+            "eventTopic": eventTopic,
+            "eventSource": "smarthome/items/{}/".format(eventSource),
+            "eventTypes": eventTypes
+        })).build()
+
+class ThingEventTrigger(Trigger):
+    """
+    This class is the same as the ``GenericEventTrigger``, but simplifies it a bit for use with Things.
+    The available Thing ``eventTypes`` are:
+
+    .. code-block:: none
+
+        "ThingAddedEvent"
+        "ThingRemovedEvent"
+        "ThingStatusInfoChangedEvent"
+        "ThingStatusInfoEvent"
+        "ThingUpdatedEvent"
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ThingEventTrigger("kodi:kodi:familyroom", "ThingStatusInfoEvent").trigger]
+
+    Args:
+        eventSource (string): source to watch for trigger events
+        eventTypes (string or list): types of events to watch
+        eventTopic (string): (optional) topic to watch (no need to change
+            default)
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, thingUID, eventTypes, eventTopic="smarthome/things/*", triggerName=None):
+        triggerName = validate_uid(triggerName)
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
+            "eventTopic": eventTopic,
+            "eventSource": "smarthome/things/{}/".format(thingUID),
+            "eventTypes": eventTypes
+        })).build()
+
+EVERY_SECOND = "0/1 * * * * ?"
+EVERY_10_SECONDS = "0/10 * * * * ?"
+EVERY_MINUTE = "0 * * * * ?"
+EVERY_HOUR = "0 0 * * * ?"
+
+class CronTrigger(Trigger):
+    """
+    This class builds a CronTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [CronTrigger("0 55 17 * * ?").trigger]
+
+    Args:
+        cronExpression (string): a valid `cron expression <http://www.quartz-scheduler.org/documentation/quartz-2.2.2/tutorials/tutorial-lesson-06.html>`_
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, cronExpression, triggerName=None):
+        triggerName = validate_uid(triggerName)
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("timer.GenericCronTrigger").withConfiguration(Configuration({"cronExpression": cronExpression})).build()
+
+class StartupTrigger(Trigger):
+    """
+    This class builds a StartupTrigger Module to be used when creating a Rule.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [StartupTrigger().trigger]
+
+    Args:
+        triggerName (string): (optional) name of this trigger
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, triggerName=None):
+        triggerName = validate_uid(triggerName)
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("jsr223.StartupTrigger").withConfiguration(Configuration()).build()
+
+class ItemRegistryTrigger(OsgiEventTrigger):
+    """
+    This class builds an OsgiEventTrigger Module to be used when creating a
+    Rule. Requires the 100_OsgiEventTrigger.py component script. The available
+    Item registry ``event_names`` are:
+
+    .. code-block:: none
+
+        "ItemAddedEvent"
+        "ItemRemovedEvent"
+        "ItemUpdatedEvent"
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemRegistryTrigger("ItemAddedEvent").trigger]
+
+    Args:
+        event_name (string): name of the event to watch
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, event_name):
+        OsgiEventTrigger.__init__(self)
+        self.event_name = event_name
+
+    def event_filter(self, event):
+        return event.get('type') == self.event_name
+
+    def event_transformer(self, event):
+        return json.loads(event['payload'])
+
+class ItemAddedTrigger(ItemRegistryTrigger):
+    """
+    This class is the same as the ``ItemRegistryTrigger``, but limited to when
+    an Item is added. This trigger will fire when any Item is added.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemAddedTrigger().trigger]
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self):
+        ItemRegistryTrigger.__init__(self, "ItemAddedEvent")
+
+class ItemRemovedTrigger(ItemRegistryTrigger):
+    """
+    This class is the same as the ``ItemRegistryTrigger``, but limited to when
+    an Item is removed. This trigger will fire when any Item is removed.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemRemovedTrigger().trigger]
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self):
+        ItemRegistryTrigger.__init__(self, "ItemRemovedEvent")
+
+class ItemUpdatedTrigger(ItemRegistryTrigger):
+    """
+    This class is the same as the ``ItemRegistryTrigger``, but limited to when
+    an Item is updated. This trigger will fire when any Item is updated.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Examples:
+        .. code-block::
+
+            MyRule.triggers = [ItemUpdatedTrigger().trigger]
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self):
+        ItemRegistryTrigger.__init__(self, "ItemUpdatedEvent")
+
+class DirectoryEventTrigger(Trigger):
+    """
+    This class builds a DirectoryEventTrigger Module to be used when creating a
+    Rule. Requires the 100_DirectoryTrigger.py component script.
+
+    See :ref:`Guides/Rules:Extensions` for examples of how to use these extensions.
+
+    Args:
+        path (string): path of the directory to watch
+        event_kinds (list): (optional) list of the events to watch for
+        watch_subdirectories (Boolean): (optional) True will watch
+            subdirectories
+
+    Attributes:
+        trigger (Trigger): Trigger object to be added to a Rule
+    """
+    def __init__(self, path, event_kinds=[ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY], watch_subdirectories=False):
+        triggerName = validate_uid(type(self).__name__)
+        config = {
+            'path': path,
+            'event_kinds': str(event_kinds),
+            'watch_subdirectories': watch_subdirectories,
+        }
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID(core.DIRECTORY_TRIGGER_MODULE_ID).withConfiguration(Configuration(config)).build()

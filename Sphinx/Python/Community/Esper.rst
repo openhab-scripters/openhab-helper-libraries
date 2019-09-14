@@ -2,18 +2,5 @@
 Esper
 *****
 
-Scripts
-=======
-
-    .. automodule:: scripts.community.esper.components.000_Esper
-
-
-Packages and Modules
-====================
-
-`esper.py`
-----------
-
-    .. automodule:: community.esper
-
-.. Esper/000_Esper.rst
+These scripts and modules provide examples for using `Esper <http://www.espertech.com/esper/>`_
+within openHAB.

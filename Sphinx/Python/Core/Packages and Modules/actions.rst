@@ -1,7 +1,5 @@
-actions
--------
-
-.. warning:: In order to avoid namespace conflicts with the ``actions`` object provided in the default scope, don't use ``import core.actions``.
+`core.actions <https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/Core/automation/lib/python/core/actions.py>`_
+--------------------------------------------------------------------------------------------------------------------------------------
 
 .. automodule:: core.actions
     :members:

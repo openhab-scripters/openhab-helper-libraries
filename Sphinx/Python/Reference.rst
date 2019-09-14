@@ -54,6 +54,15 @@ If you are using an import like ``from personal.my_package.my_module import my_f
     reload(personal.my_package.my_module)
     from personal.my_package.my_module import my_function
 
+In some cases, you may need to use this alternative:
+
+.. code-block:: python
+
+    import sys
+    import community.my_package.my_module
+    reload(sys.modules['community.my_package.my_module'])
+    from community.my_package.my_module import my_function
+
 
 Custom Packages and Modules
 ===========================

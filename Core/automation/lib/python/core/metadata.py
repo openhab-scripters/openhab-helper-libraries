@@ -1,7 +1,9 @@
 """
 This module provides functions for manipulating Item Metadata.
-"""
 
+See the :ref:`Guides/Metadata:Metadata` guide for details on the metadata
+structure.
+"""
 __all__ = [
     "get_all_namespaces", "get_metadata", "set_metadata", "remove_metadata",
     "get_value", "set_value", "get_key_value", "set_key_value",
@@ -36,11 +38,11 @@ def get_all_namespaces(item_name):
             get_all_namespaces("Item_Name")
 
     Args:
-        item_name (string): the name of the Item to retrieve the namespace
-        names for
+        item_name (str): the name of the Item to retrieve the namespace names
+        for
 
     Returns:
-        list: list of strings representing the namespace names found for the
+        list: a list of strings representing the namespace names found for the
         specified Item
     """
     log.debug("get_all_namespaces: Item [{}]".format(item_name))
@@ -58,23 +60,16 @@ def get_metadata(item_name, namespace):
             get_metadata("Item_Name", "Namespace_Name")
 
     Args:
-        item_name (string): name of the Item
-        namespace (string): name of the namespace
+        item_name (str): name of the Item
+        namespace (str): name of the namespace
 
     Returns:
         Metadata object or None: Metadata object containing the namespace
         ``value`` and ``configuration`` dictionary, but will be ``None`` if
-        the namespace or Item do not exist
+        the namespace or the Item does not exist
     """
     log.debug("get_metadata: Item [{}], namespace [{}]".format(item_name, namespace))
     metadata = metadata_registry.get(MetadataKey(namespace, item_name))
-    '''
-    # this might be interesting, but I haven't come across a need for it
-    if metadata is None:
-        return {"value": None, "configuration": None}
-    else:
-        return metadata
-    '''
     return metadata_registry.get(MetadataKey(namespace, item_name))
 
 def set_metadata(item_name, namespace, configuration, value=None, overwrite=False):
@@ -93,11 +88,11 @@ def set_metadata(item_name, namespace, configuration, value=None, overwrite=Fals
             set_metadata("Item_Name", "Namespace_Name", {"Key_5": 5}, overwrite=True)
 
     Args:
-        item_name (string): name of the Item
-        namespace (string): name of the namespace
+        item_name (str): name of the Item
+        namespace (str): name of the namespace
         configuration (dict): ``configuration`` dictionary to add to the
             namespace
-        value (string): either the new namespace value or ``None``
+        value (str): either the new namespace value or ``None``
         overwrite (bool): if ``True``, existing namespace data will be
             discarded
     """
@@ -130,8 +125,8 @@ def remove_metadata(item_name, namespace=None):
             remove_metadata("Item_Name")
 
     Args:
-        item_name (string): name of the item
-        namespace (string): name of the namespace or ``None``, which will
+        item_name (str): name of the item
+        namespace (str): name of the namespace or ``None``, which will
             remove metadata in all namespaces for the specified Item
     """
     if namespace is None:
@@ -152,13 +147,13 @@ def get_key_value(item_name, namespace, *args):
             get_key_value("Item_Name", "Namespace_Name", "Key", "Subkey", "Subsubkey")
 
     Args:
-        item_name (string): name of the Item
-        namespace (string): name of the namespace
-        key (string): ``configuration`` key to return (multiple keys in
+        item_name (str): name of the Item
+        namespace (str): name of the namespace
+        key (str): ``configuration`` key to return (multiple keys in
             descending branches can be used)
 
     Returns:
-        string: ``configuration`` key value or ``{}`` if the metadata, key or
+        string: ``configuration`` key value or ``{}`` if the namespace, key or
         Item does not exist
     """
     log.debug("get_key_value: Item [{}], namespace [{}], args [{}]".format(item_name, namespace, args))
@@ -220,9 +215,9 @@ def remove_key_value(item_name, namespace, *args):
             remove_key_value("Item_Name", "Namespace_Name", "Key", "Subkey", "Subsubkey")
 
     Args:
-        item_name (string): name of the Item
-        namespace (string): name of the namespace
-        key (string): ``configuration`` key to remove (multiple keys in
+        item_name (str): name of the Item
+        namespace (str): name of the namespace
+        key (str): ``configuration`` key to remove (multiple keys in
             descending branches can be used)
     """
     log.debug("remove_key_value: Item [{}], namespace [{}], args [{}]".format(item_name, namespace, args))
@@ -256,11 +251,11 @@ def get_value(item_name, namespace):
             get_value("Item_Name", "Namespace_Name")
 
     Args:
-        item_name (string): name of the item
-        namespace (string): name of the namespace
+        item_name (str): name of the item
+        namespace (str): name of the namespace
 
     Returns:
-        string or None: namespace ``value`` or ``None`` if the metadata or
+        string or None: namespace ``value`` or ``None`` if the namespace or
         Item does not exist
     """
     log.debug("get_value: Item [{}], namespace [{}]".format(item_name, namespace))
@@ -282,9 +277,9 @@ def set_value(item_name, namespace, value):
             set_value("Item_Name", "Namespace_Name", "namespace value")
 
     Args:
-        item_name (string): name of the Item
-        namespace (string): name of the namespace
-        value (string): new or updated value for the namespace
+        item_name (str): name of the Item
+        namespace (str): name of the namespace
+        value (str): new or updated namespace value
     """
     log.debug("set_value: Item [{}], namespace [{}], value [{}]".format(item_name, namespace, value))
     metadata = get_metadata(item_name, namespace)
