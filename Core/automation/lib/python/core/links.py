@@ -1,10 +1,10 @@
 """
-This module allows runtime creation and removal of links. This module requires
-the JythonItemChannelLinkProvider component script.
+This module allows runtime creation and removal of links.
 """
+__all__ = ["add_link", "remove_link"]
 
-from core.jsr223 import scope
-scope.scriptExtension.importPreset(None)
+from core.jsr223.scope import scriptExtension
+scriptExtension.importPreset(None)
 
 try:
     from org.openhab.core.thing.link import ItemChannelLink
@@ -30,15 +30,26 @@ ManagedItemChannelLinkProvider = osgi.get_service(
 
 log = logging.getLogger("{}.core.links".format(LOG_PREFIX))
 
-__all__ = ["add_link", "remove_link"]
+def add_link(item_or_item_name, channel_uid_or_string):
+    """
+    This function adds a Link to an Item using a
+    ManagedItemChannelLinkProvider.
 
-def add_link(item_or_item_name, channel_uid_or_string):# returns Link
+    Args:
+        item_or_item_name (Item or str): the Item object or name to create
+            the Link for
+        channel_uid_or_string (ChannelUID or str): the ChannelUID or string
+            representation of a ChannelUID to link the Item to
+
+    Returns:
+        Item or None: the Item that the Link was added to or None
+    """
     try:
         item = validate_item(item_or_item_name)
         channel_uid = validate_channel_uid(channel_uid_or_string)
         if item is None or channel_uid is None:
             return None
-        
+
         link = ItemChannelLink(item.name, channel_uid)
         ManagedItemChannelLinkProvider.add(link)
         log.debug("Link added: [{}]".format(link))
@@ -49,12 +60,25 @@ def add_link(item_or_item_name, channel_uid_or_string):# returns Link
         return None
 
 def remove_link(item_or_item_name, channel_uid_or_string):
+    """
+    This function removes a Link from an Item using a
+    ManagedItemChannelLinkProvider.
+
+    Args:
+        item_or_item_name (Item or str): the Item object or name to create
+            the Link for
+        channel_uid_or_string (ChannelUID or str): the ChannelUID or string
+            representation of a ChannelUID to link the Item to
+
+    Returns:
+        Item or None: the Item that the Link was removed from or None
+    """
     try:
         item = validate_item(item_or_item_name)
         channel_uid = validate_channel_uid(channel_uid_or_string)
         if item is None or channel_uid is None:
             return None
-        
+
         link = ItemChannelLink(item.name, channel_uid)
         ManagedItemChannelLinkProvider.remove(str(link))
         log.debug("Link removed: [{}]".format(link))
@@ -65,6 +89,17 @@ def remove_link(item_or_item_name, channel_uid_or_string):
         return None
 
 def remove_all_links(item_or_item_name):
+    """
+    This function removes all Links from an Item using a
+    ManagedItemChannelLinkProvider.
+
+    Args:
+        item_or_item_name (Item or str): the Item object or name to create
+            the Link for
+
+    Returns:
+        Item or None: the Item that the Links were removed from or None
+    """
     try:
         item = validate_item(item_or_item_name)
         if item is None:
