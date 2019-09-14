@@ -16,7 +16,7 @@ this module can accept any of the following date types:
 __all__ = [
     "format_date", "days_between", "hours_between", "minutes_between",
     "seconds_between", "to_java_zoneddatetime", "to_java_calendar",
-    "to_python_datetime", "to_joda_datetime"
+    "to_python_datetime", "to_joda_datetime", "human_readable_seconds"
 ]
 
 import sys
