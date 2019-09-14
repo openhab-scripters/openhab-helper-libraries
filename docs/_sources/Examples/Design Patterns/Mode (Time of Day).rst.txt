@@ -2,16 +2,11 @@
 Mode (Time of Day)
 ******************
 
-.. automodule:: scripts.examples.mode_example
-
 .. tabs::
 
     .. group-tab:: Python
 
-        .. literalinclude:: ../../../Design Patterns/Mode (Time of Day)/automation/lib/python/configuration.py.example
-
-        .. literalinclude:: ../../../Design Patterns/Mode (Time of Day)/automation/jsr223/python/personal/mode_example.py
-            :lines: 18-56
+        :doc:`../../../Python/Community/Mode (Time of Day)`
 
     .. group-tab:: JavaScript
 

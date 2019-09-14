@@ -1,6 +1,6 @@
-================================
-ideAlarm Troubleshooting and FAQ
-================================
+=======================
+Troubleshooting and FAQ
+=======================
 
 Table of Contents
 =================
@@ -50,8 +50,8 @@ In order to be able to help you and to give you the best support, please include
 Troubleshooting
 ---------------
 
-* Check that other openhab-helper-libraries jsr223 jython scripts runs fine.
-  There are simple :ref:`example scripts <Examples/Examples:Examples>` that that you can try out.
-* Check that you have the latest version of openhab-helper-libraries.
-  If you just upgraded from an earlier version, check again that you made the necessary steps according to the :ref:`Release Notices <Python/Community/IdeAlarm:Release Notices>`.
-* Check your openhab-helper-libraries configuration file and make sure that it's valid python syntax.
+* Check that other Jython scripts run fine.
+  Reread the :ref:`installation guide <Getting Started/Installation:Installation>` and follow the instructions to verify that the ``hello_world.py`` script functions.
+* Check that you have the latest version of the openHAB Helper Libraries.
+  If you just upgraded from an earlier version, check again that you made the necessary steps according to the :ref:`Release Notices <Python/Community/ideAlarm:Release Notices>`.
+* Check your ``configuration.py`` and make sure that it's valid Python syntax.

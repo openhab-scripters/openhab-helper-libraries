@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -227,6 +229,13 @@ Import the package or module, reload it, then import again.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">personal.my_package.my_module</span>
 <span class="nb">reload</span><span class="p">(</span><span class="n">personal</span><span class="o">.</span><span class="n">my_package</span><span class="o">.</span><span class="n">my_module</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">personal.my_package.my_module</span> <span class="kn">import</span> <span class="n">my_function</span>
+</pre></div>
+</div>
+<p>In some cases, you may need to use this alternative:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">community.my_package.my_module</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;community.my_package.my_module&#39;</span><span class="p">])</span>
+<span class="kn">from</span> <span class="nn">community.my_package.my_module</span> <span class="kn">import</span> <span class="n">my_function</span>
 </pre></div>
 </div>
 </div>

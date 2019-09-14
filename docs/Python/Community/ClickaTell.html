@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -108,6 +110,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../Reference.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Core.html">Core</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../Community.html">Community</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Alexa Speak and Respond.html">Alexa Speak and Respond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Area Triggers and Actions.html">Area Triggers and Actions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="AutoRemote.html">AutoRemote</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">ClickaTell</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#license">License</a></li>
@@ -115,6 +119,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Delete and Rediscover Z-Wave Things.html">Delete and Rediscover Z-Wave Things</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mode (Time of Day).html">Mode (Time of Day)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="OpenWeatherMap.html">OpenWeatherMap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Sonos.html">Sonos</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WeatherStationUploader.html">WeatherStationUploader</a></li>
@@ -204,44 +209,6 @@
 <p>Copyright (c) 2006-2012 Jacques Marneweck. All rights reserved.
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<dl class="function">
-<dt id="community.clickatell.require_auth">
-<code class="sig-prename descclassname">community.clickatell.</code><code class="sig-name descname">require_auth</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#community.clickatell.require_auth" title="Permalink to this definition">¶</a></dt>
-<dd><p>decorator to ensure that the Clickatell object is authed before proceeding</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="community.clickatell.ClickatellError">
-<em class="property">exception </em><code class="sig-prename descclassname">community.clickatell.</code><code class="sig-name descname">ClickatellError</code><a class="headerlink" href="#community.clickatell.ClickatellError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Base class for Clickatell errors</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="community.clickatell.ClickatellAuthenticationError">
-<em class="property">exception </em><code class="sig-prename descclassname">community.clickatell.</code><code class="sig-name descname">ClickatellAuthenticationError</code><a class="headerlink" href="#community.clickatell.ClickatellAuthenticationError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#community.clickatell.ClickatellError" title="community.clickatell.ClickatellError"><code class="xref py py-class docutils literal notranslate"><span class="pre">community.clickatell.ClickatellError</span></code></a></p>
-</dd></dl>
-
-<dl class="class">
-<dt id="community.clickatell.Clickatell">
-<em class="property">class </em><code class="sig-prename descclassname">community.clickatell.</code><code class="sig-name descname">Clickatell</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">password</em>, <em class="sig-param">api_id</em>, <em class="sig-param">sender</em><span class="sig-paren">)</span><a class="headerlink" href="#community.clickatell.Clickatell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Provides a wrapper around the Clickatell HTTP/S API interface</p>
-<dl class="method">
-<dt id="community.clickatell.Clickatell.auth">
-<code class="sig-name descname">auth</code><span class="sig-paren">(</span><em class="sig-param">url='https://api.clickatell.com/http/auth'</em><span class="sig-paren">)</span><a class="headerlink" href="#community.clickatell.Clickatell.auth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Authenticate against the Clickatell API server</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="community.clickatell.Clickatell.curl">
-<code class="sig-name descname">curl</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">post</em>, <em class="sig-param">urlEncode=True</em><span class="sig-paren">)</span><a class="headerlink" href="#community.clickatell.Clickatell.curl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inteface for sending web requests to the Clickatell API Server</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 </div>
 

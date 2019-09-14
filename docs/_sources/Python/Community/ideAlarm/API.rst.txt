@@ -1,6 +1,6 @@
-============
-ideAlarm API
-============
+===
+API
+===
 
 About the API
 =============
@@ -38,7 +38,7 @@ It provides functions to query and manipulate your ideAlarm system.
 * ideAlarm.isArmed(zone='1')
     * Returns True if the zone given is armed.
     * **Parameters**
-        * zone: (integer or string) The zone's name or ordinal number. 
+        * zone: (integer or string) The zone's name or ordinal number.
           Defaults to the zone first defined in the configuration file.
     * **Return value**
         * (boolean)
@@ -54,7 +54,7 @@ It provides functions to query and manipulate your ideAlarm system.
         * (boolean)
     * **Usage example**
         * ``if ideAlarm.isDisArmed('My Home'):``
-  
+
 * ideAlarm.getZoneStatus(zone='1')
     * Returns the given zone's status.
     * **Parameters**
@@ -64,7 +64,7 @@ It provides functions to query and manipulate your ideAlarm system.
         * (integer) The return value refers to the ``ZONESTATUS`` constant.
     * **Usage example**
         * ``if ideAlarm.getZoneStatus('My Home') in [ZONESTATUS['ALERT'], ZONESTATUS['TRIPPED']]:``
-  
+
 * ideAlarm.getAlertingZonesCount()
     * Returns the total count of alarm zones which has the status ``ZONESTATUS['ALERT']``.
     * **Return value**

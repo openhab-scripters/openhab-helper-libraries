@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/File Locations.html">File Locations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Getting Started/First Steps.html">First Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Getting Started/VS Code.html">Setting up VSCode</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Guides</span></p>
 <ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Triggers.html">Triggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Actions.html">Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Guides/Metadata.html">Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/Event Object Attributes.html">Event Object Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Examples/Examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Guides/But How Do I.html">But How Do I…?</a></li>
@@ -108,15 +110,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../Reference.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Core.html">Core</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../Community.html">Community</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Alexa Speak and Respond.html">Alexa Speak and Respond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Area Triggers and Actions.html">Area Triggers and Actions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="AutoRemote.html">AutoRemote</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ClickaTell.html">ClickaTell</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Delete and Rediscover Z-Wave Things</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#purpose">PURPOSE</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#requires">REQUIRES</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#known-issues">KNOWN ISSUES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#purpose">Purpose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requires">Requires</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-issues">Known Issues</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Esper.html">Esper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Mode (Time of Day).html">Mode (Time of Day)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="OpenWeatherMap.html">OpenWeatherMap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Sonos.html">Sonos</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WeatherStationUploader.html">WeatherStationUploader</a></li>
@@ -199,24 +204,83 @@
   <div class="section" id="module-scripts.community.delete_zwave_things.delete_zwave_things">
 <span id="delete-and-rediscover-z-wave-things"></span><h1>Delete and Rediscover Z-Wave Things<a class="headerlink" href="#module-scripts.community.delete_zwave_things.delete_zwave_things" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="purpose">
-<h2>PURPOSE<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
-<p>OH does not currently support automatically updating a Things definition, when
-a binding is updated. This rule will delete all managed Z-Wave Things and then
-rediscover them.</p>
+<h2>Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<p>openHAB does not currently support automatically updating a Thing’s definition
+after it has been updated in a binding. In order to update it, the existing
+Thing must be deleted and rediscovered. This rule will delete all managed
+Z-Wave Things and rediscover them. Any existing configuration (name, location,
+etc.) for the Z-Wave Things is not restored.</p>
 </div>
 <div class="section" id="requires">
-<h2>REQUIRES<a class="headerlink" href="#requires" title="Permalink to this headline">¶</a></h2>
+<h2>Requires<a class="headerlink" href="#requires" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>OH installed on Linux</p></li>
+<li><p>openHAB installed on Linux (executeCommandLine is used to launch
+<code class="docutils literal notranslate"><span class="pre">/usr/bin/curl</span></code> in a <code class="docutils literal notranslate"><span class="pre">/bin/sh</span></code> shell</p></li>
 <li><p>The Z-Wave binding</p></li>
-<li><p>A Delete_Zwave_Things Item</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">Delete_Zwave_Things</span></code> Item (the script will create this for you, if it
+does not exist)</p></li>
 </ul>
 </div>
 <div class="section" id="known-issues">
-<h2>KNOWN ISSUES<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h2>
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Manual configurations (e.q., location, name, etc.) will not be replaced after the deletion.</p></li>
+<li><p>Manual Thing configurations (e.q., location, name, etc.) are not retained
+and restored.</p></li>
 </ul>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">core.rules</span> <span class="kn">import</span> <span class="n">rule</span>
+<span class="kn">from</span> <span class="nn">core.triggers</span> <span class="kn">import</span> <span class="n">when</span>
+<span class="kn">from</span> <span class="nn">core.actions</span> <span class="kn">import</span> <span class="n">Exec</span>
+<span class="kn">from</span> <span class="nn">core.items</span> <span class="kn">import</span> <span class="n">add_item</span>
+<span class="kn">from</span> <span class="nn">core.metadata</span> <span class="kn">import</span> <span class="n">set_value</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItems</span><span class="p">(</span><span class="s2">&quot;Delete_Zwave_Things&quot;</span><span class="p">):</span>
+    <span class="n">add_item</span><span class="p">(</span><span class="s2">&quot;Delete_Zwave_Things&quot;</span><span class="p">,</span> <span class="n">item_type</span><span class="o">=</span><span class="s2">&quot;Switch&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Delete Z-Wave Things [</span><span class="si">%s</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Switchable&quot;</span><span class="p">])</span>
+
+<span class="n">set_value</span><span class="p">(</span><span class="s2">&quot;Delete_Zwave_Things&quot;</span><span class="p">,</span> <span class="s2">&quot;autoupdate&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span>
+
+<span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Misc: Delete and rediscover Z-Wave Things&quot;</span><span class="p">)</span>
+<span class="nd">@when</span><span class="p">(</span><span class="s2">&quot;Item Delete_Zwave_Things received command&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">deleteRediscoverZwaveThings</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: Start&quot;</span><span class="p">)</span>
+    <span class="n">statusMap</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;DeletionSuccess&quot;</span>       <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;DeletionFailure&quot;</span>       <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;DiscoveryFailure&quot;</span>      <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;ThingsAdded&quot;</span>           <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;ThingsNotAdded&quot;</span>        <span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">thingUIDList</span> <span class="o">=</span> <span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 10 -m 10 -X GET --header </span><span class="se">\&quot;</span><span class="s2">Accept: application/json</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">http://localhost:8080/rest/things</span><span class="se">\&quot;</span><span class="s2"> | /usr/bin/jq &#39;.[].UID | select(contains(</span><span class="se">\&quot;</span><span class="s2">zwave:device</span><span class="se">\&quot;</span><span class="s2">))&#39;&quot;</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="c1"># get List of Things and filter out everything but Zwave device Thing UIDs</span>
+    <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: thingUIDList=[{}], len(thingUIDList)=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">thingUIDList</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">thingUIDList</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="s2">&quot;&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">thingUIDList</span><span class="p">:</span>
+        <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: {} Things found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">thingUIDList</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">thingUIDList</span><span class="p">:</span><span class="c1"># delete Zwave Things</span>
+            <span class="n">deletionResponse</span> <span class="o">=</span> <span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -o /dev/null -s -w </span><span class="se">\&quot;</span><span class="s2">%{{http_code}}</span><span class="se">\&quot;</span><span class="s2"> --connect-timeout 10 -m 10 -X DELETE --header </span><span class="se">\&quot;</span><span class="s2">Accept: application/json</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">http://localhost:8080/rest/things/{}?force=false</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">thing</span><span class="p">),</span><span class="mi">10000</span><span class="p">)</span><span class="c1"># delete Thing</span>
+            <span class="k">if</span> <span class="n">deletionResponse</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;200&quot;</span><span class="p">,</span> <span class="s2">&quot;202&quot;</span><span class="p">]:</span>
+                <span class="n">statusMap</span><span class="p">[</span><span class="s2">&quot;DeletionSuccess&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">statusMap</span><span class="p">[</span><span class="s2">&quot;DeletionFailure&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: Thing deletion: &lt;&lt;&lt;&lt;&lt; deletionResponse=[{}], Thing=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">deletionResponse</span><span class="p">,</span><span class="n">thing</span><span class="p">))</span>
+    <span class="n">thingUIDList</span> <span class="o">=</span> <span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 10 -m 10 -X GET --header </span><span class="se">\&quot;</span><span class="s2">Accept: application/json</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">http://localhost:8080/rest/things</span><span class="se">\&quot;</span><span class="s2"> | /usr/bin/jq &#39;.[].UID | select(contains(</span><span class="se">\&quot;</span><span class="s2">zwave:device</span><span class="se">\&quot;</span><span class="s2">))&#39;&quot;</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="c1"># get List of Things and filter out everything but Zwave device Thing UIDs (if deletion was successful, this should be empty)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">thingUIDList</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">&quot;&quot;</span> <span class="ow">in</span> <span class="n">thingUIDList</span><span class="p">:</span>
+        <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: All Zwave Things were deleted, so starting Zwave Discovery&quot;</span><span class="p">)</span>
+        <span class="n">discoveryResponse</span> <span class="o">=</span> <span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -o /dev/null -s -w </span><span class="se">\&quot;</span><span class="s2">%{http_code}</span><span class="se">\&quot;</span><span class="s2"> --connect-timeout 10 -m 10 -X POST --header </span><span class="se">\&quot;</span><span class="s2">Content-Type: application/json</span><span class="se">\&quot;</span><span class="s2"> --header </span><span class="se">\&quot;</span><span class="s2">Accept: text/plain</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">http://localhost:8080/rest/discovery/bindings/zwave/scan</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span><span class="c1"># start discovery</span>
+        <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: Started discovery: &gt;&gt;&gt;&gt;&gt; discoveryResponse=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">discoveryResponse</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">discoveryResponse</span> <span class="o">!=</span> <span class="s2">&quot;200&quot;</span><span class="p">:</span>
+            <span class="n">statusMap</span><span class="p">[</span><span class="s2">&quot;DeletionFailure&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">inboxList</span> <span class="o">=</span> <span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 10 -m 10 -X GET --header </span><span class="se">\&quot;</span><span class="s2">Accept: application/json</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">http://localhost:8080/rest/inbox</span><span class="se">\&quot;</span><span class="s2"> | /usr/bin/jq -r &#39;.[] | {thingUID:(.thingUID | select(contains(</span><span class="se">\&quot;</span><span class="s2">zwave:device</span><span class="se">\&quot;</span><span class="s2">))), label:.label} | .[]&#39;&quot;</span><span class="p">,</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="c1"># get List of Thing UIDs and labels from Inbox</span>
+        <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: len(inboxList)=[{}], [{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inboxList</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">inboxList</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">approvalResponse</span> <span class="o">=</span> <span class="n">Exec</span><span class="o">.</span><span class="n">executeCommandLine</span><span class="p">(</span><span class="s2">&quot;/bin/sh@@-c@@/usr/bin/curl -o /dev/null -s -w </span><span class="se">\&quot;</span><span class="s2">%{{http_code}}</span><span class="se">\&quot;</span><span class="s2"> --connect-timeout 10 -m 10 -X POST --header </span><span class="se">\&quot;</span><span class="s2">Content-Type: text/plain</span><span class="se">\&quot;</span><span class="s2"> --header </span><span class="se">\&quot;</span><span class="s2">Accept: application/json</span><span class="se">\&quot;</span><span class="s2"> -d </span><span class="se">\&quot;</span><span class="s2">{}</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">http://localhost:8080/rest/inbox/{}/approve</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inboxList</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span><span class="n">inboxList</span><span class="p">[</span><span class="n">index</span><span class="p">]),</span><span class="mi">10000</span><span class="p">)</span><span class="c1"># approve Thing in Inbox</span>
+            <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: Inbox approval: approvalResponse=[{}], Thing=[{}], label=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">approvalResponse</span><span class="p">,</span><span class="n">inboxList</span><span class="p">[</span><span class="n">index</span><span class="p">],</span><span class="n">inboxList</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">approvalResponse</span> <span class="o">==</span> <span class="s2">&quot;200&quot;</span><span class="p">:</span>
+                <span class="n">statusMap</span><span class="p">[</span><span class="s2">&quot;ThingsAdded&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">statusMap</span><span class="p">[</span><span class="s2">&quot;ThingsNotAdded&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: {} Z-Wave Things were not deleted, so did not start Z-Wave Discovery. thingUIDList=[{}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">thingUIDList</span><span class="p">),</span><span class="n">thingUIDList</span><span class="p">))</span>
+    <span class="n">deleteRediscoverZwaveThings</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Delete Z-Wave Things: End: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">statusMap</span><span class="p">))</span>
+</pre></div>
 </div>
 </div>
 

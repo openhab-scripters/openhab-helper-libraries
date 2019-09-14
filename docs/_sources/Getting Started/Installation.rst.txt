@@ -46,7 +46,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
     If you do not plan to use all of the languages, you may want to remove the directories for them under ``/automation/jsr223/`` and ``/automation/lib/``.
 
 .. |core_step_8a| replace::
-    There is a main configuration file for each scripting language's helper libraries that will need to be renamed.
+    There is a main configuration file for each scripting language's helper libraries that must be renamed.
 
 .. |core_step_8b| replace::
     These files can be used to secure personal information, so that they are not stored in files that may be shared with the community, or to store variables that are accesed by multiple scripts and/or modules, e.g. LOG_PREFIX.
@@ -76,6 +76,8 @@ Instructions for installation in a Docker container are available :doc:`here <Do
         #. |core_step_8a|
            For example, in ``/automation/lib/python/``, rename the file ``configuration.py.example`` to ``configuration.py``.
            |core_step_8b|
+        #. The ''/automation/lib/python/personal/__init.py.example`` file must be renamed to ``__init__.py``.
+           If you modify it, take care not to overwrite the file during upgrades.
         #. Add/modify the EXTRA_JAVA_OPTS.
            These examples assume that you will be using the standalone Jython 2.7.0 jar in the next step.
            Changes to the EXTRA_JAVA_OPTS require an openHAB restart.

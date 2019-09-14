@@ -54,13 +54,13 @@ The following should be installed, configured, tested and working before continu
         Switch Z1_Alert_Max_Timer      "Z1 alert maximum time [%s]"                     <time>      (G_Timer)            {expire="20s,command=OFF"}
 
 
-Installation of the ideAlarm package
+Installation of the ideAlarm Package
 ====================================
 
 * Follow the instruction for how to :ref:`install or update a Community package <Getting Started/Installation:Community>`.
   Make sure you haven't skipped the step to install the mapping files.
 * Edit the configuration dictionary ``idealarm_configuration`` that you've previously inserted into the openhab-helper-libraries configuration file.
-  See :ref:`Python/Community/IdeAlarm/Configuration:IdeAlarm Configuration` for details.
+  See :ref:`Python/Community/IdeAlarm/Configuration:Configuration` for details.
   Before saving you might want to copy and paste the contents of your configuration file into the form on `PythonBuddy <https://pythonbuddy.com/>`_ to verify that the Python syntax is valid.
 * Save and reload the openhab-helper-libraries configuration as described in :ref:`Python/Reference:Modifying and Reloading Packages or Modules`.
 * Create a custom library script.
