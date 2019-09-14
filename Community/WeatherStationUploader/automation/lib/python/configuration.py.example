@@ -4,7 +4,7 @@
 # will be used. If you don't have a certain sensor type, just put None (Don't put None inside a list)
 # Not mandatory. You may remove.
 weatherStationUploader_configuration = {
-    'logLevel': DEBUG,
+    'logLevel': 'DEBUG',
     'stationdata': {
         "weather_upload": False, # Set to True to actually upload anything
         "rapid_fire_mode": True, # If you would like to send real-time data every few seconds, select Rapid Fire. RapidFire Updates allow you to update weather station conditions at a frequency up to once observation every 2.5 seconds. Web site visitors will see these observations change in real-time on the wunderground.com site.
