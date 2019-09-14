@@ -6,7 +6,7 @@ Mode (Time of Day)
 
     .. group-tab:: Python
 
-        .. automodule:: scripts.community.update_mode
+        :doc:`../../../Python/Community/Mode (Time of Day)`
 
     .. group-tab:: JavaScript
 

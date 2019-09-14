@@ -2,15 +2,20 @@
 Purpose
 -------
 
-This script will parse all Alexa voice commands and, if they match the text in the rule, it will send a command to an Item
-linked to that Alexa device's TTS Channel. For example, I can ask Alexa "Are the doors locked?" and the device that I asked
-will respond with "all doors are locked" or a list of the unlocked doors. Additional phrases can be added.
+This is an example script that can be modified to suit your implementation. It
+will parse all Alexa voice commands and, if they match the text in the rule,
+it will send a command to an Item linked to that Alexa device's TTS Channel.
+For example, I can ask Alexa "Are the doors locked?" and the device that I
+asked will respond with "all doors are locked" or a list of the unlocked doors.
+Additional phrases can be added.
 
 Requires
 --------
 
-* `Amazon Echo Control <https://www.openhab.org/addons/bindings/amazonechocontrol/>`_ binding
-* A routine setup in the Alexa app that captures the same text you are capturing (I used a volume adjustment for the action)
+* `Amazon Echo Control <https://www.openhab.org/addons/bindings/amazonechocontrol/>`_
+  binding
+* A routine setup in the Alexa app that captures the same text you are
+  capturing (I used a volume adjustment for the action)
 * This file will need to be renamed (remove the '.example')
 * Items:
 
@@ -22,9 +27,9 @@ Requires
       String    FamilyRoom_Dot_LastVoiceCommand    "Famiy Room: Last Voice Command [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:lastVoiceCommand"}
       String    FamilyRoom_Dot_TTS    "Family Room: TTS [%s]"    (gAlexa_LastVoiceCommand)    {channel="amazonechocontrol:xxxxx:xxxxx:xxxxx:textToSpeech"}
 
-The get_lock_states function can be removed or replaced. It uses a group (gSecurity) that contains all of my outer doors.
+The ``get_lock_states()`` function can be removed or replaced. It uses a group
+(``gSecurity``) that contains all of my outer doors.
 """
-
 from core.triggers import when
 from core.rules import rule
 

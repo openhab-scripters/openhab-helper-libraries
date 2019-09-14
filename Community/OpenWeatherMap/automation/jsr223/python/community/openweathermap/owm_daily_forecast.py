@@ -1,6 +1,4 @@
 """
-:Author: `Scott Rushworth <https://github.com/openhab-5iver>`_
-
 Purpose
 =======
 
@@ -80,30 +78,29 @@ Known Issues
 Change Log
 ==========
 
-| 01/11/19: Corrected an issue where the Items were not linking.
-| 01/12/19: Removed Forecast_Temperature_X, and added 
+* 01/11/19: Corrected an issue where the Items were not linking.
+* 01/12/19: Removed Forecast_Temperature_X, and added
   Forecast_Temperature_High_X and Forecast_Temperature_Low_X
-| 01/16/19: Restructured how the rule is created
-| 01/16/19: Fixed SCALE transformation install
-| 01/16/19: Fixed Item existence check
-| 01/16/19: Changed to using values of Timestamp Items for calculating the
+* 01/16/19: Restructured how the rule is created
+* 01/16/19: Fixed SCALE transformation install
+* 01/16/19: Fixed Item existence check
+* 01/16/19: Changed to using values of Timestamp Items for calculating the
   number of remaining forecasts, and the Item label times
-| 01/16/19: Added group label changes to reflect current day of week
-| 01/16/19: Changed Item label to use time from Timestamp Items
-| 01/16/19: Added IconID
-| 01/16/19: Added manual group aggregation for Condition, ConditionID, Icon,
+* 01/16/19: Added group label changes to reflect current day of week
+* 01/16/19: Changed Item label to use time from Timestamp Items
+* 01/16/19: Added IconID
+* 01/16/19: Added manual group aggregation for Condition, ConditionID, Icon,
   IconID, and WindDirection
-| 01/18/19: Fixed issue with Items not being added to groups properly
-| 01/18/19: Added a NULL check when manually setting group aggregation values
-| 01/20/19: Fixed improper log entry after SCALE transform has been installed
-| 02/04/19: Added check to make sure a Thing with ThingUID
+* 01/18/19: Fixed issue with Items not being added to groups properly
+* 01/18/19: Added a NULL check when manually setting group aggregation values
+* 01/20/19: Fixed improper log entry after SCALE transform has been installed
+* 02/04/19: Added check to make sure a Thing with ThingUID
   'openweathermap:forecast-and-weather' exists and is ONLINE
-| 02/06/19: Added verification that the forecastHours and forecastDays are
+* 02/06/19: Added verification that the forecastHours and forecastDays are
   configured properly in the Thing
-| 05/31/19: Fixed Cloudiness and Humidity units and group function (no more
+* 05/31/19: Fixed Cloudiness and Humidity units and group function (no more
   unit of 'one'!)
 """
-
 from core.log import logging, LOG_PREFIX, log_traceback
 
 @log_traceback
@@ -122,7 +119,7 @@ def removeOWMItems():
         if "Forecast_" in item.name or "Current_" in item.name:
             removeOWMItems.log.debug("removeOWMItems: [{}]".format(item))
             remove_item(item)
-    '''    
+    '''
 #removeOWMItems()
 
 def addOWMItems():
@@ -429,7 +426,7 @@ def addOWMItems():
 
                     ir.getItem("gForecast_Cloudiness_{}".format(groupIndex)).addMember(ir.getItem("Forecast_Cloudiness_{:02d}".format(3 * index)))
                     ir.getItem("Forecast_Cloudiness_{:02d}".format(3 * index)).setLabel("Forecast ({}): Cloudiness [%d %%]".format(labelTime))
-                    
+
                     ir.getItem("gForecast_RainVolume_{}".format(groupIndex)).addMember(ir.getItem("Forecast_RainVolume_{:02d}".format(3 * index)))
                     ir.getItem("Forecast_RainVolume_{:02d}".format(3 * index)).setLabel("Forecast ({}): Rain volume [%.1f %unit%]".format(labelTime))
 
@@ -453,7 +450,7 @@ def addOWMItems():
                     if len(windDirectionItemStates) > 0:
                         windDirectionAvg = reduce(lambda x, y: (((x + y) / 2) if y - x < 180 else (x + y + 360) / 2) % 360, windDirectionItemStates)
                         events.postUpdate("gForecast_WindDirection_" + str(index), str(windDirectionAvg))
-                
+
                 addOWMItemsToGroups.log.debug("Updated groups and Items")
 
             addOWMItemsToGroups(None)
