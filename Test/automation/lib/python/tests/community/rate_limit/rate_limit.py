@@ -1,4 +1,4 @@
-from personal.latch import Latch
+from community.rate_limit import RateLimit
 import time
 from core.log import logging, LOG_PREFIX
 
@@ -10,17 +10,17 @@ def test():
     func_called = True
 
 try:
-    latch = Latch()
+    rate_limit = RateLimit()
 
-    latch.run(test, secs=2)
+    rate_limit.run(test, secs=2)
     assert func_called
 
     func_called = False
-    latch.run(test, secs=2)
+    rate_limit.run(test, secs=2)
     assert not func_called
 
     time.sleep(2)
-    latch.run(test, secs=2)
+    rate_limit.run(test, secs=2)
     assert func_called
 
 except AssertionError:

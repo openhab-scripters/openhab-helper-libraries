@@ -1,7 +1,7 @@
 """
 Author: Rich Koshak
 
-Provides a class to implement the Rule Latching Design Pattern. This will ignore
+Provides a class to implement Rate Limiting in Rules. This will ignore
 any calls to run that take place within a certain amount of time after the last
 one was called.
 
@@ -10,7 +10,7 @@ will execute all calls but spread them out and this class drops repeated calls.
 
 Types
 =====
-    - Latch: Implements the Latch Design Pattern.
+    - RateLimit: Implements the Latch Design Pattern.
 
 License
 =======
@@ -18,7 +18,7 @@ Copyright (c) 2019 Contributors to the openHAB Scripters project
 """
 from datetime import datetime, timedelta
 
-class Latch(object):
+class RateLimit(object):
     """
     Keeps a timestamp for when a new call to run is allowed to execute, ignoring
     any calls that take place before that time.
