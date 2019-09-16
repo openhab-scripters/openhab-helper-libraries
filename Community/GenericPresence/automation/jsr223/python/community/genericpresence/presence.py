@@ -116,9 +116,17 @@ def presence(event):
         proxy_name = presence_config[sensor_name][0]
         flap_time = presence_config[sensor_name][1]
 
+    except ValueError:
+        presence.log.error("{} is not in presence_sensors!"
+                           .format(event.itemName))
+    except IndexError:
+        presence.log.error("presence_items does not have the same number of "
+                           "elements as presence_sensors, check your "
+                           "configuration!")
+
+    else:
         # Item and sensor are the same, cancel the flapping timer if there is
         # one.
-        global presence_timers # For the love of Pete why?! I get "use before assigned" errors without the global
         if items[sensor_name] == items[proxy_name]:
             if (proxy_name in presence_timers.keys()
                     and not presence_timers[proxy_name].hasTerminated()):
@@ -133,26 +141,18 @@ def presence(event):
         if event.itemState == OFF:
             presence.log.debug("Setting the flapping timer for {}"
                                .format(proxy_name))
-            presence_timers = ScriptExecution.createTimer(
+            presence_timers[proxy_name] = ScriptExecution.createTimer(
                 DateTime.now().plusMinutes(presence_flap_time),
                 lambda: away(presence.log, events, proxy_name, presence_timers))
         elif event.itemState == ON:
             presence.log.debug("{} came home.".format(proxy_name))
             events.sendCommand(proxy_name, "ON")
-    except ValueError:
-        presence.log.error("{} is not in presence_sensors!"
-                           .format(event.itemName))
-    except IndexError:
-        presence.log.error("presence_items does not have the same number of "
-                           "elements as presence_sensors, check your "
-                           "configuration!")
 
 def scriptUnloaded():
     """
     Cancels all the timers when the script is unloaded to avoid timers hanging
     around.
     """
-    global presence_timers
     if not presence_timers:
         for key in presence_timers.keys():
             if not presence_timers[key].hasTerminated()
