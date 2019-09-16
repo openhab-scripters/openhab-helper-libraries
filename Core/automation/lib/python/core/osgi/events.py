@@ -13,8 +13,9 @@ circular loops in the rule execution.
             event = inputs['event']
             # do something with event
 """
-from core.jsr223.scope import scriptExtension, Trigger
-scriptExtension.importPreset(None)
+from core.jsr223.scope import scriptExtension
+scriptExtension.importPreset("RuleSupport")
+from core.jsr223.scope import Trigger, TriggerBuilder, Configuration
 
 import uuid
 import java.util
@@ -29,8 +30,6 @@ from core.osgi import bundle_context
 from core.log import logging, LOG_PREFIX
 
 log = logging.getLogger("{}.core.osgi.events".format(LOG_PREFIX))
-
-scriptExtension.importPreset("RuleSupport")
 
 def hashtable(*key_values):
     """
@@ -49,10 +48,10 @@ class OsgiEventAdmin(object):
     # Singleton
     class OsgiEventHandler(EventHandler):
         def __init__(self):
-            self.log = logging.getLogger("jython.openhab.osgi.events.OsgiEventHandler")
+            self.log = logging.getLogger("jsr223.jython.core.osgi.events.OsgiEventHandler")
             self.registration = bundle_context.registerService(
                 EventHandler, self, hashtable((EventConstants.EVENT_TOPIC, ["*"])))
-            self.log.info("Registered openHAB OSGI event listener service")
+            self.log.info("Registered openHAB OSGi event listener service")
             self.log.debug("Registration: [{}]".format(self.registration))
 
         def handleEvent(self, event):
@@ -68,7 +67,7 @@ class OsgiEventAdmin(object):
 
     @classmethod
     def add_listener(cls, listener):
-        cls.log.debug("Adding listener admin: [{} {}]".format (id(cls), listener))
+        cls.log.debug("Adding listener admin: [{} {}]".format(id(cls), listener))
         cls._event_listeners.append(listener)
         if len(cls._event_listeners) == 1:
             if cls._event_handler is None:
@@ -81,7 +80,7 @@ class OsgiEventAdmin(object):
             cls._event_listeners.remove(listener)
         if len(cls._event_listeners) == 0:
             if cls._event_handler is not None:
-                cls.log.info("Unregistering openHAB OSGI event listener service")
+                cls.log.info("Unregistering openHAB OSGi event listener service")
                 cls._event_handler.dispose()
                 cls._event_handler = None
 
@@ -100,11 +99,10 @@ class OsgiEventTrigger(Trigger):
     """Filter is a predicate taking an event argument and returning True (keep) or False (drop)"""
     def __init__(self, filter=None):
         self.filter = filter or (lambda event: True)
-        triggerId = type(self).__name__ + "-" + uuid.uuid1().hex
-        config = Configuration()
-        Trigger.__init__(self, triggerId, core.OSGI_TRIGGER_ID, config)
+        triggerName = type(self).__name__ + "-" + uuid.uuid1().hex
+        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("jsr223.OsgiEventTrigger").withConfiguration(Configuration()).build()
         global osgi_triggers
-        osgi_triggers[self.id] = self
+        osgi_triggers[triggerName] = self
 
     def event_filter(self, event):
         return self.filter(event)
