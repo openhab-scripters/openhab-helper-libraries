@@ -66,6 +66,15 @@ from org.joda.time import DateTime
 
 presence_timers = {}
 
+def get_name(item_name):
+    """
+    Arguments:
+        item_name: The name of the Item to retrieve the metadata from.
+    Returns:
+        None the 'name' metadata value of the passed in item_name
+    """
+    return get_value(item_name, "name") or item_name
+
 def trigger_generator(presence_config):
     """
     Called to generate triggers for all of the defined presence sensors imported
@@ -76,12 +85,27 @@ def trigger_generator(presence_config):
         that are managed by this Rule.
     """
     def generated_triggers(function):
-        for sensor in list(presence_config):
+        for sensor in presence_config:
             when("Item {} changed".format(sensor))(function)
         return function
     return generated_triggers
 
-def away(log, events, proxy_name, flap_time):
+def create_timer(log, events, proxy_name, item_name, flap_time):
+    """
+    Creates an antiflapping timer.
+
+    Arguments:
+        - log: Logger from the Rule that creates the Timer.
+        - events: Used to send the command.
+        - proxy_name: Name of the proxy Item to set to OFF.
+        - item_name: Name of the sensor Item that detects this person.
+        - flap_time: Number of minutes to set the timer for.
+    """
+    presence_timers[proxy_name] = ScriptExecution.createTimer(
+        DateTime.now().plusMinutes(flap_time),
+        lambda: away(log, events, proxy_name, item_name, flap_time))
+
+def away(log, events, proxy_name, item_name, flap_time):
     """
     Called when a person has been detected away for more than the flapping time.
     Log out the away state and command the Item to OFF.
@@ -90,11 +114,18 @@ def away(log, events, proxy_name, flap_time):
         - log: Logger passed in from the presence Rule.
         - events: Access to the events Object so we can call sendCommand.
         - proxy_name: Name of the proxy Item that we want to set to away.
+        - item_name: Name of the sensor Item that detects presence.
         - flap_time: Number of minutes we wait before marking the person away.
     """
-    log.info("{} has been away for {} minutes, setting to away."
-            .format(proxy_name,flap_time))
-    events.sendCommand(proxy_name, "OFF")
+    if items[proxy_name] == OFF:
+        log.warn("Presence away timer expired but {} is already OFF!"
+                 .format(proxy_name))
+    elif items[item_name] == ON:
+        log.warn("Presence away timer expired but {} is ON!".format(item_name))
+    else:
+        log.info("{} has been away for {} minutes, setting to away."
+                .format(get_name(proxy_name),flap_time))
+        events.sendCommand(proxy_name, "OFF")
 
 @rule("Presence",
       description=("Aggregates presence sensor readings and implements "
@@ -109,7 +140,6 @@ def presence(event):
     requires the user to be away for some minutes before the proxy will be set
     to OFF.
     """
-
     # Get the proxy Item associated with the sensor.
     try:
         sensor_name = event.itemName
@@ -125,35 +155,50 @@ def presence(event):
                            "configuration!")
 
     else:
-        # Item and sensor are the same, cancel the flapping timer if there is
-        # one.
-        if items[sensor_name] == items[proxy_name]:
-            if (proxy_name in presence_timers.keys()
-                    and not presence_timers[proxy_name].hasTerminated()):
-                presence.log.debug("{} came home, cancelling the flapping "
-                                   "timer.".format(proxy_name))
-                presence_timers[proxy_name].cancel()
+        # Sensor changed to ON, cancel any timers if they exist and command the
+        # proxy to ON if it isn't already ON.
+        if event.itemState == ON:
+            if proxy_name in presence_timers:
+                if not presence_timers[proxy_name].hasTerminated():
+                    presence_timers[proxy_name].cancel()
                 del presence_timers[proxy_name]
-            return
+            if items[proxy_name] != ON:
+                presence.log.info("{} came home.".format(get_name(proxy_name)))
+                events.sendCommand(proxy_name, "ON")
 
-        # Item and sensor are different, set a flapping timer if the sensor went
-        # to OFF.
-        if event.itemState == OFF:
-            presence.log.debug("Setting the flapping timer for {}"
-                               .format(proxy_name))
-            presence_timers[proxy_name] = ScriptExecution.createTimer(
-                DateTime.now().plusMinutes(presence_flap_time),
-                lambda: away(presence.log, events, proxy_name, presence_timers))
-        elif event.itemState == ON:
-            presence.log.debug("{} came home.".format(proxy_name))
-            events.sendCommand(proxy_name, "ON")
+        # Sensor changed to OFF, create an antiflapping timer.
+        elif event.itemState == OFF:
+            create_timer(presence.log, events, proxy_name, sensor_name,
+                         flap_time)
+
+@rule("Presence Timers Reload",
+      description=("Create an necessary timers and update proxies at system "
+                   "start"),
+      tags=["presence"])
+@when("System started")
+def presence_started(event):
+    """
+    Called at system started to update any timers and proxy Items based on
+    current and/or restored states of sensors.
+    """
+    for sensor_name in presence_config:
+        proxy_name = presence_config[sensor_name][0]
+        flap_time = presence_config[sensor_name][1]
+
+        if items[sensor_name] == ON:
+            events.postUpdate(proxy_name, "ON")
+        elif items[sensor_name] == OFF and items[proxy_name] != OFF:
+            create_timer(presence_started.log, events, proxy_name, sensor_name,
+                         flap_time)
+        else:
+            events.postUpdate(proxy_name, "UNDEF")
 
 def scriptUnloaded():
     """
     Cancels all the timers when the script is unloaded to avoid timers hanging
     around.
     """
-    if not presence_timers:
-        for key in presence_timers.keys():
-            if not presence_timers[key].hasTerminated()
-                presence_timers.cancel()
+    if presence_timers:
+        for key in [ k for k in presence_timers.keys()
+                     if not presence_timers[k].hasTerminated() ]:
+            presence_timers[key].cancel()
