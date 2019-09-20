@@ -15,13 +15,8 @@
 #     eventbus to this Group. Change eb_out_gr below with the name of that
 #     Group.
 #
-#   - Create a Broker Thing to publish commands. Configure the retained flag to
-#     off on this connection. Commands are ephemeral and should not be retained.
-#     Copy this Thing ID to eb_cmd_br below.
-#
-#   - Create a Broker Thing to publish updates. Configure the retained flag to
-#     on on this connection. Updates represent Item states and should therefore
-#     be retained. Copy this Thing ID to eb_up_br below.
+#   - Create a Broker Thing to publish updates and commands. Set eb_br below to
+#     the Thing ID for this Broker Thing.
 #
 #   - Set the eb_name variable below with a unique name.
 
@@ -32,16 +27,8 @@ eb_out_gr = "PubItems"
 # Name of this instance of OH, used as the root of the MQTT topics.
 eb_name   = "cabin"
 
-# The Thing ID of the Broker Thing to use for publishing commands; I recommend
-# setting the retained flag to off for this connection.
-eb_cmd_br = "mqtt:broker:mosquitto"
-
-# The Thing ID of the Broker Thing to use for publishing updates; I recommend
-# setting the retained flag to on for this connection.
-#
-# As of now the retained flag appears not to work. An issue has been filed:
-# https://github.com/openhab/openhab2-addons/issues/6100
-eb_up_br = "mqtt:broker:mosquitto-retained"
+# The Thing ID of the Broker Thing to use for publishing commands and updates.
+eb_br = "mqtt:broker:mosquitto"
 
 #-----------------------------
 ### Subscriber parameters
