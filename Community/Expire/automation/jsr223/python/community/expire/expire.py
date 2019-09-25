@@ -84,7 +84,8 @@ def get_config(item_name):
         "state=".
         - [<new state>]: an optional state that the Item get's updated (state)
         or commanded (command) to when the time expires. Use '' to represent the
-        empty String (differs from Expire1 Binding)
+        empty String (differs from Expire1 Binding). Use 'UNDEF' or 'NULL' to
+        represent the String rather than the state.
 
     Examples (taken from the Expire1 Binding docs):
         - expire="1h,command=STOP" (send the STOP command after one hour)
@@ -95,7 +96,11 @@ def get_config(item_name):
                                     value)
 
     Unique to this implementation:
-        - expire="5s,state=''"     (update a String Item to the empty String)
+        - expire="5s,state=''"      (update a String Item to the empty String)
+        - expire="5s,state=UNDEF"   (for String Items, expires to UNDEF, not the
+                                     string, "UNDEF")
+        - expire="5s,state='UNDEF'" (for String Items, expires to the String
+                                     "UNDEF")
     """
     cfg = get_value(item_name, "expire")
     time = cfg
