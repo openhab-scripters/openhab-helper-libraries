@@ -72,7 +72,8 @@ def get_config(item_name):
         send to this Item when it expires. If not supplied it defaults to
         "state=".
         - [<new state>]: an optional state that the Item get's updated (state)
-        or commanded (command) to when the time expires.
+        or commanded (command) to when the time expires. Use '' to represent the
+        empty String (differs from Expire1 Binding)
 
     Examples (taken from the Expire1 Binding docs):
         - expire="1h,command=STOP" (send the STOP command after one hour)
@@ -81,6 +82,9 @@ def get_config(item_name):
                                     and 12 seconds)
         - expire="2h"              (update state to UNDEF 2 hours after the last
                                     value)
+
+    Unique to this implementation:
+        - expire="5s,state=''"     (update a String Item to the empty String)
     """
     cfg = get_value(item_name, "expire")
     time = cfg
@@ -99,9 +103,16 @@ def get_config(item_name):
             event = state.split('=')[0]
             state = state.split('=')[1]
 
+        # Check for and remove single quotes from state
+        if state.startswith("'") and state.endswith("'"):
+            state = state.replace("'", "")
+
     td = parse_time(time)
 
     return { "time":td, "type":event, "state":state }
+
+# TODO listen for Item added/removed events and regenerate the Rule and its
+# triggers.
 
 @log_traceback
 def trigger_generator():
@@ -123,23 +134,23 @@ def trigger_generator():
     return generate_triggers
 
 @log_traceback
-def expired(item_name, exp_type, exp_state, log):
+def expired(item, exp_type, exp_state, log):
     """
     Called when an Item expires. postUpdate or sendCommand to the configured
     state.
 
     Arguments:
-        - item_name: Name of the Item that expired.
+        - item: The Item that expired.
         - cfg: Contians a dict representation of the expire config returned by
         get_config.
         - log: Logger from the expire Rule.
     """
-    log.debug("{} expired, {} to {}"
-             .format(item_name, exp_type, exp_state))
+    log.debug("{} expired, {} to {}".format(item.name, exp_type, exp_state))
+
     if exp_type == "state":
-        events.postUpdate(item_name, exp_state)
+        events.postUpdate(item, exp_state)
     else:
-        events.sendCommand(item_name, exp_state)
+        events.sendCommand(item, exp_state)
 
 @rule("Expire",
       description=("Simulates the Expire1 binding, updating or commanding an "
@@ -164,10 +175,10 @@ def expire(event):
     cfg = get_config(event.itemName)
 
     # Cancel the timer when the Item enters the cfg state.
-    # Use unicode because ther eis no degree symbol in ASCII so we can handle
+    # Use unicode because there is no degree symbol in ASCII so we can handle
     # Number:Temperature Items.
     if unicode(items[event.itemName]) == cfg["state"]:
-        if (timers[event.itemName] is not None
+        if (event.itemName in timers
                 and not timers[event.itemName].hasTerminated()):
             timers[event.itemName].cancel()
             del timers[event.itemName]
@@ -181,7 +192,7 @@ def expire(event):
             timers[event.itemName].reschedule(t)
         else:
             timers[event.itemName] = ScriptExecution.createTimer(t,
-                                     lambda: expired(event.itemName,
+                                     lambda: expired(ir.getItem(event.itemName),
                                                      cfg["type"],
                                                      cfg["state"],
                                                      expire.log))
