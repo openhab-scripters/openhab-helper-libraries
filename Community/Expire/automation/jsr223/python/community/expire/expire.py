@@ -1,7 +1,7 @@
 """
 Author: Rich Koshak
 
-Implements a drop in replacement for the Expire1 binding using Rules.
+Implements a near drop in replacement for the Expire1 binding using Rules.
 
 Requirements:
     - Uninstall the Expire1 binding before use
@@ -9,8 +9,16 @@ Requirements:
 Limitations:
     - The expire config metadata string must include the default units when
     using with Items that are defined with Units of Measure.
+
     - Adding new Items or changing Items with an expire metadata config requires
     a reload of this script to regenerate the rule triggers.
+
+Differences from the binding:
+    - You can expire a String Item to an empty string: expire="5s,state=''"
+
+    - In the binding, expire="5s,state=UNDEF" will set a StringItem to the
+    String "UNDEF". This script will set the String Item to UnDefType.UNDEF.
+    To set a String Item to the String "UNDEF", use expire="5s,state='UNDEF'"
 
 License
 =======
@@ -24,10 +32,13 @@ from datetime import timedelta
 from core.actions import ScriptExecution
 from org.joda.time import DateTime
 from core.log import logging, LOG_PREFIX, log_traceback
+from org.openhab.core.library.items import StringItem
 
 init_logger = logging.getLogger("{}.Expire Init".format(LOG_PREFIX))
 regex = re.compile(r'^((?P<days>[\.\d]+?)d)? *((?P<hours>[\.\d]+?)h)? *((?P<minutes>[\.\d]+?)m)? *((?P<seconds>[\.\d]+?)s)?$')
 timers = { }
+special = { "UNDEF": UnDefType.UNDEF,
+            "NULL":  UnDefType.NULL }
 
 @log_traceback
 def parse_time(time_str):
@@ -89,7 +100,7 @@ def get_config(item_name):
     cfg = get_value(item_name, "expire")
     time = cfg
     event = "state"
-    state = "UNDEF"
+    state = UNDEF
 
     # If it contains a ',' there is a state supplied, split and assign the left
     # to time and right to state.
@@ -103,8 +114,12 @@ def get_config(item_name):
             event = state.split('=')[0]
             state = state.split('=')[1]
 
-        # Check for and remove single quotes from state
-        if state.startswith("'") and state.endswith("'"):
+        # Check for special types.
+        if state in special:
+            state = special[state]
+
+        # Check for and remove single quotes from state.
+        elif state.startswith("'") and state.endswith("'"):
             state = state.replace("'", "")
 
     td = parse_time(time)
@@ -146,6 +161,11 @@ def expired(item, exp_type, exp_state, log):
         - log: Logger from the expire Rule.
     """
     log.debug("{} expired, {} to {}".format(item.name, exp_type, exp_state))
+
+    # Force the state to a StringType for StringItems to allow us to set the
+    # Item to "UNDEF" and "NULL" as opposed to the UnDefTypes.
+    if item.type == "String" and isinstance(exp_state, basestring):
+        exp_state = StringType(exp_state)
 
     if exp_type == "state":
         events.postUpdate(item, exp_state)
