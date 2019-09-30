@@ -1,23 +1,30 @@
 """
 Purpose
 =======
+
 With AutoRemote you have full control of your phone, from wherever you are by sending push notifications to your phone and reacting to them in Tasker or AutoRemote standalone apps.
 This helper library aims to facilitate sending such AutoRemote notifications from custom openHAB scripts.
 
+
 Requires
 ========
+
 * - Setup an AutoRemote profile in Tasker to react to the message
 
-Check out the Autoremote Quickstart guide at (http://goo.gl/OhZsg)
+Further reading is available at the authors web site (https://joaoapps.com/autoremote/)
+
 
 Known Issues
 ============
 
+None
+
+
 Change Log
 ==========
+
 * 09/19/19: Added this description.
 """
-
 import os
 from configuration import autoremote_configuration
 
