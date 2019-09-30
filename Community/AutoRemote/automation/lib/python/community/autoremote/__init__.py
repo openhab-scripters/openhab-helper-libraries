@@ -11,7 +11,7 @@ Requires
 
 * - Setup an AutoRemote profile in Tasker to react to the message
 
-Further reading is available at the authors web site (https://joaoapps.com/autoremote/)
+Further reading is available at the author's web site (https://joaoapps.com/autoremote/).
 
 
 Known Issues
