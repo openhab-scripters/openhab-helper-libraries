@@ -8,7 +8,7 @@ Requires
 ========
 * - Setup an AutoRemote profile in Tasker to react to the message
 
-Check out the Autoremote Quickstart guide at (http://goo.gl/OhZsg)
+Further reading is available at the authors web site (https://joaoapps.com/autoremote/)
 
 Known Issues
 ============
