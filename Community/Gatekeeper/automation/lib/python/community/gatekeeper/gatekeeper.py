@@ -20,7 +20,7 @@ from org.joda.time import DateTime
 from Queue import Queue
 
 class Gatekeeper(object):
-    """Keeps a queue of commands and makes sure that the commands to not get 
+    """Keeps a queue of commands and makes sure that the commands to not get
     executed too quickly. Adding a command to the queue is non-blocking.
 
     Examples:
@@ -29,8 +29,8 @@ class Gatekeeper(object):
             gk = gatekeeper(logger)
             # Execute a command and wait 1 second before allowing the next.
             gk.add_command(1000, lambda: events.sendCommand("MyItem", "ON"))
-            # Adds a command that will wait unti the previous command has 
-            # expired and then will block for 1 1/2 second. 
+            # Adds a command that will wait unti the previous command has
+            # expired and then will block for 1 1/2 second.
             gk.add_command(1500, lambda: events.sendCommand("MyTTSItem", "Hello world")
 
     Functions:
@@ -43,16 +43,16 @@ class Gatekeeper(object):
         self.commands = Queue()
         self.timer = None
 
-    def __proc_command__(self):
+    def _proc_command(self):
         """
-        Called when it is time to execute another command. This function 
-        simply returns if the queue is empty. Otherwise it pops the next 
-        command, executes that command, and then sets a Timer to go off the 
-        given number of milliseconds and call _proc_command__ again to process 
+        Called when it is time to execute another command. This function
+        simply returns if the queue is empty. Otherwise it pops the next
+        command, executes that command, and then sets a Timer to go off the
+        given number of milliseconds and call _proc_command__ again to process
         the next command.
         """
         # No more commands
-        if self.commands.empty(): 
+        if self.commands.empty():
             self.timer = None
             return
 
@@ -71,17 +71,17 @@ class Gatekeeper(object):
 
         # Create/reschedule the Timer
         if not self.timer:
-            self.timer = ScriptExecution.createTimer(trigger_time, 
+            self.timer = ScriptExecution.createTimer(trigger_time,
                                                      self.__proc_command__)
         else:
             self.timer.reschedule(trigger_time)
 
     def add_command(self, pause, command):
         """
-        Adds a new command to the queue. If it has been long enough since the 
+        Adds a new command to the queue. If it has been long enough since the
         last command executed immediately execute this command. If not it waits
         until enough time has passed. The time required to execute command is
-        included in the amount of time to wait. For example, if the command 
+        included in the amount of time to wait. For example, if the command
         takes 250 msec and the pause is 1000 msec, the next command will be
         allowed to execute 750 msec after the command returns.
 
@@ -92,4 +92,4 @@ class Gatekeeper(object):
         """
         self.commands.put((pause, command))
         if self.timer is None or self.timer.hasTerminated():
-            self.__proc_command__()
+            self._proc_command()
