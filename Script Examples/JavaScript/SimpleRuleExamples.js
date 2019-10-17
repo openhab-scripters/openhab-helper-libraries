@@ -7,17 +7,19 @@
  */
 'use strict';
 
-var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF"); // most this is /etc/openhab2
-load(OPENHAB_CONF+'/automation/lib/javascript/core/rules.js');
+load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
 
-var me = "SimpleRuleExamples.js";
+var rules = require('rules');
+var triggers = require('triggers');
+var utils = require('utils');
+
 logInfo("################# SimpleRuleExamples.js ##################", TimerTrigger);
 
 //### Example 1: Default spelling, not simplified
-var xRule = new SimpleRule(){
+var xRule = new rules.SimpleRule(){
 	execute: function( module, input){
 		logInfo(" ################  xRule Line: "+__LINE__+"  #################");
-		logInfo(" xRule::execute "+__LINE__, " input "+ input, " module "+ module, " uuid "+ uuid.randomUUID());
+		logInfo(" xRule::execute "+__LINE__, " input "+ input, " module "+ module, " uuid "+ utils.uuid.randomUUID());
 		
 		for( var i in input){
 			var ai = input[i];
@@ -27,19 +29,19 @@ var xRule = new SimpleRule(){
 	}
 };
 xRule.setTriggers([
-		TimerTrigger("0/15 * * * * ?")
+		triggers.TimerTrigger("0/15 * * * * ?")
 ]);
 //Enable/Disable Rule:
-automationManager.addRule(xRule); 
+utils.automationManager.addRule(xRule); 
 //logInfo(" -- getUID "+xRule.getUID());
 //logInfo(" -- getUID "+automationManager.addRule(xRule).getUID());
 
 
 //### Example 2: More backward compatible spelling
-JSRule({
+rules.JSRule({
 	getEventTrigger: function(){
 		return [ 
-			new TimerTrigger("0/5 * * * * ?")//Enable/Disable Rule
+			new triggers.TimerTrigger("0/5 * * * * ?")//Enable/Disable Rule
 		]
 	},
 	execute: function( module, input){
@@ -50,9 +52,9 @@ JSRule({
 
 
 //### Example 3: Simplest spelling
-JSRule({
+rules.JSRule({
 	triggers: [
-		TimerTrigger("0/5 * * * * ?")//Enable/Disable Rule
+		triggers.TimerTrigger("0/5 * * * * ?")//Enable/Disable Rule
 	],
 	execute: function( module, input){
 		logInfo(" ################  zRule Line: "+__LINE__+"  #################");
@@ -60,7 +62,7 @@ JSRule({
 });
 
 //### Example 4: Most simple spelling live.
-JSRule({
+rules.JSRule({
 	name: "Example 4",
 	description: "Most simple spelling live",
 	triggers: [ //Enable/Disable Rule
@@ -95,8 +97,8 @@ JSRule({
 		var testItemSwitch = updateIfUninitialized('testItemSwitch', OFF); 
 		logInfo("testItemSwitch "+__LINE__, "testItemSwitch.state = " + testItemSwitch.state);
 		
-		sendCommand("testItemSwitch", ON);
-		postUpdate("testItemSwitch", OFF);
+		utils.sendCommand("testItemSwitch", ON);
+		utils.postUpdate("testItemSwitch", OFF);
 		
 		//Java 8 
 		logInfo(" -#### LocalDateTime.now().withMinute(0) "+__LINE__, LocalDateTime.now().withMinute(0));
@@ -105,7 +107,7 @@ JSRule({
 		
 		// Run Timer
 		var runme = function(){logInfo(" runme ", "Timer has been executed at "+DateTime.now());};
-		createTimer(now().plusSeconds(5), runme);
+		utils.createTimer(now().plusSeconds(5), runme);
 		
 		//Action Examples
 		//getAction("XMPP").static.sendXMPP("any@jabber.com", "automation XMPP :-)");

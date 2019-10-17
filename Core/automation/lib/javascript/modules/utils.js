@@ -7,9 +7,7 @@
  */
 'use strict';
 
-// START: Backward Compatibility Header
-load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
-// END: Backward Compatibility Header
+
 
 
 	//var QuartzScheduler = Java.type("org.quartz.core.QuartzScheduler");
@@ -23,8 +21,8 @@ load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javas
   //https://wiki.shibboleth.net/confluence/display/IDP30/ScriptedAttributeDefinition
   var logger 					= Java.type("org.slf4j.LoggerFactory").getLogger("jsr223.javascript");
   
-	var pe = require('PersistenceExtensions');
-
+//TODO: migrate to CommonJS
+load( mainPath + '/PersistenceExtensions.js');
 
   try {
 	context.RuleBuilder = Java.type("org.openhab.core.automation.util.RuleBuilder");
@@ -575,16 +573,8 @@ load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javas
 		if (v instanceof Function) { 
 			return true;
 		}
-		return false;
+		return false
 	};
 	
 	
 })(exports);
-
-// START: Backward Compatibility Footer
-if (typeof ___INIT_STATE___ === 'undefined') {
-    for (var k in exports) {
-		this[k] = exports[k];
-	}
-}
-// END: Backward Compatibility Footer

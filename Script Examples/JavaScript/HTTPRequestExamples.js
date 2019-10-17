@@ -7,12 +7,14 @@
  */
 'use strict';
 
-load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/rules.js');
+load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
 
-var me = "HTTPRequestExamples.js";
+var rules = require('rules');
+var utils = require('utils');
+
 logInfo("################# "+me+" ##################");
 
-JSRule({
+rules.JSRule({
 	name: me+" NativeHTTPRequestExamples",
 	description: "Native HTTPRequestExamples L:"+__LINE__,
 	triggers: [ 
@@ -35,7 +37,7 @@ JSRule({
 	}
 });
 
-JSRule({
+rules.JSRule({
 	name: me+" XMLHttpRequestJavaScript",
 	description: "XMLHttpRequest Native JavaScript L:"+__LINE__,
 	triggers: [ 
@@ -54,7 +56,7 @@ JSRule({
 	}
 });
 
-JSRule({
+rules.JSRule({
 	name: me+" HTTPRequestExamples",
 	description: "HTTPRequestExamples L:"+__LINE__,
 	triggers: [ 
@@ -67,18 +69,18 @@ JSRule({
 		var timeout = 5000;
 
 		// Library
-		var results = sendHttpGetRequest(url, timeout);
+		var results = utils.sendHttpGetRequest(url, timeout);
 		logInfo("results sendHttpGetRequest: ", results);
-		results = sendHttpPutRequest(url, timeout);
+		results = utils.sendHttpPutRequest(url, timeout);
 		logInfo("results sendHttpPutRequest: ", results);
-		results = sendHttpPostRequest(url, timeout);
+		results = utils.sendHttpPostRequest(url, timeout);
 		logInfo("results sendHttpPostRequest: ", results);
-		results = sendHttpDeleteRequest(url, timeout);
+		results = utils.sendHttpDeleteRequest(url, timeout);
 		logInfo("results sendHttpDeleteRequest: ", results);
 		
 		//  Library executeUrlWithContent( httpMethod, url, httpHeaders, content, contentType, timeout)
 		var header  = "application/x-www-form-urlencoded; charset=UTF-8";
-		var results = executeUrlWithContent("POST", url, null, "", header, timeout);
+		var results = utils.executeUrlWithContent("POST", url, null, "", header, timeout);
 		logInfo("results executeUrlWithContent: ", results);
 
 	}

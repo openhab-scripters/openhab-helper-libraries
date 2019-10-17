@@ -22,19 +22,17 @@ Switch    Switch_Item
 */
 'use strict';
 
-var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF"); // most this is /etc/openhab2
-load(OPENHAB_CONF+'/automation/lib/javascript/core/rules.js');
+load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
 
-var me = "ItemTest.js";
-logInfo("################# "+me+" ##################");
+var rules = require('rules');
+var triggers = require('triggers');
+var utils = require('utils');
 
-//var count=0;
-
-JSRule({
+rules.JSRule({
 	name: me+" L"+__LINE__,
 	description: "Set Items"+__LINE__,
 	triggers: [ 
-		TimerTrigger("0/5 * * * * ?")//, //alle 5 sec
+		triggers.TimerTrigger("0/5 * * * * ?")//, //alle 5 sec
 		//TimerTrigger("0/15 * * * * ?"), //alle 15 sec
 		//TimerTrigger("0 0/5 * * * ?"), //alle 5 Minuten
 		//TimerTrigger("53 0 8 * * ?") //8:00:53
@@ -66,9 +64,9 @@ JSRule({
         //## Call //ONLY postUpdate?!
         //var sl = new StringListType("017922398##0919162558");
         var sl = new StringListType("017922398,0919162558");
-        postUpdate("Call_Item", ["017922399","0919162559"] );
-        postUpdate("Call_Item", "017922398,0919162558" );
-        postUpdate("Call_Item", sl );
+        utils.postUpdate("Call_Item", ["017922399","0919162559"] );
+        utils.postUpdate("Call_Item", "017922398,0919162558" );
+        utils.postUpdate("Call_Item", sl );
 
         //################
         //## Color
@@ -76,14 +74,14 @@ JSRule({
 		var s = new PercentType(77);
         var v = new PercentType(99);
         var hsv = new HSBType(h,s,v);
-		sendCommand("Color_Item", hsv);
-		sendCommand("Color_Item", new PercentType(getRandom100()));
-		sendCommand("Color_Item", OFF);
-		sendCommand("Color_Item", new HSBType(getRandom360() + "," + getRandom100() + "," + getRandom100()));//as String
-		sendCommand("Color_Item", new PercentType(getRandom100()+""));//as String
-        sendCommand("Color_Item","ON");//as String
+		utils.sendCommand("Color_Item", hsv);
+		utils.sendCommand("Color_Item", new PercentType(getRandom100()));
+		utils.sendCommand("Color_Item", OFF);
+		utils.sendCommand("Color_Item", new HSBType(getRandom360() + "," + getRandom100() + "," + getRandom100()));//as String
+		utils.sendCommand("Color_Item", new PercentType(getRandom100()+""));//as String
+        utils.sendCommand("Color_Item","ON");//as String
         //Example for conversion to 8-bit representation
-        var Color_Item = itemRegistry.getItem("Color_Item");
+        var Color_Item = utils.getItem("Color_Item");
         var hsvs = new HSBType( Color_Item.state );
         logInfo("################ Color_Item.state:", Color_Item.state);
         var red   = Math.round(hsvs.red * 2.55);
@@ -93,16 +91,16 @@ JSRule({
     
         //################
         //## Contact
-     	postUpdate("Contact_Item", getRandom2str([OPEN,CLOSED]));
+        utils.postUpdate("Contact_Item", getRandom2str([OPEN,CLOSED]));
 
          //################
         //## DateTime 
         //Format: '2018-09-11T11:21:17.029+0200'
-        postUpdate("DateTime_Item", isoDateTimeString());
+        utils.postUpdate("DateTime_Item", isoDateTimeString());
 
         //################
         //## Dimmer
-        postUpdate("Dimmer_Item", getRandom100());
+        utils.postUpdate("Dimmer_Item", getRandom100());
 
         //################
         //## Group
@@ -114,27 +112,27 @@ JSRule({
 
         //################
         //## Location
-        postUpdate("Location_Item", new PointType("52.5200066,13.4049540"));
+        utils.postUpdate("Location_Item", new PointType("52.5200066,13.4049540"));
 
         //################
         //## Number
-        postUpdate("Number_Item", getRandom100());
+        utils.postUpdate("Number_Item", getRandom100());
 
         //################
         //## Player
-        sendCommand("Player_Item", getRandom4str([PREVIOUS,PAUSE,PLAY,NEXT]));
+        utils.sendCommand("Player_Item", getRandom4str([PREVIOUS,PAUSE,PLAY,NEXT]));
 
         //################
         //## Rollershutter
-        sendCommand("Rollershutter_Item", getRandom4str([UP,DOWN,STOP,getRandom100()]));
+        utils.sendCommand("Rollershutter_Item", getRandom4str([UP,DOWN,STOP,getRandom100()]));
 
         //################
         //## String
-        postUpdate("String_Item", getRandom2str(["str1","str2"]));
+        utils.postUpdate("String_Item", getRandom2str(["str1","str2"]));
 
         //################
         //## Switch
-        postUpdate("Switch_Item", getRandom2str([ON,OFF]));	
+        utils.postUpdate("Switch_Item", getRandom2str([ON,OFF]));	
 	}
 });
 
