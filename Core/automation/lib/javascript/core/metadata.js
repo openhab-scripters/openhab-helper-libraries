@@ -4,6 +4,11 @@ This library provides functions for manipulating Item Metadata.
 
 'use strict';
 
+// START: Backward Compatibility Header
+load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
+// END: Backward Compatibility Header
+
+
 (function(context) {
     'use strict';
 
@@ -242,4 +247,12 @@ This library provides functions for manipulating Item Metadata.
         }
     };
 
-})(this);
+})(exports);
+
+// START: Backward Compatibility Footer
+if (typeof ___INIT_STATE___ === 'undefined') {
+    for (var k in exports) {
+		this[k] = exports[k];
+	}
+}
+// END: Backward Compatibility Footer

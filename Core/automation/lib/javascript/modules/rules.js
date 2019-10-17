@@ -7,10 +7,6 @@
  */
 'use strict';
 
-// START: Backward Compatibility Header
-load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
-// END: Backward Compatibility Header
-
 scriptExtension.importPreset("RuleSupport"); //https://www.openhab.org/docs/configuration/jsr223.html#overview
 scriptExtension.importPreset("RuleSimple");
 scriptExtension.importPreset("RuleFactories");
@@ -19,6 +15,7 @@ scriptExtension.importPreset("default");
 var utils = require('utils');
 var triggers = require('triggers');
 var conditions = require('conditions');
+var logutil = require('logutil');
 
 //https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/api.html
 //var StSimpleRule = Java.type("org.openhab.core.automation.module.script.rulesupport.shared.simple.SimpleRule");
@@ -85,7 +82,7 @@ return RuleBuilder.create(ruleDto.uid)
 (function (context) {
 	'use strict';
 
-	var log = require('log').Logger("jsr223.javascript");
+	var log = logutil.createLogger("jsr223.javascript");
 
 	//FROM: https://community.openhab.org/t/port-jsr223-bundle-to-openhab-2/2633/171?u=lewie
 	//Search ruleUID = filter(lambda rule: rule.name == "Alert: TV turn off timer alert", rules.getAll())[0].UID
@@ -158,11 +155,3 @@ return RuleBuilder.create(ruleDto.uid)
 	}
 	
 }) (exports);
-
-// START: Backward Compatibility Footer
-if (typeof ___INIT_STATE___ === 'undefined') {
-    for (var k in exports) {
-		this[k] = exports[k];
-	}
-}
-// END: Backward Compatibility Footer

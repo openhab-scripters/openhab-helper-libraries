@@ -7,9 +7,7 @@
  */
 'use strict';
 
-// START: Backward Compatibility Header
-load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
-// END: Backward Compatibility Header
+
 
 
 	//var QuartzScheduler = Java.type("org.quartz.core.QuartzScheduler");
@@ -575,16 +573,8 @@ load( mainPath + '/PersistenceExtensions.js');
 		if (v instanceof Function) { 
 			return true;
 		}
-		return false;
+		return false
 	};
 	
 	
 })(exports);
-
-// START: Backward Compatibility Footer
-if (typeof ___INIT_STATE___ === 'undefined') {
-    for (var k in exports) {
-		this[k] = exports[k];
-	}
-}
-// END: Backward Compatibility Footer

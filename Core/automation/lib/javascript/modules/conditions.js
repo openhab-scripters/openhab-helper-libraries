@@ -7,11 +7,6 @@
  */
 'use strict';
 
-// START: Backward Compatibility Header
-load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
-// END: Backward Compatibility Header
-
-
 scriptExtension.importPreset("RuleSupport");
 
 // Get Triggers and Conditions module output
@@ -47,11 +42,3 @@ exports.GenericCompareCondition = function(itemName, state, operator, condName){
 }
 //compareCondition("itemName", OFF, "==", "condNameOfCompareCondition")
 exports.compareCondition = exports.GenericCompareCondition;
-
-// START: Backward Compatibility Footer
-if (typeof ___INIT_STATE___ === 'undefined') {
-    for (var k in exports) {
-		this[k] = exports[k];
-	}
-}
-// END: Backward Compatibility Footer

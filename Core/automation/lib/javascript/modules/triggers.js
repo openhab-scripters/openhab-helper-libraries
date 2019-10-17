@@ -7,10 +7,6 @@
  */
 //'use strict';
 
-// START: Backward Compatibility Header
-load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
-// END: Backward Compatibility Header
-
 scriptExtension.importPreset("RuleSupport");
 scriptExtension.importPreset("RuleFactories");
 
@@ -173,11 +169,3 @@ var getTrName = function(trn){
 }
 
 })();
-
-// START: Backward Compatibility Footer
-if (typeof ___INIT_STATE___ === 'undefined') {
-    for (var k in exports) {
-		this[k] = exports[k];
-	}
-}
-// END: Backward Compatibility Footer

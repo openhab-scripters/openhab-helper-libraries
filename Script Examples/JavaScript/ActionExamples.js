@@ -7,13 +7,17 @@
  */
 'use strict';
 
-var OPENHAB_CONF = Java.type("java.lang.System").getenv("OPENHAB_CONF"); // most this is /etc/openhab2
-load(OPENHAB_CONF+'/automation/lib/javascript/core/rules.js');
+load(Java.type("java.lang.System").getenv("OPENHAB_CONF")+'/automation/lib/javascript/core/init.js');
 
-var me = "ActionExamples.js";
+var rules = require('rules');
+var triggers = require('triggers');
+var actions = require('actions');
+var utils = require('utils');
+
+
 logInfo("################# "+me+" ##################");
 
-var myRule = JSRule({
+var myRule = rules.JSRule({
 	name: me+" Busevents",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -52,7 +56,7 @@ var myRule = JSRule({
 		
 		// Run Timer
 		var runme = function(){logWarn(" runme ", "runme");};
-		createTimer(now().plusSeconds(2), runme);
+		utils.createTimer(now().plusSeconds(2), runme);
 		
 		//getAction("XMPP").static.sendXMPP("helmutl@lewi-cleantech.net", "automation XMPP :-)");
 		//sendXMPP("helmutl@lewi-cleantech.net", "automation XMPP :-)");
@@ -98,7 +102,7 @@ var myRule = JSRule({
  * storeStates(Item...)
  * restoreStates(Map<Item, State>)
  */
-JSRule({
+rules.JSRule({
 	name: me+" Busevents",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -107,7 +111,7 @@ JSRule({
 	execute: function( module, input){
 		logInfo("################ "+me+" Line: "+__LINE__+"  #################");
 		
-		var it = getItem("errors_in_logs");
+		var it = utils.getItem("errors_in_logs");
 		
 		//sendCommand(it, String);
 		//sendCommand(it, Number);
@@ -139,7 +143,7 @@ JSRule({
 /**
  * getActions to see which actions are available
  */
-JSRule({
+rules.JSRule({
 	name: me+" getActions",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -147,8 +151,8 @@ JSRule({
 	],
 	execute: function( module, input){
 		logInfo("################ "+me+" Line: "+__LINE__+"  #################");	
-		var a = getActions();
-		var aList = getActionList();
+		var a = utils.getActions();
+		var aList = utils.getActionList();
 		print("getActionList: 	" + JSON.stringify( aList ));
 		
 		for(var i=0; i<aList.length; i++){
@@ -168,7 +172,7 @@ JSRule({
  * PersistenceExtensions
  * PersistenceExtensions are default imported by helper.js see: 'jslib/PersistenceExtensions.js'
  */
-JSRule({
+rules.JSRule({
 	name: me+" PersistenceExtensions",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -225,7 +229,7 @@ JSRule({
  * sendHttpDeleteRequest(String url, int timeout)
  */
 var HTTP = Java.type('org.eclipse.smarthome.model.script.actions.HTTP');
-JSRule({
+rules.JSRule({
 	name: me+" HTTP",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -233,7 +237,7 @@ JSRule({
 	],
 	execute: function( module, input){
 		logInfo("################ "+me+" Line: "+__LINE__+"  #################");	
-		print("HTTP sendHttpGetRequest: 	" + HTTP.sendHttpGetRequest("http://www.heise.de"));
+		print("HTTP sendHttpGetRequest: 	" + actions.HTTP.sendHttpGetRequest("http://www.heise.de"));
 	}
 });
 
@@ -242,7 +246,7 @@ JSRule({
  * boolean checkVitality(String host, int port, int timeout)
  */
 var Ping = Java.type('org.eclipse.smarthome.model.script.actions.Ping');
-JSRule({
+rules.JSRule({
 	name: me+" Ping",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -250,14 +254,14 @@ JSRule({
 	],
 	execute: function( module, input){
 		logInfo("################ "+me+" Line: "+__LINE__+"  #################");	
-		print("Ping localhost: 	" + Ping.checkVitality("localhost", 22, 500));
+		print("Ping localhost: 	" + actions.Ping.checkVitality("localhost", 22, 500));
 	}
 });
 
 /**
  * Exec on bash
  */
-JSRule({
+rules.JSRule({
 	name: me+" Exec",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -265,9 +269,9 @@ JSRule({
 	],
 	execute: function( module, input){
 		logInfo("################ "+me+" Line: "+__LINE__+"  #################");
-		var antwort = executeCommandLineAndWaitResponse("bash /data/findErrors.sh", 10000);
+		var antwort = utils.executeCommandLineAndWaitResponse("bash /data/findErrors.sh", 10000);
 		logInfo( me, "meldet "+ antwort +" ");
-		antwort = executeCommandLine("bash /data/findErrors.sh");
+		antwort = utils.executeCommandLine("bash /data/findErrors.sh");
 		logInfo( me, "meldet "+ antwort +" ");
 	}
 });
@@ -285,7 +289,7 @@ JSRule({
  * decreaseMasterVolume(float volume)
  */
 var Audio = Java.type('org.eclipse.smarthome.model.script.actions.Audio');
-JSRule({
+rules.JSRule({
 	name: me+" Audio",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -307,7 +311,7 @@ JSRule({
  * interpret(Object text, String voice, String sink)
  */
 var Voice = Java.type('org.eclipse.smarthome.model.script.actions.Voice');
-JSRule({
+rules.JSRule({
 	name: me+" Voice",
 	description: "TEST L:"+__LINE__,
 	triggers: [ 
@@ -341,7 +345,7 @@ JSRule({
 
 
 
-JSRule({
+rules.JSRule({
 	name: "Light_UG_Arbeitsraum Mode",
 	description: "",
 	triggers: [ 
@@ -349,12 +353,12 @@ JSRule({
 		//IS WORKING: ChangedEventTrigger("testItemSwitch", "ON", "OFF")
 		//IS WORKING: UpdatedEventTrigger("testItemSwitch"),
         //IS WORKING: CommandEventTrigger("testItemSwitch")
-        CommandEventTrigger("Light_UG_Arbeitsraum") 
+        triggers.CommandEventTrigger("Light_UG_Arbeitsraum") 
 	],
 	execute: function( module, input){
 
         logInfo("Light_UG_Arbeitsraum", "Light_UG_Arbeitsraum Switched");
-        var receivedCommand = getTriggeredData(input).receivedCommand;
+        var receivedCommand = utils.getTriggeredData(input).receivedCommand;
         logInfo("Light_UG_Arbeitsraum", receivedCommand);
         /*
 		var Box_Kitchen_Mode = getItem("Box_Kitchen_Mode");
