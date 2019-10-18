@@ -11,7 +11,9 @@
 	var automationPath 			= OPENHAB_CONF+'/automation/';
 	var mainPath 				= automationPath + 'lib/javascript/core/';
 	//https://wiki.shibboleth.net/confluence/display/IDP30/ScriptedAttributeDefinition
-	var logger 					= Java.type("org.slf4j.LoggerFactory").getLogger("jsr223.javascript");
+
+	load(__DIR__+'/log.js');
+	var logger 					= Logger(null);
 	
 	try {
 		var RuleBuilder = Java.type("org.openhab.core.automation.util.RuleBuilder");
@@ -87,20 +89,20 @@
     
 	context.uuid = uuid;
 	
-	context.logInfo = function(type , value) {
-		logger.info(args(arguments));
+	context.logInfo = function (type , value) {
+		logger.info(Error(args(arguments)));
 	};
-	context.logWarn = function(type , value) {
-		logger.warn(args(arguments));
+	context.logWarn = function (type , value) {
+		logger.warn(Error(args(arguments)));
 	};
-	context.logDebug = function(type , value) {
-		logger.debug(args(arguments));
+	context.logDebug = function (type , value) {
+		logger.debug(Error(args(arguments)));
 	};
-	context.logError = function(type , value) {
-		logger.error(args(arguments));
+	context.logError = function (type , value) {
+		logger.error(Error(args(arguments)));
 	};
-	context.logTrace = function(type , value) {
-		logger.trace(args(arguments));
+	context.logTrace = function (type , value) {
+		logger.trace(Error(args(arguments)));
 	};
 	
 	
@@ -110,8 +112,8 @@
 	context.console.debug = context.logDebug;
 	context.console.error = context.logError;
 	
-	context.console.log = function(value) {
-		logger.info("console.log", value);
+	context.console.log = function (value) {
+		logger.info(Error("console.log"), value);
 	};
 	
 	context.isUndefined = function(item) {
