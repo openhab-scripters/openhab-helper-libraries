@@ -24,6 +24,7 @@
             name = name.slice(-3) == ".js" ? name.slice(0,-3) : null;
         }
         var _logger  = Java.type("org.slf4j.LoggerFactory").getLogger(name === null ? "jsr223.javascript" : "jsr223.javascript." + name.toString().toLowerCase());        
+        var _messageFormatter = Java.type("org.slf4j.helpers.MessageFormatter");
 
         try {
             // Set default config for config params not provided.
@@ -44,11 +45,11 @@
 
                 error: { value: function error (msg) {
                     try {
-                        if (_logger.isErrorEnabled()) {                      
-                            eval("_logger.error" + this._loggerArgs(this._getLogMessage(msg), arguments.length));                        
+                        if (_logger.isErrorEnabled()) {                                                  
+                            _logger.error(this._getLogMessage(msg), [].slice.call(arguments).slice(1));
                         }
                         if (this._notificationLevel >= context.NOTIFY_ERROR) {
-                            this._sendNotification(this._getLogMessage(msg, this._config.ERROR.prefix, "ERROR"), "fire", "ERROR");
+                            this._sendNotification(_messageFormatter.arrayFormat(this._getLogMessage(msg, this._config.ERROR.prefix, "ERROR"), [].slice.call(arguments).slice(1)).getMessage(), "fire", "ERROR");
                         }
                     } catch (err) {
                         _logger.error(this._getLogMessage(err));
@@ -58,10 +59,10 @@
                 warn: { value: function warn (msg) {
                     try {
                         if (_logger.isWarnEnabled()) {                      
-                            eval("_logger.warn" + this._loggerArgs(this._getLogMessage(msg), arguments.length));                        
+                            _logger.warn(this._getLogMessage(msg), [].slice.call(arguments).slice(1));
                         }
                         if (this._notificationLevel >= context.NOTIFY_WARN) {
-                            this._sendNotification(this._getLogMessage(msg, this._config.WARN.prefix, "WARN"), "error", "WARN");                            
+                            this._sendNotification(_messageFormatter.arrayFormat(this._getLogMessage(msg, this._config.WARN.prefix, "WARN"), [].slice.call(arguments).slice(1)).getMessage(), "error", "WARN");
                         }
                     } catch (err) {
                         _logger.error(this._getLogMessage(err));
@@ -71,10 +72,10 @@
                 info: { value: function info (msg) {
                     try {
                         if (_logger.isInfoEnabled()) {                      
-                            eval("_logger.info" + this._loggerArgs(this._getLogMessage(msg), arguments.length));                        
+                            _logger.info(this._getLogMessage(msg), [].slice.call(arguments).slice(1));
                         }
                         if (this._notificationLevel >= context.NOTIFY_INFO) {
-                            this._sendNotification(this._getLogMessage(msg, this._config.INFO.prefix, "INFO"), "lightbulb", "INFO");                            
+                            this._sendNotification(_messageFormatter.arrayFormat(this._getLogMessage(msg, this._config.INFO.prefix, "INFO"), [].slice.call(arguments).slice(1)).getMessage(), "lightbulb", "INFO");
                         }
                     } catch (err) {
                         _logger.error(this._getLogMessage(err));
@@ -84,10 +85,10 @@
                 debug: { value: function debug (msg) {
                     try {
                         if (_logger.isDebugEnabled()) {                      
-                            eval("_logger.debug" + this._loggerArgs(this._getLogMessage(msg), arguments.length));                        
+                            _logger.debug(this._getLogMessage(msg), [].slice.call(arguments).slice(1));
                         }
                         if (this._notificationLevel >= context.NOTIFY_DEBUG) {
-                            this._sendNotification(this._getLogMessage(msg, this._config.DEBUG.prefix, "DEBUG"), "text", "DEBUG");                            
+                            this._sendNotification(_messageFormatter.arrayFormat(this._getLogMessage(msg, this._config.DEBUG.prefix, "DEBUG"), [].slice.call(arguments).slice(1)).getMessage(), "text", "DEBUG");
                         }
                     } catch (err) {
                         _logger.error(this._getLogMessage(err));
@@ -96,23 +97,29 @@
 
                 trace: { value: function trace (msg) {
                     try {                        
-                        if (_logger.isTraceEnabled()) {                      
-                            eval("_logger.trace" + this._loggerArgs(this._getLogMessage(msg), arguments.length));                        
+                        if (_logger.isTraceEnabled()) {     
+                            _logger.trace(this._getLogMessage(msg), [].slice.call(arguments).slice(1));                 
                         }
                     } catch (err) {                        
                         _logger.error(this._getLogMessage(err));                        
                     }
                 }},
-
-                _getCaller: { value: function _getCaller (stack) {
-                    try {                                                              
-                        return stack.split('\n\tat ')[1].split(' ')[0];
-                    } catch (err) {
-                        return null;
-                    }
-                }},
-
+                
+                _getCallerDetails: { value: function _getCallerDetails (msg) {
+                    var matches = msg.stack.split('\n\tat ')[3].match(/(.+?) \((.+):(\d+?)\)/);
+                    msg.caller = matches[1];
+                    msg.fileName = matches[2]
+                    msg.lineNumber = matches[3]   
+                    return msg;
+                }},       
+                
                 _getLogMessage: { value: function _getLogMessage (msg, prefix, levelString) {                                        
+                    if ((typeof msg) !== "object") {
+                        msg = Error(msg);
+                        msg = this._getCallerDetails(msg);
+                    } else {
+                        msg.caller = msg.stack.split('\n\tat ')[1].split(' (')[0]
+                    }
                     msg = this._legacyLoggerCorrection(msg);
 
                     if (prefix === undefined) prefix = "log";                                                            
@@ -125,44 +132,46 @@
                     var name = "";
                     if (prefix != "log") {
                         level = "[" + levelString + "] ";
-                        name = this._name === null ? "" : this._name + ": ";
+                        name = this._name === null ? "" : this._name;
                     }
 
                     if (prefix == "level") {
-                        return (level + msg.message);
+                        return (level + msg);
                     }
 
-                    var caller = this._getCaller(msg.stack);
                     var callerText;
-                    if (caller === null) {
-                        callerText = "";
-                    } else if (caller.substr(0,1) == "<") {
-                        callerText = ", in " + caller;
+                    if (msg.caller.substr(0,1) == "<") {
+                        callerText = ", in " + msg.caller;
                     } else {
-                        callerText = ", function " + caller;
+                        callerText = ", function " + msg.caller;
                     }
+                    
                     var message = msg.message == "" ? "" : "] " + msg.message;                    
 
                     if (prefix == "short") {
-                        return (level + "[" + name + msg.fileName.split('/').pop() + ":" + msg.lineNumber + callerText + message);    
+                        return (level + "[" + (name != "" ? name + ", " : "") + msg.fileName.split('/').pop() + ":" + msg.lineNumber + callerText + message);    
                     }
-
-                    return (level + "[" + name + "source " + msg.fileName + ", line " + msg.lineNumber + callerText + message);
+                    return (level + "[" + (name != "" ? name + ": " : "") + "source " + msg.fileName + ", line " + msg.lineNumber + callerText + message);
                 }},
                 
                 _legacyLoggerCorrection: { value: function _legacyLoggerCorrection (msg) {
                     if (msg.fileName.search(/automation\/lib\/javascript\/core\/utils\.js$/) !== -1) {
-                        switch (this._getCaller(msg.stack)) {
+                        switch (msg.caller) {
                             case "logError":
                             case "logWarn":
                             case "logInfo":
                             case "logDebug":
-                            case "logTrace":  
-                            case "log":                              
-                                msg.stack = msg.stack.split('\n\tat ').slice(1).join('\n\tat ');
-                                msg.fileName = msg.stack.split('\n\tat ')[1].match(/.*? \((.*):/)[1];
-                                msg.lineNumber = msg.stack.split('\n\tat ')[1].match(/.*:(.*?)\)/)[1];                                
-                        }
+                            case "logTrace":
+                            case "error":
+                            case "warn":
+                            case "info":
+                            case "debug":
+                            case "log":
+                                var stackArray = msg.stack.split('\n\tat ');
+                                stackArray.splice(3,1);
+                                msg.stack = stackArray.join('\n\tat ');
+                                msg = this._getCallerDetails(msg);
+                            }
                     }
                     return msg;
                 }},
@@ -179,15 +188,6 @@
                         NotificationAction.sendBroadcastNotification(message, icon, levelString);
                         this.trace(Error("Broadcast notification sent. Message: \"" + message + "\""));
                     }                    
-                }},
-
-                _loggerArgs: { value: function _loggerArgs (msg, length) {                    
-                    var str = "(\"" + msg.replace(/\n/g, '\\n') + "\"";
-                    for (var i = 1; i < length; i++) {
-                        str = str+",arguments["+i+"]";
-                    }    
-                    str = str+");"                                              
-                    return str;
                 }}
 
             })

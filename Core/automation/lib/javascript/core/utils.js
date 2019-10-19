@@ -14,6 +14,7 @@
 
 	load(__DIR__+'/log.js');
 	var logger 					= Logger(null);
+	var loggerConsole			= Logger("console");
 	
 	try {
 		var RuleBuilder = Java.type("org.openhab.core.automation.util.RuleBuilder");
@@ -90,30 +91,38 @@
 	context.uuid = uuid;
 	
 	context.logInfo = function (type , value) {
-		logger.info(Error(args(arguments)));
+		logger.info(args(arguments));
 	};
 	context.logWarn = function (type , value) {
-		logger.warn(Error(args(arguments)));
+		logger.warn(args(arguments));
 	};
 	context.logDebug = function (type , value) {
-		logger.debug(Error(args(arguments)));
+		logger.debug(args(arguments));
 	};
 	context.logError = function (type , value) {
-		logger.error(Error(args(arguments)));
+		logger.error(args(arguments));
 	};
 	context.logTrace = function (type , value) {
-		logger.trace(Error(args(arguments)));
+		logger.trace(args(arguments));
 	};
 	
 	
 	context.console  = {};
-	context.console.info = context.logInfo;
-	context.console.warn = context.logWarn;
-	context.console.debug = context.logDebug;
-	context.console.error = context.logError;
+	context.console.info = function (type , value) {
+		loggerConsole.info(args(arguments));
+	};
+	context.console.warn = function (type , value) {
+		loggerConsole.warn(args(arguments));
+	};
+	context.console.debug = function (type , value) {
+		loggerConsole.debug(args(arguments));
+	};
+	context.console.error = function (type , value) {
+		loggerConsole.error(args(arguments));
+	};
 	
 	context.console.log = function (value) {
-		logger.info(Error("console.log"), value);
+		loggerConsole.info(value.toString());
 	};
 	
 	context.isUndefined = function(item) {
