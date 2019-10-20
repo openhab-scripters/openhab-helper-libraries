@@ -152,6 +152,20 @@ Use an Addon/Bundle Action
             from core.actions import Telegram
             Telegram.sendTelegram("MyBot", "Test")
 
+        `Pushover <https://www.openhab.org/addons/actions/pushover/#pushover-actions>`_
+
+        .. code-block::
+
+            from core.actions import Pushover
+            Pushover.sendPushoverMessage(Pushover.pushoverBuilder("Test"))
+
+        `Pushbullet <https://www.openhab.org/addons/bindings/pushbullet/#pushbullet-binding>`_
+
+        .. code-block::
+
+            from core.actions import PushbulletAPIConnector
+            PushbulletAPIConnector.sendPushbulletNote("someone@example.com", "openHAB", "Test")
+
         `Mail <https://www.openhab.org/addons/actions/mail/#mail-actions>`_
 
         .. code-block::
