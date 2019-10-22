@@ -164,7 +164,7 @@ Function
     More information on logging can be found on the :doc:`../Guides/Logging` page.
 
     Snippets of code can be found in :ref:`Guides/But How Do I:But How Do I...?`.
-    Examples of rule functions with side-by-side comparison with DSL rules can be found in the :ref:`Examples`.
+    Examples of rule functions with side-by-side comparison with DSL rules can be found in the :ref:`Examples/Examples:Examples`.
 
     .. tabs::
 
