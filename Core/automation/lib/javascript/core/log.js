@@ -114,11 +114,11 @@
                 }},       
                 
                 _getLogMessage: { value: function _getLogMessage (msg, prefix, levelString) {                                        
-                    if ((typeof msg) !== "object") {
-                        msg = Error(msg);
-                        msg = this._getCallerDetails(msg);
-                    } else {
+                    if (msg instanceof Error) {
                         msg.caller = msg.stack.split('\n\tat ')[1].split(' (')[0]
+                    } else {
+                        msg = Error(msg);
+                        msg = this._getCallerDetails(msg);                    
                     }
                     msg = this._legacyLoggerCorrection(msg);
 
