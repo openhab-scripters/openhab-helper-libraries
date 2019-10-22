@@ -434,30 +434,30 @@ Get the members or all members of a Group
 
         .. code-block:: JavaScript
 
-            # just direct members, which could include groups
+            // just direct members, which could include groups
             ir.getItem("gTest").members
 
-            # iteratively, all child Items and the child Items of all child groups
+            // iteratively, all child Items and the child Items of all child groups
             ir.getItem("gTest").allMembers
 
     .. group-tab:: Groovy
 
         .. code-block:: Groovy
 
-            # just direct members, which could include groups
+            // just direct members, which could include groups
             ir.getItem("gTest").members
 
-            # iteratively, all child Items and the child Items of all child groups
+            // iteratively, all child Items and the child Items of all child groups
             ir.getItem("gTest").allMembers
 
     .. group-tab:: Rules DSL
 
         .. code-block:: Xtend
 
-            # just direct members, which could include groups
+            // just direct members, which could include groups
             gTest.members
 
-            # iteratively, all child Items and the child Items of all child groups
+            // iteratively, all child Items and the child Items of all child groups
             gTest.allMembers
 
 

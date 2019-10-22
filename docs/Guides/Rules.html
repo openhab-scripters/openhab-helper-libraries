@@ -399,6 +399,8 @@ It must be able to accept one positional argument, which will always be <code cl
 The rule UID is useful when enabling/disabling rules, <code class="docutils literal notranslate"><span class="pre">my_rule_function.UID</span></code>.
 A logger is also provided for each rule, <code class="docutils literal notranslate"><span class="pre">my_rule_function.log.info(&quot;Log</span> <span class="pre">message&quot;)</span></code>, and it will use the logger <code class="docutils literal notranslate"><span class="pre">&lt;core.logging.LOG_PREFIX&gt;.Rule_Name</span></code>.
 More information on logging can be found on the <a class="reference internal" href="Logging.html"><span class="doc">Logging</span></a> page.</p>
+<p>Snippets of code can be found in <a class="reference internal" href="But How Do I.html#but-how-do-i"><span class="std std-ref">But How Do I…?</span></a>.
+Examples of rule functions with side-by-side comparison with DSL rules can be found in the <a class="reference internal" href="../Examples/Examples.html#examples"><span class="std std-ref">Examples</span></a>.</p>
 <div class="sphinx-tabs docutils container">
 <div class="ui top attached tabular menu sphinx-menu docutils container">
 <div class="active item sphinx-data-tab-UHl0aG9u docutils container">
@@ -485,15 +487,10 @@ As we get closer to the raw API, you can appeciate the amount of complexity that
 
 <span class="nd">@rule</span><span class="p">(</span><span class="s2">&quot;Jython Hello World (CronTrigger extension with rule decorator)&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;This is an example rule using a CronTrigger extension and rule decorator&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Example rule tag&quot;</span><span class="p">])</span>
 <span class="k">class</span> <span class="nc">ExampleExtensionRule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="c1">#def __init__(self):</span>
-    <span class="c1">#    self.triggers = [StartupTrigger().trigger,</span>
-    <span class="c1">#                     CronTrigger(&quot;0/10 * * * * ?&quot;).trigger,</span>
-    <span class="c1">#                     ItemStateUpdateTrigger(&quot;Test_Switch_1&quot;).trigger]</span>
-
-    <span class="k">def</span> <span class="nf">getEventTriggers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">StartupTrigger</span><span class="p">()</span><span class="o">.</span><span class="n">trigger</span><span class="p">,</span>
-                <span class="n">CronTrigger</span><span class="p">(</span><span class="s2">&quot;0/10 * * * * ?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">,</span>
-                <span class="n">ItemStateUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;Test_Switch_1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span><span class="n">StartupTrigger</span><span class="p">()</span><span class="o">.</span><span class="n">trigger</span><span class="p">,</span>
+                         <span class="n">CronTrigger</span><span class="p">(</span><span class="s2">&quot;0/10 * * * * ?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">,</span>
+                         <span class="n">ItemStateUpdateTrigger</span><span class="p">(</span><span class="s2">&quot;Test_Switch_1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">trigger</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
