@@ -127,6 +127,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#groups">Groups</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#get-the-members-or-all-members-of-a-group">Get the members or all members of a Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intersection-of-two-groups">Intersection of two groups</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#iterate-over-members-of-a-group">Iterate over members of a Group</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#filter-members-of-a-group">Filter members of a group</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#get-the-first-item-in-a-filtered-list-of-group-members">Get the first Item in a filtered list of Group members</a></li>
@@ -875,30 +876,91 @@
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># just direct members, which could include groups</span>
+<span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span>
 
+<span class="c1"># iteratively, all child Items and the child Items of all child groups</span>
 <span class="n">ir</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">allMembers</span>
 </pre></div>
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
-<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">).</span><span class="nx">members</span>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="c1">// just direct members, which could include groups</span>
+<span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">).</span><span class="nx">members</span>
 
+<span class="c1">// iteratively, all child Items and the child Items of all child groups</span>
 <span class="nx">ir</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;gTest&quot;</span><span class="p">).</span><span class="nx">allMembers</span>
 </pre></div>
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
-<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;gTest&quot;</span><span class="o">).</span><span class="na">members</span>
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="c1">// just direct members, which could include groups</span>
+<span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;gTest&quot;</span><span class="o">).</span><span class="na">members</span>
 
+<span class="c1">// iteratively, all child Items and the child Items of all child groups</span>
 <span class="n">ir</span><span class="o">.</span><span class="na">getItem</span><span class="o">(</span><span class="s2">&quot;gTest&quot;</span><span class="o">).</span><span class="na">allMembers</span>
 </pre></div>
 </div>
 </div>
 <div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
-<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">gTest</span><span class="o">.</span><span class="n">members</span>
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="c1">// just direct members, which could include groups</span>
+<span class="n">gTest</span><span class="o">.</span><span class="n">members</span>
 
+<span class="c1">// iteratively, all child Items and the child Items of all child groups</span>
 <span class="n">gTest</span><span class="o">.</span><span class="n">allMembers</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="intersection-of-two-groups">
+<h3>Intersection of two groups<a class="headerlink" href="#intersection-of-two-groups" title="Permalink to this headline">¶</a></h3>
+<div class="sphinx-tabs docutils container">
+<div class="ui top attached tabular menu sphinx-menu docutils container">
+<div class="active item sphinx-data-tab-UHl0aG9u docutils container">
+<div class="docutils container">
+<p>Python</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="docutils container">
+<p>JavaScript</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="docutils container">
+<p>Groovy</p>
+</div>
+</div>
+<div class="item sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="docutils container">
+<p>Rules DSL</p>
+</div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UHl0aG9u active docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">list_of_items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gDS_FamilyRoom&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span> <span class="k">if</span> <span class="s2">&quot;gMotion_Sensor&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">groupNames</span><span class="p">]</span>
+
+<span class="c1"># or</span>
+<span class="n">list_of_items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gDS_FamilyRoom&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gMotion_Sensor&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span><span class="p">]</span>
+
+<span class="c1"># or</span>
+<span class="n">list_of_items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gMotion_Sensor&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">members</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemRegistry</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="s2">&quot;gDownstairs&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">allMembers</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-SmF2YVNjcmlwdA== docutils container">
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-R3Jvb3Z5 docutils container">
+<div class="highlight-Groovy notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
+</pre></div>
+</div>
+</div>
+<div class="ui bottom attached sphinx-tab tab segment sphinx-data-tab-UnVsZXMgRFNM docutils container">
+<div class="highlight-Xtend notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div>
