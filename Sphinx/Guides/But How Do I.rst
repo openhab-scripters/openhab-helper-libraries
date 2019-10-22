@@ -424,33 +424,77 @@ Get the members or all members of a Group
 
         .. code-block::
 
+            # just direct members, which could include groups
             ir.getItem("gTest").members
 
+            # iteratively, all child Items and the child Items of all child groups
             ir.getItem("gTest").allMembers
 
     .. group-tab:: JavaScript
 
         .. code-block:: JavaScript
 
+            # just direct members, which could include groups
             ir.getItem("gTest").members
 
+            # iteratively, all child Items and the child Items of all child groups
             ir.getItem("gTest").allMembers
 
     .. group-tab:: Groovy
 
         .. code-block:: Groovy
 
+            # just direct members, which could include groups
             ir.getItem("gTest").members
 
+            # iteratively, all child Items and the child Items of all child groups
             ir.getItem("gTest").allMembers
 
     .. group-tab:: Rules DSL
 
         .. code-block:: Xtend
 
+            # just direct members, which could include groups
             gTest.members
 
+            # iteratively, all child Items and the child Items of all child groups
             gTest.allMembers
+
+
+Intersection of two groups
+--------------------------
+
+.. tabs::
+
+    .. group-tab:: Python
+
+        .. code-block::
+
+            list_of_items = [item.name for item in itemRegistry.getItem("gDS_FamilyRoom").members if "gMotion_Sensor" in item.groupNames]
+
+            # or
+            list_of_items = [item for item in itemRegistry.getItem("gDS_FamilyRoom").members if item in itemRegistry.getItem("gMotion_Sensor").members]
+
+            # or
+            list_of_items = [item.name for item in itemRegistry.getItem("gMotion_Sensor").members if item in itemRegistry.getItem("gDownstairs").allMembers]
+
+    .. group-tab:: JavaScript
+
+        .. code-block:: JavaScript
+
+            TODO
+
+    .. group-tab:: Groovy
+
+        .. code-block:: Groovy
+
+            TODO
+
+    .. group-tab:: Rules DSL
+
+        .. code-block:: Xtend
+
+            TODO
 
 
 Iterate over members of a Group
