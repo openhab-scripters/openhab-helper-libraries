@@ -44,7 +44,7 @@ Example Directory Structure
                 │   ├── core
                 │   ├── personal
                 │   └── configuration.groovy
-                ├── groovy
+                ├── javascript
                 │   ├── community
                 │   ├── core
                 │   ├── personal

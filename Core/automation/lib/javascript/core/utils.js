@@ -90,19 +90,19 @@
     
 	context.uuid = uuid;
 	
-	context.logInfo = function (type , value) {
+	context.logInfo = function(type , value) {
 		logger.info(args(arguments));
 	};
-	context.logWarn = function (type , value) {
+	context.logWarn = function(type , value) {
 		logger.warn(args(arguments));
 	};
-	context.logDebug = function (type , value) {
+	context.logDebug = function(type , value) {
 		logger.debug(args(arguments));
 	};
-	context.logError = function (type , value) {
+	context.logError = function(type , value) {
 		logger.error(args(arguments));
 	};
-	context.logTrace = function (type , value) {
+	context.logTrace = function(type , value) {
 		logger.trace(args(arguments));
 	};
 	
@@ -122,7 +122,7 @@
 	};
 	
 	context.console.log = function (value) {
-		loggerConsole.info(value.toString());
+		loggerConsole.info(value);
 	};
 	
 	context.isUndefined = function(item) {

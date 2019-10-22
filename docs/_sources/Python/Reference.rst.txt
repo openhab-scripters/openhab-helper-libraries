@@ -5,9 +5,10 @@ Reference
 Suggested reading
 =================
 
-* https://www.jython.org/jythonbook/en/1.0/index.html
+* https://jython.readthedocs.io/en/latest/
 * https://wiki.python.org/moin/BeginnersGuide
 * https://docs.python.org/2/
+* https://www.youtube.com/playlist?list=PLlrxD0HtieHhS8VzuMCfQD4uJ9yne1mE6
 
 
 Scripts vs. Modules

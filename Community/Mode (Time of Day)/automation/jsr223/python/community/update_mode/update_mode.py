@@ -57,7 +57,7 @@ def update_mode(event):
     new_mode = last_mode_of_day
     for i, (mode, value) in enumerate(mode_dict.iteritems()):
         if mode != last_mode_of_day:
-            if not event and mode_dict[mode].get("hour") is not None and Interval(
+            if event is None and mode_dict[mode].get("hour") is not None and Interval(
                     DateTime.now().withTime(
                         value["hour"],
                         value["minute"],
@@ -65,9 +65,9 @@ def update_mode(event):
                         0
                     ),
                     DateTime.now().withTime(
-                        mode_dict.items()[i + 1][1]["hour"],
-                        mode_dict.items()[i + 1][1]["minute"],
-                        mode_dict.items()[i + 1][1]["second"],
+                        mode_dict.items()[i + 1][1].get("hour", value["hour"]),
+                        mode_dict.items()[i + 1][1].get("minute", value["minute"] + 1),
+                        mode_dict.items()[i + 1][1].get("second", value["second"]),
                         0
                     )
                 ).contains(DateTime.now()):

@@ -24,7 +24,7 @@ Rather than using an import, these additional symbols (`presets <https://www.ope
     scriptExtension.importPreset("RuleFactories")
 
 The ``scriptExtension`` instance is provided as one of the default scope variables.
-The ``RuleSimple`` preset defines the ``SimpleRule`` base class.  
+The ``RuleSimple`` preset defines the ``SimpleRule`` base class.
 This base class implements a rule with a single custom Action associated with the ``execute`` function.
 The list of rule triggers are provided by the triggers attribute of the rule instance.
 The triggers in these examples is an instance of the ``Trigger`` class.
@@ -163,6 +163,9 @@ Function
     A logger is also provided for each rule, ``my_rule_function.log.info("Log message")``, and it will use the logger ``<core.logging.LOG_PREFIX>.Rule_Name``.
     More information on logging can be found on the :doc:`../Guides/Logging` page.
 
+    Snippets of code can be found in :ref:`Guides/But How Do I:But How Do I...?`.
+    Examples of rule functions with side-by-side comparison with DSL rules can be found in the :ref:`Examples/Examples:Examples`.
+
     .. tabs::
 
         .. group-tab:: Python
@@ -217,15 +220,10 @@ Extensions
 
                 @rule("Jython Hello World (CronTrigger extension with rule decorator)", description="This is an example rule using a CronTrigger extension and rule decorator", tags=["Example rule tag"])
                 class ExampleExtensionRule(object):
-                    #def __init__(self):
-                    #    self.triggers = [StartupTrigger().trigger,
-                    #                     CronTrigger("0/10 * * * * ?").trigger,
-                    #                     ItemStateUpdateTrigger("Test_Switch_1").trigger]
-                    
-                    def getEventTriggers(self):
-                        return [StartupTrigger().trigger,
-                                CronTrigger("0/10 * * * * ?").trigger,
-                                ItemStateUpdateTrigger("Test_Switch_1").trigger]
+                    def __init__(self):
+                        self.triggers = [StartupTrigger().trigger,
+                                         CronTrigger("0/10 * * * * ?").trigger,
+                                         ItemStateUpdateTrigger("Test_Switch_1").trigger]
 
                     def execute(self, module, inputs):
                         self.log.info("Hello World!")
@@ -400,5 +398,5 @@ Raw API
                         .withConfiguration(new Configuration([cronExpression: "0/10 * * * * ?"]))
                         .build()
                     ])
-                    
+
                 automationManager.addRule(rawAPIRule)
