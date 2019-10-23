@@ -1,6 +1,41 @@
 var exports = {};
 var module = {};
 
+// POLYFILLS
+
+if (typeof Object.assign !== 'function') {
+  // Must be writable: true, enumerable: false, configurable: true
+  Object.defineProperty(Object, "assign", {
+    value: function assign(target, varArgs) { // .length of function is 2
+      'use strict';
+      if (target === null || target === undefined) {
+        throw new TypeError('Cannot convert undefined or null to object');
+      }
+
+      var to = Object(target);
+
+      for (var index = 1; index < arguments.length; index++) {
+        var nextSource = arguments[index];
+
+        if (nextSource !== null && nextSource !== undefined) { 
+          for (var nextKey in nextSource) {
+            // Avoid bugs when hasOwnProperty is shadowed
+            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+              to[nextKey] = nextSource[nextKey];
+            }
+          }
+        }
+      }
+      return to;
+    },
+    writable: true,
+    configurable: true
+  });
+}
+
+
+// LOADER
+
 (function (context) {
   'use strict';
 
@@ -50,7 +85,7 @@ var module = {};
       });
       jLog.debug(stackString(init_state.require_stack) + "loaded personal script " + id);
     } catch (e) {
-      if (e.toString().startsWith("javax.script.ScriptException: TypeError: Cannot load script from")) { //script not there; warn only
+      if (e.toString().startsWith("TypeError: Cannot load script from")) { //script not there; warn only
         jLog.debug(stackString(init_state.require_stack) + "No script named " + id + " in personal; falling back to core");
       } else {
         jLog.error(stackString(init_state.require_stack) + "Error loading " + id + ": " + e);
@@ -62,11 +97,11 @@ var module = {};
       jLog.debug(stackString(init_state.require_stack) + "loaded core script " + id);
     }
 
-    jLog.debug(stackString(init_state.require_stack) + "retrieved exports:  " + Object.keys(exports));
+    jLog.debug(stackString(init_state.require_stack) + "retrieved exports:  " + Object.keys(exports) + Object.keys(module));
   };
 
   context.require = function require(id) {
-    jLog.debug("modules: " + Object.keys(init_state.loaded_modules));
+    jLog.debug("Cached modules: " + Object.keys(init_state.loaded_modules));
 
     jLog.debug(stackString(init_state.require_stack, id) + "Attempting to retreive module " + id);
 
@@ -83,13 +118,17 @@ var module = {};
     }
 
     // do the require of module 'id'
-    // - if currently requiring a module, push global exports/module objects into arguments.callee.modules  
+    // - if currently requiring a module, push global exports/module objects into init_state  
     if (init_state.require_stack.length > 0) {
-      var currently_requiring_id = init_state.require_stack[init_state.require_stack.length - 1];
-      init_state.loaded_modules[currently_requiring_id] = {
+      var container_requiring_id = init_state.require_stack[init_state.require_stack.length - 1];
+      init_state.loaded_modules[container_requiring_id] = {
         exports: exports,
         module: module
       };
+
+
+      exports = {};
+      module = {};
     }
 
     init_state.require_stack.push(id);
@@ -112,6 +151,14 @@ var module = {};
       module = {};
     }
 
-    return init_state.loaded_modules[id].exports;
+    var requested = init_state.loaded_modules[id].exports;
+
+    //add anything exported on the module
+    if(init_state.loaded_modules[id].module.exports) {
+      Object.assign(requested, init_state.loaded_modules[id].module.exports);
+    }
+
+    return requested;
   }
 })(this);
+
