@@ -93,3 +93,9 @@ class Gatekeeper(object):
         self.commands.put((pause, command))
         if self.timer is None or self.timer.hasTerminated():
             self._proc_command()
+
+    def cancel_all(self):
+        """ Call to clear out the enqueued commands without running them. """
+        self.log.debug("Clearing out all enqueued commands")
+        while not self.commands.empty():
+            self.commands.get(false)
