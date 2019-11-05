@@ -166,6 +166,7 @@ class IdeAlarmZone(object):
         self.name = cfg['name']
         self.armAwayToggleSwitch = cfg['armAwayToggleSwitch']
         self.armHomeToggleSwitch = cfg['armHomeToggleSwitch']
+        self.autoResetAfterAlert = cfg['autoReset']
         self.mainZone = cfg['mainZone']
         self.canArmWithTrippedSensors = cfg['canArmWithTrippedSensors']
         self.alarmTestMode = parent.alarmTestMode
@@ -351,6 +352,13 @@ class IdeAlarmZone(object):
         for alertDevice in self.alertDevices:
             send_command_if_different(alertDevice, scope.OFF)
         self.log.debug('Alert devices have been switched off due to they\'ve reached their time limit')
+
+        if self.autoResetAfterAlert == True:
+            self.log.info(u"Automatic reset Zone '{}' after Alert".format(self.name.decode('utf8')))
+            self.setZoneStatus(ZONESTATUS['NORMAL'])
+            if 'onZoneResetAfterAlert' in dir(custom):
+                custom.onZoneResetAfterAlert(self, self.getArmingMode(), self.getZoneStatus())
+
 
     def getNagSensors(self, timerTimedOut=False):
         '''
