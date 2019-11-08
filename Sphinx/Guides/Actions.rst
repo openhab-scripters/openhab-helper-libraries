@@ -170,6 +170,10 @@ Use an Addon/Bundle Action
 
         .. code-block::
 
+            #New Mail Binding Action
+            actions.get("mail", "mail:smtp:mail_thing").sendMail("someone@example.com", "This is the subject", "This is the message")
+            
+            #Deprecated due to new Mail Binding
             from core.actions import Mail
             Mail.sendMail("someone@example.com", "This is the subject", "This is the message")
 
