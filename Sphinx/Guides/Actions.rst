@@ -170,8 +170,13 @@ Use an Addon/Bundle Action
 
         .. code-block::
 
+            #deprecated use the new Mail binding
             from core.actions import Mail
             Mail.sendMail("someone@example.com", "This is the subject", "This is the message")
+            
+            #Mail Binding
+            actions.get("mail", "mail:smtp:mail_thing").sendMail("someone@example.com", "This is the subject", This is the message)
+
 
         `Astro <https://www.openhab.org/addons/actions/astro/#astro-actions>`_
 
