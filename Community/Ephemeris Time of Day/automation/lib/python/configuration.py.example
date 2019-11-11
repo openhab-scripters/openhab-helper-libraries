@@ -1,0 +1,110 @@
+# Create a tod_group_ephem variable with the name of the Group of Groups of
+# DateTime Items that drive the time of day.
+#
+# Create a tod_item_ephem variable with the name of the Time of Day Item that
+# will receive the time of day state String.
+#
+# Create a Group for each type of day for which you have a different set of
+# times of day states. Add metadata to these Groups to identify what type of
+# day those start times define.
+#
+# Supported types of days include:
+#     - default: this Group will be selected if no other type of day is
+#                detected. Defined with the following metadata:
+#                    - Empty (i.e. no metadata)
+#                    - ToD="day"[type="default"]
+#     - weekday: this Group will be selected when Ephemeris.isWeekend()
+#                returns False. Defined with the following metadata:
+#                    - ToD="day"[type="weekday"]
+#     - weekend: this Group will be selected when Ephemeris.isWeekend()
+#                returns True. Defined with the following metadata:
+#                    - ToD="day"[type="weekend"]
+#     - dayset: Ephemeris allows you to define custom daysets in
+#               $OH_CONF/services/ephemeris.cfg. Defined with the following
+#               metadata:
+#                   - ToD="day"[type="dayset", set="school"]
+#               Use the name of the set as it is defined in ephemeris.cfg.
+#     - holiday: Defined with the following metadata:
+#                    - ToD="day"[type="holiday"]
+#     - custom: The Ephemeris capability allows one to define their own sets
+#               of special days (e.g. birthdays and anniversaries) in a
+#               specially formatted XML file. Defined with the following metadata:
+#                   - ToD="day"[type="custom", file="/openhab/conf/services/custom1.xml"]
+#
+# For example, to define times of day that covers the weekend, weekdays, and
+# a custom set of bank holidays you might have the following Groups.
+#
+#     Group Ephem_TimeOfDay_StartTimes
+#     Group Ephem_Weekday (Ephem_TimeOfDay_StartTimes) { ToD="day"[type="weekday"] }
+#     Group Ephem_Weekend (Ephem_TimeOfDay_StartTimes) { ToD="day"[type="weekend"] }
+#     Group Ephem_Custom1 (Ephem_TimeOfDay_StartTimes) { ToD="day"[type="custom", file="/openhab/conf/services/custom1.xml"] }
+#
+# You must be sure to define a Group for every type of day about. It can be
+# handy to define the default Group to ensure that happens. The day types are
+# checked in the order listed above and the bottom day type wins (e.g. if it's
+# a weekday and a custom day the custom day will be selected).
+#
+# You can define multiple Groups for dayset and custom. If you define more
+# than one Group for any of the rest, only the first one found will be used.
+#
+# Now that you have the days defined, you must define a set of DateTime Items
+# which hold the start times for each time of day state used on that day and
+# add those Items to the given day's Group. For example, the start times for
+# the weekend would be added to the Ephem_Weekend Group above.
+#
+# The expected metadata is : Tod="init"[start_time="HH:MM:SS:MS", tod_state="EXAMPLE"]
+# where
+#     - HH is hours
+#     - MM is minutes
+#     - SS is seconds and optional
+#     - MS is milliseconds and optional
+#     - EXAMPLE is the State String
+#
+# All members of tod_group are required to have a tod_state metadata entry.
+# Only static Items (Items whose time is not populated by something else like
+# the Astro binding) require the start_time metadata entry.
+#
+# For example, the full set of Groups and Items for a weekend, weekday and
+# standard bank holiday system might be something like the following:
+#
+#     Group Ephem_TimeOfDay_StartTimes
+#     Group Ephem_Weekday (Ephem_TimeOfDay_StartTimes) { ToD="day"[type="weekday"] }
+#     Group Ephem_Weekend (Ephem_TimeOfDay_StartTimes) { ToD="day"[type="weekend"] }
+#     Group Ephem_Holiday (Ephem_TimeOfDay_StartTimes) { ToD="day"[type="holiday] }
+#
+#     DateTime vMorning_Time "Morning [%1$tH:%1$tM]"
+#         <sunrise> (Ephem_Weekday)
+#         { ToD="init"[start_time="06:00",tod_state="MORNING"] }
+#
+#     DateTime vDay_Time "Day1 [%1$tH:%1$tM]"
+#         <sun> (Ephem_Weekend, Ephem_Holiday)
+#         { channel="astro:sun:local:rise#start",
+#           ToD="init"[tod_state="DAY"] }
+#
+#     DateTime vAfternoon_Time "Afternoon [ %1$tH:%1$tM]"
+#         <sunset> (Ephem_Weekday, Ephem_Weekend, Ephem_Holiday)
+#         { channel="astro:sun:set120:set#start",
+#           ToD="init"[tod_state="AFTERNOON"] }
+#
+#     DateTime vEvening_Time "Evening [%1$tH:%1$tM]"
+#         <sunset> (Ephem_Weekday, Ephem_Weekend, Ephem_Holiday)
+#         { channel="astro:sun:local:set#start",
+#           ToD="init"[tod_state="EVENING"] }
+#
+#     DateTime vNight_Time "Night [%1$tH:%1$tM]"
+#         <moon> (Ephem_Weekday)
+#         { ToD="init"[start_time="23:00", tod_state="NIGHT"] }
+#
+#     DateTime vBed_Time "Bed [%1$tH:%1$tM]"
+#         <bedroom_blue> (Ephem_Weekend, Ephem_Holiday)
+#         { ToD="init"[start_time="00:02",tod_state="BED"] }
+#
+#     DateTime vBed_Time_Weekend "Holiday Bed [%1$tH:%1$tM]"
+#         <bedroom_blue> (Ephem_Weekend, Ephem_Holiday)
+#
+# Take notice that one DateTime Item can be a member of more than one Group.
+# Also take notice that each day has a different set of times of day defined.
+# Finally notice that some of the times are static and others driven by Astro.
+
+tod_group_ephem = "Ephem_TimeOfDay_StartTimes"
+tod_item_ephem = "vTimeOfDay"
