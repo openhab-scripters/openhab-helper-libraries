@@ -62,7 +62,7 @@ def tod_update_items(log):
         time_str = get_key_value(start_time.name, "ToD", "start_time")
 
         # If there is a value, parse it and set the Item to that time for today
-        if time_str:
+        if time_str != {}:
             log.debug("Handling {}".format(start_time))
             time_parts = time_str.split(':')
             num_parts = len(time_parts)
@@ -153,7 +153,7 @@ def get_start_times(log):
         rval = curr
         for grp in [grp for grp in tod_grps if check(grp, type)]:
             value = get_key_value(grp.name, "ToD", key)
-            if value is None:
+            if value == {}:
                 log.error("Group {} doesn't have a key {}!"
                                     .format(grp.name, key))
             elif day_check(value):
@@ -166,7 +166,7 @@ def get_start_times(log):
     start_times = None
 
     start_times = get_group("default",
-                            lambda grp, type: check(grp, type) or not get_key_value(grp.name, "ToD", "type"),
+                            lambda grp, type: check(grp, type) or get_key_value(grp.name, "ToD", "type") == {},
                             start_times,
                             True)
 
@@ -231,7 +231,7 @@ def create_tod_timers(log, start_times):
 
         state = get_key_value(start_time.name, "ToD", "tod_state")
         # If there is no state we can't use this Item.
-        if state is None:
+        if state == {}:
             log.error("{} does not have tod_state metadata!"
                       .format(start_time.name))
 
