@@ -11,7 +11,10 @@ Limitations:
       using with Items that are defined with Units of Measure.
 
     - Adding new Items or changing Items with an expire metadata config requires
-      a reload of this script to regenerate the rule triggers.
+      a regeneration of the rules. This can be done by reloading the script file
+      or by commanding the expire_reload_item Switch Item to ON (preserves
+      running timers). The expire_reload_item is a variable defined in
+      configuration.py containing the name of the Item.
 
 Differences from the binding:
     - You can expire a String Item to an empty string: expire="5s,state=''"
@@ -32,6 +35,7 @@ from datetime import timedelta
 from core.actions import ScriptExecution
 from org.joda.time import DateTime
 from core.log import logging, LOG_PREFIX, log_traceback
+import configuration
 
 regex = re.compile(r'^((?P<days>[\.\d]+?)d)? *((?P<hours>[\.\d]+?)h)? *((?P<minutes>[\.\d]+?)m)? *((?P<seconds>[\.\d]+?)s)?$')
 timers = { }
@@ -77,8 +81,8 @@ def get_config(item_name, log):
     """
     Parses the config string to extract the time duration, type of event, and
     the necessary state. The config string is stored in an "expire" metadata
-    entry.The config takes format of
-    ``expire="<duration>[,][command=|state=][<new state>]"``
+    entry. The config takes format of
+    ``expire="<duration>[,[command=|state=]<new state>]"``
         - <duration>: a time duration of the format described in parse_time.
         - [,]: if supplying more than just the duration, a comma is required
         here.
@@ -128,7 +132,7 @@ def get_config(item_name, log):
             state = state[0]
 
         # Check for special types.
-        if state in special:
+        if state.strip() in special:
             state = special[state]
 
         # Remove single quotes from state.
@@ -184,15 +188,15 @@ def expire(event):
     """
     Called when an item configured for expire receives an update.
 
-    If the Item updates to an UnDefType, the change is ignored.
+    If the Item updates to an UnDefType, the timer is cancelled.
     If the Item updates to the same state configured in the expire config any
     expire timer is cancelled.
-    If the Item updates to a different state configured in the expire config a
-    new timer is created to go off at the configured time in the future.
+    If the Item updates to a state different than configured in the expire
+    config a new timer is created to go off at the configured time in the future.
     """
     item_name = event.itemName
 
-    # Ignore changes to an UnDefType.
+    # Cancel timer when changed to an UnDefType.
     if isinstance(event.itemState, UnDefType):
         if (timers[item_name] is not None
                 and not timers[item_name].hasTerminated()):
@@ -221,8 +225,8 @@ def expire(event):
     expire.log.debug("Setting timer for '{}' with delay {}"
                      .format(item_name, cfg["time"]))
     t = (DateTime.now().plusDays(cfg["time"].days)
-                        .plusSeconds(cfg["time"].seconds)
-                        .plusMillis(int(cfg["time"].microseconds/1000)))
+                       .plusSeconds(cfg["time"].seconds)
+                       .plusMillis(int(cfg["time"].microseconds/1000)))
     if (timers[item_name] is not None
             and not timers[item_name].hasTerminated()):
         timers[item_name].reschedule(t)
@@ -237,7 +241,16 @@ def expire(event):
 
 
 def expire_load(event):
+    """
+    Called on script load and when expire_reload_item is commanded to ON.
 
+    Scans the Item Registry for items with a valid expire config and adds an
+    update trigger to the expire rule for the Item. Timers will be dropped for
+    Items that no longer have a valid expire config.
+
+    This load will not cancel any running timers for Items that have a valid
+    expire config.
+    """
     log = logging.getLogger("{}.Expire Load".format(LOG_PREFIX))
     log.debug("Expire loading...")
 
@@ -279,7 +292,7 @@ def expire_load(event):
     else:
         log.info("Expire found no configured items")
 
-    # Drop items that no longer exist or have expire config
+    # Drop items that no longer exist or no longer have expire config
     for item_name in timers:
         if item_name not in new_items:
             if item_name in items:
@@ -300,22 +313,21 @@ def scriptLoaded(*args):
     Called at script load, sets up the reload rule.
     """
     log = logging.getLogger("{}.Expire Init".format(LOG_PREFIX))
+    reload_item = None
 
-    import configuration
     if hasattr(configuration, "expire_reload_item"):
-        item_name = configuration.expire_reload_item
-    else:
-        item_name = "expire_reload"
-        log.debug("No value for 'expire_reload_item' in configuration.py, "
-                  "using default item 'expire_reload'")
+        reload_item = configuration.expire_reload_item
 
-    if item_name in items:
-        when("Item {} received command ON".format(item_name))(expire_load)
+    if reload_item is None:
+        log.debug("Expire Reload rule not created, no 'expire_reload_item' "
+                  "defined in 'configuration.py'")
+    elif reload_item in items:
+        when("Item {} received command ON".format(reload_item))(expire_load)
         rule(
             "Expire Reload",
             description=("Reloads the Expire script, adding items that did not "
-                            "have a valid expire config and removing items that have "
-                            "been deleted or no longer have a valid expire config"),
+                         "have a valid expire config and removing items that have "
+                         "been deleted or no longer have a valid expire config"),
             tags=["expire"]
         )(expire_load)
         if hasattr(expire_load, "UID"):
@@ -323,12 +335,8 @@ def scriptLoaded(*args):
         else:
             log.error("Failed to create Expire Reload rule")
     else:
-        if hasattr(configuration, "expire_reload_item"):
-            log.warn("Unable to create Expire Reload rule, item '{}' does not exist"
-                     .format(item_name))
-        else:
-            log.debug("Unable to create Expire Reload rule, item '{}' does not exist"
-                      .format(item_name))
+        log.warn("Unable to create Expire Reload rule, item '{}' does not exist"
+                 .format(reload_item))
 
     expire_load(None)
 
