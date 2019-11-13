@@ -1,6 +1,6 @@
 """
 :Author: `besynnerlig <https://github.com/besynnerlig>`_
-:Version: **4.0.0**
+:Version: **4.1.0**
 
 Multi Zone Home Alarm package for openHAB. This software is distributed as a
 community submission to the `openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_.
@@ -22,6 +22,11 @@ Below are important instructions if you are **upgrading** weatherStationUploader
 If you are creating a new installation, you can ignore what follows.
 
 **PLEASE MAKE SURE THAT YOU GO THROUGH ALL STEPS BELOW WHERE IT SAYS "BREAKING CHANGE"... DON'T SKIP ANY VERSION**
+
+    **Version 4.1.0**
+        Added attribute `autoReset` to each zone. When set to `True` the zone will automatically rearm / reset after a alarm. 
+        The default value is `False`, which will cause the zoen to act as in previous versions. If the attribute is not
+        set, it will default to `False`
 
     **Version 4.0.0**
         **BREAKING CHANGE**: The script is now distributed as a part of
@@ -166,7 +171,10 @@ class IdeAlarmZone(object):
         self.name = cfg['name']
         self.armAwayToggleSwitch = cfg['armAwayToggleSwitch']
         self.armHomeToggleSwitch = cfg['armHomeToggleSwitch']
-        self.autoResetAfterAlert = cfg['autoReset']
+        if 'autoReset' in cfg:
+            self.autoResetAfterAlert = cfg['autoReset']
+        else:
+            self.autoResetAfterAlert = False
         self.mainZone = cfg['mainZone']
         self.canArmWithTrippedSensors = cfg['canArmWithTrippedSensors']
         self.alarmTestMode = parent.alarmTestMode
@@ -425,7 +433,7 @@ class IdeAlarm(object):
 
         * Nothing really...
         '''
-        self.__version__ = '4.0.0'
+        self.__version__ = '4.1.0'
         self.__version_info__ = tuple([ int(num) for num in self.__version__.split('.')])
         self.log = logging.getLogger("{}.IdeAlarm V{}".format(LOG_PREFIX, self.__version__))
         self.alarmTestMode = idealarm_configuration['ALARM_TEST_MODE']
