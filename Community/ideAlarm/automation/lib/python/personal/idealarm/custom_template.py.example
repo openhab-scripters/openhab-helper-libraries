@@ -35,7 +35,7 @@ def onZoneStatusChange(zone, newZoneStatus, oldZoneStatus, errorMessage=None):
     This function will be called when there is a change of zone status.
     oldZoneStatus is None when initializing.
     '''
-    log.info("onZoneStatusChange: [{}] ---> [{}]".format(zone.name.decode('utf-8'), kw(ZONESTATUS, newZoneStatus)))
+    log.info(u"onZoneStatusChange: [{}] ---> [{}]".format(zone.name.decode('utf-8'), kw(ZONESTATUS, newZoneStatus)))
 
     if newZoneStatus == ZONESTATUS['ERROR']:
         pass
