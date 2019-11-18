@@ -109,6 +109,10 @@ return RuleBuilder.create(ruleDto.uid)
 			if (obj.name) {
 				rule.setName(obj.name);
 			}
+			
+			if (obj.conditions){
+				rule.setConditions(obj.conditions);
+			}
 
 			//1. Register rule here
 			if (triggers && triggers.length > 0) {
