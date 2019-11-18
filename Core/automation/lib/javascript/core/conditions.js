@@ -19,17 +19,13 @@ if(ModuleBuilder == undefined)var ModuleBuilder = Java.type("org.eclipse.smartho
 
 // ### stateCondition ###
 var ItemStateCondition = function(itemName, state, condName){
-    return ModuleBuilder.createCondition().withId(getTrName(condName)).withTypeUID("core.ItemStateCondition").withConfiguration( new Configuration({
-        "itemName": itemName,
-        "operator": "=",
-        "state": state
-    })).build();
+ return GenericCompareCondition(itemName,state,"=",condName);
 }
 var stateCondition = ItemStateCondition;
 
 // ### GenericCompareCondition ###
 var GenericCompareCondition = function(itemName, state, operator, condName){
-    return ModuleBuilder.createCondition().withId(getTrName(condName)).withTypeUID("core.GenericCompareCondition").withConfiguration( new Configuration({
+    return ModuleBuilder.createCondition().withId(getTrName(condName)).withTypeUID("core.ItemStateCondition").withConfiguration( new Configuration({
         "itemName": itemName,
         "operator": operator,// matches, ==, <, >, =<, =>
         "state": state
