@@ -63,6 +63,7 @@ from core.triggers import when
 from configuration import presence_config
 from core.actions import ScriptExecution
 from org.joda.time import DateTime
+from core.metadata import get_value
 
 presence_timers = {}
 
