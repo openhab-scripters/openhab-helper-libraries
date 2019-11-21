@@ -41,4 +41,8 @@ def pub(event):
                                   "command" if is_cmd else "state")
     retained = False if is_cmd else True
     pub.log.debug("Publishing {} to {} on {}".format(msg, topic, eb_br))
-    actions.get("mqtt", broker).publishMQTT(topic, msg, retained)
+    action = actions.get("mqtt", broker)
+    if action:
+        action.publishMQTT(topic, msg, retained)
+    else:
+        pub.log.error("There is no broker Thing {}".format(eb_br))

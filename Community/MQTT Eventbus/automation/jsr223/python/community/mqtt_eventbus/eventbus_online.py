@@ -16,6 +16,7 @@ from configuration import eb_name, eb_br
       description="Publsih that this instance of OH is now online",
       tags=["eventbus"])
 @when("System started")
+@when("Thing {} changed to ONLINE".format(eb_br))
 def online(event):
     """
     At OH system start, publish "ONLINE" to eb_name/status to indicate that OH
