@@ -37,6 +37,10 @@ disable=
     anomalous-unicode-escape-in-string,
     global-statement,
     deprecated-method,                 # log.warn
+    dangerous-default-value,
+    arguments-differ,
+    redefined-builtin,
+    redefined-outer-name,
 
 
 [TYPECHECK]
@@ -44,11 +48,10 @@ disable=
 ignored-modules=
     # Java packages
     java,
-    org.joda.time,
+    org,
     # openHAB packages and classes
     events,
     # Helper Libraries modules
-    core,
     core.jsr223,
     core.actions,
     community,
