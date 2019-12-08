@@ -334,19 +334,27 @@ def generate_sitemap(log):
     """
     def get_mappings(item_name):
         mappings = ['"none"="None"']
-        item_type = ir.getItem(item_name).type
+        endpoint_item = ir.getItem(item_name)
         for source_name in sorted(members[SELECTOR_SOURCES][action_key], key=lambda name: get_value(name, "selector") or ir.getItem(name).label):
             source_item = ir.getItem(source_name)
-            if source_item.type == item_type:
+            compat = False
+            if source_item.type == endpoint_item.type:
+                compat = True # same item types are compatible
+            elif action_key == SELECTOR_UPDATE:
+                if source_item.acceptedDataTypes[0] in endpoint_item.acceptedDataTypes:
+                    compat = True # source preferred state accepted by endpoint
+            elif action_key == SELECTOR_COMMAND:
+                compat = True
+                for command_type in source_item.acceptedCommandTypes:
+                    if command_type not in endpoint_item.acceptedCommandTypes:
+                        compat = False # skip if source can accept a command that endpoint cannot
+
+            if compat:
                 mappings.append('"{}"="{}"'.format(
                     source_item.name,
                     get_value(source_name, "selector") or source_item.label
                 ))
-        s = ""
-        for mapping in mappings:
-            s = "{}{}, ".format(s, mapping)
-        s = s[:-2]
-        return "[{}]".format(s)
+        return "[{}]".format(", ".join(mappings))
 
     log.debug("Updating Selector sitemap")
     sitemap_data = 'sitemap selector label="Selector" {\n'
@@ -363,9 +371,7 @@ def generate_sitemap(log):
                 link_item_name = link_name_format.format(
                     action=action_key, item_name=endpoint_item_name)
                 sitemap_data += '        Selection item={} mappings={}\n'.format(
-                        link_item_name,
-                        get_mappings(endpoint_item_name)
-                    )
+                    link_item_name, get_mappings(endpoint_item_name))
             sitemap_data += '    }\n'
 
     sitemap_data += '}'
