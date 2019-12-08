@@ -1,0 +1,22 @@
+# Existing Groups that contain Items to use as Sources and Endpoints
+selector_command_sources_group = "selector_command_sources_group"
+selector_command_endpoints_group = "selector_command_endpoints_group"
+selector_update_sources_group = "selector_update_sources_group"
+selector_update_endpoints_group = "selector_update_endpoints_group"
+
+# Existing Group to create Link Items in
+selector_links_group = "selector_links_group"
+# Additional Groups to add Link Items to, like restore on startup
+selector_links_additional_groups = ["persist_restore"]
+# String to use when compose Link Item names. Must have '{action}' and '{item_name}' keys
+selector_links_format = "selector_link_{action}_{item_name}"
+
+# Cron expression used to create a trigger for the Selector update rule
+selector_update_cron = "22 */30 * * * ?"
+# Item to watch for ON commands to update Selector
+selector_update_item = "selector_update"
+
+# Icon names for Link Items, defaults shown
+selector_link_icon_none = "none" # Unlinked
+selector_link_icon_good = "switch-on" # Link good
+selector_link_icon_error = "error" # Source Item does not exist
