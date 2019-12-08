@@ -101,7 +101,6 @@ from core.items import add_item
 from core.metadata import get_value
 from core.utils import sendCommand, postUpdate
 from core.log import logging, LOG_PREFIX, log_traceback
-from core.jsr223.scope import scriptExtension
 ruleRegistry = scriptExtension.get("ruleRegistry")
 
 
