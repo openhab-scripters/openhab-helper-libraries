@@ -1,0 +1,30 @@
+"""
+Decay requires you to supply, at a minimum, either an item prefix or suffix.
+These will be added to the group name to compose a name for the decay item
+that will be added to the group.
+"""
+decay_item_prefix = ""
+decay_item_suffix = ""
+
+
+"""
+The group prefix and suffix can be supplied to remove parts of the name of the
+group before added the item prefix and suffix to compose the decay item name.
+
+Example:
+    decay_item_suffix = "_decay"
+    decay_group_suffix = "_group"
+
+    Will take a group named `example_group` and create a decay item named
+    `example_decay`.
+"""
+decay_group_prefix = ""
+decay_group_suffix = ""
+
+
+"""
+In order to refresh the Decay configuration without having to reload the
+script, you can create a switch item and supply its name here. When it receives
+an `ON` command, Decay will be reloaded (running timers will be preserved).
+"""
+decay_reload_item = ""
