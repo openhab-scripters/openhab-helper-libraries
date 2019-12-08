@@ -1,0 +1,123 @@
+[MASTER]
+
+jobs=2      # use 2 cores
+#jobs=4      # use 4 cores
+#jobs=8      # use 8 cores
+
+
+[MESSAGES CONTROL]
+
+enable=
+    E,
+    F,
+
+    # VSCode defaults - https://code.visualstudio.com/docs/python/linting#_default-pylint-rules
+    unreachable,
+    duplicate-key,
+    unnecessary-semicolon,
+    global-variable-not-assigned,
+    unused-variable,
+    binary-op-exception,
+    bad-format-string,
+    anomalous-backslash-in-string,
+    bad-open-mode
+
+disable=
+    C,
+    R,
+    reimported,
+    missing-docstring,
+    line-too-long,
+    logging-format-interpolation,
+    bare-except,
+    broad-except,
+    pointless-string-statement,
+    unused-argument,
+    wrong-import-position,
+    anomalous-unicode-escape-in-string,
+    global-statement,
+    deprecated-method,                 # log.warn
+
+
+[TYPECHECK]
+
+ignored-modules=
+    # Java packages
+    java,
+    org.joda.time,
+    # openHAB packages and classes
+    events,
+    # Helper Libraries modules
+    core,
+    core.jsr223,
+    core.actions,
+    community,
+    personal,
+    configuration,
+
+generated-members=
+    # added by `rules` decorator
+    log,
+    UID,
+    # added by `when` decorator
+    triggers
+
+
+[VARIABLES]
+
+additional-builtins=
+    reload,             # Jython module reloader
+
+    # Default Preset
+    State,
+    Command,
+    DateTime,
+    LocalTime,
+    StringUtils,
+    URLEncoder,
+    FileUtils,
+    FilenameUtils,
+    File,
+    UnDefType,
+    NULL,
+    UNDEF,
+    IncreaseDecreaseType,
+    DECREASE,
+    INCREASE,
+    OnOffType,
+    ON,
+    OFF,
+    OpenCloseType,
+    OPEN,
+    CLOSED,
+    StopMoveType,
+    STOP,
+    MOVE,
+    RewindFastforwardType,
+    REWIND,
+    FASTFORWARD,
+    NextPreviousType,
+    NEXT,
+    PREVIOUS,
+    PlayPauseType,
+    PLAY,
+    PAUSE,
+    UpDownType,
+    UP,
+    DOWN,
+    DecimalType,
+    QuantityType,
+    HSBType,
+    PercentType,
+    PointType,
+    StringType,
+    StringListType,
+    RawType,
+    items,
+    itemRegistry,
+    ir,
+    things,
+    rules,
+    scriptExtension,
+    se,
+    events

@@ -19,43 +19,11 @@ ENV File
     This will allow ``pylint`` to see any packages or modules in that directory and no longer
     show import errors for them.
 
-Exclude Helper Libraries
-========================
+``.pylintrc`` File
+==================
 
-    If you don't already have an ``{OH_CONF}/.vscode/settings.json`` file, create it and
-    add the following:
+    Copy the ``OHCONF.pylintrc`` file from the root of this repository into your openHAB conf
+    directory and rename it to ``.pylintrc``. It will prevent any openHAB or Java packages from
+    being listed as missing, as well as all objects from the Default Preset.
 
-    .. code-block:: JSON
-
-        {
-            "python.linting.ignorePatterns": [
-                "**/automation/**/python/core/**/*.py",
-                "**/automation/**/python/community/**/*.py"
-            ]
-        }
-
-    This will tell ``pylint`` to ignore all files in the Helper Libraries' ``core`` and
-    ``community`` directories, greatly reducing the number of errors you will see
-    because of openHAB packages it cannot import.
-
-pylint Directives
-=================
-
-    Lastly, you can use ``pylint`` directives if you want to disable the import error
-    messages in your files for the openHAB packages that it cannot import.
-
-    When importing packages or classes from openHAB:
-
-    .. code-block::
-
-        # pylint: disable=import-error
-        from org.openhab.core.library.items import SwitchItem
-        # pylint: enable=import-error
-
-    When importing ``scope`` from ``core.jsr223``:
-
-    .. code-block::
-
-        # pylint: disable=import-error, no-name-in-module
-        from core.jsr223 import scope
-        # pylint: enable=import-error, no-name-in-module
+    [``OHCONF.pylintrc``](https://github.com/openhab-scripters/openhab-helper-libraries/blob/master/.gitignore)
