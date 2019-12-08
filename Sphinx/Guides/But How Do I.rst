@@ -410,6 +410,38 @@ Convert DecimalType to an integer or float for arithmetic
 
             TODO
 
+Convert a state to a formatted string
+-------------------------------------
+
+Follow the formatting syntax from: https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html#syntax
+
+.. tabs::
+
+    .. group-tab:: Python
+
+        .. code-block::
+
+            str = items["DateTime_Item"].format("%1$tR")    
+            str = items["Number_Item"].format("%.2f")
+
+    .. group-tab:: JavaScript
+
+        .. code-block:: JavaScript
+
+            TODO
+
+    .. group-tab:: Groovy
+
+        .. code-block:: Groovy
+
+            TODO
+
+    .. group-tab:: Rules DSL
+
+        .. code-block:: Xtend
+
+            TODO
+
 
 Groups
 ======
