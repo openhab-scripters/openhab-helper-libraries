@@ -140,15 +140,22 @@ Use an Addon/Bundle Action
 --------------------------
 
  The binding or Action must be installed.
+ There are two different types of Actions, old 1.x style Actions and new 2.x style Actions that come inside of 2.x bindings.
+ For the 1.x version Actions you must explicetly import the Action to use it (see Astro below).
+ For 2.x bindings, the Actions are accessible through the actions variable.
 
 .. tabs::
 
     .. group-tab:: Python
 
-        `Telegram <https://www.openhab.org/addons/actions/telegram/#telegram-actions>`_
+        `Telegram <https://www.openhab.org/addons/bindings/telegram/>`_
 
         .. code-block::
 
+            # New Telegram Binding Action
+            actions.get("telegram", "telegram:telegramBot:xxxxx").sendTelegram("MyBot", "Test")
+
+            # Deprecated due to new Telegram Binding
             from core.actions import Telegram
             Telegram.sendTelegram("MyBot", "Test")
 
@@ -159,21 +166,25 @@ Use an Addon/Bundle Action
             from core.actions import Pushover
             Pushover.sendPushoverMessage(Pushover.pushoverBuilder("Test"))
 
-        `Pushbullet <https://www.openhab.org/addons/bindings/pushbullet/#pushbullet-binding>`_
+        `Pushbullet <https://www.openhab.org/addons/bindings/pushbullet/>`_
 
         .. code-block::
 
+            # New Pushbullet Binding Action
+            actions.get("pushbullet", "pushbullet:bot:r2d2").sendPushbulletNote("someone@example.com", "R2D2 talks here...", "This is the pushed note.")
+
+            # Deprecated due to new Pushbullet Binding
             from core.actions import PushbulletAPIConnector
             PushbulletAPIConnector.sendPushbulletNote("someone@example.com", "openHAB", "Test")
 
-        `Mail <https://www.openhab.org/addons/actions/mail/#mail-actions>`_
+        `Mail <https://www.openhab.org/addons/bindings/mail/>`_
 
         .. code-block::
 
-            #New Mail Binding Action
+            # New Mail Binding Action
             actions.get("mail", "mail:smtp:mail_thing").sendMail("someone@example.com", "This is the subject", "This is the message")
-            
-            #Deprecated due to new Mail Binding
+
+            # Deprecated due to new Mail Binding
             from core.actions import Mail
             Mail.sendMail("someone@example.com", "This is the subject", "This is the message")
 
@@ -201,19 +212,27 @@ Use an Addon/Bundle Action
 
         .. code-block:: JavaScript
 
-        `Telegram <https://www.openhab.org/addons/actions/telegram/#telegram-actions>`_
+        `Telegram <https://www.openhab.org/addons/bindings/telegram/>`_
 
         .. code-block::
 
+            // New Telegram Binding Action
+            actions.get("telegram", "telegram:telegramBot:xxxxx").sendTelegram("MyBot", "Test")
+
+            // Deprecated due to new Telegram Binding Action
             var OPENHAB_CONF = Java.type('java.lang.System').getenv('OPENHAB_CONF');
             load(OPENHAB_CONF + '/automation/lib/javascript/core/actions.js');
 
             Telegram.sendTelegram("MyBot", "Test");
 
-        `Mail <https://www.openhab.org/addons/actions/mail/#mail-actions>`_
+        `Mail <https://www.openhab.org/addons/bindings/mail/>`_
 
         .. code-block::
 
+            // New Mail Binding Action
+            actions.get("mail", "mail:smtp:mail_thing").sendMail("someone@example.com", "This is the subject", "This is the message")
+
+            // Deprecated due to new Mail Binding Action
             var OPENHAB_CONF = Java.type('java.lang.System').getenv('OPENHAB_CONF');
             load(OPENHAB_CONF + '/automation/lib/javascript/core/actions.js');
 
@@ -247,5 +266,51 @@ Use an Addon/Bundle Action
     .. group-tab:: Rules DSL
 
         .. code-block:: Xtend
+        `Telegram <https://www.openhab.org/addons/bindings/telegram/>`_
 
-            TODO
+        .. code-block::
+
+            // New Telegram Binding Action
+            getActions.get("telegram", "telegram:telegramBot:xxxxx").sendTelegram("MyBot", "Test")
+
+            // Deprecated due to new Telegram Binding
+            sendTelegram("MyBot", "Test")
+
+        `Pushover <https://www.openhab.org/addons/actions/pushover/#pushover-actions>`_
+
+        .. code-block::
+
+            sendPushoverMessage(Pushover.pushoverBuilder("Test"))
+
+        `Pushbullet <https://www.openhab.org/addons/bindings/pushbullet/>`_
+
+        .. code-block::
+
+            // New Pushbullet Binding Action
+            getActions.get("pushbullet", "pushbullet:bot:r2d2").sendPushbulletNote("someone@example.com", "R2D2 talks here...", "This is the pushed note.")
+
+            // Deprecated due to new Pushbullet Binding
+            sendPushbulletNote("someone@example.com", "openHAB", "Test")
+
+        `Mail <https://www.openhab.org/addons/bindings/mail/>`_
+
+        .. code-block::
+
+            // New Mail Binding Action
+            getActions.get("mail", "mail:smtp:mail_thing").sendMail("someone@example.com", "This is the subject", "This is the message")
+
+            // Deprecated due to new Mail Binding
+            sendMail("someone@example.com", "This is the subject", "This is the message")
+
+        `Astro <https://www.openhab.org/addons/actions/astro/#astro-actions>`_
+
+        .. code-block::
+
+            // Use the Astro action to get the sunset start time.
+            logInfo("Sunset: {}".format(getAstroSunsetStart(Date(2017, 7, 25), 38.897096, -77.036545).time))
+
+        `MQTT2 <https://www.openhab.org/addons/bindings/mqtt/>`_
+
+        .. code-block::
+
+            getActions.get("mqtt", "mqtt:systemBroker:embedded-mqtt-broker").publishMQTT("test/system/started", "true")
