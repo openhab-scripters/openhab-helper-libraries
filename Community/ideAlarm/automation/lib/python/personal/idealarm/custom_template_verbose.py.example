@@ -162,3 +162,10 @@ def onNagTimer(zone, nagSensors):
         tts(msg, PRIO['HIGH'])
     elif zone.zoneNumber == 2 and scope.itemRegistry.getItem('Z2_Block_Nag').state != scope.ON:
         tts(msg, PRIO['MODERATE'])
+
+
+def onZoneResetAfterAlert(zone, armingMode, zoneStatus):
+    '''
+    This function will be called when the zone is status is automatic reset after being tripped.
+    '''
+    log.info(u"onZoneResetAfterAlert: {} ---> {}".format(zone.name.decode('utf-8'), kw(ZONESTATUS, zoneStatus)))
