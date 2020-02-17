@@ -14,7 +14,7 @@ ENV \
 ## Install to /opt but allow writing $class files by giving every one permission to write, openhab user is created only after container has started
 RUN \
   mkdir -p ${JYTHON_HOME} && \
-  wget http://central.maven.org/maven2/org/python/jython-installer/${JYTHON_VERSION}/jython-installer-${JYTHON_VERSION}.jar -O /tmp/jython-installer.jar && \
+  wget https://repo1.maven.org/maven2/org/python/jython-installer/${JYTHON_VERSION}/jython-installer-${JYTHON_VERSION}.jar -O /tmp/jython-installer.jar && \
   java -jar /tmp/jython-installer.jar -s -d ${JYTHON_HOME}/ -t standard -e demo doc src && \
   rm /tmp/jython-installer.jar && \
   chmod -R o+w ${JYTHON_HOME} 
