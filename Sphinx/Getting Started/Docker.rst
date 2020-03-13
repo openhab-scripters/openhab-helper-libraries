@@ -17,9 +17,9 @@ Docker
                 
             .. code-block:: bash
 
-                wget https://github.com/OH-Jython-Scripters/openhab2-jython/archive/master.zip
+                wget https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip
                 unzip master.zip
-                mv openhab2-jython-master/automation conf/
+                mv openhab-helper-libraries-master/Core/automation conf/
 
             .. note::
 
