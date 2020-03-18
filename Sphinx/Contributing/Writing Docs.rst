@@ -276,7 +276,7 @@ Building
 
     .. code-block:: bash
 
-      (.venv) $ Sphinx/build_docs.sh
+      (.venv) $ Sphinx/build-docs.sh
 
     This should produce some output and end with ``build succeeded.``
 
