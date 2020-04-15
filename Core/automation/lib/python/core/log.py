@@ -45,7 +45,7 @@ def log_traceback(fn):
     configuration.adminEmail variable is populated, the notification will be
     sent to that address. Otherwise, a broadcast notification will be sent.
     """
-    functools.wraps(fn)
+    @functools.wraps(fn)
     def wrapper(*args, **kwargs):
         try:
             return fn(*args, **kwargs)

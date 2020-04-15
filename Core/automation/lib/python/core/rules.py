@@ -96,6 +96,7 @@ class _FunctionRule(SimpleRule):
                 name = "JSR223-Jython"
         self.name = name
         callback.log = logging.getLogger("{}.{}".format(LOG_PREFIX, name))
+        callback.name = name
         self.callback = log_traceback(callback)
         if description is not None:
             self.description = description
