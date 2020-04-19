@@ -199,11 +199,11 @@
 	context.transform = function(type, script, value) {
 		//var myList = transform("JS", "wunderground.js", wundergr);//returns String
 		//https://www.openhab.org/docs/configuration/transformations.html#usage
-		context.logInfo("|-|-transform "+__LINE__, "type:" + type, "script:" + script, "content:" + value.substring(0, 40));
-		var t = getAction("Transformation").static.transform;
-		context.logInfo("|-|-transform "+__LINE__, "transform:" + t);
+		//context.logInfo("|-|-transform "+__LINE__, "type:" + type, "script:" + script, "content:" + value.substring(0, 40));
+		//var t = getAction("Transformation").static.transform;
+		//context.logInfo("|-|-transform "+__LINE__, "transform:" + t);
 
-		getAction("Transformation").static.transform(type, script, value);
+		return getAction("Transformation").static.transform(type, script, value);
 	};
 	
 	context.postUpdate = function(item, value) {
