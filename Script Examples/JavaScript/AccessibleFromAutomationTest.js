@@ -73,7 +73,6 @@ logInfo(" activate "+__LINE__, "State", State);
 logInfo(" activate "+__LINE__, "Command", Command);
 //logInfo(" activate "+__LINE__, "DateTime", DateTime);
 logInfo(" activate "+__LINE__, "LocalTime", LocalTime);
-logInfo(" activate "+__LINE__, "StringUtils", StringUtils);
 logInfo(" activate "+__LINE__, "URLEncoder", URLEncoder);
 logInfo(" activate "+__LINE__, "FileUtils", FileUtils);
 logInfo(" activate "+__LINE__, "FilenameUtils", FilenameUtils);
