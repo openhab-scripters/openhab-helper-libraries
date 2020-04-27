@@ -279,3 +279,90 @@ def validate_uid(uid):
         uid = "{}_{}".format("jython", uid)
     uid = re.sub(r"__+", "_", uid)
     return uid
+
+
+BouncingRuleTracker = {}
+
+
+def debounce(func):
+"""
+This is a simple decorator function that can be used to debounce rules. The two most
+common use cases are:
+
+1. there is a physical switch or other device that can be triggered numerous times
+but it is only desirable for the rule to run once within a set time period - for example a doorbell.
+Ordinarily openHAB will run the rule sequentially (so for example if the doorbell rule takes two seconds to complete, 
+and someone presses the doorbell ten times in one second, then the doorbell rule will run ten times, taking 20 seconds in all).
+
+2. there is a rule which takes a long time to run, perhaps with multiple sleep statements, or calling external 
+applications that themselves take a long time to run. Such rules are prone to unpredictable effects if they run
+multiple times in succession.
+
+The decorator function enforces a two second gap between a rule ending and the same rule starting again. So, in the doorbell 
+example above, the doorbell will only ring once. If a longer gap is desired then the user can simply add a sleep (x)
+t the end of their rule. (or, ideally, this function would have an optional "recoverytime" parameter - 
+but I'm not clever enough to do that)
+
+Because of the risk that the decorator function itself has unintended consequences, the rule includes debug logging,
+showing the start and end of each rule, and how long each rule took to complete.
+
+usage is simply to add the decorator function as the *last* decorator before a rule. For example:
+
+@rule("Main test function")
+@when("Item TestSwitch received command ON") 
+@debounce
+def main_test(event):
+
+   log.info("Test switch on")
+   
+"""
+    def wrapper_debounce(event):
+        global BouncingRuleTracker
+        min_delay = 2
+
+        current_rule = str(func.__name__)
+
+        report = "Started rule " + current_rule + \
+            ", triggered by " + str(event.itemName)
+
+        if current_rule in BouncingRuleTracker:
+
+            if BouncingRuleTracker[current_rule]["running"] == True:
+                # Note currently openhab seems to always run rules sequentially
+                # so this condition will never be satisfied - but still
+                # seems sensible to deal with this case
+                log.info(report + ", which is already running - so exiting now")
+                return
+
+            actualdelay = round(
+                (time.time() - BouncingRuleTracker[current_rule]["timetrack"]), 1)
+            report = report + ". Last finished " + \
+                str(actualdelay) + " seconds ago"
+
+            if actualdelay < min_delay:
+                report = report + ", so debouncing and not running rule"
+                log.info(report)
+                return
+
+        else:
+            report = report + ". This is the first time the rule has run."
+            BouncingRuleTracker[current_rule] = {}
+
+        BouncingRuleTracker[current_rule]["timetrack"] = time.time()
+        BouncingRuleTracker[current_rule]["running"] = True
+
+        log.debug(report)
+
+        func(event)
+
+        ruletime = round(
+            (time.time() - BouncingRuleTracker[current_rule]["timetrack"]), 1)
+
+        log.debug("Finishing rule " + current_rule + " triggered by " +
+                 str(event.itemName) + ". Rule took " + str(ruletime) + " seconds to run.")
+        
+        BouncingRuleTracker[current_rule]["timetrack"] = time.time()
+        BouncingRuleTracker[current_rule]["running"] = False
+
+    return wrapper_debounce
+
