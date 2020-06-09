@@ -67,7 +67,7 @@ if area_triggers_and_actions_dict.get("lux_item_name") and itemRegistry.getItems
         #start_time = DateTime.now().getMillis()
         mode_change_or_system_start = (event.itemName == "Mode") if event is not None else True
         if not mode_change_or_system_start:
-            lux_current = items[area_triggers_and_actions_dict["lux_item_name"]]
+            lux_current = event.itemState
             lux_previous = event.oldItemState
         spanned = False
         # get a list of active trigger groups (or all of them, if system started)
@@ -77,8 +77,13 @@ if area_triggers_and_actions_dict.get("lux_item_name") and itemRegistry.getItems
             if action_group:
                 for item in action_group.members:
                     low_lux_trigger = get_key_value(item.name, "area_triggers_and_actions", "modes", str(items["Mode"]), "low_lux_trigger") or area_triggers_and_actions_dict["default_levels"]["low_lux_trigger"]
+                    low_lux_trigger_buffer = get_low_lux_trigger_buffer(item.name)
+                    up_breach = down_breach = False
+                    if not mode_change_or_system_start and lux_current is not NULL:
+                        up_breach = (lux_previous == NULL or lux_previous.intValue() < low_lux_trigger + low_lux_trigger_buffer) and low_lux_trigger + low_lux_trigger_buffer  <= lux_current.intValue()
+                        down_breach = (lux_previous == NULL or lux_previous.intValue() > low_lux_trigger - low_lux_trigger_buffer) and  low_lux_trigger - low_lux_trigger_buffer >= lux_current.intValue()
                     # replay actions for all lights on mode change and system start, or only the lights affected on a lux change
-                    if mode_change_or_system_start or min(lux_previous.intValue(), lux_current.intValue()) <= low_lux_trigger <= max(lux_previous.intValue(), lux_current.intValue()):
+                    if mode_change_or_system_start or up_breach or down_breach:
                         action_function_names = get_key_value(item.name, "area_triggers_and_actions", "actions").keys()
                         if not action_function_names or "light_action" in action_function_names:
                             start_action(item, True if event is not None else trigger_group.state in [ON, OPEN], "light_action")
@@ -90,3 +95,9 @@ if area_triggers_and_actions_dict.get("lux_item_name") and itemRegistry.getItems
         if not mode_change_or_system_start and not spanned:
             mode_or_lux_change.log.debug("No lights were adjusted: current=[{}], previous=[{}]".format(lux_current, lux_previous))
         #mode_or_lux_change.log.warn("Test: time=[{}]".format(DateTime.now().getMillis() - start_time))
+
+def get_low_lux_trigger_buffer(item_name):
+    try:
+        return get_key_value(item_name, "area_triggers_and_actions", "modes", str(items["Mode"]), "low_lux_trigger_buffer") or area_triggers_and_actions_dict["default_levels"]["low_lux_trigger_buffer"]
+    except KeyError:
+        return 0 # without any configuration we default to no buffer
