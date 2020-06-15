@@ -2,21 +2,20 @@
 This script adds an ItemProvider, so that Items can be added and removed at
 runtime.
 """
-
-scriptExtension.importPreset(None)
+scriptExtension.importPreset(None)# fix for compatibility with Jython > 2.7.0
 
 import core
-from core import osgi
+from core.osgi import register_service, unregister_service
 from core.log import logging, LOG_PREFIX
 
-provider_class = None
+PROVIDER_CLASS = None
 
 try:
     from org.openhab.core.items import ItemProvider
-    provider_class = "org.openhab.core.items.ItemProvider"
+    PROVIDER_CLASS = "org.openhab.core.items.ItemProvider"
 except:
     from org.eclipse.smarthome.core.items import ItemProvider
-    provider_class = "org.eclipse.smarthome.core.items.ItemProvider"
+    PROVIDER_CLASS = "org.eclipse.smarthome.core.items.ItemProvider"
 
 try:
     class JythonItemProvider(ItemProvider):
@@ -61,17 +60,15 @@ except:
     logging.getLogger(
         "{}.core.JythonItemProvider".format(LOG_PREFIX)).error(traceback.format_exc())
 
-
-def scriptLoaded(id):
+def scriptLoaded(script):
     if core.JythonItemProvider is not None:
-        core.osgi.register_service(core.JythonItemProvider, [provider_class])
+        register_service(core.JythonItemProvider, [PROVIDER_CLASS])
         logging.getLogger(
             "{}.core.JythonItemProvider.scriptLoaded".format(LOG_PREFIX)).debug("Registered service")
 
-
 def scriptUnloaded():
     if core.JythonItemProvider is not None:
-        core.osgi.unregister_service(core.JythonItemProvider)
+        unregister_service(core.JythonItemProvider)
         core.JythonItemProvider = None
         logging.getLogger(
             "{}.core.JythonItemProvider.scriptUnloaded".format(LOG_PREFIX)).debug("Unregistered service")
