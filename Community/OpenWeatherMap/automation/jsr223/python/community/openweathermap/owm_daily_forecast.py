@@ -488,9 +488,7 @@ def add_owm_items():
 
                 add_owm_items_to_groups.log.debug("Updated groups and Items")
 
-            add_owm_items_to_groups(None)
-
-            
+            add_owm_items_to_groups(None)         
     except:
         import traceback
         add_owm_items.log.error(traceback.format_exc())

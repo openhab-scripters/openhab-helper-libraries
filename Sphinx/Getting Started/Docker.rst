@@ -17,9 +17,9 @@ Docker
                 
             .. code-block:: bash
 
-                wget https://github.com/OH-Jython-Scripters/openhab2-jython/archive/master.zip
+                wget https://github.com/openhab-scripters/openhab-helper-libraries/archive/master.zip
                 unzip master.zip
-                mv openhab2-jython-master/automation conf/
+                mv openhab-helper-libraries-master/Core/automation /openhab/conf/
 
             .. note::
 
@@ -32,7 +32,7 @@ Docker
 
                 curl http://search.maven.org/remotecontent?filepath=org/python/jython-standalone/2.7.0/jython-standalone-2.7.0.jar -o jython-standalone-2.7.0.jar
                 mkdir conf/automation/jython
-                mv jython-standalone-2.7.0.jar conf/automation/jython/
+                mv jython-standalone-2.7.0.jar /openhab/conf/automation/jython/
 
             Again, the ``conf`` directory above is the directory that's mounted in openHAB.
 
@@ -40,7 +40,7 @@ Docker
 
             .. code-block:: bash
 
-                cp openhab2-jython-master/Script\ Examples/Python/hello_world.py conf/automation/jsr223/python/personal
+                cp openhab2-jython-master/Script\ Examples/Python/hello_world.py /openhab/conf/automation/jsr223/python/personal
 
         Docker Environment
 

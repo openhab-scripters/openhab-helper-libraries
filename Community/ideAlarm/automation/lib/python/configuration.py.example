@@ -38,7 +38,8 @@ idealarm_configuration = {
             'armAwayToggleSwitch': 'Toggle_Z1_Armed_Away',
             'armHomeToggleSwitch': 'Toggle_Z1_Armed_Home',
             'mainZone': True,
-            'canArmWithTrippedSensors': False
+            'canArmWithTrippedSensors': False,
+            'autoReset': False
         },
         {
             'name': 'Pembridge Square Residence',
@@ -55,7 +56,8 @@ idealarm_configuration = {
             'armAwayToggleSwitch': 'Toggle_Z2_Armed_Away',
             'armHomeToggleSwitch': 'Toggle_Z2_Armed_Home',
             'mainZone': False,
-            'canArmWithTrippedSensors': True
+            'canArmWithTrippedSensors': True,
+            'autoReset': False
         }
     ] 
 }

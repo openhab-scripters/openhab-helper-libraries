@@ -1,28 +1,29 @@
 """
 This script adds a ThingProvider.
 """
-
-scriptExtension.importPreset(None)
-
-provider_class = None
-try:
-    from org.openhab.core.thing import ThingProvider
-    provider_class = "org.openhab.core.thing.ThingProvider"
-except:
-    from org.eclipse.smarthome.core.thing import ThingProvider
-    provider_class = "org.eclipse.smarthome.core.thing.ThingProvider"
+scriptExtension.importPreset(None)# fix for compatibility with Jython > 2.7.0
 
 import core
-from core import osgi
+from core.osgi import register_service, unregister_service
 from core.log import logging, LOG_PREFIX
+
+PROVIDER_CLASS = None
+
+try:
+    from org.openhab.core.thing import ThingProvider
+    PROVIDER_CLASS = "org.openhab.core.thing.ThingProvider"
+except:
+    from org.eclipse.smarthome.core.thing import ThingProvider
+    PROVIDER_CLASS = "org.eclipse.smarthome.core.thing.ThingProvider"
 
 try:
     class JythonThingProvider(ThingProvider):
+
         def __init__(self):
             self.things = []
             self.listeners = []
 
-        def addProviderChangeListener(self, listener): # ProviderChangeListener
+        def addProviderChangeListener(self, listener):
             self.listeners.append(listener)
 
         def removeProviderChangeListener(self, listener):
@@ -53,13 +54,13 @@ except:
     import traceback
     logging.getLogger("{}.core.JythonThingProvider".format(LOG_PREFIX)).error(traceback.format_exc())
 
-def scriptLoaded(id):
+def scriptLoaded(script):
     if core.JythonThingProvider is not None:
-        core.osgi.register_service(core.JythonThingProvider, [provider_class])
+        register_service(core.JythonThingProvider, [PROVIDER_CLASS])
         logging.getLogger("{}.core.JythonThingProvider.scriptLoaded".format(LOG_PREFIX)).debug("Registered service")
 
 def scriptUnloaded():
     if core.JythonThingProvider is not None:
-        core.osgi.unregister_service(core.JythonThingProvider)
+        unregister_service(core.JythonThingProvider)
         core.JythonThingProvider = None
         logging.getLogger("{}.core.JythonThingProvider.scriptUnloaded".format(LOG_PREFIX)).debug("Unregistered service")
