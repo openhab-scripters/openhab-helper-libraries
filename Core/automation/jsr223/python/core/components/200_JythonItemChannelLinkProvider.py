@@ -2,27 +2,27 @@
 This script adds an ItemChannelLinkProvider, so that Links can be added and
 removed at runtime.
 """
-
-scriptExtension.importPreset(None)
-
-provider_class = None
-try:
-    from org.openhab.core.thing.link import ItemChannelLinkProvider
-    provider_class = "org.openhab.core.thing.link.ItemChannelLinkProvider"
-except:
-    from org.eclipse.smarthome.core.thing.link import ItemChannelLinkProvider
-    provider_class = "org.eclipse.smarthome.core.thing.link.ItemChannelLinkProvider"
+scriptExtension.importPreset(None)# fix for compatibility with Jython > 2.7.0
 
 import core
-from core import osgi
+from core.osgi import register_service, unregister_service
 from core.log import logging, LOG_PREFIX
+
+PROVIDER_CLASS = None
+
+try:
+    from org.openhab.core.thing.link import ItemChannelLinkProvider
+    PROVIDER_CLASS = "org.openhab.core.thing.link.ItemChannelLinkProvider"
+except:
+    from org.eclipse.smarthome.core.thing.link import ItemChannelLinkProvider
+    PROVIDER_CLASS = "org.eclipse.smarthome.core.thing.link.ItemChannelLinkProvider"
 
 try:
     class JythonItemChannelLinkProvider(ItemChannelLinkProvider):
+
         def __init__(self):
             self.listeners = []
             self.links = []
-
 
         def addProviderChangeListener(self, listener):
             self.listeners.append(listener)
@@ -55,13 +55,13 @@ except:
     import traceback
     logging.getLogger("{}.core.JythonItemChannelLinkProvider".format(LOG_PREFIX)).warn(traceback.format_exc())
 
-def scriptLoaded(id):
+def scriptLoaded(script):
     if core.JythonItemChannelLinkProvider is not None:
-        core.osgi.register_service(core.JythonItemChannelLinkProvider, [provider_class])
+        register_service(core.JythonItemChannelLinkProvider, [PROVIDER_CLASS])
         logging.getLogger("{}.core.JythonItemChannelLinkProvider.scriptLoaded".format(LOG_PREFIX)).debug("Registered service")
 
 def scriptUnloaded():
     if core.JythonItemChannelLinkProvider is not None:
-        core.osgi.unregister_service(core.JythonItemChannelLinkProvider)
+        unregister_service(core.JythonItemChannelLinkProvider)
         core.JythonItemChannelLinkProvider = None
         logging.getLogger("{}.core.JythonItemChannelLinkProvider.scriptUnloaded".format(LOG_PREFIX)).debug("Unregistered service")

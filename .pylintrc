@@ -1,0 +1,153 @@
+[MASTER]
+
+#jobs=2      # use 2 cores
+#jobs=4      # use 4 cores
+#jobs=8      # use 8 cores
+
+[MESSAGES CONTROL]
+
+enable=
+    E,
+    F,
+
+    # VSCode defaults - https://code.visualstudio.com/docs/python/linting#_default-pylint-rules
+    unreachable,
+    duplicate-key,
+    unnecessary-semicolon,
+    global-variable-not-assigned,
+    unused-variable,
+    binary-op-exception,
+    bad-format-string,
+    anomalous-backslash-in-string,
+    bad-open-mode
+
+disable=
+    C,
+    R,
+    reimported,
+    missing-docstring,
+    line-too-long,
+    logging-format-interpolation,
+    bare-except,
+    broad-except,
+    pointless-string-statement,
+    unused-argument,
+    wrong-import-position,
+    anomalous-unicode-escape-in-string,
+    global-statement,
+    deprecated-method,
+    dangerous-default-value,
+    arguments-differ,
+    redefined-builtin,
+    redefined-outer-name,
+    invalid-encoded-data
+
+[TYPECHECK]
+
+ignored-modules=
+    com,
+    java,
+    javax,
+    org,
+    core,
+    core.actions,
+    core.jsr223,
+    community,
+    personal,
+    configuration
+
+[VARIABLES]
+
+additional-builtins=
+    reload,
+
+    # Default Preset
+    DateTime,
+    LocalTime,
+    State,
+    Command,
+    StringUtils,
+    URLEncoder,
+    FileUtils,
+    FilenameUtils,
+    File,
+    UnDefType,
+    NULL,
+    UNDEF,
+    IncreaseDecreaseType,
+    DECREASE,
+    INCREASE,
+    OnOffType,
+    ON,
+    OFF,
+    OpenClosedType,
+    OPEN,
+    CLOSED,
+    StopMoveType,
+    STOP,
+    MOVE,
+    UpDownType,
+    UP,
+    DOWN,
+    RefreshType
+    REFRESH,
+    NextPreviousType,
+    NEXT,
+    PREVIOUS,
+    PlayPauseType,
+    PLAY,
+    PAUSE,
+    RewindFastforwardType,
+    REWIND,
+    FASTFORWARD,
+    QuantityType,
+    StringListType,
+    RawType,
+    DateTimeType,
+    DecimalType,
+    HSBType,
+    PercentType,
+    PointType,
+    StringType,
+    SIUnits,
+    ImperialUnits,
+    MetricPrefix,
+    SmartHomeUnits,
+    BinaryPrefix,
+    items,
+    ir,
+    itemRegistry,
+    things,
+    rules,
+    events,
+    scriptExtension,
+    se,
+
+    # RuleSimple Preset
+    ActionType,
+    ConfigDescriptionParameter,
+    ModuleType,
+    SimpleActionHandler,
+    SimpleConditionHandler,
+    SimpleRule,
+    SimpleTriggerHandler,
+    TriggerType,
+    Visibility,
+
+    # RuleSupport Preset
+    Action,
+    ActionBuilder,
+    Condition,
+    ConditionBuilder,
+    Configuration,
+    ModuleBuilder,
+    Rule,
+    Trigger,
+    TriggerBuilder,
+    automationManager,
+    ruleRegistry,
+
+    # RuleFactories Preset
+    ActionHandlerFactory,
+    ConditionHandlerFactory,
+    TriggerHandlerFactory
