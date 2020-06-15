@@ -101,7 +101,9 @@ Change Log
   configured properly in the Thing
 * 05/31/19: Fixed Cloudiness and Humidity units and group function (no more
   unit of 'one'!)
-  05/29/20: Pylint updates
+* 05/29/20: Pylint updates
+* -6/14/20: Only check for SCALE transformation service if using Linux OS
+* 06/14/20: Using System properties for HTTP/HTTPS ports, rather than hard coded 8080/8443
 """
 from core.log import logging, LOG_PREFIX, log_traceback
 
@@ -111,14 +113,14 @@ def remove_owm_items():
     remove_owm_items.log = logging.getLogger("{}.remove_owm_items".format(LOG_PREFIX))
     from core.items import remove_item
 
-    for item in ir.getItemsByTag("OpenWeatherMap"):
+    for item in itemRegistry.getItemsByTag("OpenWeatherMap"):
         remove_owm_items.log.debug("'{}'".format(item))
         remove_item(item)
 
     # use this as a last resort, but make sure it's not removing any Items not
     # created by this script
 
-    # for item in ir.getAll():
+    # for item in itemRegistry.getAll():
     #     if "Forecast_" in item.name or "Current_" in item.name:
     #         remove_owm_items.log.debug("'{}'".format(item))
     #         remove_item(item)
@@ -173,66 +175,93 @@ def add_owm_items():
         else:
             add_owm_items.log.debug("owm_thing_uid set to '{}'".format(owm_thing_uid))
 
-            # install Scale transformation service, if not already
-            from org.eclipse.smarthome.model.script.actions.Exec import executeCommandLine
-            import json
+            # install Scale transformation service, if not already installed
+            from java.lang import System
 
-            scale_check_result = json.loads(executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 10 -m 10 -X GET -H \"Accept: application/json\" \"http://localhost:8080/rest/extensions/transformation-scale\"", 15000))['installed']
-            if not scale_check_result:
-                install_scale_result = executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -o /dev/null -s -w \"%{http_code}\" --connect-timeout 10 -m 10 -X POST -H \"Content-Type: application/json\" -H \"Accept: application/json\" \"http://localhost:8080/rest/extensions/transformation-scale/install\"", 15000)
-                if install_scale_result != "200":
-                    add_owm_items.log.debug("Scale transformation service installation failed")
-                    return
+            if System.getProperty("os.name") == "Linux":
+                import json
+                from core.actions import Exec
+
+                INSECURE_PORT = System.getProperty("org.osgi.service.http.port")
+                SECURE_PORT = System.getProperty("org.osgi.service.http.port.secure")
+
+                scale_check_result = None
+                try:
+                    scale_check_result = Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 10 -m 10 -X GET -H \"Accept: application/json\" \"http://localhost:{}/rest/extensions/transformation-scale\"".format(INSECURE_PORT), 15000)
+                except:
+                    try:
+                        scale_check_result = Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 10 -m 10 -X GET -H \"Accept: application/json\" \"http://localhost:{}/rest/extensions/transformation-scale\"".format(SECURE_PORT), 15000)
+                    except:
+                        add_owm_items.log.warn("Scale transformation service installation failed: unable to communicate with REST API")
+                        return
+                if scale_check_result is not None:            
+                    scale_check_result = json.loads(scale_check_result).get('installed')
+                    if not scale_check_result:
+                        install_scale_result = None
+                        try:
+                            install_scale_result = Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -o /dev/null -s -w \"%{{http_code}}\" --connect-timeout 10 -m 10 -X POST -H \"Content-Type: application/json\" -H \"Accept: application/json\" \"http://localhost:{}/rest/extensions/transformation-scale/install\"".format(INSECURE_PORT), 15000)
+                        except:
+                            try:
+                                install_scale_result = Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -o /dev/null -s -w \"%{{http_code}}\" --connect-timeout 10 -m 10 -X POST -H \"Content-Type: application/json\" -H \"Accept: application/json\" \"http://localhost:{}/rest/extensions/transformation-scale/install\"".format(SECURE_PORT), 15000)
+                            except:
+                                add_owm_items.log.warn("Scale transformation service installation failed")
+                                return
+                        if install_scale_result != "200":
+                            add_owm_items.log.warn("Scale transformation service installation failed: result {}".format(install_scale_result))
+                            return
+                        else:
+                            add_owm_items.log.debug("Scale transformation service has been installed")
+                    else:
+                        add_owm_items.log.debug("Scale transformation service is already installed")
                 else:
-                    add_owm_items.log.debug("Scale transformation service has been installed")
-            else:
-                add_owm_items.log.debug("Scale transformation service is already installed")
+                    add_owm_items.log.warn("Scale transformation service installation failed: REST API return None")
+                    return
 
             # create Current group and Items
-            if ir.getItems("gOpenWeatherMap") == []:
+            if itemRegistry.getItems("gOpenWeatherMap") == []:
                 add_item("gOpenWeatherMap", item_type="Group", groups=["gWeather"], label="OpenWeatherMap", tags=["OpenWeatherMap"])
-            if ir.getItems("gCurrent") == []:
+            if itemRegistry.getItems("gCurrent") == []:
                 add_item("gCurrent", item_type="Group", groups=["gOpenWeatherMap"], label="Current", tags=["OpenWeatherMap"])
-            if ir.getItems("Current_Timestamp") == []:
+            if itemRegistry.getItems("Current_Timestamp") == []:
                 add_item("Current_Timestamp", item_type="DateTime", groups=["gCurrent", "gForecast_Timestamp_1"], label="Current: Timestamp [%1$tY-%1$tm-%1$td %1$tI:%1$tM%1$tp]", category="Time", tags=["OpenWeatherMap"])
                 add_link("Current_Timestamp", ChannelUID(owm_thing_uid + ":current#time-stamp"))
-            if ir.getItems("Current_Condition") == []:
+            if itemRegistry.getItems("Current_Condition") == []:
                 add_item("Current_Condition", item_type="String", groups=["gCurrent", "gForecast_Condition_1"], label="Current: Condition [%s]", category="Sun_Clouds", tags=["OpenWeatherMap"])
                 add_link("Current_Condition", ChannelUID(owm_thing_uid + ":current#condition"))
-            if ir.getItems("Current_ConditionID") == []:
+            if itemRegistry.getItems("Current_ConditionID") == []:
                 add_item("Current_ConditionID", item_type="String", groups=["gCurrent", "gForecast_ConditionID_1"], label="Current: Condition ID [%s]", tags=["OpenWeatherMap"])
                 add_link("Current_ConditionID", ChannelUID(owm_thing_uid + ":current#condition-id"))
-            if ir.getItems("Current_IconID") == []:
+            if itemRegistry.getItems("Current_IconID") == []:
                 add_item("Current_IconID", item_type="String", groups=["gCurrent", "gForecast_IconID_1"], label="Current: Icon ID [%s]", tags=["OpenWeatherMap"])
                 add_link("Current_IconID", ChannelUID(owm_thing_uid + ":current#icon-id"))
-            if ir.getItems("Current_Icon") == []:
+            if itemRegistry.getItems("Current_Icon") == []:
                 add_item("Current_Icon", item_type="Image", groups=["gCurrent", "gForecast_Icon_1"], label="Current: Icon", tags=["OpenWeatherMap"])
                 add_link("Current_Icon", ChannelUID(owm_thing_uid + ":current#icon"))
-            if ir.getItems("Current_Temperature") == []:
+            if itemRegistry.getItems("Current_Temperature") == []:
                 add_item("Current_Temperature", item_type="Number:Temperature", groups=["gCurrent", "gForecast_Temperature_High_1", "gForecast_Temperature_Low_1"], label="Current: Temperature [%.0f %unit%]", category="Temperature", tags=["OpenWeatherMap"])
                 add_link("Current_Temperature", ChannelUID(owm_thing_uid + ":current#temperature"))
-            if ir.getItems("Current_Pressure") == []:
+            if itemRegistry.getItems("Current_Pressure") == []:
                 add_item("Current_Pressure", item_type="Number:Pressure", groups=["gCurrent", "gForecast_Pressure_1"], label="Current: Pressure [%.1f %unit%]", category="Pressure", tags=["OpenWeatherMap"])
                 add_link("Current_Pressure", ChannelUID(owm_thing_uid + ":current#pressure"))
-            if ir.getItems("Current_Humidity") == []:
+            if itemRegistry.getItems("Current_Humidity") == []:
                 add_item("Current_Humidity", item_type="Number:Dimensionless", groups=["gCurrent", "gForecast_Humidity_1"], label="Current: Humidity [%d %%]", category="Humidity", tags=["OpenWeatherMap"])
                 add_link("Current_Humidity", ChannelUID(owm_thing_uid + ":current#humidity"))
-            if ir.getItems("Current_WindSpeed") == []:
+            if itemRegistry.getItems("Current_WindSpeed") == []:
                 add_item("Current_WindSpeed", item_type="Number:Speed", groups=["gCurrent", "gForecast_WindSpeed_1"], label="Current: Wind speed [%.0f %unit%]", category="Wind", tags=["OpenWeatherMap"])
                 add_link("Current_WindSpeed", ChannelUID(owm_thing_uid + ":current#wind-speed"))
-            if ir.getItems("Current_GustSpeed") == []:
+            if itemRegistry.getItems("Current_GustSpeed") == []:
                 add_item("Current_GustSpeed", item_type="Number:Speed", groups=["gCurrent", "gForecast_GustSpeed_1"], label="Current: Gust speed [%.0f %unit%]", category="Wind", tags=["OpenWeatherMap"])
                 add_link("Current_GustSpeed", ChannelUID(owm_thing_uid + ":current#gust-speed"))
-            if ir.getItems("Current_WindDirection") == []:
+            if itemRegistry.getItems("Current_WindDirection") == []:
                 add_item("Current_WindDirection", item_type="Number:Angle", groups=["gCurrent", "gForecast_WindDirection_1"], label="Current: Wind direction [SCALE(windDirection.scale):%s]", category="Wind", tags=["OpenWeatherMap"])
                 add_link("Current_WindDirection", ChannelUID(owm_thing_uid + ":current#wind-direction"))
-            if ir.getItems("Current_Cloudiness") == []:
+            if itemRegistry.getItems("Current_Cloudiness") == []:
                 add_item("Current_Cloudiness", item_type="Number:Dimensionless", groups=["gCurrent", "gForecast_Cloudiness_1"], label="Current: Cloudiness [%d %%]", category="Sun_Clouds", tags=["OpenWeatherMap"])
                 add_link("Current_Cloudiness", ChannelUID(owm_thing_uid + ":current#cloudiness"))
-            if ir.getItems("Current_RainVolume") == []:
+            if itemRegistry.getItems("Current_RainVolume") == []:
                 add_item("Current_RainVolume", item_type="Number:Length", groups=["gCurrent", "gForecast_RainVolume_1"], label="Current: Rain volume [%.1f %unit%]", category="Rain", tags=["OpenWeatherMap"])
                 add_link("Current_RainVolume", ChannelUID(owm_thing_uid + ":current#rain"))
-            if ir.getItems("Current_SnowVolume") == []:
+            if itemRegistry.getItems("Current_SnowVolume") == []:
                 add_item("Current_SnowVolume", item_type="Number:Length", groups=["gCurrent", "gForecast_SnowVolume_1"], label="Current: Snow volume [%.1f %unit%]", category="Snow", tags=["OpenWeatherMap"])
                 add_link("Current_SnowVolume", ChannelUID(owm_thing_uid + ":current#snow"))
 
@@ -242,82 +271,82 @@ def add_owm_items():
             last_reading = DateTime(str(items["Current_Timestamp"])).getDayOfWeek() - 1
             for index in range(1, 6):
                 day_of_the_week = "Today" if index == 1 else calendar.day_name[(last_reading + index - 1) % 7]
-                if ir.getItems("gForecast_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_" + str(index)) == []:
                     add_item("gForecast_" + str(index), item_type="Group", groups=["gOpenWeatherMap"], label=day_of_the_week, tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_Timestamp_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_Timestamp_" + str(index)) == []:
                     add_item("gForecast_Timestamp_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Timestamp [%1$tY-%1$tm-%1$td %1$tI:%1$tM%1$tp]", category="Time", tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_Condition_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_Condition_" + str(index)) == []:
                     add_item("gForecast_Condition_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Condition [%s]", gi_base_type="String", category="Sun_Clouds", tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_ConditionID_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_ConditionID_" + str(index)) == []:
                     add_item("gForecast_ConditionID_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Condition ID [%s]", gi_base_type="String", tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_IconID_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_IconID_" + str(index)) == []:
                     add_item("gForecast_IconID_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Icon ID [%s]", gi_base_type="String", tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_Icon_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_Icon_" + str(index)) == []:
                     add_item("gForecast_Icon_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Icon", gi_base_type="Image", tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_Temperature_High_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_Temperature_High_" + str(index)) == []:
                     add_item("gForecast_Temperature_High_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Temperature (high) [%.0f %unit%]", category="Temperature_Hot", gi_base_type="Number:Temperature", group_function=QuantityTypeArithmeticGroupFunction.Max(Temperature), tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_Temperature_Low_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_Temperature_Low_" + str(index)) == []:
                     add_item("gForecast_Temperature_Low_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Temperature (low) [%.0f %unit%]", category="Temperature_Cold", gi_base_type="Number:Temperature", group_function=QuantityTypeArithmeticGroupFunction.Min(Temperature), tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_Pressure_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_Pressure_" + str(index)) == []:
                     add_item("gForecast_Pressure_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Pressure [%.1f %unit%]", category="Pressure", gi_base_type="Number:Pressure", group_function=QuantityTypeArithmeticGroupFunction.Max(Pressure), tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_Humidity_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_Humidity_" + str(index)) == []:
                     add_item("gForecast_Humidity_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Humidity [%d %%]", category="Humidity", gi_base_type="Number:Dimensionless", group_function=QuantityTypeArithmeticGroupFunction.Max(Dimensionless), tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_WindSpeed_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_WindSpeed_" + str(index)) == []:
                     add_item("gForecast_WindSpeed_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Wind Speed [%.0f %unit%]", category="Wind", gi_base_type="Number:Speed", group_function=QuantityTypeArithmeticGroupFunction.Max(Speed), tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_GustSpeed_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_GustSpeed_" + str(index)) == []:
                     add_item("gForecast_GustSpeed_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Gust Speed [%.0f %unit%]", category="Wind", gi_base_type="Number:Speed", group_function=QuantityTypeArithmeticGroupFunction.Max(Speed), tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_WindDirection_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_WindDirection_" + str(index)) == []:
                     #add_item("gForecast_WindDirection_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Wind direction [SCALE(windDirection.scale):%s]", category="Wind", gi_base_type="Number:Angle", group_function=QuantityTypeArithmeticGroupFunction.Avg(Angle), tags=["OpenWeatherMap"])# this doesn't work properly yet
                     add_item("gForecast_WindDirection_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Wind direction [SCALE(windDirection.scale):%s]", category="Wind", gi_base_type="Number:Angle", tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_Cloudiness_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_Cloudiness_" + str(index)) == []:
                     add_item("gForecast_Cloudiness_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Cloudiness [%d %%]", category="Sun_Clouds", gi_base_type="Number:Dimensionless", group_function=QuantityTypeArithmeticGroupFunction.Max(Dimensionless), tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_RainVolume_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_RainVolume_" + str(index)) == []:
                     add_item("gForecast_RainVolume_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Rain Volume [%.1f %unit%]", category="Rain", gi_base_type="Number:Length", group_function=QuantityTypeArithmeticGroupFunction.Sum(Length), tags=["OpenWeatherMap"])
-                if ir.getItems("gForecast_SnowVolume_" + str(index)) == []:
+                if itemRegistry.getItems("gForecast_SnowVolume_" + str(index)) == []:
                     add_item("gForecast_SnowVolume_" + str(index), item_type="Group", groups=["gForecast_" + str(index)], label=day_of_the_week + ": Snow Volume [%.1f %unit%]", category="Snow", gi_base_type="Number:Length", group_function=QuantityTypeArithmeticGroupFunction.Sum(Length), tags=["OpenWeatherMap"])
 
             # create Forecast Items
             for index in range(1, 41):
-                if ir.getItems("Forecast_Timestamp_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_Timestamp_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_Timestamp_{:02d}".format(3 * index), item_type="DateTime", label="Forecast ({:02d}): Timestamp [%1$tY-%1$tm-%1$td %1$tI:%1$tM%1$tp]".format(3 * index), category="Time", tags=["OpenWeatherMap"])
                     add_link("Forecast_Timestamp_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#time-stamp".format(3 * index)))
-                if ir.getItems("Forecast_Condition_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_Condition_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_Condition_{:02d}".format(3 * index), item_type="String", label="Forecast ({:02d}): Condition [%s]".format(3 * index), category="Sun_Clouds", tags=["OpenWeatherMap"])
                     add_link("Forecast_Condition_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#condition".format(3 * index)))
-                if ir.getItems("Forecast_ConditionID_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_ConditionID_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_ConditionID_{:02d}".format(3 * index), item_type="String", label="Forecast ({:02d}): Condition ID [%s]".format(3 * index), tags=["OpenWeatherMap"])
                     add_link("Forecast_ConditionID_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#condition-id".format(3 * index)))
-                if ir.getItems("Forecast_IconID_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_IconID_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_IconID_{:02d}".format(3 * index), item_type="String", label="Forecast ({:02d}): Icon ID [%s]".format(3 * index), tags=["OpenWeatherMap"])
                     add_link("Forecast_IconID_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#icon-id".format(3 * index)))
-                if ir.getItems("Forecast_Icon_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_Icon_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_Icon_{:02d}".format(3 * index), item_type="Image", label="Forecast ({:02d}): Icon".format(3 * index), tags=["OpenWeatherMap"])
                     add_link("Forecast_Icon_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#icon".format(3 * index)))
-                if ir.getItems("Forecast_Temperature_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_Temperature_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_Temperature_{:02d}".format(3 * index), item_type="Number:Temperature", label="Forecast ({:02d}): Temperature [%.0f %unit%]".format(3 * index), category="Temperature", tags=["OpenWeatherMap"])
                     add_link("Forecast_Temperature_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#temperature".format(3 * index)))
-                if ir.getItems("Forecast_Pressure_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_Pressure_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_Pressure_{:02d}".format(3 * index), item_type="Number:Pressure", label="Forecast ({:02d}): Pressure [%.1f %unit%]".format(3 * index), category="Pressure", tags=["OpenWeatherMap"])
                     add_link("Forecast_Pressure_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#pressure".format(3 * index)))
-                if ir.getItems("Forecast_Humidity_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_Humidity_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_Humidity_{:02d}".format(3 * index), item_type="Number:Dimensionless", label="Forecast ({:02d}): Humidity [%d %%]".format(3 * index), category="Humidity", tags=["OpenWeatherMap"])
                     add_link("Forecast_Humidity_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#humidity".format(3 * index)))
-                if ir.getItems("Forecast_WindSpeed_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_WindSpeed_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_WindSpeed_{:02d}".format(3 * index), item_type="Number:Speed", label="Forecast ({:02d}): Wind speed [%.0f %unit%]".format(3 * index), category="Wind", tags=["OpenWeatherMap"])
                     add_link("Forecast_WindSpeed_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#wind-speed".format(3 * index)))
-                if ir.getItems("Forecast_GustSpeed_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_GustSpeed_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_GustSpeed_{:02d}".format(3 * index), item_type="Number:Speed", label="Forecast ({:02d}): Gust speed [%.0f %unit%]".format(3 * index), category="Wind", tags=["OpenWeatherMap"])
                     add_link("Forecast_GustSpeed_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#gust-speed".format(3 * index)))
-                if ir.getItems("Forecast_WindDirection_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_WindDirection_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_WindDirection_{:02d}".format(3 * index), item_type="Number:Angle", label="Forecast ({:02d}): Wind direction [SCALE(windDirection.scale):%s]".format(3 * index), category="Wind", tags=["OpenWeatherMap"])
                     add_link("Forecast_WindDirection_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#wind-direction".format(3 * index)))
-                if ir.getItems("Forecast_Cloudiness_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_Cloudiness_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_Cloudiness_{:02d}".format(3 * index), item_type="Number:Dimensionless", label="Forecast ({:02d}): Cloudiness [%d %%]".format(3 * index), category="Sun_Clouds", tags=["OpenWeatherMap"])
                     add_link("Forecast_Cloudiness_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#cloudiness".format(3 * index)))
-                if ir.getItems("Forecast_RainVolume_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_RainVolume_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_RainVolume_{:02d}".format(3 * index), item_type="Number:Length", label="Forecast ({:02d}): Rain volume [%.1f %unit%]".format(3 * index), category="Rain", tags=["OpenWeatherMap"])
                     add_link("Forecast_RainVolume_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#rain".format(3 * index)))
-                if ir.getItems("Forecast_SnowVolume_{:02d}".format(3 * index)) == []:
+                if itemRegistry.getItems("Forecast_SnowVolume_{:02d}".format(3 * index)) == []:
                     add_item("Forecast_SnowVolume_{:02d}".format(3 * index), item_type="Number:Length", label="Forecast ({:02d}): Snow volume [%.1f %unit%]".format(3 * index), category="Snow", tags=["OpenWeatherMap"])
                     add_link("Forecast_SnowVolume_{:02d}".format(3 * index), ChannelUID(owm_thing_uid + ":forecastHours{:02d}#snow".format(3 * index)))
 
@@ -330,36 +359,36 @@ def add_owm_items():
             def add_owm_items_to_groups(event):
                 # remove hourly forecast Items from groups
                 for group_index in range(1, 6):
-                    for member in [item for item in ir.getItem("gForecast_Timestamp_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_Timestamp_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_Condition_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_Condition_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_ConditionID_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_ConditionID_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_IconID_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_IconID_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_Icon_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_Icon_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_Temperature_High_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_Temperature_High_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_Temperature_Low_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_Temperature_Low_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_Pressure_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_Pressure_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_Humidity_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_Humidity_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_WindSpeed_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_WindSpeed_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_GustSpeed_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_GustSpeed_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_WindDirection_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_WindDirection_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_Cloudiness_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_Cloudiness_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_RainVolume_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_RainVolume_{}".format(group_index)).removeMember(member)
-                    for member in [item for item in ir.getItem("gForecast_SnowVolume_{}".format(group_index)).getMembers() if "Current" not in item.name]:
-                        ir.getItem("gForecast_SnowVolume_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_Timestamp_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_Timestamp_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_Condition_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_Condition_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_ConditionID_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_ConditionID_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_IconID_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_IconID_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_Icon_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_Icon_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_Temperature_High_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_Temperature_High_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_Temperature_Low_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_Temperature_Low_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_Pressure_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_Pressure_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_Humidity_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_Humidity_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_WindSpeed_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_WindSpeed_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_GustSpeed_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_GustSpeed_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_WindDirection_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_WindDirection_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_Cloudiness_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_Cloudiness_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_RainVolume_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_RainVolume_{}".format(group_index)).removeMember(member)
+                    for member in [item for item in itemRegistry.getItem("gForecast_SnowVolume_{}".format(group_index)).getMembers() if "Current" not in item.name]:
+                        itemRegistry.getItem("gForecast_SnowVolume_{}".format(group_index)).removeMember(member)
 
                 # update group labels to reflect week day
                 from org.joda.time import DateTime
@@ -367,22 +396,22 @@ def add_owm_items():
                 last_reading = DateTime(str(items["Current_Timestamp"])).getDayOfWeek() - 1
                 for index in range(1, 6):
                     day_of_the_week = "Today" if index == 1 else calendar.day_name[(last_reading + index - 1) % 7]
-                    ir.getItem("gForecast_" + str(index)).setLabel(day_of_the_week)
-                    ir.getItem("gForecast_Timestamp_" + str(index)).setLabel(day_of_the_week + ": Timestamp")
-                    ir.getItem("gForecast_Condition_" + str(index)).setLabel(day_of_the_week + ": Condition [%s]")
-                    ir.getItem("gForecast_ConditionID_" + str(index)).setLabel(day_of_the_week + ": Condition ID [%s]")
-                    ir.getItem("gForecast_IconID_" + str(index)).setLabel(day_of_the_week + ": Icon ID [%s]")
-                    ir.getItem("gForecast_Icon_" + str(index)).setLabel(day_of_the_week + ": Icon")
-                    ir.getItem("gForecast_Temperature_High_" + str(index)).setLabel(day_of_the_week + ": Temperature (high) [%.0f %unit%]")
-                    ir.getItem("gForecast_Temperature_Low_" + str(index)).setLabel(day_of_the_week + ": Temperature (low) [%.0f %unit%]")
-                    ir.getItem("gForecast_Pressure_" + str(index)).setLabel(day_of_the_week + ": Pressure [%.1f %unit%]")
-                    ir.getItem("gForecast_Humidity_" + str(index)).setLabel(day_of_the_week + ": Humidity [%d %%]")
-                    ir.getItem("gForecast_WindSpeed_" + str(index)).setLabel(day_of_the_week + ": Wind Speed [%.0f %unit%]")
-                    ir.getItem("gForecast_GustSpeed_" + str(index)).setLabel(day_of_the_week + ": Gust Speed [%.0f %unit%]")
-                    ir.getItem("gForecast_WindDirection_" + str(index)).setLabel(day_of_the_week + ": Wind direction [SCALE(windDirection.scale):%s]")
-                    ir.getItem("gForecast_Cloudiness_" + str(index)).setLabel(day_of_the_week + ": Cloudiness [%d %%]")
-                    ir.getItem("gForecast_RainVolume_" + str(index)).setLabel(day_of_the_week + ": Rain Volume [%.1f %unit%]")
-                    ir.getItem("gForecast_SnowVolume_" + str(index)).setLabel(day_of_the_week + ": Snow Volume [%.1f %unit%]")
+                    itemRegistry.getItem("gForecast_" + str(index)).setLabel(day_of_the_week)
+                    itemRegistry.getItem("gForecast_Timestamp_" + str(index)).setLabel(day_of_the_week + ": Timestamp")
+                    itemRegistry.getItem("gForecast_Condition_" + str(index)).setLabel(day_of_the_week + ": Condition [%s]")
+                    itemRegistry.getItem("gForecast_ConditionID_" + str(index)).setLabel(day_of_the_week + ": Condition ID [%s]")
+                    itemRegistry.getItem("gForecast_IconID_" + str(index)).setLabel(day_of_the_week + ": Icon ID [%s]")
+                    itemRegistry.getItem("gForecast_Icon_" + str(index)).setLabel(day_of_the_week + ": Icon")
+                    itemRegistry.getItem("gForecast_Temperature_High_" + str(index)).setLabel(day_of_the_week + ": Temperature (high) [%.0f %unit%]")
+                    itemRegistry.getItem("gForecast_Temperature_Low_" + str(index)).setLabel(day_of_the_week + ": Temperature (low) [%.0f %unit%]")
+                    itemRegistry.getItem("gForecast_Pressure_" + str(index)).setLabel(day_of_the_week + ": Pressure [%.1f %unit%]")
+                    itemRegistry.getItem("gForecast_Humidity_" + str(index)).setLabel(day_of_the_week + ": Humidity [%d %%]")
+                    itemRegistry.getItem("gForecast_WindSpeed_" + str(index)).setLabel(day_of_the_week + ": Wind Speed [%.0f %unit%]")
+                    itemRegistry.getItem("gForecast_GustSpeed_" + str(index)).setLabel(day_of_the_week + ": Gust Speed [%.0f %unit%]")
+                    itemRegistry.getItem("gForecast_WindDirection_" + str(index)).setLabel(day_of_the_week + ": Wind direction [SCALE(windDirection.scale):%s]")
+                    itemRegistry.getItem("gForecast_Cloudiness_" + str(index)).setLabel(day_of_the_week + ": Cloudiness [%d %%]")
+                    itemRegistry.getItem("gForecast_RainVolume_" + str(index)).setLabel(day_of_the_week + ": Rain Volume [%.1f %unit%]")
+                    itemRegistry.getItem("gForecast_SnowVolume_" + str(index)).setLabel(day_of_the_week + ": Snow Volume [%.1f %unit%]")
 
                 # add Forecast Items to groups, and update the labels to reflect time
                 group_index = 1
@@ -394,74 +423,72 @@ def add_owm_items():
                             group_index += 1
                     label_time = items["Forecast_Timestamp_{:02}".format(3 * index)].format("%1$tl:%1$tM%1$tp")
 
-                    ir.getItem("gForecast_Timestamp_{}".format(group_index)).addMember(ir.getItem("Forecast_Timestamp_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_Timestamp_{:02d}".format(3 * index)).setLabel("Forecast ({}): Timestamp [%1$tY-%1$tm-%1$td %1$tI:%1$tM%1$tp]".format(label_time))
+                    itemRegistry.getItem("gForecast_Timestamp_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_Timestamp_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_Timestamp_{:02d}".format(3 * index)).setLabel("Forecast ({}): Timestamp [%1$tY-%1$tm-%1$td %1$tI:%1$tM%1$tp]".format(label_time))
 
-                    ir.getItem("gForecast_Condition_{}".format(group_index)).addMember(ir.getItem("Forecast_Condition_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_Condition_{:02d}".format(3 * index)).setLabel("Forecast ({}): Condition [%s]".format(label_time))
+                    itemRegistry.getItem("gForecast_Condition_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_Condition_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_Condition_{:02d}".format(3 * index)).setLabel("Forecast ({}): Condition [%s]".format(label_time))
 
-                    ir.getItem("gForecast_ConditionID_{}".format(group_index)).addMember(ir.getItem("Forecast_ConditionID_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_ConditionID_{:02d}".format(3 * index)).setLabel("Forecast ({}): Condition ID [%s]".format(label_time))
+                    itemRegistry.getItem("gForecast_ConditionID_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_ConditionID_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_ConditionID_{:02d}".format(3 * index)).setLabel("Forecast ({}): Condition ID [%s]".format(label_time))
 
-                    ir.getItem("gForecast_IconID_{}".format(group_index)).addMember(ir.getItem("Forecast_IconID_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_IconID_{:02d}".format(3 * index)).setLabel("Forecast ({}): Icon ID [%s]".format(label_time))
+                    itemRegistry.getItem("gForecast_IconID_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_IconID_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_IconID_{:02d}".format(3 * index)).setLabel("Forecast ({}): Icon ID [%s]".format(label_time))
 
-                    ir.getItem("gForecast_Icon_{}".format(group_index)).addMember(ir.getItem("Forecast_Icon_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_Icon_{:02d}".format(3 * index)).setLabel("Forecast ({}): Icon".format(label_time))
+                    itemRegistry.getItem("gForecast_Icon_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_Icon_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_Icon_{:02d}".format(3 * index)).setLabel("Forecast ({}): Icon".format(label_time))
 
-                    ir.getItem("gForecast_Temperature_High_{}".format(group_index)).addMember(ir.getItem("Forecast_Temperature_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_Temperature_{:02d}".format(3 * index)).setLabel("Forecast ({}): Temperature [%.0f %unit%]".format(label_time))
+                    itemRegistry.getItem("gForecast_Temperature_High_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_Temperature_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_Temperature_{:02d}".format(3 * index)).setLabel("Forecast ({}): Temperature [%.0f %unit%]".format(label_time))
 
-                    ir.getItem("gForecast_Temperature_Low_{}".format(group_index)).addMember(ir.getItem("Forecast_Temperature_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_Temperature_{:02d}".format(3 * index)).setLabel("Forecast ({}): Temperature [%.0f %unit%]".format(label_time))
+                    itemRegistry.getItem("gForecast_Temperature_Low_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_Temperature_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_Temperature_{:02d}".format(3 * index)).setLabel("Forecast ({}): Temperature [%.0f %unit%]".format(label_time))
 
-                    ir.getItem("gForecast_Pressure_{}".format(group_index)).addMember(ir.getItem("Forecast_Pressure_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_Pressure_{:02d}".format(3 * index)).setLabel("Forecast ({}): Pressure [%.1f %unit%]".format(label_time))
+                    itemRegistry.getItem("gForecast_Pressure_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_Pressure_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_Pressure_{:02d}".format(3 * index)).setLabel("Forecast ({}): Pressure [%.1f %unit%]".format(label_time))
 
-                    ir.getItem("gForecast_Humidity_{}".format(group_index)).addMember(ir.getItem("Forecast_Humidity_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_Humidity_{:02d}".format(3 * index)).setLabel("Forecast ({}): Humidity [%d %%]".format(label_time))
+                    itemRegistry.getItem("gForecast_Humidity_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_Humidity_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_Humidity_{:02d}".format(3 * index)).setLabel("Forecast ({}): Humidity [%d %%]".format(label_time))
 
-                    ir.getItem("gForecast_WindSpeed_{}".format(group_index)).addMember(ir.getItem("Forecast_WindSpeed_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_WindSpeed_{:02d}".format(3 * index)).setLabel("Forecast ({}): Wind speed [%.0f %unit%]".format(label_time))
+                    itemRegistry.getItem("gForecast_WindSpeed_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_WindSpeed_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_WindSpeed_{:02d}".format(3 * index)).setLabel("Forecast ({}): Wind speed [%.0f %unit%]".format(label_time))
 
-                    ir.getItem("gForecast_GustSpeed_{}".format(group_index)).addMember(ir.getItem("Forecast_GustSpeed_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_GustSpeed_{:02d}".format(3 * index)).setLabel("Forecast ({}): Gust speed [%.0f %unit%]".format(label_time))
+                    itemRegistry.getItem("gForecast_GustSpeed_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_GustSpeed_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_GustSpeed_{:02d}".format(3 * index)).setLabel("Forecast ({}): Gust speed [%.0f %unit%]".format(label_time))
 
-                    ir.getItem("gForecast_WindDirection_{}".format(group_index)).addMember(ir.getItem("Forecast_WindDirection_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_WindDirection_{:02d}".format(3 * index)).setLabel("Forecast ({}): Wind direction [SCALE(windDirection.scale):%s]".format(label_time))
+                    itemRegistry.getItem("gForecast_WindDirection_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_WindDirection_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_WindDirection_{:02d}".format(3 * index)).setLabel("Forecast ({}): Wind direction [SCALE(windDirection.scale):%s]".format(label_time))
 
-                    ir.getItem("gForecast_Cloudiness_{}".format(group_index)).addMember(ir.getItem("Forecast_Cloudiness_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_Cloudiness_{:02d}".format(3 * index)).setLabel("Forecast ({}): Cloudiness [%d %%]".format(label_time))
+                    itemRegistry.getItem("gForecast_Cloudiness_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_Cloudiness_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_Cloudiness_{:02d}".format(3 * index)).setLabel("Forecast ({}): Cloudiness [%d %%]".format(label_time))
 
-                    ir.getItem("gForecast_RainVolume_{}".format(group_index)).addMember(ir.getItem("Forecast_RainVolume_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_RainVolume_{:02d}".format(3 * index)).setLabel("Forecast ({}): Rain volume [%.1f %unit%]".format(label_time))
+                    itemRegistry.getItem("gForecast_RainVolume_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_RainVolume_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_RainVolume_{:02d}".format(3 * index)).setLabel("Forecast ({}): Rain volume [%.1f %unit%]".format(label_time))
 
-                    ir.getItem("gForecast_SnowVolume_{}".format(group_index)).addMember(ir.getItem("Forecast_SnowVolume_{:02d}".format(3 * index)))
-                    ir.getItem("Forecast_SnowVolume_{:02d}".format(3 * index)).setLabel("Forecast ({}): Snow volume [%.1f %unit%]".format(label_time))
+                    itemRegistry.getItem("gForecast_SnowVolume_{}".format(group_index)).addMember(itemRegistry.getItem("Forecast_SnowVolume_{:02d}".format(3 * index)))
+                    itemRegistry.getItem("Forecast_SnowVolume_{:02d}".format(3 * index)).setLabel("Forecast ({}): Snow volume [%.1f %unit%]".format(label_time))
 
                 # set Condition, Icon and WindDirection group values
                 for index in range(1, 6):
                     for group in [600, 200, 500, 300, 700, 800]:# the Conditions are organized into groups (https://openweathermap.org/weather-conditions), which I have prioritized
-                        forecast_items = [item for item in ir.getItem("gForecast_ConditionID_" + str(index)).getMembers() if int(item.state.toString()) in range(group, group + 100)]
+                        forecast_items = [item for item in itemRegistry.getItem("gForecast_ConditionID_" + str(index)).getMembers() if int(item.state.toString()) in range(group, group + 100)]
                         if forecast_items:
                             sorted_items = sorted(forecast_items, key=lambda item: int(item.state.toString()))
                             selected_item = sorted_items.pop()# this will provide the highest value in the sorted list of Items, which is usually the most severe condition
                             events.postUpdate("gForecast_ConditionID_" + str(index), selected_item.state.toString())
                             events.postUpdate("gForecast_Condition_" + str(index), items[selected_item.name.replace("ID", "")].toString())
                             events.postUpdate("gForecast_IconID_" + str(index), items[selected_item.name.replace("Condition", "Icon")].toString())
-                            events.postUpdate(ir.getItem("gForecast_Icon_" + str(index)), items[selected_item.name.replace("ConditionID", "Icon")])
+                            events.postUpdate(itemRegistry.getItem("gForecast_Icon_" + str(index)), items[selected_item.name.replace("ConditionID", "Icon")])
                             break
                     # this can be removed when QuantityTypeArithmeticGroupFunction.Avg() is fixed for Number:Angle
-                    wind_direction_item_states = [item.state.intValue() for item in ir.getItem("gForecast_WindDirection_" + str(index)).getMembers() if not isinstance(item.state, UnDefType)]
+                    wind_direction_item_states = [item.state.intValue() for item in itemRegistry.getItem("gForecast_WindDirection_" + str(index)).getMembers() if not isinstance(item.state, UnDefType)]
                     if wind_direction_item_states:
                         wind_direction_average = reduce(lambda x, y: (((x + y) / 2) if y - x < 180 else (x + y + 360) / 2) % 360, wind_direction_item_states)
                         events.postUpdate("gForecast_WindDirection_" + str(index), str(wind_direction_average))
 
                 add_owm_items_to_groups.log.debug("Updated groups and Items")
 
-            add_owm_items_to_groups(None)
-
-            
+            add_owm_items_to_groups(None)         
     except:
         import traceback
         add_owm_items.log.error(traceback.format_exc())
