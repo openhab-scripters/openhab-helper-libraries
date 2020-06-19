@@ -5,8 +5,8 @@ import traceback
 
 scriptExtension.importPreset(None)# fix for compatibility with Jython > 2.7.0
 import core
-import core.osgi.events
-reload(core.osgi.events)
+#import core.osgi.events
+#reload(core.osgi.events)
 from core.osgi.events import OsgiEventAdmin, event_dict, OSGI_TRIGGERS
 from core.log import logging, LOG_PREFIX
 
@@ -37,7 +37,7 @@ class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
             self.filter = getattr(self.trigger, "event_filter", None)
             self.transformer = getattr(self.trigger, "event_transformer", None)
             self.callback = None
-            LOG.warn("Creating trigger handler for {} ({}), filter={}, transformer={}".format(type(self.trigger).__name__, self.trigger.id, self.filter, self.transformer))
+            LOG.warn("Creating trigger handler for '{}' ({}), filter={}, transformer={}".format(type(self.trigger).__name__, self.trigger.id, self.filter, self.transformer))
             #except:
             #    LOG.error(traceback.format_exc())
 
@@ -50,7 +50,7 @@ class OsgiEventTriggerHandlerFactory(TriggerHandlerFactory):
             self.callback = callback
 
         def dispose(self):
-            LOG.warn("Disposing {} (module {})".format(self, self.trigger.id))
+            LOG.warn("Disposing '{}' (module {})".format(self, self.trigger.id))
             self.factory.handlers.remove(self)
             OsgiEventAdmin.remove_listener(self.on_event)
             if self.trigger.id in OSGI_TRIGGERS:
@@ -85,17 +85,17 @@ core.OSGI_TRIGGER_ID = "jsr223.OsgiEventTrigger"
 
 def scriptLoaded(script):
     automationManager.addTriggerHandler(core.OSGI_TRIGGER_ID, OsgiEventTriggerHandlerFactory())
-    LOG.info("TriggerHandler added [{}]".format(core.OSGI_TRIGGER_ID))
+    LOG.info("TriggerHandler added '{}'".format(core.OSGI_TRIGGER_ID))
 
     automationManager.addTriggerType(TriggerType(
         core.OSGI_TRIGGER_ID, None,
         "an OSGI event is published",
         "Triggers when an OSGi event is published",
         None, Visibility.VISIBLE, None))
-    LOG.info("TriggerType added [{}]".format(core.OSGI_TRIGGER_ID))
+    LOG.info("TriggerType added '{}'".format(core.OSGI_TRIGGER_ID))
 
 
 def scriptUnloaded():
     automationManager.removeHandler(core.OSGI_TRIGGER_ID)
     automationManager.removeModuleType(core.OSGI_TRIGGER_ID)
-    LOG.info("TriggerType and TriggerHandler removed [{}]".format(core.OSGI_TRIGGER_ID))
+    LOG.info("TriggerType and TriggerHandler removed '{}'".format(core.OSGI_TRIGGER_ID))

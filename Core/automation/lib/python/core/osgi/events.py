@@ -1,3 +1,4 @@
+# pylint: disable=wrong-import-position, invalid-name
 """
 This module provides an OSGi EventAdmin event monitor and rule trigger. This
 can trigger off any OSGi event. Rule manager events are filtered to avoid
@@ -13,50 +14,57 @@ circular loops in the rule execution.
             event = inputs['event']
             # do something with event
 """
+import uuid
+import traceback
+
+import java.util
+
+from org.osgi.service.event import EventHandler, EventConstants#, EventAdmin
+
 from core.jsr223.scope import scriptExtension
 scriptExtension.importPreset("RuleSupport")
 from core.jsr223.scope import Trigger, TriggerBuilder, Configuration
-
-import uuid
-import java.util
-import traceback
-
-from org.osgi.framework import FrameworkUtil
-from org.osgi.service.event import EventHandler, EventConstants, EventAdmin
-from org.osgi.service.cm import ManagedService
-
-import core
-from core.osgi import bundle_context
+from core.osgi import BUNDLE_CONTEXT
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger("{}.core.osgi.events".format(LOG_PREFIX))
+LOG = logging.getLogger("{}.core.osgi.events".format(LOG_PREFIX))
+
 
 def hashtable(*key_values):
     """
-    :param key_values: 2-tuples of (key, value)
-    :return: initialized Hashtable
+    Creates a Hashtable from 2-tuples of key/value pairs.
+
+    Args:
+        key_values (2-tuples): the key/value pairs to add to the Hashtable
+
+    Returns:
+        java.util.Hashtable: initialized Hashtable
     """
-    ht = java.util.Hashtable()
-    for k, v in key_values:
-        ht.put(k, v)
-    return ht
+    _hashtable = java.util.Hashtable()
+    for key, value in key_values:
+        _hashtable.put(key, value)
+    return _hashtable
+
 
 class OsgiEventAdmin(object):
+
     _event_handler = None
-    _event_listeners = []
+    event_listeners = []
+    log = logging.getLogger("{}.core.osgi.events.OsgiEventAdmin".format(LOG_PREFIX))
 
     # Singleton
     class OsgiEventHandler(EventHandler):
+
         def __init__(self):
-            self.log = logging.getLogger("jsr223.jython.core.osgi.events.OsgiEventHandler")
-            self.registration = bundle_context.registerService(
+            self.log = logging.getLogger("{}.core.osgi.events.OsgiEventHandler")
+            self.registration = BUNDLE_CONTEXT.registerService(
                 EventHandler, self, hashtable((EventConstants.EVENT_TOPIC, ["*"])))
             self.log.info("Registered openHAB OSGi event listener service")
             self.log.debug("Registration: [{}]".format(self.registration))
 
         def handleEvent(self, event):
-            self.log.debug("Handling event: [{}]".format(event))
-            for listener in OsgiEventAdmin._event_listeners:
+            self.log.critical("Handling event: [{}]".format(event))
+            for listener in OsgiEventAdmin.event_listeners:
                 try:
                     listener(event)
                 except:
@@ -66,23 +74,23 @@ class OsgiEventAdmin(object):
             self.registration.unregister()
 
     @classmethod
-    def add_listener(cls, listener):
-        cls.log.debug("Adding listener admin: [{} {}]".format(id(cls), listener))
-        cls._event_listeners.append(listener)
-        if len(cls._event_listeners) == 1:
-            if cls._event_handler is None:
-                cls._event_handler = cls.OsgiEventHandler()
+    def add_listener(class_, listener):
+        class_.log.debug("Adding listener admin: [{} {}]".format(id(class_), listener))
+        class_.event_listeners.append(listener)
+        if len(class_.event_listeners) == 1:
+            if class_._event_handler is None:
+                class_._event_handler = class_.OsgiEventHandler()
 
     @classmethod
-    def remove_listener(cls, listener):
-        cls.log.debug("Removing listener: [{}]".format(listener))
-        if listener in cls._event_listeners:
-            cls._event_listeners.remove(listener)
-        if len(cls._event_listeners) == 0:
-            if cls._event_handler is not None:
-                cls.log.info("Unregistering openHAB OSGi event listener service")
-                cls._event_handler.dispose()
-                cls._event_handler = None
+    def remove_listener(class_, listener):
+        class_.log.debug("Removing listener: [{}]".format(listener))
+        if listener in class_.event_listeners:
+            class_.event_listeners.remove(listener)
+        if not class_.event_listeners:
+            if class_._event_handler is not None:
+                class_.log.info("Unregistering openHAB OSGi event listener service")
+                class_._event_handler.dispose()
+                class_._event_handler = None
 
 
 # The OH / JSR223 design does not allow trigger handlers to access
@@ -93,16 +101,23 @@ class OsgiEventAdmin(object):
 # OSGi doesn't support passing Jython-related objects. To work around these
 # issues, the following dictionary provides a side channel for obtaining the original
 # trigger.
-osgi_triggers = {}
+OSGI_TRIGGERS = {}
 
 class OsgiEventTrigger(Trigger):
-    """Filter is a predicate taking an event argument and returning True (keep) or False (drop)"""
-    def __init__(self, filter=None):
-        self.filter = filter or (lambda event: True)
-        triggerName = type(self).__name__ + "-" + uuid.uuid1().hex
-        self.trigger = TriggerBuilder.create().withId(triggerName).withTypeUID("jsr223.OsgiEventTrigger").withConfiguration(Configuration()).build()
-        global osgi_triggers
-        osgi_triggers[triggerName] = self
+
+    def __init__(self, filter_predicate=None):
+        """
+        The filter_predicate is a predicate taking an event argument and
+        returning True (keep) or False (drop).
+        """
+        self.filter = filter_predicate or (lambda event: True)
+        trigger_name = type(self).__name__ + "-" + uuid.uuid1().hex
+        self.trigger = TriggerBuilder.create().withId(trigger_name).withTypeUID("jsr223.OsgiEventTrigger").withConfiguration(Configuration()).build()
+        LOG.warn("self.trigger.id: {}".format(self.trigger.id))
+        LOG.warn("trigger_name: {}".format(trigger_name))
+        OSGI_TRIGGERS[trigger_name] = self
+        #OSGI_TRIGGERS[self.id] = self
+        #OSGI_TRIGGERS[self.trigger.id] = self
 
     def event_filter(self, event):
         return self.filter(event)
@@ -110,16 +125,18 @@ class OsgiEventTrigger(Trigger):
     def event_transformer(self, event):
         return event
 
+
 def log_event(event):
-    log.info("OSGI event: [{} ({})]".format(event, type(event).__name__))
+    LOG.info("OSGi event: [{} ({})]".format(event, type(event).__name__))
     if isinstance(event, dict):
         for name in event:
             value = event[name]
-            log.info("  '{}': {} ({})".format(name, value, type(value)))
+            LOG.info("  '{}': {} ({})".format(name, value, type(value)))
     else:
         for name in event.propertyNames:
             value = event.getProperty(name)
-            log.info("  '{}': {} ({})".format(name, value, type(value)))
+            LOG.info("  '{}': {} ({})".format(name, value, type(value)))
+
 
 def event_dict(event):
-    return { key: event.getProperty(key) for key in event.getPropertyNames() }
+    return {key: event.getProperty(key) for key in event.getPropertyNames()}
