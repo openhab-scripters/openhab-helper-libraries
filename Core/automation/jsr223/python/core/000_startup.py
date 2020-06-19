@@ -1,17 +1,29 @@
+"""
+This is the first script to load and it will log system information to assist
+with troubleshooting.
+"""
 from org.slf4j import LoggerFactory
 LOG = LoggerFactory.getLogger("jython.Startup")
 
 from java.lang import System
-import sys, platform
+import sys
 
-LOG.warn("")
-if hasattr(sys.version_info, "major"):
-    LOG.warn("Jython version: {}.{}.{}.{}".format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro, sys.version_info.releaselevel))
-else:
-    LOG.warn("Jython version: {}".format(sys.version))
-LOG.warn("Operating system: {}".format(System.getProperty("os.name")))
-LOG.warn("OS Version: {}".format(System.getProperty("os.version")))
-LOG.warn("Architecture: {}".format(platform.uname()[5]))
-LOG.warn("Java version: {}".format(sys.platform))
-LOG.warn("sys.path: {}".format(sys.path))
-LOG.warn("")
+LOG.warn("\n\n\
+*******************************************************************************\n\
+Jython version:       {}.{}.{}.{}\n\
+Operating system:     {}\n\
+OS Version:           {}\n\
+Java vendor:          {}\n\
+Java VM name:         {}\n\
+Java runtime name:    {}\n\
+Java runtime version: {}\n\
+sys.path:             {}\n\
+*******************************************************************************\n".format(
+sys.version_info[0], sys.version_info[1], sys.version_info[2], sys.version_info[3],
+System.getProperty("os.name"),
+System.getProperty("os.version"),
+System.getProperty("java.vendor"),
+System.getProperty("java.vm.name"),
+System.getProperty("java.runtime.name"),
+System.getProperty("java.runtime.version"),
+"\n                      ".join(sys.path)))
