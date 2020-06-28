@@ -157,6 +157,8 @@ Instructions for installation in a Docker container are available :doc:`here <Do
         #. |core_step_10|
         #. |core_step_11|
 
+Update/Upgrade
+=========
 To upgrade to the latest version of the helper libraries, delete the older version and follow the installation steps.
 
 
