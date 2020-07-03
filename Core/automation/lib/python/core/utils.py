@@ -126,9 +126,9 @@ def kw(dictionary, value):
             None if the value is not found
     """
     LOG.warn("The 'core.utils.kw' function is pending deprecation.")
-    for key, value in dictionary.iteritems():
-        if value == value:
-            return key
+    for k, v in dictionary.iteritems():
+        if v == value:
+            return k
     return None
 
 
