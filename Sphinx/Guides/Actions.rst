@@ -18,7 +18,7 @@ For LogAction, see :ref:`Guides/Logging:LogAction`.
             Exec.executeCommandLine("/bin/sh@@-c@@/usr/bin/curl -s --connect-timeout 3 --max-time 3 http://host.example.com",5000)
 
             from core.actions import HTTP
-            HTTP.sendHttpPutRequest("someURL.example.com, "application/json", '{"this": "that"}')
+            HTTP.sendHttpPutRequest("someURL.example.com", "application/json", '{"this": "that"}')
 
             from core.actions import Ping
             if Ping.checkVitality("10.5.5.5", 0, 5000):
