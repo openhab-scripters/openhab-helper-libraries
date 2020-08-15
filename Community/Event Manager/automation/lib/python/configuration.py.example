@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+'''
+This is an example configuration file for Event Manager.
+You should copy the contents of this file and paste into your ordinary
+openhab2-jython configuration file e.g. automation\lib\python\configuration.py
+'''
+from core.jsr223 import scope
+
+'''
+Four Astro triggers is defined, Sunrise and Sunset event is just sunset/sunrise. 
+Where AlarmDayStartand AlarmNightStart also has an earliest/latest clause (see details in astro.things and Astro Binding  doc)
+Two Time triggers is defined, they are simply Cron Triggers
+
+Time of day is just a sequence of states, where it stays in current state until next state occur.
+Please notice that the events MUST be ordered in syncronous order. Else they will never be triggered. 
+'''
+
+eventmgr_configuration = {
+    'RULENAME'    : 'JSR223 - EventHandler',
+    'ITEM_PREFIX' : 'eventmgr',
+    'EVENTS' : [
+            {'id' : 'Sunrise',         'trigger' : {'astro' : 'astro:sun:astro-home:rise#end' }},
+            {'id' : 'Sunset',          'trigger' : {'astro' : 'astro:sun:astro-home:set#start' }},
+            {'id' : 'AlarmDayStart',   'trigger' : {'astro' : 'astro:sun:astro-alarm:rise#end' }},
+            {'id' : 'AlarmNightStart', 'trigger' : {'astro' : 'astro:sun:astro-alarm:set#start' }},
+            {'id' : 'LunchBreakStart', 'trigger' : {'time'  : {'hour' : 12, 'minute' :  0 }}},
+            {'id' : 'CoffeeBreakStart','trigger' : {'time'  : {'hour' : 15, 'minute' :  0 }}},
+        ],
+    'TIME_OF_DAY' :  [
+            {'id' : 'AstroTimeOfDay', 'events' : OrderedDict([('Sunrise', 'DAY'), ('Sunset', 'NIGHT')]) },
+			{'id' : 'AlarmTimeOfDay', 'events' : OrderedDict([('AlarmDayStart', 'DAY'), ('AlarmNightStart', 'NIGHT')]) },
+            {'id' : 'TimeOfDay1',     'events' : OrderedDict([('Sunrise', 'DAY'), ('LunchBreakStart', 'LUNCH'), ('CoffeeBreakStart', 'COFFEE'), ('Sunset', 'NIGHT')]) },
+            {'id' : 'TimeOfDay2',     'events' : OrderedDict([('DayStart', 'DAY'), ('NightStart', 'NIGHT')]) },
+			
+        ]
+}
