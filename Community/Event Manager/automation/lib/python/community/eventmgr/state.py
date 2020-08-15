@@ -115,8 +115,7 @@ class TimeOfDayStateProxy(StateProxy):
         for subscription in self.dictTimeOfDaySubscriptions[ruleId]:
             try:
                 self.Logger().debug("[callback] Id='{}', TimeOfDay='{}'".format(ruleId, subscription))    
-                #HEST Set Metadata
-                subscription.callback( TimeOfDayEvent(ruleId, eventId, timeOfDayEvents[eventId]) )
+                subscription.callback( TimeOfDayEvent(ruleId, eventId, timeOfDayEvents[eventId], subscription.getMetadata()) )
             except:
                 self.Logger().error(traceback.format_exc())
 

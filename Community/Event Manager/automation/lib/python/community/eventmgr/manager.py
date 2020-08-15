@@ -159,7 +159,7 @@ class EventManager(EventBase):
         Args: 
             eventId: Id of the TimeOfDay 
             callback: Method to callback when event is triggered
-            metadta: User defined metadata (string) to return in callback
+            metadata: User defined metadata (string) to return in callback
 
         Returns:
             None
@@ -378,12 +378,10 @@ class EventManager(EventBase):
         
 
 
-    #@log_traceback
     def generateTrigger(self, eventId, trigger):
 
         try:
             self.Logger().debug("[generateTrigger] Trigger='{}'".format(trigger))
-
             #Create Astro Channel Trigger
             if trigger.has_key('astro'):
                 bindingRegistryInfo = get_service("org.eclipse.smarthome.core.binding.BindingInfoRegistry")
@@ -395,7 +393,6 @@ class EventManager(EventBase):
                         self.Logger().error("Cannot subscribe to event '{}' with trigger '{}' because Astro Binding is not installed".format(eventId, trigger))
                         return
 
-                self.Logger().debug("[generateTrigger] Astro Channel Trigger!")
                 self.generateAstroChannelTrigger(eventId, trigger['astro'])
             
             #Create CronTrigger
