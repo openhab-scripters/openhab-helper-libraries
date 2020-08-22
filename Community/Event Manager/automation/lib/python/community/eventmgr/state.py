@@ -5,7 +5,8 @@ from abc import abstractmethod
 from org.joda.time import DateTime
 
 from core.log import log_traceback
-from core.jsr223.scope import itemRegistry, DateTimeType
+from core.jsr223.scope import itemRegistry, DateTimeType, UnDefType
+
 
 from community.eventmgr.base import EventBase
 from community.eventmgr.event import TimeOfDayEvent
@@ -101,8 +102,8 @@ class TimeOfDayStateProxy(StateProxy):
 
     @log_traceback
     def callback(self, eventData):
-        self.Logger().debug(" [callback] id='{}', key='{}', state='{}'".format(eventData.getId(), eventData.getUserKey(), eventData.getState()))
-        ruleId = eventData.getUserKey()
+        self.Logger().debug(" [callback] id='{}', Metadata='{}', state='{}'".format(eventData.getId(), eventData.getMetadata(), eventData.getState()))
+        ruleId = eventData.getMetadata()
         eventId = eventData.getId()
 
         self.state = eventData.getState()
@@ -114,6 +115,7 @@ class TimeOfDayStateProxy(StateProxy):
         for subscription in self.dictTimeOfDaySubscriptions[ruleId]:
             try:
                 self.Logger().debug("[callback] Id='{}', TimeOfDay='{}'".format(ruleId, subscription))    
+                #HEST Set Metadata
                 subscription.callback( TimeOfDayEvent(ruleId, eventId, timeOfDayEvents[eventId]) )
             except:
                 self.Logger().error(traceback.format_exc())

@@ -25,6 +25,12 @@ If you are creating a new installation, you can ignore what follows.
 
 **PLEASE MAKE SURE THAT YOU GO THROUGH ALL STEPS BELOW WHERE IT SAYS "BREAKING CHANGE"... DON'T SKIP ANY VERSION**
     
+    **Version 1.1.0**
+        Support for configuring via metadata from items
+        Check if astro binding is installed if used
+        Improved Errorhandling
+        Changed 'UserKey' in subscriptions to 'metadata'
+        
     **Version 1.0.0**
         Initial version
 
@@ -54,5 +60,8 @@ scope.scriptExtension.importPreset("RuleSimple")
 
 LOG_CONTEXTNAME = '{}.eventmgr'.format(LOG_PREFIX)   #: Logcontext for EventMgr
 
-EVENTMANAGER_LIB_VERSION = '1.0.0'   #: Version of Event Manager
+EVENTMANAGER_LIB_VERSION = '1.1.0'   #: Version of Event Manager
+
+
+
 

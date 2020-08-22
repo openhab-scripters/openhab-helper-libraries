@@ -1,4 +1,6 @@
-
+"""
+This is just a sample script for inspiration on how this library can be used
+"""
 import traceback 
 
 from core.log import log_traceback, logging, LOG_PREFIX

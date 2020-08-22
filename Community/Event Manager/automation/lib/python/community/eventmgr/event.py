@@ -12,14 +12,14 @@ class TimeEvent(EventBase):
 
     Attributes:
         id: A String with the EventId that was fired.
-        userKey: User defined Key when subscribing
+        metadata: User defined metadata when subscribing
         state: DateTimeType indicating the state of the event that was fired
     """
     @log_traceback
-    def __init__(self, id, userKey, state):
+    def __init__(self, id, metadata, state):
         EventBase.__init__(self)
         self.id = id
-        self.userKey = userKey
+        self.metadata = metadata
         self.state = state
 
     @log_traceback
@@ -34,17 +34,18 @@ class TimeEvent(EventBase):
         """
         return self.id
 
+
     @log_traceback
-    def getUserKey(self):
+    def getMetadata(self):
         """
-        Get method for the User defined key
+        Get method for the User defined metadata
 
         Args:
 
         Returns:
-            UserKey
+            Metadata
         """
-        return self.userKey
+        return self.metadata
 
     
     @log_traceback
@@ -60,6 +61,8 @@ class TimeEvent(EventBase):
         return self.state
     
 
+
+
 class TimeOfDayEvent(EventBase):
     """Class used in event callbacks for TimeOfDay Events.
 
@@ -68,16 +71,17 @@ class TimeOfDayEvent(EventBase):
     Attributes:
         ruleId: A String with the Id of the TimeOfDay Rule that changed state.
         eventId: A String with the Id of the event that caused the state change.
-        userKey: User defined Key when subscribing
+        metadata: User defined metadata when subscribing
         state: String defined in config, indicating the current state
     """
     
     @log_traceback
-    def __init__(self, ruleId, eventId, eventName):
+    def __init__(self, ruleId, eventId, eventName, metadata = ''):
         EventBase.__init__(self)
         self.ruleId = ruleId
         self.eventId = eventId
         self.eventName = eventName
+        self.metadata = metadata
 
     @log_traceback
     def getRuleId(self):
@@ -106,6 +110,19 @@ class TimeOfDayEvent(EventBase):
     @log_traceback
     def getEventName(self):
         return self.eventName
+
+    @log_traceback
+    def getMetadata(self):
+        """
+        Get method for the User defined metadata
+
+        Args:
+
+        Returns:
+            Metadata
+        """
+        return self.metadata
+
 
     @log_traceback
     def getState(self):

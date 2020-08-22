@@ -2,8 +2,11 @@
 
 import traceback 
 
+from core.osgi import get_service
+from core import items
+
 from core.jsr223 import scope
-from core.jsr223.scope import ir, DateTimeType
+from core.jsr223.scope import events, ir, DateTimeType
 from core.log import log_traceback
 from core.actions import ScriptExecution
 from core.date import to_joda_datetime
@@ -11,7 +14,8 @@ from core.rules import addRule
 from core.triggers import ChannelEventTrigger, CronTrigger, ItemStateChangeTrigger, ItemStateUpdateTrigger
 from core.items import add_item, remove_item
 from core.links import add_link
-from core.metadata import set_metadata, get_key_value
+from core.metadata import get_metadata, set_metadata, get_key_value, get_value
+
 
 from community.eventmgr import EVENTMANAGER_LIB_VERSION
 from community.eventmgr.base import EventBase
@@ -30,13 +34,27 @@ from org.joda.time import DateTime
 class EventSubscription(EventBase):
 
     @log_traceback
-    def __init__(self, EventId, CallbackKey, Callback):
+    def __init__(self, eventId, metadata, callback):
         EventBase.__init__(self)
 
-        self.Logger().debug("[EventSubscription] Subscribe to event Id='{}', CallbackKey='{}'".format(EventId, CallbackKey))
-        self.eventId = EventId
-        self.callback = Callback
-        self.callbackKey = CallbackKey
+        self.Logger().debug("[EventSubscription] Subscribe to event Id='{}', Metadata='{}'".format(eventId, metadata))
+        self.eventId = eventId
+        self.callback = callback
+        self.metadata = metadata
+    
+    
+    @log_traceback
+    def getEventId(self):
+        return self.eventId
+
+    @log_traceback
+    def getCallback(self):
+        return self.callback
+    
+    @log_traceback
+    def getMetadata(self):
+        return self.metadata
+
 
 class EventManager(EventBase): 
     """
@@ -101,6 +119,8 @@ class EventManager(EventBase):
             
             self.initializeTimeOfDay()
 
+            self.initializeMetadataConfig()
+
             self.Logger().debug("Initialized EventManager")
         except:
             self.Logger().error(traceback.format_exc())
@@ -132,34 +152,34 @@ class EventManager(EventBase):
         return cls.getInstance()._getTimeOfDayState(timeOfDayId)
         
     @classmethod
-    def subscribeEvent(cls, eventId, callback, userKey = None ):
+    def subscribeEvent(cls, eventId, callback, metadata = None ):
         """
         Called to subscribe to events
 
         Args: 
             eventId: Id of the TimeOfDay 
             callback: Method to callback when event is triggered
-            userKey: User defined metadata (string) to return in callback
+            metadta: User defined metadata (string) to return in callback
 
         Returns:
             None
         """
-        cls.getInstance()._subscribeEvent(eventId, callback, userKey) 
+        cls.getInstance()._subscribeEvent(eventId, callback, metadata) 
 
     @classmethod
-    def subscribeTimeOfDayEvent(cls, eventId, callback, userKey = None ):
+    def subscribeTimeOfDayEvent(cls, eventId, callback, metadata = None ):
         """
         Called to subscribe to events
 
         Args: 
             eventId: Id of the TimeOfDay 
             callback: Method to callback when event is triggered
-            userKey: User defined metadata (string) to return in callback
+            metadata: User defined metadata (string) to return in callback
 
         Returns:
             None
         """
-        cls.getInstance()._subscribeTimeOfDayEvent(eventId, callback, userKey) 
+        cls.getInstance()._subscribeTimeOfDayEvent(eventId, callback, metadata) 
 
     @log_traceback
     def _getEventState(self, eventId):
@@ -176,10 +196,10 @@ class EventManager(EventBase):
         return None
 
 
-    def _subscribeEvent(self, eventId, callback, userKey):
+    def _subscribeEvent(self, eventId, callback, metadata):
         if eventId in self.dictEventSubscriptions.keys():
-            self.Logger().info("[_subscribeEvent] Create subscription to event '{}' with UserKey '{}'".format(eventId, userKey))
-            self.dictEventSubscriptions[eventId].append( EventSubscription(eventId, userKey, callback) )
+            self.Logger().info("[_subscribeEvent] Create subscription to event '{}' with Metadata '{}'".format(eventId, metadata))
+            self.dictEventSubscriptions[eventId].append( EventSubscription(eventId, metadata, callback) )
 
             if (self.dictEventId2StateProxy.has_key(eventId)):
                 return self.dictEventId2StateProxy[eventId].getState()
@@ -194,10 +214,10 @@ class EventManager(EventBase):
         return None
 
     
-    def _subscribeTimeOfDayEvent(self, todRuleId, callback, userKey):
+    def _subscribeTimeOfDayEvent(self, todRuleId, callback, metadata):
         if todRuleId in self.dictTimeOfDaySubscriptions.keys():
-            self.Logger().info("[_subscribeTimeOfDayEvent] Create subscription to TimeOfDay event ruleId '{}' and userKey '{}'".format(todRuleId, userKey))
-            self.dictTimeOfDaySubscriptions[todRuleId].append( EventSubscription(todRuleId, userKey, callback) )
+            self.Logger().info("[_subscribeTimeOfDayEvent] Create subscription to TimeOfDay event ruleId '{}' and metadata '{}'".format(todRuleId, metadata))
+            self.dictTimeOfDaySubscriptions[todRuleId].append( EventSubscription(todRuleId, metadata, callback) )
         else:
             message = "Cannot create TimeOfDay subscription because TimeOfDay rule '{}' does not exist in configuration.".format(todRuleId)
             self.Logger().warn("[_subscribeTimeOfDayEvent] {}".format(message))
@@ -229,7 +249,6 @@ class EventManager(EventBase):
             eventId = event['id']
             eventTrigger = event['trigger']
             self.log.debug("[INITIALIZE] Processing config for id='{}' is '{}'".format(eventId, eventTrigger))
-
             self.generateTrigger(eventId, eventTrigger)
         
         newRule = addRule(self._eventHandlerRule)   # Activate Rule
@@ -247,7 +266,7 @@ class EventManager(EventBase):
             dictRules = ruleTimeOfDay['events']
             self.Logger().debug("[initializeTimeOfDay] Processing rule '{}' with states '{}'".format(ruleId, dictRules))
 
-            dictInitValues = {}
+            #dictInitValues = {}
             
             # ##################
             # Initialize
@@ -259,6 +278,11 @@ class EventManager(EventBase):
             objTimeOfDayProxy = None
             
             for idx1, (eventId, eventValue) in enumerate(dictRules.iteritems()):  # Find current/initial State
+                
+                if not self.dictEventId2StateProxy.has_key(eventId):
+                    self.Logger().error("TimeOfDay '{}' is referencing an event '{}' that does not exist. Either the name is mispelled, or the event could not be created dur to other errors. Check previous errors.".format(ruleId, eventId))
+                    return
+
                 if not self.dictEventId2StateProxy[eventId].getStateAsJoda().isBefore(now):
                     self.Logger().debug("[TimeOfDay] Initial state for TimeOfDay '{}' is '{}'".format(ruleId, initialState))
                     objTimeOfDayProxy = TimeOfDayStateProxy(ruleId, dictRules, initialState)
@@ -283,19 +307,57 @@ class EventManager(EventBase):
             # prepare for subscriptions
             self.dictTimeOfDaySubscriptions[ruleId] = []
     
-
-    
+    @log_traceback
+    def initializeMetadataConfig(self):
+        NAMESPACE_EVENTMGR = 'eventmgr'
+        for curItem in items:
+            metadata = get_metadata(curItem, NAMESPACE_EVENTMGR)
+            if metadata is not None:
+                eventType = get_value(curItem, NAMESPACE_EVENTMGR)
+                eventId = get_key_value(curItem, NAMESPACE_EVENTMGR, 'id')
                 
+                self.Logger().debug(u"[initializeMetadataConfig] Item {} has metadata for namespace '{}': Type='{}' Key='{}'".format(curItem, NAMESPACE_EVENTMGR, eventType, eventId))
+                curState = None
+                if eventType == 'event':
+                    if (self.dictEventId2StateProxy.has_key(eventId)):
+                        EventManager.subscribeEvent(eventId, self.callbackItemEventUpdate, curItem)
+                        curState = EventManager.getEventState(eventId).toString()
+                    
+                elif eventType == 'tod':
+                    if (self.dictTimeOfDay2StateProxy.has_key(eventId)):
+                        EventManager.subscribeTimeOfDayEvent(eventId, self.callbackItemTimeOfDayUpdate, curItem)
+                        curState = EventManager.getTimeOfDayState(eventId)
+                
+                if (curState != None):
+                    self.updateItemState(curItem, curState)
+                
+
+
+    @log_traceback
+    def callbackItemEventUpdate(self, eventData):
+        self.Logger().debug("[callbackItemEventUpdate] id='{}', key='{}', data='{}'".format(eventData.getId(), eventData.getMetadata(), eventData.getState()))
+        self.updateItemState(eventData.getMetadata() , eventData.getState())
+    
+    @log_traceback
+    def callbackItemTimeOfDayUpdate(self, eventData):
+        self.Logger().debug("[callbackItemTimeOfDayUpdate] ruleId='{}', id='{}', key='{}', data='{}'".format(eventData.getRuleId(), eventData.getEventId(), eventData.getMetadata(), eventData.getState()))
+        self.updateItemState(eventData.getMetadata(), eventData.getState())
+
+    @log_traceback
+    def updateItemState(self, itemName, state):
+        self.Logger().debug(u"[updateItemState] Item {} has state '{}'".format(itemName, state))
+        events.postUpdate(itemName, state)
+
     @log_traceback
     def ensureItemCreated(self, itemName, itemType, itemLabel = '', listTags = [], listGroups = []):
         """
         Ensure Group Item is created
         """
-        self.log.debug("[ensureItemCreated] Ensure item '{}' is created".format(itemName))
+        self.Logger().debug("[ensureItemCreated] Ensure item '{}' is created".format(itemName))
         if scope.itemRegistry.getItems(itemName):
             remove_item(itemName)
         if not scope.itemRegistry.getItems(itemName):
-            self.log.debug("[ensureItemCreated] Creating item '{}'!".format(itemName))
+            self.Logger().debug("[ensureItemCreated] Creating item '{}'!".format(itemName))
             add_item(itemName, item_type=itemType, label=itemLabel, groups=listGroups, tags=listTags)
 
     
@@ -316,14 +378,23 @@ class EventManager(EventBase):
         
 
 
-    @log_traceback
+    #@log_traceback
     def generateTrigger(self, eventId, trigger):
 
         try:
             self.Logger().debug("[generateTrigger] Trigger='{}'".format(trigger))
-            
+
             #Create Astro Channel Trigger
             if trigger.has_key('astro'):
+                bindingRegistryInfo = get_service("org.eclipse.smarthome.core.binding.BindingInfoRegistry")
+
+                if bindingRegistryInfo is None:
+                    self.Logger().warn('Failed to verify if required Astro Binding is installed')        
+                else:
+                    if (bindingRegistryInfo.getBindingInfo('astro') is None):
+                        self.Logger().error("Cannot subscribe to event '{}' with trigger '{}' because Astro Binding is not installed".format(eventId, trigger))
+                        return
+
                 self.Logger().debug("[generateTrigger] Astro Channel Trigger!")
                 self.generateAstroChannelTrigger(eventId, trigger['astro'])
             
@@ -333,7 +404,6 @@ class EventManager(EventBase):
             
             else:
                 self.Logger().error("[generateTrigger] Trigger type is unknown/unsupported, nothing will be created! => {}".format(trigger))
-          
         except:
             self.Logger().error((traceback.format_exc()))
 
@@ -543,8 +613,8 @@ class EventManager(EventBase):
                 for subscription in self.dictEventSubscriptions[eventId]:
                     
                     try:
-                        self.Logger().info("[processEvent] SUBSCRIPTION='{}' - Sending event '{}' with state '{}' to subscriber".format(subscription, eventId, eventState)) 
-                        subscription.callback(TimeEvent(eventId, subscription.callbackKey, eventState))
+                        self.Logger().info("[processEvent] SUBSCRIPTION='{}' - Sending event '{}' with state '{}' and metadata '{}' to subscriber".format(subscription, eventId, eventState, subscription.getMetadata())) 
+                        subscription.callback(TimeEvent(eventId, subscription.getMetadata(), eventState))
                     except:
                         self.Logger().error(traceback.format_exc())
             else:
@@ -558,9 +628,8 @@ class EventManager(EventBase):
     
     @log_traceback
     def callbackTimeOfDay(self, eventData):
-        self.Logger().info("[TIMEOFDAY-CALLBACK] id='{}', key='{}', data='{}'".format(eventData.getId(), eventData.getUserKey(), eventData.getState()))
-        #userKey = eventData.getUserKey()
-        ruleId = eventData.getUserKey()
+        self.Logger().info("[TIMEOFDAY-CALLBACK]  EventData[id='{}', metadata='{}', data='{}']".format(eventData.getId(), eventData.getMetadata(), eventData.getState()))
+        ruleId = eventData.getMetadata()
         eventId = eventData.getId()
         timeOfDay = self._TimeOfDay
 
@@ -575,8 +644,8 @@ class EventManager(EventBase):
         # Perform callback to all TimeOfDay event subscribers
         for subscription in self.dictTimeOfDaySubscriptions[ruleId]:
             try:
-                self.Logger().debug("[callbackTimeOfDay] Performing callback to subscriber with ruleId='{}', eventId='{}', TimeOfDay='{}'".format(ruleId, eventId, subscription))    
-                subscription.callback( TimeOfDayEvent(ruleId, eventId, timeOfDayEvents[eventId]) )
+                self.Logger().debug("[callbackTimeOfDay] Performing callback to subscriber with ruleId='{}', eventId='{}', metadata='{}', TimeOfDay='{}'".format(ruleId, eventId, subscription.getMetadata(), subscription))    
+                subscription.callback( TimeOfDayEvent(ruleId, eventId, timeOfDayEvents[eventId], subscription.getMetadata()) )
             except:
                 self.Logger().exception(traceback.format_exc())    
     
