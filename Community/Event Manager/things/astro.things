@@ -1,0 +1,24 @@
+Thing astro:sun:astro-home "Astro: Home [SUN]" @ "Astro" [ geolocation="56.123456,11.703813", interval=60 ]
+
+Thing astro:sun:astro-alarm  "Astro: Alarm [SUN]" @ "Astro" [ geolocation="56.123456,11.703813", interval=60 ] {
+     Channels:
+        Type start : rise#start [
+            earliest="07:00"
+        ]
+        Type end : rise#end [
+            earliest="07:00"
+        ]
+        Type rangeEvent : rise#event [
+            earliest="07:00"
+        ]
+
+        Type start : set#start [
+            latest="21:00"
+        ]
+        Type end : set#end [
+            latest="21:00"
+        ]        
+        Type rangeEvent : set#event [
+            latest="21:00"
+        ]
+}
