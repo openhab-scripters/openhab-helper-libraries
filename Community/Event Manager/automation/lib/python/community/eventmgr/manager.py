@@ -393,6 +393,7 @@ class EventManager(EventBase):
                         self.Logger().error("Cannot subscribe to event '{}' with trigger '{}' because Astro Binding is not installed".format(eventId, trigger))
                         return
 
+                self.Logger().debug("[generateTrigger] Astro Channel Trigger!")
                 self.generateAstroChannelTrigger(eventId, trigger['astro'])
             
             #Create CronTrigger
