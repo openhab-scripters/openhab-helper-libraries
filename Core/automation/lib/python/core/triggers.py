@@ -280,8 +280,8 @@ def when(target):
             raise ValueError(u"when: '{}' is not a valid Thing status".format(new_state))
         elif target_type == "Channel" and things.getChannel(ChannelUID(trigger_target)) is None:# returns null if Channel does not exist
             raise ValueError(u"when: '{}' could not be parsed because Channel '{}' does not exist".format(target, trigger_target))
-        elif target_type == "Channel" and things.getChannel(ChannelUID(trigger_target)).kind != ChannelKind.TRIGGER:
-            raise ValueError(u"when: '{}' could not be parsed because '{}' is not a trigger Channel".format(target, trigger_target))
+#       elif target_type == "Channel" and things.getChannel(ChannelUID(trigger_target)).kind != ChannelKind.TRIGGER:
+#           raise ValueError(u"when: '{}' could not be parsed because '{}' is not a trigger Channel".format(target, trigger_target))
         elif target_type == "System" and trigger_target != "started":# and trigger_target != "shuts down":
             raise ValueError(u"when: '{}' could not be parsed. trigger_target '{}' is invalid for target_type 'System'. The only valid trigger_type value is 'started'".format(target, target_type))# and 'shuts down'".format(target, target_type))
 
