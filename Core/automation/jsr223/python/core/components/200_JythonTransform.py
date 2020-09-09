@@ -12,16 +12,19 @@ from core.log import logging, LOG_PREFIX
 TRANSFORMATION_CLASS = None
 
 try:
-    from org.openhab.core.transform import TransformationService
-    TRANSFORMATION_CLASS = "org.openhab.core.transform.TransformationService"
-except:
     from org.eclipse.smarthome.core.transform import TransformationService
+    from org.eclipse.smarthome.config.core import ConfigConstants
     TRANSFORMATION_CLASS = "org.eclipse.smarthome.core.transform.TransformationService"
+except:
+    from org.openhab.core.transform import TransformationService
+    from org.openhab.core.config.core import ConfigConstants
+    TRANSFORMATION_CLASS = "org.openhab.core.transform.TransformationService"
 
 try:
     class JythonTransformationService(TransformationService):
 
-        def transform(self, pathname, value):
+        def transform(self, function, value):
+            pathname = "{}/{}/{}".format(ConfigConstants.getConfigFolder(), TransformationService.TRANSFORM_FOLDER_NAME, function)
             with open(pathname, "r") as file_path:
                 code = file_path.read()
                 return eval(code, globals(), {'value': value})
