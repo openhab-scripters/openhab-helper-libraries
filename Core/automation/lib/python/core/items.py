@@ -2,6 +2,8 @@
 This module allows runtime creation and removal of items. It will also remove
 any links from an Item before it is removed.
 """
+from __future__ import unicode_literals
+
 __all__ = ["add_item", "remove_item"]
 
 from core.jsr223.scope import scriptExtension, itemRegistry

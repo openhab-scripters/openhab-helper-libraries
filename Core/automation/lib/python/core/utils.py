@@ -2,6 +2,8 @@
 """
 This module provides miscellaneous utility functions that are used across the core packages and modules.
 """
+from __future__ import unicode_literals
+
 __all__ = [
     "validate_channel_uid",
     "validate_uid",

@@ -4,6 +4,8 @@ This module provides functions for manipulating Item Metadata.
 See the :ref:`Guides/Metadata:Metadata` guide for details on the metadata
 structure.
 """
+from __future__ import unicode_literals
+
 __all__ = [
     "get_all_namespaces",
     "get_metadata",
