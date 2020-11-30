@@ -16,8 +16,13 @@ except:
 
 LOG = logging.getLogger("{}.core.StartupTrigger".format(LOG_PREFIX))
 
+core.STARTUP_MODULE_ID = "jsr223.StartupTrigger"
+
+
 class _StartupTriggerHandlerFactory(TriggerHandlerFactory):
+
     class Handler(TriggerHandler):
+
         def __init__(self, trigger):
             self.trigger = trigger
 
@@ -38,18 +43,18 @@ class _StartupTriggerHandlerFactory(TriggerHandlerFactory):
     def dispose(self):
         pass
 
-core.STARTUP_MODULE_ID = "jsr223.StartupTrigger"
 
 def scriptLoaded(script):
     automationManager.addTriggerHandler(core.STARTUP_MODULE_ID, _StartupTriggerHandlerFactory())
-    LOG.info("TriggerHandler added [{}]".format(core.STARTUP_MODULE_ID))
+    LOG.info("TriggerHandler added '{}'".format(core.STARTUP_MODULE_ID))
 
     automationManager.addTriggerType(TriggerType(
         core.STARTUP_MODULE_ID, None,
         "System started or rule saved",
         "Triggers when the rule is added, which occurs when the system has started or the rule has been saved",
         None, Visibility.VISIBLE, None))
-    LOG.info("TriggerType added [{}]".format(core.STARTUP_MODULE_ID))
+    LOG.info("TriggerType added '{}'".format(core.STARTUP_MODULE_ID))
+
 
 def scriptUnloaded():
     automationManager.removeHandler(core.STARTUP_MODULE_ID)
