@@ -1,15 +1,15 @@
 from core.metadata import set_metadata
 
 '''
-# which Items have an `area_triggers_and_actions` namespace?
+# Which Items have an `area_triggers_and_actions` namespace?
 from core.metadata import get_metadata
 from core.log import logging, LOG_PREFIX
 
-log = logging.getLogger("{}.area_triggers_and_actions.update_metadata".format(LOG_PREFIX))
+LOG = logging.getLogger("{}.area_triggers_and_actions.update_metadata".format(LOG_PREFIX))
 for item in ir.getAll():
     metadata = get_metadata(item.name, "area_triggers_and_actions")
     if metadata:
-        log.warn("{}: {}".format(item.name, metadata))
+        LOG.warn(u"{}: {}".format(item.name, metadata))
 '''
 
 '''
@@ -21,10 +21,10 @@ for item in ir.getAll():
 '''
 
 '''
-# This is the general metadata structure. Every option is listed but seldom are
-# they all used. Custom actions can make use of custom metadata structures, as
-# is done with the notification_action.
-
+# This is the general Item metadata structure that could be used for a specific
+# Item. Every option is listed but they are seldom all used. Custom actions can
+# make use of custom metadata structures, as is done in the notification_action
+# example.
 "Area_Triggers_and_Actions": {
     "modes": {
         "Morning": {"low_lux_trigger":5,  "hue":100, "saturation":100, "brightness":10},
@@ -36,13 +36,13 @@ for item in ir.getAll():
     },
     "actions": {
         "light_action": {
+            "lux_item_name": "DS_FamilyRoom_Lux",
             "ON": {
                 "delay": 0,
-                "recurring": False
             },
             "OFF": {
                 "delay": 60,
-                "recurring": True
+                "recurring": False
             }
         },
         "notification_action": {
@@ -60,7 +60,6 @@ for item in ir.getAll():
             },
             "OFF": {
                 "delay": 5,
-                "recurring": False
             }
         }
     }
@@ -70,19 +69,97 @@ for item in ir.getAll():
 '''
 # Examples
 
-set_metadata("gOutside_Door_Trigger", "area_triggers_and_actions", {"actions": {"notification_action": {"ON": {"delay": 3600, "types": {"audio": True, "mobile": True}, "Priority": 0, "recurring": True}}}}, overwrite=True)
+# set_metadata("gOutside_Door_Trigger", "area_triggers_and_actions", {
+#     "notification_action": {
+#         "limited": True,
+#         "active": {
+#             "delay": 3600,
+#             "types": {
+#                 "audio": True,
+#                 "mobile": True
+#             },
+#             "Priority": 0,
+#             "recurring": True
+#         }
+#     }
+# }, overwrite=True)
 
-set_metadata("US_GarageAttached_Dimmer", "area_triggers_and_actions", {"actions": {"light_action": {"OFF": {"delay": 180}}}}, overwrite=True)
+# set_metadata("US_GarageAttached_Dimmer", "area_triggers_and_actions", {
+#     "light_action": {
+#         "inactive": {
+#             "delay": 180
+#         }
+#     }
+# }, overwrite=True)
 
-set_metadata("DS_Office_Speaker_Player", "area_triggers_and_actions", {"actions": {"speaker_action": {"OFF": {"delay": 30}}}}, overwrite=True)
+# set_metadata("US_MasterBathroom_Speaker_Player", "area_triggers_and_actions", {
+#     "speaker_action": {
+#         "inactive": {
+#             "delay": 30
+#         }
+#     }
+# }, overwrite=True)
 
-set_metadata("DS_FamilyRoom_TV_LED_Color", "area_triggers_and_actions", {"modes": {"Morning": {"low_lux_trigger":5, "brightness":10, "hue":100, "saturation":100}, "Day": {"low_lux_trigger":55, "brightness":10, "hue":255, "saturation":100}, "Evening": {"low_lux_trigger":90, "brightness":10, "hue":255, "saturation":100}, "Night": {"low_lux_trigger":90, "brightness":10, "hue":240, "saturation":100}, "Late": {"low_lux_trigger":5, "brightness":10, "hue":0, "saturation":100}, "Party": {"low_lux_trigger":5, "brightness":10, "hue":0, "saturation":100}}}, overwrite=True)
+# set_metadata("gDS_Office_Bulb", "area_triggers_and_actions", {
+#     "light_action": {
+#         "lux_item_name": "ESP12E_01_Luminance",
+#         "active": {
+#             "modes": {
+#                 "Morning": {"lux_trigger": 0, "low_lux": {"brightness":1}},
+#                 "Day": {"lux_trigger": 0, "low_lux": {"brightness":98}},
+#                 "Evening": {"lux_trigger": 0, "low_lux": {"brightness":98}},
+#                 "Night": {"lux_trigger": 0, "low_lux": {"brightness":25}},
+#                 "Late": {"lux_trigger": 0, "low_lux": {"brightness":1}},
+#                 "Party": {"lux_trigger": 0, "low_lux": {"brightness":98}}
+#             }
+#         }
+#     }
+# }, overwrite=True)
 
-set_metadata("DS_Kitchen_Sink_Switch", "area_triggers_and_actions", {"modes": {"Morning": {"low_lux_trigger":5, "brightness":98}, "Day": {"low_lux_trigger":50, "brightness":98}, "Evening": {"low_lux_trigger":90, "brightness":98}, "Night": {"low_lux_trigger":90, "brightness":98}, "Late": {"low_lux_trigger":90, "brightness":0}}}, overwrite=True)
-set_metadata("DS_Kitchen_Spots_Dimmer", "area_triggers_and_actions", {"modes": {"Morning": {"low_lux_trigger":5, "brightness":98}, "Day": {"low_lux_trigger":50, "brightness":98}, "Evening": {"low_lux_trigger":90, "brightness":98}, "Night": {"low_lux_trigger":90, "brightness":98}, "Late": {"low_lux_trigger":90, "brightness":0}}}, overwrite=True)
-set_metadata("DS_Kitchen_Stove_Bulb", "area_triggers_and_actions", {"modes": {"Morning": {"low_lux_trigger":99999, "brightness":98}, "Day": {"low_lux_trigger":99999, "brightness":98}, "Evening": {"low_lux_trigger":99999, "brightness":98}, "Night": {"low_lux_trigger":99999, "brightness":55}, "Late": {"low_lux_trigger":99999, "brightness":10}}}, overwrite=True)
+# set_metadata("gOutsideLight", "area_triggers_and_actions", {
+#     "light_action": {
+#         "lux_item_name": "ESP12E_01_Luminance",
+#         "active": {
+#             "modes": {
+#                 "Morning": {"lux_trigger": 25, "low_lux": {"brightness":98}},
+#                 "Day": {"lux_trigger": 25, "low_lux": {"brightness":98}},
+#                 "Evening": {"lux_trigger": 25, "low_lux": {"brightness":98}},
+#                 "Night": {"lux_trigger": 25, "low_lux": {"brightness":98}},
+#                 "Late": {"lux_trigger": 25, "low_lux": {"brightness":98}},
+#                 "Party": {"lux_trigger": 25, "low_lux": {"brightness":98}}
+#             }
+#         }
+#     }
+# }, overwrite=True)
 
-set_metadata("Outlet5", "area_triggers_and_actions", {"modes": {"Morning": {"low_lux_trigger":5, "brightness":0}, "Day": {"low_lux_trigger":50, "brightness":0}, "Evening": {"low_lux_trigger":90, "brightness":0}, "Night": {"low_lux_trigger":90, "brightness":1}, "Late": {"low_lux_trigger":90, "brightness":1}, "Party": {"low_lux_trigger":90, "brightness":0}}}, overwrite=True)
+# set_metadata("US_DiningRoom_Dimmer", "area_triggers_and_actions", {
+#     "light_action": {
+#         "lux_item_name": "ESP12E_02_Luminance",
+#         "active": {
+#             "modes": {
+#                 "Morning": {"lux_trigger": 55, "low_lux": {"brightness":30}},
+#                 "Day": {"lux_trigger": 200, "low_lux": {"brightness":30}},
+#                 "Evening": {"lux_trigger": 200, "low_lux": {"brightness":30}},
+#                 "Night": {"lux_trigger": 200, "low_lux": {"brightness":30}},
+#                 "Late": {"lux_trigger": 55, "low_lux": {"brightness":1}},
+#                 "Party": {"lux_trigger": 0, "low_lux": {"brightness":30}}
+#             }
+#         }
+#     }
+# }, overwrite=True)
 
-set_metadata("gOutsideLight", "area_triggers_and_actions", {"modes": {"Morning": {"low_lux_trigger":5, "brightness":98}, "Day": {"low_lux_trigger":5, "brightness":98}, "Evening": {"low_lux_trigger":5, "brightness":98}, "Night": {"low_lux_trigger":5, "brightness":98}, "Late": {"low_lux_trigger":5, "brightness":98}, "Party": {"low_lux_trigger":90, "brightness":98}}}, overwrite=True)
-'''
+# set_metadata("DS_FamilyRoom_TV_LED_Color", "area_triggers_and_actions", {
+#     "light_action": {
+#         "lux_item_name": "ESP12E_01_Luminance",
+#         "active": {
+#             "modes": {
+#                 "Morning": {"lux_trigger": 55, "low_lux": {"brightness": 10, "hue": 100, "saturation":100}},
+#                 "Day": {"lux_trigger": 250, "low_lux": {"brightness": 0, "hue": 0, "saturation":0}},
+#                 "Evening": {"lux_trigger": 250, "low_lux": {"brightness": 10, "hue": 255, "saturation":100}},
+#                 "Night": {"lux_trigger": 250, "low_lux": {"brightness": 10, "hue": 240, "saturation":100}},
+#                 "Late": {"lux_trigger": 55, "low_lux": {"brightness": 10, "hue": 0, "saturation":100}},
+#                 "Party": {"lux_trigger": 0, "low_lux": {"brightness": 10, "hue": 0, "saturation":100}}
+#             }
+#         }
+#     }
+# }, overwrite=True)
