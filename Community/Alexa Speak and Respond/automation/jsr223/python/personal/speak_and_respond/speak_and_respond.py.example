@@ -39,8 +39,8 @@ def get_lock_states():
 @rule("Alert: Voice command alert")
 @when("Member of gAlexa_LastVoiceCommand received update")
 def last_voice_command_alert(event):
-    last_voice_command_alert.log.debug("LastVoiceCommand received [{}]".format(event.itemState))
+    last_voice_command_alert.log.debug("LastVoiceCommand received: {}".format(event.itemState))
     if event.itemState.toString() == "are the doors locked":
         events.sendCommand(event.itemName.replace("LastVoiceCommand", "TTS"), get_lock_states())
-    #elif event.itemState.toString() == "are the windows closed":
-        # do stuff here
+    # elif event.itemState.toString() == "are the windows closed":
+    #    # do stuff here
