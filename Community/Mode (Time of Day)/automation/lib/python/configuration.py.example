@@ -4,25 +4,62 @@ to start. The rule will adapt to changes in this dict, so times can be changed
 and Modes can be added or removed, but the script will need to be reloaded for
 the changes to take affect. Modes must be ordered first to last, with no
 overlap in times. The Modes can be configured with Times and/or Channels. If
-both are used, the first one that occurs will trigger the Mode. If a Time, the
-Mode will be set after saving the file. If not, the Mode will need to be
-manuallly set the first time, or just wait for the first trigger.
+both are used, the first one that occurs will trigger the Mode. If a Time is
+used for each Mode, the Mode will be updated after OH starts or after saving
+the file. If not, the Mode may not be updated until the first trigger, so it
+may need to be set manually.
 
 Here is an example using a Channel (Morning) and using both a Time and a
 Channel (Night):
-
-mode_dict = OrderedDict([
-    ("Morning", {"channel": "astro:sun:local:civilDawn#event", "event": "START"}),
-    ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"})
-])
 """
-
-from collections import OrderedDict
-
-mode_dict = OrderedDict([
-    ("Morning", {"hour": 7,  "minute": 0,  "second": 0}),
-    ("Day"    , {"hour": 9,  "minute": 0,  "second": 0}),
-    ("Evening", {"hour": 17, "minute": 55, "second": 0}),
-    ("Night"  , {"hour": 21, "minute": 0,  "second": 0}),
-    ("Late"   , {"hour": 23, "minute": 0,  "second": 0})
-])
+MODE_CONFIGURATION = {
+    "Monday": OrderedDict([
+        ("Morning", {"channel": "astro:sun:local:civilDawn#event", "event": "START"}),
+        ("Day"    , {"hour": 9,  "minute": 0,  "second": 0}),
+        ("Evening", {"hour": 17, "minute": 55, "second": 0}),
+        ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"}}),
+        ("Late"   , {"hour": 23, "minute": 0,  "second": 0})
+    ]),
+    "Tuesday": OrderedDict([
+        ("Morning", {"channel": "astro:sun:local:civilDawn#event", "event": "START"}),
+        ("Day"    , {"hour": 9,  "minute": 0,  "second": 0}),
+        ("Evening", {"hour": 17, "minute": 55, "second": 0}),
+        ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"}}),}),
+        ("Late"   , {"hour": 23, "minute": 0,  "second": 0})
+    ]),
+    "Wednesday": OrderedDict([
+        ("Morning", {"channel": "astro:sun:local:civilDawn#event", "event": "START"}),
+        ("Day"    , {"hour": 9,  "minute": 0,  "second": 0}),
+        ("Evening", {"hour": 17, "minute": 55, "second": 0}),
+        ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"}}),}),
+        ("Late"   , {"hour": 23, "minute": 0,  "second": 0})
+    ]),
+    "Thursday": OrderedDict([
+        ("Morning", {"channel": "astro:sun:local:civilDawn#event", "event": "START"}),
+        ("Day"    , {"hour": 9,  "minute": 0,  "second": 0}),
+        ("Evening", {"hour": 17, "minute": 55, "second": 0}),
+        ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"}}),}),
+        ("Late"   , {"hour": 23, "minute": 0,  "second": 0})
+    ]),
+    "Friday": OrderedDict([
+        ("Morning", {"channel": "astro:sun:local:civilDawn#event", "event": "START"}),
+        ("Day"    , {"hour": 9,  "minute": 0,  "second": 0}),
+        ("Evening", {"hour": 17, "minute": 55, "second": 0}),
+        ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"}}),}),
+        ("Late"   , {"hour": 23, "minute": 0,  "second": 0})
+    ]),
+    "Saturday": OrderedDict([
+        ("Morning", {"hour": 9,  "minute": 0,  "second": 0}),
+        ("Day"    , {"hour": 11, "minute": 0,  "second": 0}),
+        ("Evening", {"hour": 17, "minute": 55, "second": 0}),
+        ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"}}),}),
+        ("Late"   , {"hour": 23, "minute": 0,  "second": 0})
+    ]),
+    "Sunday": OrderedDict([
+        ("Morning", {"hour": 9,  "minute": 0,  "second": 0}),
+        ("Day"    , {"hour": 11, "minute": 0,  "second": 0}),
+        ("Evening", {"hour": 17, "minute": 55, "second": 0}),
+        ("Night"  , {"hour": 21, "minute": 0,  "second": 0, "channel": "astro:sun:local:civilDusk#event", "event": "START"}}),}),
+        ("Late"   , {"hour": 23, "minute": 0,  "second": 0})
+    ])
+}
