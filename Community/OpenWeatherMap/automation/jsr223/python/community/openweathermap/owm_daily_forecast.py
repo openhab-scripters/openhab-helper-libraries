@@ -114,15 +114,15 @@ def remove_owm_items():
     from core.items import remove_item
 
     for item in itemRegistry.getItemsByTag("OpenWeatherMap"):
-        remove_owm_items.log.debug("'{}'".format(item))
+        remove_owm_items.log.debug(u"'{}'".format(item))
         remove_item(item)
 
-    # use this as a last resort, but make sure it's not removing any Items not
-    # created by this script
+    # use this as a last resort, but make sure it's not removing any Items that
+    # were not created by this script
 
     # for item in itemRegistry.getAll():
     #     if "Forecast_" in item.name or "Current_" in item.name:
-    #         remove_owm_items.log.debug("'{}'".format(item))
+    #         remove_owm_items.log.debug(u"'{}'".format(item))
     #         remove_item(item)
 
 
@@ -165,15 +165,15 @@ def add_owm_items():
                             owm_thing_uid = str(thing.getUID())
                             break
                         else:
-                            add_owm_items.log.warn("Thing found, but forecastDays is not set to [0]: forecastDays='{}'".format(forecast_days))
+                            add_owm_items.log.warn("Thing found, but forecastDays is not set to [0]: forecastDays: {}".format(forecast_days))
                     else:
-                        add_owm_items.log.warn("Thing found, but forecast_hours is not set to [120]: forecastHours='{}'".format(forecast_hours))
+                        add_owm_items.log.warn("Thing found, but forecast_hours is not set to [120]: forecastHours: {}".format(forecast_hours))
                 else:
-                    add_owm_items.log.warn("Thing found, but statusInfo was not [ONLINE]: statusInfo='{}'".format(thing.statusInfo))
+                    add_owm_items.log.warn("Thing found, but statusInfo was not [ONLINE]: statusInfo: {}".format(thing.statusInfo))
         if owm_thing_uid is None:
             add_owm_items.log.warn("No Thing found with ThingTypeUID 'openweathermap:weather-and-forecast', or it was not ONLINE, or it was improperly configured for the free API. Exiting script.")
         else:
-            add_owm_items.log.debug("owm_thing_uid set to '{}'".format(owm_thing_uid))
+            add_owm_items.log.debug("owm_thing_uid set to {}".format(owm_thing_uid))
 
             # install Scale transformation service, if not already installed
             from java.lang import System
@@ -207,7 +207,7 @@ def add_owm_items():
                                 add_owm_items.log.warn("Scale transformation service installation failed")
                                 return
                         if install_scale_result != "200":
-                            add_owm_items.log.warn("Scale transformation service installation failed: result {}".format(install_scale_result))
+                            add_owm_items.log.warn("Scale transformation service installation failed: result: {}".format(install_scale_result))
                             return
                         else:
                             add_owm_items.log.debug("Scale transformation service has been installed")

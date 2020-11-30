@@ -127,10 +127,10 @@ def getTheSensor(lbl, never_assume_dead=False, getHighest=False, getLowest=False
     sensor_dead_after_mins = weatherStationUploader_configuration['sensor_dead_after_mins'] # The time after which a sensor is presumed to be dead
 
     def isSensorAlive(sName):
-        if getLastUpdate(ir.getItem(sName)).isAfter(DateTime.now().minusMinutes(sensor_dead_after_mins)):
+        if getLastUpdate(itemRegistry.getItem(sName)).isAfter(DateTime.now().minusMinutes(sensor_dead_after_mins)):
             return True
         else:
-            weatherStationUploader.log.warn("Sensor device {} has not reported since: {}".format(sName, format_date(getLastUpdate(ir.getItem(sName)), customDateTimeFormats['dateTime'])))
+            weatherStationUploader.log.warn(u"Sensor device {} has not reported since: {}".format(sName, format_date(getLastUpdate(itemRegistry.getItem(sName)), customDateTimeFormats['dateTime'])))
             return False
 
     sensorName = None
@@ -162,7 +162,7 @@ def getTheSensor(lbl, never_assume_dead=False, getHighest=False, getLowest=False
                 sensorName = tSens
 
     if sensorName is not None:
-        weatherStationUploader.log.debug("Device used for {}: {}".format(lbl, sensorName))
+        weatherStationUploader.log.debug(u"Device used for {}: {}".format(lbl, sensorName))
     return sensorName
 
 @rule("Weather station uploader")
@@ -173,9 +173,9 @@ def weatherStationUploader(event):
     if (not weatherStationUploader_configuration['stationdata']['weather_upload']) \
     or (weatherStationUploader_configuration['stationdata']['weather_upload'] and wu_second_count%weatherStationUploader_configuration['stationdata']['upload_frequency_seconds'] == 0):
         if weatherStationUploader_configuration['stationdata']['weather_upload']:
-            weatherStationUploader.log.debug('Uploading data to Weather Underground')
+            weatherStationUploader.log.debug("Uploading data to Weather Underground")
         else:
-            weatherStationUploader.log.debug('No data to will be upladed to Weather Underground')
+            weatherStationUploader.log.debug("No data to will be upladed to Weather Underground")
 
         sdf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         dateutc = sdf.print(DateTime.now((DateTimeZone.UTC)))
