@@ -7,25 +7,27 @@ be overwritten during an upgrade. Instead, place them in the
 """
 __all__ = ['light_action', 'toggle_action']
 
-from core.jsr223.scope import events, items, PercentType, DecimalType, HSBType, ON, OFF
+#from org.joda.time import DateTime
+
+from core.jsr223.scope import events, items, PercentType, DecimalType, HSBType, ON, OFF, OnOffType
 from core.metadata import get_key_value
-from core.log import logging, LOG_PREFIX
+from core.log import logging, LOG_PREFIX, log_traceback
 
 import configuration
 reload(configuration)
-from configuration import area_triggers_and_actions_dict
+from configuration import AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION
 
-#from org.joda.time import DateTime
+LOG = logging.getLogger(u"{}.community.area_triggers_and_actions.area_actions".format(LOG_PREFIX))
 
-log = logging.getLogger("{}.community.area_triggers_and_actions.area_actions".format(LOG_PREFIX))
 
+@log_traceback
 def light_action(item, active):
     """
     This function performs an action on a light Item.
 
     When called, this function pulls in the metadata for the supplied Item or
     uses the default values specified in
-    ``configuration.area_triggers_and_actions_dict"["default_levels"]``, if the
+    ``configuration.AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION"["default_levels"]``, if the
     metadata does not exist. This metadata is then compared to the current lux
     level to determine if a light should be turned OFF or set to the specified
     level. This function should work for everyone without modification.
@@ -35,65 +37,44 @@ def light_action(item, active):
         boolean active: Area activity (True for active and False for inactive)
     """
     #start_time = DateTime.now().getMillis()
-    item_metadata = get_key_value(item.name, "area_triggers_and_actions", "modes", str(items["Mode"]))
-    low_lux_trigger = item_metadata.get("low_lux_trigger", area_triggers_and_actions_dict["default_levels"]["low_lux_trigger"])
-    hue = DecimalType(item_metadata.get("hue", area_triggers_and_actions_dict["default_levels"]["hue"]))
-    saturation = PercentType(str(item_metadata.get("saturation", area_triggers_and_actions_dict["default_levels"]["saturation"])))
-    brightness = PercentType(str(item_metadata.get("brightness", area_triggers_and_actions_dict["default_levels"]["brightness"])))
-    #log.warn("light_action: item.name [{}], active [{}], brightness [{}], lux [{}], low_lux_trigger [{}]".format(item.name, active, brightness, items[area_triggers_and_actions_dict["lux_item_name"]], low_lux_trigger))
-    lux_item_name = area_triggers_and_actions_dict.get("lux_item_name")
-    if active and brightness > PercentType(0) and (True if lux_item_name is None else items[lux_item_name].intValue() <= low_lux_trigger):
-        if item.type == "Dimmer" or (item.type == "Group" and item.baseItem.type == "Dimmer"):
-            if item.state != brightness:
-                if item.state < PercentType(99):
-                    events.sendCommand(item, brightness)
-                    log.info(">>>>>>> {}: {}".format(item.name, brightness))
-                else:
-                    log.info("[{}]: dimmer was manually set > 98, so not adjusting".format(item.name))
+    item_metadata = get_key_value(item.name, "area_triggers_and_actions", "light_action")#, "ON" if active else "OFF", "modes", items["Mode"].toString())
+    lux_item_name = item_metadata.get("lux_item_name", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"].get("lux_item_name"))
+    trigger_type = "active" if active else "inactive"
+    lux_trigger = item_metadata.get(trigger_type, {}).get("modes", {}).get(items["Mode"].toString(), {}).get("lux_trigger", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type]["lux_trigger"])
+    lux_type = "low_lux" if lux_trigger == 0 or lux_item_name is None or items[lux_item_name].intValue() < lux_trigger else "high_lux"
+    levels = item_metadata.get(trigger_type, {}).get("modes", {}).get(items["Mode"].toString(), {}).get(lux_type, {})
+    brightness = PercentType(str(levels.get("brightness", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type][lux_type]["brightness"])))
+    #LOG.warn(u"light_action: trigger_type: {}, item.name: {}, item.state: {}, lux: {}, lux_trigger: {}, lux_type: {}, brightness: {}, lux_item_name: {}".format(trigger_type, item.name, item.state, items[AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["lux_item_name"]], lux_trigger, lux_type, brightness, lux_item_name))
+    if item.type in ["Dimmer", "Rollershutter"] or (item.type == "Group" and item.baseItem.type == "Dimmer"):
+        if item.state != brightness:
+            if item.state < PercentType(99):
+                events.sendCommand(item, brightness)
+                LOG.info(u"{} {}: {}".format("<<<<<<<<<<<<<<<<<<<<<" if brightness == DecimalType(0) else ">>>>>>>", item.name, brightness))
             else:
-                log.debug("[{}]: dimmer is already set to [{}], so not sending command".format(item.name, brightness))
-        elif item.type == "Color" or (item.type == "Group" and item.baseType == "Color"):
-            if item.state != HSBType(hue, saturation, brightness):
-                if item.state.brightness < PercentType(99):
-                    events.sendCommand(item, HSBType(hue, saturation, brightness))
-                    log.info(">>>>>>> {}: [{}]".format(item.name, HSBType(hue, saturation, brightness)))
-                else:
-                    log.info("[{}]: brightness was manually set > 98, so not adjusting".format(item.name))
+                LOG.info(u"'{}': dimmer was manually set > 98, so not adjusting".format(item.name))
+        else:
+            LOG.debug(u"'{}': dimmer is already set to '{}', so not sending command".format(item.name, brightness))
+    elif item.type == "Color" or (item.type == "Group" and item.baseItem.type == "Color"):
+        hue = DecimalType(str(levels.get("hue", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type][lux_type]["hue"])))
+        saturation = PercentType(str(levels.get("saturation", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type][lux_type]["saturation"])))
+        if item.state != HSBType(hue, saturation, brightness):
+            if item.state.brightness < PercentType(99):
+                events.sendCommand(item, HSBType(hue, saturation, brightness))
+                LOG.info(u"{} {}: '{}'".format("<<<<<<<<<<<<<<<<<<<<<" if brightness == DecimalType(0) else ">>>>>>>", item.name, HSBType(hue, saturation, brightness)))
             else:
-                log.debug("[{}]: color is already set to [{}, {}, {}], so not sending command".format(item.name, hue, saturation, brightness))
-        elif item.type == "Switch" or (item.type == "Group" and item.baseItem.type == "Switch"):
-            if item.state == OFF:
-                events.sendCommand(item, ON)
-                log.info(">>>>>>> {}: ON".format(item.name))
-            else:
-                log.debug("[{}]: switch is already [ON], so not sending command".format(item.name))
-    else:
-        if item.type == "Dimmer" or (item.type == "Group" and item.baseItem.type == "Dimmer"):
-            if item.state != PercentType(0):
-                if item.state < PercentType(99):
-                    events.sendCommand(item, PercentType(0))
-                    log.info("<<<<<<<<<<<<<<<<<<<<< {}: 0".format(item.name))
-                else:
-                    log.info("{}: dimmer was manually set > 98, so not adjusting".format(item.name))
-            else:
-                log.debug("[{}]: dimmer is already set to [0], so not sending command".format(item.name))
-        elif item.type == "Color" or (item.type == "Group" and item.baseType == "Color"):
-            if item.state != HSBType(DecimalType(0), PercentType(0), PercentType(0)):
-                if item.state.brightness < PercentType(99):
-                    events.sendCommand(item, "0, 0, 0")
-                    log.info("<<<<<<<<<<<<<<<<<<<<< {}: [0, 0, 0]".format(item.name))
-                else:
-                    log.info("{}: brightness was manually set > 98, so not adjusting".format(item.name))
-            else:
-                log.debug("[{}]: color is already set to [0, 0, 0], so not sending command".format(item.name))
-        elif item.type == "Switch" or (item.type == "Group" and item.baseItem.type == "Switch"):
-            if item.state == ON:
-                events.sendCommand(item, OFF)
-                log.info("<<<<<<<<<<<<<<<<<<<<< {}: OFF".format(item.name))
-            else:
-                log.debug("[{}]: switch is already set to [OFF], so not sending command".format(item.name))
-    #log.warn("Test: light_action: {}: [{}]: time=[{}]".format(item.name, "ON" if active else "OFF", DateTime.now().getMillis() - start_time))
+                LOG.info(u"'{}': brightness was manually set > 98, so not adjusting".format(item.name))
+        else:
+            LOG.debug(u"'{}': color is already set to [{}, {}, {}], so not sending command".format(item.name, hue, saturation, brightness))
+    elif item.type == "Switch" or (item.type == "Group" and item.baseItem.type == "Switch"):
+        new_state = brightness.as(OnOffType)
+        if item.state != new_state:
+            events.sendCommand(item, new_state)
+            LOG.info(u"{} {}: {}".format("<<<<<<<<<<<<<<<<<<<<<" if new_state == OFF else ">>>>>>>", item.name, new_state))
+        else:
+            LOG.debug(u"'{}': switch is already '{}', so not sending command".format(item.name, new_state))
 
+
+@log_traceback
 def toggle_action(item, active):
     """
     This function sends the OFF command to the Item.

@@ -3,6 +3,8 @@ The functions in this module are examples and are meant to be customized.
 """
 __all__ = ['speaker_action', 'notification_action']
 
+from org.joda.time import DateTime
+
 from core.jsr223.scope import events, items, StringType, OFF, PLAY
 from core.metadata import get_key_value
 from core.log import logging, LOG_PREFIX
@@ -10,9 +12,8 @@ from core.date import seconds_between, human_readable_seconds
 from core.actions import PersistenceExtensions
 from personal.utils import notification
 
-from org.joda.time import DateTime
+LOG = logging.getLogger("{}.personal.area_triggers_and_actions.area_actions".format(LOG_PREFIX))
 
-log = logging.getLogger("{}.personal.area_triggers_and_actions.area_actions".format(LOG_PREFIX))
 
 def speaker_action(item, active):
     """
@@ -29,25 +30,28 @@ def speaker_action(item, active):
         autoplay_mode_item_name = item.name.replace("_Player", "_AutoPlay_Mode")
         if items[autoplay_mode_item_name] == StringType("Sound Effects"):
             if items["Sound_Effect"] != StringType("Normal"):
-                log.debug("speaker_action: {}: sound effects".format(item.name))
+                LOG.debug("speaker_action: {}: sound effects".format(item.name))
                 if item.state != PLAY:
-                    workingPrefixList = str(items["Working_Prefix_List"]).split(",")
-                    if len(workingPrefixList) > 0:
+                    workingPrefixList = items["Working_Prefix_List"].toString().split(",")
+                    #if len(workingPrefixList) > 0:
+                    if workingPrefixList:
                         alertPrefixURI = workingPrefixList.pop()
-                        if len(workingPrefixList) > 0:
+                        #if len(workingPrefixList) > 0:
+                        if workingPrefixList > 0:
                             events.sendCommand("Working_Prefix_List", ",".join(workingPrefixList))
                         else:
-                            events.sendCommand("Sound_Effect", str(items["Sound_Effect"]))
-                        log.debug("speaker_action: {}: sound effects: alertPrefixURI=[{}]".format(item.name, alertPrefixURI))
+                            events.sendCommand("Sound_Effect", items["Sound_Effect"].toString())
+                        LOG.debug("speaker_action: {}: sound effects: alertPrefixURI=[{}]".format(item.name, alertPrefixURI))
                         events.sendCommand(item.name.replace("_Player", "_PlayURI"), alertPrefixURI)
         elif items[autoplay_mode_item_name] == StringType("House Shuffle"):
             if active:
-                if (items["Presence"] == StringType("Home") and str(items["Mode"]) not in ["Night", "Late"]) or items["Mode"] == StringType("Party"):
+                if (items["Presence"] == StringType("Home") and items["Mode"].toString() not in ["Night", "Late"]) or items["Mode"] == StringType("Party"):
                     if item.state != PLAY:
                         events.sendCommand(item.name.replace("_Player", "_PlayURI"), "HouseShuffle")
             else:
                 events.sendCommand(item.name.replace("_Player", "_Stop"), "ON")
-    #log.warn("Test: speaker_action: {}: [{}]: time=[{}]".format(item.name, "ON" if active else "OFF", DateTime.now().getMillis() - start_time))
+    #LOG.warn("Test: speaker_action: {}: [{}]: time=[{}]".format(item.name, "ON" if active else "OFF", DateTime.now().getMillis() - start_time))
+
 
 def notification_action(item, active):
     """
@@ -60,19 +64,24 @@ def notification_action(item, active):
         boolean active: Area activity (True for active and False for inactive)
     """
     #start_time = DateTime.now().getMillis()
-    timer_type = "ON" if active else "OFF"
-    notification_metadata = get_key_value(item.name, "area_triggers_and_actions", "actions", "notification_action", timer_type)
-    message = notification_metadata.get("message")
-    if message is None:
-        time_interval = seconds_between(PersistenceExtensions.previousState(item).timestamp, DateTime.now())
-        if time_interval < 1:
-            message = "{} is {}".format(item.label, "active" if active else "inactive")
-        else:
-            message = "{} has been {} for {}".format(item.label, "active" if active else "inactive", human_readable_seconds(time_interval))
-    types = notification_metadata.get("types", {})
-    priority = types.get("priority", 0)
-    audio = types.get("audio", False)
-    kodi = types.get("kodi", False)
-    mobile = types.get("mobile", False)
-    notification("Area Action", message, priority=priority, audio=audio, kodi=kodi, mobile=mobile)
-    #log.warn("Test: notification_action: {}: [{}]: time=[{}]".format(item.name, "ON" if active else "OFF", DateTime.now().getMillis() - start_time))
+    timer_type = "active" if active else "inactive"
+    notification_metadata = get_key_value(item.name, "area_triggers_and_actions", "notification_action")
+    notification_settings = notification_metadata.get(timer_type)
+    if notification_settings or not notification_metadata.get("limited"):# stop notifications for timer_types that should not notify, if any
+        message = notification_metadata.get(timer_type, {}).get("message")
+        if message is None:
+            start_time = PersistenceExtensions.previousState(item).timestamp
+            stop_time = DateTime.now().plusSeconds(1)
+            #LOG.warn("start_time: {}, stop_time: {}".format(start_time, stop_time))
+            time_interval = seconds_between(start_time, stop_time)
+            if time_interval < 1:# for immediate alerts
+                message = "{} is {}".format(item.label, timer_type)
+            else:
+                message = "{} has been {} for {}".format(item.label, timer_type, human_readable_seconds(time_interval))
+        types = notification_settings.get("types", {})
+        priority = types.get("priority", 0)
+        audio = types.get("audio", False)
+        kodi = types.get("kodi", False)
+        mobile = types.get("mobile", False)
+        notification(message, priority=priority, audio=audio, kodi=kodi, mobile=mobile)
+        #LOG.warn("Test: notification_action: {}: [{}]: time=[{}]".format(item.name, "ON" if active else "OFF", DateTime.now().getMillis() - start_time))
