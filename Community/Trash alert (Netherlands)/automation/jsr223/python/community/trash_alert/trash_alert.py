@@ -52,7 +52,7 @@ afvalkalender_configuration = {
     'create_missing_items': False
 }
 
-@rule("TrashPickupdates", description="Haal de gegevens over ophalen van afval op uit de afvalwijzer", tags=["afvalkalender"])
+@rule("Trash pickup dates", description="Haal de gegevens over ophalen van afval op uit de afvalwijzer", tags=["afvalkalender"])
 @when("Time cron 0 30 7 * * ?")
 @when("Time cron 0 30 19 * * ?")
 def send_trash_pickup_notifications(event):
@@ -80,7 +80,7 @@ def process_pickupdates(dates, type, description, item, now=None):
         return
     if now is None:
         now = datetime.now()
-    send_trash_pickup_notifications.itemRegistrydebug('Processing pickup dates for {}: {} and item {} on {}'.format(type, description, item, now))
+    send_trash_pickup_notifications.log.debug(u"Processing pickup dates for {}: {} and item {} on {}".format(type, description, item, now))
     if itemRegistry.getItems(item) == []:
         if afvalkalender_configuration['create_missing_items']:
             add_item(item, item_type="DateTime", label="{} [%%1$td-%1$tm]".format(description), category="Calendar", groups=[], tags=[])
@@ -94,11 +94,11 @@ def process_pickupdates(dates, type, description, item, now=None):
     post_update(item, str(pickup_date))
     current_time = now.time()
     if today == next_date and current_time.hour <= 12:
-        message = "Vandaag wordt het {} opgehaald.".format(description)
+        message = u"Vandaag wordt het {} opgehaald.".format(description)
         send_trash_pickup_notifications.log.info(message)
         notification(message)
     if tomorrow == next_date and current_time.hour > 12:
-        message = "Morgen wordt het {} opgehaald.".format(description)
+        message = u"Morgen wordt het {} opgehaald.".format(description)
         send_trash_pickup_notifications.log.info(message)
         notification(message)
 
@@ -110,7 +110,7 @@ def get_json_response(URI):
     try:
         return json.loads(the_page.decode('utf-8'))
     except Exception as ex:
-        send_trash_pickup_notifications.log.warn('Could not interpret json response from {}: {}'.format(URI, ex))
+        send_trash_pickup_notifications.log.warn(u"Could not interpret json response from {}: {}".format(URI, ex))
 
 def get_pickupdates_mijnafvalwijzer(postcode, huisnummer, toevoeging=''):
     """
@@ -123,12 +123,12 @@ def get_pickupdates_mijnafvalwijzer(postcode, huisnummer, toevoeging=''):
         response = get_json_response(URI)
         pickupdates = response['data']['ophaaldagen']
         if pickupdates[u'response'] != u'OK':
-            send_trash_pickup_notifications.log.warn('Invalid response while getting garbage pickup dates from {}: {}'.format(URI, pickupdates['error']))
+            send_trash_pickup_notifications.log.warn(u"Invalid response while getting garbage pickup dates from {}: {}".format(URI, pickupdates['error']))
             return
         else:
             return pickupdates['data']
     except Exception as ex:
-        send_trash_pickup_notifications.log.warn('Could not interpret garbage pickup dates from {}: {}'.format(URI, ex))
+        send_trash_pickup_notifications.log.warn(u"Could not interpret garbage pickup dates from {}: {}".format(URI, ex))
         return
 
 """
@@ -157,15 +157,15 @@ Cranendonck: https://afvalkalender.cranendonck.nl
 List taken from: https://www.gadget-freakz.com/domoticz-dzvents-getgarbagedates-script/
 """
 def get_pickupdates_afvalkalender(postcode, huisnummer, afvalkalender_URI):
-    URI1='{0}/rest/adressen/{1}-{2}'.format(afvalkalender_URI, postcode, huisnummer)
+    URI1=u"{0}/rest/adressen/{1}-{2}".format(afvalkalender_URI, postcode, huisnummer)
     response1 = get_json_response(URI1)
     if not response1:
-        send_trash_pickup_notifications.log.warn('Could not get garbage pickup information from {}'.format(URI1))
+        send_trash_pickup_notifications.log.warn(u"Could not get garbage pickup information from {}".format(URI1))
         return
-    URI2='{0}/rest/adressen/{1}/afvalstromen'.format(afvalkalender_URI, response1[0]['bagId'])
+    URI2=u"{0}/rest/adressen/{1}/afvalstromen".format(afvalkalender_URI, response1[0]['bagId'])
     response2 = get_json_response(URI2)
     if not response2:
-        send_trash_pickup_notifications.log.warn('Could not get garbage pickup dates from {}'.format(URI2))
+        send_trash_pickup_notifications.log.warn(u"Could not get garbage pickup dates from {}".format(URI2))
         return
     pickupdates = []
     for pd in response2:
