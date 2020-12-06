@@ -1,3 +1,4 @@
+# pylint: disable=eval-used
 """
 This trigger can respond to file system changes. For example, you could watch a
 directory for new files and then process them.
@@ -20,6 +21,7 @@ import core
 from core.log import logging, log_traceback, LOG_PREFIX
 
 LOG = logging.getLogger("{}.core.DirectoryEventTrigger".format(LOG_PREFIX))
+core.DIRECTORY_TRIGGER_MODULE_ID = "jsr223.DirectoryEventTrigger"
 
 scriptExtension.importPreset("RuleSimple")
 scriptExtension.importPreset("RuleSupport")
@@ -46,9 +48,10 @@ class JythonDirectoryWatcher(AbstractWatchService):
             self.callback(event, kind, path)
 
 
+@log_traceback
 class _DirectoryEventTriggerHandlerFactory(TriggerHandlerFactory):
 
-
+    @log_traceback
     class Handler(TriggerHandler):
 
         @log_traceback
@@ -63,8 +66,8 @@ class _DirectoryEventTriggerHandlerFactory(TriggerHandlerFactory):
             self.watcher.callback = self.handle_directory_event
             self.watcher.activate()
 
-        def setRuleEngineCallback(self, rule_engine_callback):
-            self.rule_engine_callback = rule_engine_callback
+        def setCallback(self, callback):
+            self.rule_engine_callback = callback
 
         @log_traceback
         def handle_directory_event(self, event, kind, path):
@@ -83,24 +86,21 @@ class _DirectoryEventTriggerHandlerFactory(TriggerHandlerFactory):
         return _DirectoryEventTriggerHandlerFactory.Handler(trigger)
 
 
-core.DIRECTORY_TRIGGER_MODULE_ID = "jsr223.DirectoryTrigger"
-
-
 def scriptLoaded(*args):
     automationManager.addTriggerHandler(
         core.DIRECTORY_TRIGGER_MODULE_ID,
         _DirectoryEventTriggerHandlerFactory())
-    LOG.info("TriggerHandler added [{}]".format(core.DIRECTORY_TRIGGER_MODULE_ID))
+    LOG.info("TriggerHandler added '{}'".format(core.DIRECTORY_TRIGGER_MODULE_ID))
 
     automationManager.addTriggerType(TriggerType(
         core.DIRECTORY_TRIGGER_MODULE_ID, None,
         "a directory change event is detected.",
         "Triggers when a directory change event is detected.",
         None, Visibility.VISIBLE, None))
-    LOG.info("TriggerType added [{}]".format(core.DIRECTORY_TRIGGER_MODULE_ID))
+    LOG.info("TriggerType added '{}'".format(core.DIRECTORY_TRIGGER_MODULE_ID))
 
 
 def scriptUnloaded():
     automationManager.removeHandler(core.DIRECTORY_TRIGGER_MODULE_ID)
     automationManager.removeModuleType(core.DIRECTORY_TRIGGER_MODULE_ID)
-    LOG.info("TriggerType and TriggerHandler removed [{}]".format(core.DIRECTORY_TRIGGER_MODULE_ID))
+    LOG.info("TriggerType and TriggerHandler removed '{}'".format(core.DIRECTORY_TRIGGER_MODULE_ID))
