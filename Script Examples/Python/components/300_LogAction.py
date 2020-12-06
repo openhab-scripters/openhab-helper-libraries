@@ -1,12 +1,24 @@
+# pylint: disable=unnecessary-lambda
 """
 This is a simple rule action that will log a message to the openHAB log file.
 """
-
-from org.slf4j import Logger, LoggerFactory
+from org.slf4j import LoggerFactory
 
 scriptExtension.importPreset("RuleSupport")
 
+try:
+    from org.openhab.core.automation.handler import ActionHandler
+except:
+    from org.eclipse.smarthome.core.automation.handler import ActionHandler
+
+try:
+    from org.openhab.core.config.core import ConfigDescriptionParameterBuilder
+except:
+    from org.eclipse.smarthome.config.core import ConfigDescriptionParameterBuilder
+
+
 class LoggerAction(ActionHandler):
+
     def __init__(self, module):
         self.module = module
 
@@ -19,10 +31,12 @@ class LoggerAction(ActionHandler):
         logger.info(str(config.get('message')))
         return {"result": "success"}
 
+
 def param(name, type, label, default=None, required=False):
     return ConfigDescriptionParameterBuilder.create(name, type)\
         .withLabel(label).withDefault(default).withRequired(required).build()
-        
+ 
+
 automationManager.addActionHandler("LogAction", lambda module: LoggerAction(module))
 
 automationManager.addActionType(ActionType(
