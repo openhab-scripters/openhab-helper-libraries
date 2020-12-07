@@ -1,3 +1,4 @@
+# pylint: disable=invalid-name
 """
 The rules module contains some utility functions and a decorator that can:
 
@@ -6,23 +7,23 @@ The rules module contains some utility functions and a decorator that can:
 """
 __all__ = [
     'rule',
-    'addRule',
-    'set_uid_prefix'
+    'addRule'#,
+    # 'set_uid_prefix'
 ]
 
 from inspect import isclass
-from java.util import UUID
+# from java.util import UUID
 
-try:
-    from org.openhab.core.automation import Rule as SmarthomeRule
-except:
-    from org.eclipse.smarthome.automation import Rule as SmarthomeRule
+# try:
+#     from org.openhab.core.automation import Rule as SmarthomeRule
+# except:
+#     from org.eclipse.smarthome.automation import Rule as SmarthomeRule
 
 from core.log import logging, LOG_PREFIX, log_traceback
 from core.jsr223.scope import SimpleRule, scriptExtension
 from core.jsr223 import get_automation_manager
 
-log = logging.getLogger("{}.core.rules".format(LOG_PREFIX))
+LOG = logging.getLogger("{}.core.rules".format(LOG_PREFIX))
 
 scriptExtension.importPreset("RuleSimple")
 
@@ -45,36 +46,36 @@ def rule(name=None, description=None, tags=None):
         description (str): (optional) description of the rule
         tags (list): (optional) list of tags as strings
     """
-    def rule_decorator(object):
-        if isclass(object):
-            clazz = object
+    def rule_decorator(new_rule):
+        if isclass(new_rule):
+            class_ = new_rule
             def init(self, *args, **kwargs):
                 SimpleRule.__init__(self)
                 if name is None:
-                    if hasattr(clazz, '__name__'):
-                        self.name = clazz.__name__
+                    if hasattr(class_, '__name__'):
+                        self.name = class_.__name__
                     else:
                         self.name = "JSR223-Jython"
                 else:
                     self.name = name
-                #set_uid_prefix(self)
-                self.log = logging.getLogger("{}.{}".format(LOG_PREFIX, self.name))
-                clazz.__init__(self, *args, **kwargs)
+                # set_uid_prefix(self)
+                self.log = logging.getLogger(u"{}.{}".format(LOG_PREFIX, self.name))
+                class_.__init__(self, *args, **kwargs)
                 if description is not None:
                     self.description = description
-                elif self.description is None and clazz.__doc__:
-                    self.description = clazz.__doc__
+                elif self.description is None and class_.__doc__:
+                    self.description = class_.__doc__
                 if hasattr(self, "getEventTriggers"):
                     self.triggers = log_traceback(self.getEventTriggers)()
                 if tags is not None:
                     self.tags = set(tags)
-            subclass = type(clazz.__name__, (clazz, SimpleRule), dict(__init__=init))
-            subclass.execute = log_traceback(clazz.execute)
+            subclass = type(class_.__name__, (class_, SimpleRule), dict(__init__=init))
+            subclass.execute = log_traceback(class_.execute)
             new_rule = addRule(subclass())
             subclass.UID = new_rule.UID
             return subclass
         else:
-            callable_obj = object
+            callable_obj = new_rule
             if callable_obj.triggers.count(None) == 0:
                 simple_rule = _FunctionRule(callable_obj, callable_obj.triggers, name=name, description=description, tags=tags)
                 new_rule = addRule(simple_rule)
@@ -82,7 +83,7 @@ def rule(name=None, description=None, tags=None):
                 callable_obj.triggers = None
                 return callable_obj
             else:
-                log.warn("rule: not creating rule [{}] due to an invalid trigger definition".format(name))
+                LOG.warn(u"rule: not creating rule '{}' due to an invalid trigger definition".format(name))
                 return None
     return rule_decorator
 
@@ -95,21 +96,19 @@ class _FunctionRule(SimpleRule):
             else:
                 name = "JSR223-Jython"
         self.name = name
-        callback.log = logging.getLogger("{}.{}".format(LOG_PREFIX, name))
-        self.callback = log_traceback(callback)
+        callback.log = logging.getLogger(u"{}.{}".format(LOG_PREFIX, name))
+        callback.name = name
+        self.callback = callback
         if description is not None:
             self.description = description
         if tags is not None:
             self.tags = set(tags)
 
+    @log_traceback
     def execute(self, module, inputs):
-        try:
-            self.callback(inputs.get('event'))
-        except:
-            import traceback
-            self.callback.log.error(traceback.format_exc())
+        self.callback(inputs.get('event'))
 
-def addRule(rule):
+def addRule(new_rule):
     """
     This function adds a ``rule`` to openHAB's ``ruleRegistry``.
 
@@ -121,28 +120,28 @@ def addRule(rule):
     automation manager for each call.
 
     Args:
-        rule (SimpleRule): a rule to add to openHAB
+        new_rule (SimpleRule): a rule to add to openHAB
 
     Returns:
         Rule: the Rule object that was created
     """
-    log.debug("Added rule [{}]".format(rule.name))
-    return get_automation_manager().addRule(rule)
+    LOG.debug(u"Added rule '{}'".format(new_rule.name))
+    return get_automation_manager().addRule(new_rule)
 
-def set_uid_prefix(rule, prefix=None):
-    """
-    This function changes the UID of a rule, with the option to include a
-    specified text.
+# def set_uid_prefix(new_rule, prefix=None):
+#     """
+#     This function changes the UID of a rule, with the option to include a
+#     specified text.
 
-    .. warning:: This function needs some attention in order to work with the
-        Automation API changes included in S1319.
+#     .. warning:: This function needs some attention in order to work with the
+#         Automation API changes included in S1319.
 
-    Args:
-        rule (Rule): the rule to modify
-        prefix (str): (optional) the text to include in the UID
-    """
-    if prefix is None:
-        prefix = type(rule).__name__
-    uid_field = type(SmarthomeRule).getClass(SmarthomeRule).getDeclaredField(SmarthomeRule, "uid")
-    uid_field.setAccessible(True)
-    uid_field.set(rule, "{}-{}".format(prefix, str(UUID.randomUUID())))
+#     Args:
+#         new_rule (Rule): the rule to modify
+#         prefix (str): (optional) the text to include in the UID
+#     """
+#     if prefix is None:
+#         prefix = type(new_rule).__name__
+#     uid_field = type(SmarthomeRule).getClass(SmarthomeRule).getDeclaredField(SmarthomeRule, "uid")
+#     uid_field.setAccessible(True)
+#     uid_field.set(new_rule, "{}-{}".format(prefix, str(UUID.randomUUID())))
