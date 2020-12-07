@@ -3,6 +3,7 @@ Provides utility functions for retrieving, registering and removing OSGi
 services.
 """
 __all__ = [
+    'REGISTERED_SERVICES',
     'get_service',
     'find_services',
     'register_service',
@@ -11,11 +12,12 @@ __all__ = [
 
 from core.jsr223.scope import scriptExtension
 from org.osgi.framework import FrameworkUtil
+from core.log import logging, LOG_PREFIX
 
 _BUNDLE = FrameworkUtil.getBundle(type(scriptExtension))
 BUNDLE_CONTEXT = _BUNDLE.getBundleContext() if _BUNDLE else None
-
 REGISTERED_SERVICES = {}
+LOG = logging.getLogger("{}.core.osgi".format(LOG_PREFIX))
 
 
 def get_service(class_or_name):
@@ -50,9 +52,11 @@ def find_services(class_name, service_filter):
         list: a list of matching OSGi services
     """
     if BUNDLE_CONTEXT:
-        references = BUNDLE_CONTEXT.getAllServiceReferences(class_name, service_filter)
+        references = BUNDLE_CONTEXT.getServiceReferences(class_name, service_filter)
         if references:
             return [BUNDLE_CONTEXT.getService(reference) for reference in references]
+        else:
+            return []
     else:
         return None
 
@@ -72,14 +76,16 @@ def register_service(service, interface_names, properties=None):
         unregister the service
     """
     if properties:
-        import java.util
-        properties_hashmap = java.util.Hashtable()
+        from java.util import Hashtable
+        properties_hashmap = Hashtable()
         for key, value in properties.iteritems():
             properties_hashmap.put(key, value)
         properties = properties_hashmap
     registered_service = BUNDLE_CONTEXT.registerService(interface_names, service, properties)
     for name in interface_names:
         REGISTERED_SERVICES[name] = (service, registered_service)
+    #LOG.debug("Registered service: {}".format(service))
+    #LOG.debug("REGISTERED_SERVICES: {}".format(REGISTERED_SERVICES))
     return registered_service
 
 
@@ -94,5 +100,6 @@ def unregister_service(service):
     for key in keys:
         service_object, registered_service = REGISTERED_SERVICES[key]
         if service == service_object:
+            LOG.debug("Unregistered service: {}".format(key))
             del REGISTERED_SERVICES[key]
             registered_service.unregister()

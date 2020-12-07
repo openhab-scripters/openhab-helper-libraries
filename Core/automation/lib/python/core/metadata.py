@@ -1,8 +1,41 @@
 """
-This module provides functions for manipulating Item Metadata.
+This module provides functions for manipulating Item Metadata. See the
+:ref:`Guides/Metadata:Metadata` guide for details on the metadata structure.
+Basic examples are available in the function docstrings.
 
-See the :ref:`Guides/Metadata:Metadata` guide for details on the metadata
-structure.
+
+Advanced Examples
+-----------------
+
+--code-block::
+
+    # get a list of Items with a specific namespace
+    from core.metadata import get_metadata
+
+    items_with_namespace = [item for item in itemRegistry.getAll() if get_metadata(item.name, "area_triggers_and_actions") is not None]
+
+--code-block::
+
+    # get a list of Items with a specific namespace and key value
+    from core.metadata import get_key_value
+
+    items_with_key_value = [item for item in itemRegistry.getAll() if get_key_value(item.name, "area_triggers_and_actions", "light_action", "lux_item_name") == "ESP12E_01_Luminance"]
+
+--code-block::
+
+    # remove all metadata with a specific namespace from all Items
+    from core.metadata import remove_metadata
+
+    for item in itemRegistry.getAll():
+        remove_metadata(item.name, "hueEMU")
+
+--code-block::
+
+    # remove ALL metadata from ALL Items
+    from core.metadata import remove_metadata
+
+    for item in itemRegistry.getAll():
+        remove_metadata(item.name)
 """
 __all__ = [
     "get_all_namespaces",
