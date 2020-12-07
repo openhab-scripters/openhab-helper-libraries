@@ -113,6 +113,79 @@ def validate_uid(uid):
     return uid
 
 
+def post_update_if_different(item_or_item_name, new_value, sendACommand=False, floatPrecision=None):
+    """
+    Checks if the current state of the item is different than the desired new
+    state. If the target state is the same, no update is posted.
+
+    sendCommand vs postUpdate:
+    If you want to tell something to change (turn a light on, change the
+    thermostat to a new temperature, start raising the blinds, etc.), then you
+    want to send a command to an Item using sendCommand. If your Items' states
+    are not being updated by a binding, the autoupdate feature or something
+    else external, you will probably want to update the state in a rule using
+    ``events.postUpdate``.
+
+    Unfortunately, most decimal fractions cannot be represented exactly as
+    binary fractions. A consequence is that, in general, the decimal
+    floating-point numbers you enter are only approximated by the binary
+    floating-point numbers actually stored in the machine. Therefore,
+    comparing the stored value with the new value will most likely always
+    result in a difference. You can supply the named argument floatPrecision
+    to round the value before comparing.
+
+    Args:
+        item_or_item_name (Item or str): name of the Item
+        new_value (State or Command): state to update the Item with, or Command
+            if using sendACommand (must be of a type supported by the Item)
+        sendACommand (Boolean): (optional) ``True`` to send a command instead
+            of an update
+        floatPrecision (int): (optional) the precision of the Item's state to
+            use when comparing values
+
+    Returns:
+        bool: ``True``, if the command or update was sent, else ``False``
+    """
+    compare_value = None
+    item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
+
+    if sendACommand:
+        compare_value = TypeParser.parseCommand(item.acceptedCommandTypes, str(new_value))
+    else:
+        compare_value = TypeParser.parseState(item.acceptedDataTypes, str(new_value))
+
+    if compare_value is not None:
+        if item.state != compare_value or (isinstance(new_value, float) and floatPrecision is not None and round(item.state.floatValue(), floatPrecision) != new_value):
+            if sendACommand:
+                events.sendCommand(item, new_value)
+                LOG.debug(u"New sendCommand value for '{}' is '{}'".format(item.name, new_value))
+            else:
+                events.postUpdate(item, new_value)
+                LOG.debug(u"New postUpdate value for '{}' is '{}'".format(item.name, new_value))
+            return True
+        else:
+            LOG.debug(u"Not {} {} to '{}' since it is the same as the current state".format("sending command" if sendACommand else "posting update", new_value, item.name))
+            return False
+    else:
+        LOG.warn(u"'{}' is not an accepted {} for '{}'".format(new_value, "command type" if sendACommand else "state", item.name))
+        return False
+
+
+def send_command_if_different(item_or_item_name, new_value, floatPrecision=None):
+    """
+    See postUpdateCheckFirst
+    """
+    return postUpdateCheckFirst(item_or_item_name, new_value, sendACommand=True, floatPrecision=floatPrecision)
+
+
+# for backwards compatibility
+postUpdateCheckFirst = post_update_if_different
+
+
+# for backwards compatibility
+sendCommandCheckFirst = send_command_if_different
+
+
 def kw(dictionary, value):
     """
     In a given dictionary, get the first key that has a value matching the one provided.
@@ -232,78 +305,3 @@ def postUpdate(item_or_item_name, new_value):
     LOG.warn("The 'core.utils.postUpdate' function is pending deprecation.")
     item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
     events.postUpdate(item, new_value)
-
-
-def post_update_if_different(item_or_item_name, new_value, sendACommand=False, floatPrecision=None):
-    """
-    Checks if the current state of the item is different than the desired new
-    state. If the target state is the same, no update is posted.
-
-    sendCommand vs postUpdate:
-    If you want to tell something to change (turn a light on, change the
-    thermostat to a new temperature, start raising the blinds, etc.), then you
-    want to send a command to an Item using sendCommand. If your Items' states
-    are not being updated by a binding, the autoupdate feature or something
-    else external, you will probably want to update the state in a rule using
-    ``events.postUpdate``.
-
-    Unfortunately, most decimal fractions cannot be represented exactly as
-    binary fractions. A consequence is that, in general, the decimal
-    floating-point numbers you enter are only approximated by the binary
-    floating-point numbers actually stored in the machine. Therefore,
-    comparing the stored value with the new value will most likely always
-    result in a difference. You can supply the named argument floatPrecision
-    to round the value before comparing.
-
-    Args:
-        item_or_item_name (Item or str): name of the Item
-        new_value (State or Command): state to update the Item with, or Command
-            if using sendACommand (must be of a type supported by the Item)
-        sendACommand (Boolean): (optional) ``True`` to send a command instead
-            of an update
-        floatPrecision (int): (optional) the precision of the Item's state to
-            use when comparing values
-
-    Returns:
-        bool: ``True``, if the command or update was sent, else ``False``
-    """
-    LOG.warn("The 'core.utils.post_update_if_different' function is pending deprecation.")
-    compare_value = None
-    item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
-
-    if sendACommand:
-        compare_value = TypeParser.parseCommand(item.acceptedCommandTypes, str(new_value))
-    else:
-        compare_value = TypeParser.parseState(item.acceptedDataTypes, str(new_value))
-
-    if compare_value is not None:
-        if item.state != compare_value or (isinstance(new_value, float) and floatPrecision is not None and round(item.state.floatValue(), floatPrecision) != new_value):
-            if sendACommand:
-                sendCommand(item, new_value)
-                LOG.debug(u"New sendCommand value for '{}' is '{}'".format(item.name, new_value))
-            else:
-                postUpdate(item, new_value)
-                LOG.debug(u"New postUpdate value for '{}' is '{}'".format(item.name, new_value))
-            return True
-        else:
-            LOG.debug(u"Not {} {} to '{}' since it is the same as the current state".format("sending command" if sendACommand else "posting update", new_value, item.name))
-            return False
-    else:
-        LOG.warn(u"'{}' is not an accepted {} for '{}'".format(new_value, "command type" if sendACommand else "state", item.name))
-        return False
-
-
-# for backwards compatibility
-postUpdateCheckFirst = post_update_if_different
-
-
-def send_command_if_different(item_or_item_name, new_value, floatPrecision=None):
-    """
-    See postUpdateCheckFirst
-    """
-    LOG.warn("The 'core.utils.send_command_if_different' function is pending deprecation.")
-    return postUpdateCheckFirst(item_or_item_name, new_value, sendACommand=True, floatPrecision=floatPrecision)
-
-
-# for backwards compatibility
-sendCommandCheckFirst = send_command_if_different

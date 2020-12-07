@@ -1,15 +1,14 @@
 # pylint: disable=protected-access, no-init
 """
 One of the challenges of scripted automation with Jython is that modules
-imported into scripts do not have direct access to the JSR223 scope types and
-objects. This module allows imported modules to access that data.
+imported into scripts do not have direct access to the objects that are
+available in scripts. This module provides access to those objects.
 
 .. code-block::
 
     # In Jython module, not script...
-    from core.jsr223.scope import events
-
     def update_data(data):
+        from core.jsr223.scope import events
         events.postUpdate("TestString1", str(data))
 """
 import sys

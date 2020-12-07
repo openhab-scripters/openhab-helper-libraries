@@ -27,7 +27,7 @@ from core.jsr223.scope import Trigger, TriggerBuilder, Configuration
 from core.osgi import BUNDLE_CONTEXT
 from core.log import logging, LOG_PREFIX
 
-LOG = logging.getLogger("{}.core.osgi.events".format(LOG_PREFIX))
+LOG = logging.getLogger(u"{}.core.osgi.events".format(LOG_PREFIX))
 
 
 def hashtable(*key_values):
@@ -50,7 +50,7 @@ class OsgiEventAdmin(object):
 
     _event_handler = None
     event_listeners = []
-    log = logging.getLogger("{}.core.osgi.events.OsgiEventAdmin".format(LOG_PREFIX))
+    log = logging.getLogger(u"{}.core.osgi.events.OsgiEventAdmin".format(LOG_PREFIX))
 
     # Singleton
     class OsgiEventHandler(EventHandler):
@@ -68,14 +68,14 @@ class OsgiEventAdmin(object):
                 try:
                     listener(event)
                 except:
-                    self.log.error("Listener failed: [{}]".format(traceback.format_exc()))
+                    self.log.error("Listener failed: '{}'".format(traceback.format_exc()))
 
         def dispose(self):
             self.registration.unregister()
 
     @classmethod
     def add_listener(class_, listener):
-        class_.log.debug("Adding listener admin: [{} {}]".format(id(class_), listener))
+        class_.log.debug("Adding listener admin: '{} {}'".format(id(class_), listener))
         class_.event_listeners.append(listener)
         if len(class_.event_listeners) == 1:
             if class_._event_handler is None:
@@ -83,7 +83,7 @@ class OsgiEventAdmin(object):
 
     @classmethod
     def remove_listener(class_, listener):
-        class_.log.debug("Removing listener: [{}]".format(listener))
+        class_.log.debug("Removing listener: '{}'".format(listener))
         if listener in class_.event_listeners:
             class_.event_listeners.remove(listener)
         if not class_.event_listeners:
@@ -115,7 +115,7 @@ class OsgiEventTrigger(Trigger):
         self.trigger = TriggerBuilder.create().withId(trigger_name).withTypeUID("jsr223.OsgiEventTrigger").withConfiguration(Configuration()).build()
         LOG.warn("self.trigger.id: {}".format(self.trigger.id))
         LOG.warn("trigger_name: {}".format(trigger_name))
-        OSGI_TRIGGERS[trigger_name] = self
+        OSGI_TRIGGERS[trigger_name] = self.trigger
         #OSGI_TRIGGERS[self.id] = self
         #OSGI_TRIGGERS[self.trigger.id] = self
 
@@ -127,7 +127,7 @@ class OsgiEventTrigger(Trigger):
 
 
 def log_event(event):
-    LOG.info("OSGi event: [{} ({})]".format(event, type(event).__name__))
+    LOG.info("OSGi event: '{} ({})'".format(event, type(event).__name__))
     if isinstance(event, dict):
         for name in event:
             value = event[name]
