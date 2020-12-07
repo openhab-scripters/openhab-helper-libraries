@@ -18,7 +18,7 @@ from core import osgi
 __all__ = []
 
 OH1_ACTIONS = osgi.find_services("org.openhab.core.scriptengine.action.ActionService", None) or []
-OH2_ACTIONS = osgi.find_services("org.eclipse.smarthome.model.script.engine.action.ActionService", None) or []
+OH2_ACTIONS = osgi.find_services("org.openhab.core.model.script.engine.action.ActionService", None) or osgi.find_services("org.eclipse.smarthome.model.script.engine.action.ActionService", None) or []
 
 _MODULE = sys.modules[__name__]
 
