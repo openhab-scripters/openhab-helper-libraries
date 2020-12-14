@@ -17,6 +17,8 @@ import configuration
 reload(configuration)
 from configuration import AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION
 
+MODE_ITEM = AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION.get("mode_item") or "Mode"
+DISABLE_AUTOMATION_BRIGHTNESS = AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION.get("disable_automation_brightness") or 100
 LOG = logging.getLogger(u"{}.community.area_triggers_and_actions.area_actions".format(LOG_PREFIX))
 
 
@@ -37,32 +39,32 @@ def light_action(item, active):
         boolean active: Area activity (True for active and False for inactive)
     """
     #start_time = DateTime.now().getMillis()
-    item_metadata = get_key_value(item.name, "area_triggers_and_actions", "light_action")#, "ON" if active else "OFF", "modes", items["Mode"].toString())
+    item_metadata = get_key_value(item.name, "area_triggers_and_actions", "light_action")
     lux_item_name = item_metadata.get("lux_item_name", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"].get("lux_item_name"))
     trigger_type = "active" if active else "inactive"
-    lux_trigger = item_metadata.get(trigger_type, {}).get("modes", {}).get(items["Mode"].toString(), {}).get("lux_trigger", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type]["lux_trigger"])
+    lux_trigger = item_metadata.get(trigger_type, {}).get("modes", {}).get(items[MODE_ITEM].toString(), {}).get("lux_trigger", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type]["lux_trigger"])
     lux_type = "low_lux" if lux_trigger == 0 or lux_item_name is None or items[lux_item_name].intValue() < lux_trigger else "high_lux"
-    levels = item_metadata.get(trigger_type, {}).get("modes", {}).get(items["Mode"].toString(), {}).get(lux_type, {})
+    levels = item_metadata.get(trigger_type, {}).get("modes", {}).get(items[MODE_ITEM].toString(), {}).get(lux_type, {})
     brightness = PercentType(str(levels.get("brightness", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type][lux_type]["brightness"])))
     #LOG.warn(u"light_action: trigger_type: {}, item.name: {}, item.state: {}, lux: {}, lux_trigger: {}, lux_type: {}, brightness: {}, lux_item_name: {}".format(trigger_type, item.name, item.state, items[AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["lux_item_name"]], lux_trigger, lux_type, brightness, lux_item_name))
     if item.type in ["Dimmer", "Rollershutter"] or (item.type == "Group" and item.baseItem.type == "Dimmer"):
         if item.state != brightness:
-            if item.state < PercentType(99):
+            if item.state <= PercentType(DISABLE_AUTOMATION_BRIGHTNESS):
                 events.sendCommand(item, brightness)
                 LOG.info(u"{} {}: {}".format("<<<<<<<<<<<<<<<<<<<<<" if brightness == DecimalType(0) else ">>>>>>>", item.name, brightness))
             else:
-                LOG.info(u"'{}': dimmer was manually set > 98, so not adjusting".format(item.name))
+                LOG.info(u"'{}': dimmer is currently set > {}, so not adjusting".format(DISABLE_AUTOMATION_BRIGHTNESS, item.name))
         else:
             LOG.debug(u"'{}': dimmer is already set to '{}', so not sending command".format(item.name, brightness))
     elif item.type == "Color" or (item.type == "Group" and item.baseItem.type == "Color"):
         hue = DecimalType(str(levels.get("hue", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type][lux_type]["hue"])))
         saturation = PercentType(str(levels.get("saturation", AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION["light_action"]["default_levels"][trigger_type][lux_type]["saturation"])))
         if item.state != HSBType(hue, saturation, brightness):
-            if item.state.brightness < PercentType(99):
+            if item.state.brightness < PercentType(DISABLE_AUTOMATION_BRIGHTNESS):
                 events.sendCommand(item, HSBType(hue, saturation, brightness))
                 LOG.info(u"{} {}: '{}'".format("<<<<<<<<<<<<<<<<<<<<<" if brightness == DecimalType(0) else ">>>>>>>", item.name, HSBType(hue, saturation, brightness)))
             else:
-                LOG.info(u"'{}': brightness was manually set > 98, so not adjusting".format(item.name))
+                LOG.info(u"'{}': brightness is currently set > {}, so not adjusting".format(DISABLE_AUTOMATION_BRIGHTNESS, item.name))
         else:
             LOG.debug(u"'{}': color is already set to [{}, {}, {}], so not sending command".format(item.name, hue, saturation, brightness))
     elif item.type == "Switch" or (item.type == "Group" and item.baseItem.type == "Switch"):
@@ -83,4 +85,4 @@ def toggle_action(item, active):
         Item item: The Item to perform the action on
         boolean active: Area activity (True for active and False for inactive)
     """
-    events.sendCommand(item, ON if item.state == OFF else OFF)
+    events.sendCommand(item, ON if item.state.as(OnOffType) == OFF else OFF)

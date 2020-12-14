@@ -1,8 +1,10 @@
 """
 Set the default values used when performing an area action on any Item that
-does not have these values set in its metadata. The light_action uses the
-following:
+does not have these values set in its metadata.
 
+* ``default_action_function``: the default function to use when an area becomes active or inactive
+* ``mode_item``: the name of an Item to use for determining the mode or time of day
+* ``disable_automation_brightness``: when the state of the action Item is above this brightness level, the area action is disabled
 * ``lux_trigger``: when the lux level is greater/less than the lux_trigger, the
   lights should turn ON/OFF
 * ``high_lux``: the brightness/color settings to use when the lux is higher than the lux_trigger
@@ -26,6 +28,8 @@ works well for areas without windows, like closets.
 """
 AREA_TRIGGERS_AND_ACTIONS_CONFIGURATION = {
     "default_action_function": "light_action",
+    "mode_item": "Mode",
+    "disable_automation_brightness": 100,# set to 100 to disable this feature
     "light_action": {
         # "lux_item_name": "Sun_Radiation_Diffuse",
         # "lux_item_name": "gLuminance",
