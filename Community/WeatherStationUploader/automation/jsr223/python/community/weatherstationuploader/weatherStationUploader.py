@@ -1,9 +1,13 @@
 """
 :Author: `besynnerlig <https://github.com/besynnerlig>`_
-:Version: **4.0.0**
+:Version: **4.0.1**
 
 Share your openHAB weather sensors data with the world!  It’s fun, rewarding,
 and can help others planning out their day or weekend!
+
+.. note::
+
+    When IBM (`The Weather Channel <https://weather.com/news/news/twc-weather-underground-20120702>`_) purchased Weather Underground, the API was shutdown. A new API is available for use by people who report their personal weather stations, but this script has not been updated to make use of it. Until it is updated to use the new API, this script will not function.
 
 
 About
@@ -61,6 +65,8 @@ If you are creating a new installation, you can ignore what follows.
 
 **PLEASE MAKE SURE THAT YOU GO THROUGH ALL STEPS BELOW WHERE IT SAYS "BREAKING CHANGE"... DON'T SKIP ANY VERSION**
 
+**Version 4.0.1**
+    * Added note to inform users that the script will no longer function due to the shutdown of the Weather Underground API.
 **Version 4.0.0**
     * **BREAKING CHANGE**: The script is now distributed as a part of
       `openhab-helper-libraries <https://github.com/openhab-scripters/openhab-helper-libraries>`_.
@@ -82,7 +88,7 @@ If you are creating a new installation, you can ignore what follows.
 
 """
 
-__version__ = '4.0.0'
+__version__ = '4.0.1'
 __version_info__ = tuple([ int(num) for num in __version__.split('.')])
 
 import os, time, math
