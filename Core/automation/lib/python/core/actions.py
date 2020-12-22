@@ -31,7 +31,7 @@ for action in OH1_ACTIONS + OH2_ACTIONS:
 try:
     from org.openhab.core.model.script.actions import Exec
     from org.openhab.core.model.script.actions import HTTP
-    from org.openhab.core.model.script.actions import LogAction
+    from org.openhab.core.model.script.actions import Log
     from org.openhab.core.model.script.actions import Ping
     from org.openhab.core.model.script.actions import ScriptExecution
 except:
@@ -41,7 +41,7 @@ except:
     from org.eclipse.smarthome.model.script.actions import Ping
     from org.eclipse.smarthome.model.script.actions import ScriptExecution
 
-STATIC_IMPORTS = [Exec, HTTP, LogAction, Ping, ScriptExecution]
+STATIC_IMPORTS = [Exec, HTTP, Log, Ping, ScriptExecution]
 
 for action in STATIC_IMPORTS:
     name = str(action.simpleName)

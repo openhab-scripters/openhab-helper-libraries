@@ -5,8 +5,6 @@ directory for new files and then process them.
 """
 from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
 
-scriptExtension.importPreset(None)# fix for compatibility with Jython > 2.7.0
-
 try:
     from org.openhab.core.automation.handler import TriggerHandler
 except:

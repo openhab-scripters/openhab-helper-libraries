@@ -30,7 +30,6 @@ scriptExtension.importPreset("RuleSupport")
 from core.jsr223.scope import TriggerBuilder, Configuration, Trigger
 from core.utils import validate_uid
 
-
 def when(target):
     """
     This function decorator creates a ``triggers`` attribute in the decorated
@@ -70,17 +69,34 @@ def when(target):
         target (string): the `rules DSL-like formatted trigger expression <https://www.openhab.org/docs/configuration/rules-dsl.html#rule-triggers>`_
             to parse
     """
+    def isValidExpression(expr):
+        import re
+
+        expr = expr.strip()
+        if expr.startswith("@"):
+            return re.match("@(annually|yearly|monthly|weekly|daily|hourly|reboot)") is not None
+
+        parts = expr.split()
+        # test.log.info("parts={}".format(parts))
+        if 6 <= len(parts) <= 7:
+            for i in range(len(parts)):
+                if not re.match(
+                    "\?|(\*|\d+)(\/\d+)?|(\d+|\w{3})(\/|-)(\d+|\w{3})|((\d+|\w{3}),)*(\d+|\w{3})", parts[i]
+                ):
+                    return False
+            return True
+        else:
+            return False
+        
     try:
         from os import path
-
-        from org.quartz.CronExpression import isValidExpression
 
         from core.jsr223.scope import itemRegistry, things
         from core.log import logging, LOG_PREFIX
 
         try:
             from org.openhab.core.thing import ChannelUID, ThingUID, ThingStatus
-            from org.openab.core.thing.type import ChannelKind
+            from org.openhab.core.thing.type import ChannelKind
         except:
             from org.eclipse.smarthome.core.thing import ChannelUID, ThingUID, ThingStatus
             from org.eclipse.smarthome.core.thing.type import ChannelKind
