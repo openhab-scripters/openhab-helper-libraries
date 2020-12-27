@@ -11,7 +11,10 @@
 	var automationPath 			= OPENHAB_CONF+'/automation/';
 	var mainPath 				= automationPath + 'lib/javascript/core/';
 	//https://wiki.shibboleth.net/confluence/display/IDP30/ScriptedAttributeDefinition
-	var logger 					= Java.type("org.slf4j.LoggerFactory").getLogger("jsr223.javascript");
+
+	load(__DIR__+'/log.js');
+	var logger 					= Logger(null);
+	var loggerConsole			= Logger("console");
 	
 	try {
 		var RuleBuilder = Java.type("org.openhab.core.automation.util.RuleBuilder");
@@ -105,13 +108,21 @@
 	
 	
 	context.console  = {};
-	context.console.info = context.logInfo;
-	context.console.warn = context.logWarn;
-	context.console.debug = context.logDebug;
-	context.console.error = context.logError;
+	context.console.info = function (type , value) {
+		loggerConsole.info(args(arguments));
+	};
+	context.console.warn = function (type , value) {
+		loggerConsole.warn(args(arguments));
+	};
+	context.console.debug = function (type , value) {
+		loggerConsole.debug(args(arguments));
+	};
+	context.console.error = function (type , value) {
+		loggerConsole.error(args(arguments));
+	};
 	
-	context.console.log = function(value) {
-		logger.info("console.log", value);
+	context.console.log = function (value) {
+		loggerConsole.info(value);
 	};
 	
 	context.isUndefined = function(item) {
