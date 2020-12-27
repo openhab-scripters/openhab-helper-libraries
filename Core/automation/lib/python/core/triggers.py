@@ -30,6 +30,7 @@ scriptExtension.importPreset("RuleSupport")
 from core.jsr223.scope import TriggerBuilder, Configuration, Trigger
 from core.utils import validate_uid
 
+
 def when(target):
     """
     This function decorator creates a ``triggers`` attribute in the decorated
@@ -69,25 +70,6 @@ def when(target):
         target (string): the `rules DSL-like formatted trigger expression <https://www.openhab.org/docs/configuration/rules-dsl.html#rule-triggers>`_
             to parse
     """
-    def isValidExpression(expr):
-        import re
-
-        expr = expr.strip()
-        if expr.startswith("@"):
-            return re.match("@(annually|yearly|monthly|weekly|daily|hourly|reboot)") is not None
-
-        parts = expr.split()
-        # test.log.info("parts={}".format(parts))
-        if 6 <= len(parts) <= 7:
-            for i in range(len(parts)):
-                if not re.match(
-                    "\?|(\*|\d+)(\/\d+)?|(\d+|\w{3})(\/|-)(\d+|\w{3})|((\d+|\w{3}),)*(\d+|\w{3})", parts[i]
-                ):
-                    return False
-            return True
-        else:
-            return False
-        
     try:
         from os import path
 
@@ -106,13 +88,35 @@ def when(target):
         except:
             from org.openhab.core.types import TypeParser
 
+        try:
+            from org.quartz.CronExpression import isValidExpression
+        except:
+            # Quartz is removed in OH3, this needs to either impliment or match
+            # functionality in `org.openhab.core.internal.scheduler.CronAdjuster`
+            def isValidExpression(expr):
+                import re
+
+                expr = expr.strip()
+                if expr.startswith("@"):
+                    return re.match(r"@(annually|yearly|monthly|weekly|daily|hourly|reboot)", expr) is not None
+
+                parts = expr.split()
+                if 6 <= len(parts) <= 7:
+                    for i in range(len(parts)):
+                        if not re.match(
+                            r"\?|(\*|\d+)(\/\d+)?|(\d+|\w{3})(\/|-)(\d+|\w{3})|((\d+|\w{3}),)*(\d+|\w{3})", parts[i]
+                        ):
+                            return False
+                    return True
+                return False
+
         LOG = logging.getLogger(u"{}.core.triggers".format(LOG_PREFIX))
 
 
         def item_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
-            
+
             if trigger_target in ["added", "removed", "updated"]:
                 event_names = {
                     "added": "ItemAddedEvent",

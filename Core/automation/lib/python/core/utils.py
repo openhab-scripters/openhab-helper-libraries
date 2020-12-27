@@ -30,8 +30,14 @@ try:
 except:
     from org.eclipse.smarthome.core.thing import ChannelUID
 
+try:
+    from org.joda.time import DateTime as JodaDateTime
+except:
+    JodaDateTime = None
+
 from java.time import ZonedDateTime
 
+from core.date import to_java_zoneddatetime, to_joda_datetime
 from core.log import logging, LOG_PREFIX
 from core.jsr223.scope import itemRegistry, NULL, UNDEF, ON, OFF, OPEN, CLOSED, events, things
 
@@ -247,13 +253,12 @@ def getItemValue(item_or_item_name, default_value):
         return item.state if item.state not in [NULL, UNDEF] else default_value
     elif isinstance(default_value, str):
         return item.state.toFullString() if item.state not in [NULL, UNDEF] else default_value
+    elif JodaDateTime and isinstance(default_value, JodaDateTime):
+        # We return a org.joda.time.DateTime from a org.eclipse.smarthome.core.library.types.DateTimeType
+        return to_joda_datetime(item.state) if item.state not in [NULL, UNDEF] else default_value
     elif isinstance(default_value, ZonedDateTime):
-        # We return a java.time.ZonedDateTime 
-        return (
-            ZonedDateTime.ofInstant(Instant.ofEpochMilli(item.state.calendar.timeInMillis), ZoneId.systemDefault)
-            if item.state not in [NULL, UNDEF]
-            else default_value
-        )
+        # We return a java.time.ZonedDateTime
+        return to_java_zoneddatetime(item.state) if item.state not in [NULL, UNDEF] else default_value
     else:
         LOG.warn("The type of the passed default value is not handled")
         return None
@@ -261,12 +266,14 @@ def getItemValue(item_or_item_name, default_value):
 
 def getLastUpdate(item_or_item_name):
     """
-    Returns the Item's last update datetime as an 'java.time.ZonedDateTime`_.
+    Returns the Item's last update datetime as an ``org.joda.time.DateTime``.
+    If Joda is missing it will return a ``java.time.ZonedDateTime`` instead.
 
     Args:
         item_or_item_name (Item or str): name of the Item
 
     Returns:
+        DateTime: Joda DateTime representing the time of the Item's last update
         ZonedDateTime: ZonedDateTime representing the time of the Item's last update
     """
     LOG.warn("The 'core.utils.getLastUpdate' function is pending deprecation.")
@@ -274,14 +281,14 @@ def getLastUpdate(item_or_item_name):
         from core.actions import PersistenceExtensions
         item = itemRegistry.getItem(item_or_item_name) if isinstance(item_or_item_name, basestring) else item_or_item_name
         last_update = PersistenceExtensions.lastUpdate(item)
-        if last_update is None:
-            LOG.warning(u"No existing lastUpdate data for item: '{}', so returning 1970-01-01T00:00:00Z".format(item.name))
-        return last_update
+        if last_update is not None:
+            return to_joda_datetime(last_update) if JodaDateTime else to_java_zoneddatetime(last_update)
+        LOG.warning(u"No existing lastUpdate data for item: '{}', so returning 1970-01-01T00:00:00Z".format(item.name))
     except:
         # There is an issue using the StartupTrigger and saving scripts over SMB, where changes are detected before the file
         # is completely written. The first read breaks because of a partial file write and the second read succeeds.
         LOG.warning(u"Exception when getting lastUpdate data for item: '{}', so returning 1970-01-01T00:00:00Z".format(item.name))
-        return None
+    return JodaDateTime(0) if JodaDateTime else ZonedDateTime(0)
 
 
 def sendCommand(item_or_item_name, new_value):

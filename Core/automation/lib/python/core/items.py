@@ -5,6 +5,7 @@ any links from an Item before it is removed.
 __all__ = ["add_item", "remove_item"]
 
 from core.jsr223.scope import scriptExtension, itemRegistry
+scriptExtension.importPreset(None)
 
 import core
 from core import osgi
