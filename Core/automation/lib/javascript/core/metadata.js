@@ -18,6 +18,8 @@ This library provides functions for manipulating Item Metadata.
         var MetadataRegistry =  get_service("org.eclipse.smarthome.core.items.MetadataRegistry");
     }
 
+    if(MetadataRegistry === null) MetadataRegistry = get_service("org.eclipse.smarthome.core.items.MetadataRegistry");
+
     try {
         var Metadata = Java.type("org.openhab.core.items.Metadata");
         var MetadataKey = Java.type("org.openhab.core.items.MetadataKey");
@@ -25,6 +27,9 @@ This library provides functions for manipulating Item Metadata.
         var Metadata = Java.type("org.eclipse.smarthome.core.items.Metadata");
         var MetadataKey = Java.type("org.eclipse.smarthome.core.items.MetadataKey");
     }
+
+    if(Metadata === null) Metadata = Java.type("org.eclipse.smarthome.core.items.Metadata");
+    if(MetadataKey === null) MetadataKey = Java.type("org.eclipse.smarthome.core.items.MetadataKey");
 
     context._merge_configuration = function(metadata_configuration, new_configuration) {
         var old_configuration = {};
