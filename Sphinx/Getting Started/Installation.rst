@@ -113,7 +113,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
                        REM Add to the top of the file
                        set EXTRA_JAVA_OPTS=-Xbootclasspath/a:C:\openhab2\conf\automation\jython\jython-standalone-2.7.0.jar -Dpython.home=C:\openhab2\conf\automation\jython -Dpython.path=C:\openhab2\conf\automation\lib\python
 
-        #. Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to the path specified above in the EXTRA_JAVA_OPTS.
+        #. Download the `standalone Jython 2.7.0 jar <https://www.jython.org/download>`_ and copy it to the path specified above in the EXTRA_JAVA_OPTS.
            A full installation of Jython can also be used, but the paths above would need to be modified.
            Jython 2.7.1 and 2.7.2a1+ will also work, but 2.7.0 has proven to be very stable.
         #. Copy the ``/Script Examples/Python/hello_world.py`` script to ``/automation/jsr223/python/personal/``.
