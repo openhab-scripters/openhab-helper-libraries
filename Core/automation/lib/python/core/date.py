@@ -9,7 +9,7 @@ this module can accept any of the following date types:
     java.time.LocalDateTime
     java.util.Calendar
     java.util.Date
-    org.joda.time.DateTime
+    org.joda.time.DateTime  # OH2 only
     datetime.datetime (Python)
     org.eclipse.smarthome.core.library.types.DateTimeType
     org.openhab.core.library.types.DateTimeType
@@ -22,6 +22,9 @@ __all__ = [
 
 import sys
 import datetime
+import inspect
+
+from core.log import logging, LOG_PREFIX
 
 from java.time import LocalDateTime, ZonedDateTime
 from java.time import ZoneId, ZoneOffset
@@ -30,9 +33,28 @@ from java.time.temporal.ChronoUnit import DAYS, HOURS, MINUTES, SECONDS
 from java.util import Calendar, Date, TimeZone
 
 try:
-    from org.eclipse.smarthome.core.library.types import DateTimeType as EclipseDateTime
+    from org.joda.time import DateTime as JodaDateTime
+    from org.joda.time import DateTimeZone as JodaDateTimeZone
 except:
-    EclipseDateTime = None
+    # OH3 does not have Joda Time
+    JodaDateTime = None
+    JodaDateTimeZone = None
+
+try:
+    from org.openhab.core.library.types import DateTimeType
+except:
+    DateTimeType = None
+
+try:
+    from org.eclipse.smarthome.core.library.types import DateTimeType as EclipseDateTimeType
+except:
+    EclipseDateTimeType = None
+
+try:
+    # if the compat1x bundle is not installed, the OH 1.x DateTimeType is not available
+    from org.openhab.core.library.types import DateTimeType as LegacyDateTimeType
+except:
+    LegacyDateTimeType = None
 
 if 'org.eclipse.smarthome.automation' in sys.modules or 'org.openhab.core.automation' in sys.modules:
     # Workaround for Jython JSR223 bug where dates and datetimes are converted
@@ -43,7 +65,6 @@ if 'org.eclipse.smarthome.automation' in sys.modules or 'org.openhab.core.automa
     remove_java_converter(datetime.date)
     remove_java_converter(datetime.datetime)
 
-from org.openhab.core.library.types import DateTimeType
 
 
 def format_date(value, format_string="yyyy-MM-dd'T'HH:mm:ss.SSxx"):
@@ -249,13 +270,17 @@ def to_java_zoneddatetime(value):
     if isinstance(value, Date):
         return ZonedDateTime.ofInstant(value.toInstant(), ZoneId.ofOffset("GMT", ZoneOffset.ofHours(0 - value.getTimezoneOffset() / 60)))
     # Joda DateTime
-    # if isinstance(value, DateTime):
-    #     return value.toGregorianCalendar().toZonedDateTime()
+    if JodaDateTime and isinstance(value, JodaDateTime):
+        return value.toGregorianCalendar().toZonedDateTime()
     # openHAB DateTimeType
-    if EclipseDateTime and isinstance(value, EclipseDateTime):
-        return to_java_zoneddatetime(value.calendar)
-    if isinstance(value, DateTimeType):
+    if DateTimeType and isinstance(value, DateTimeType):
         return to_java_zoneddatetime(value.getZonedDateTime())
+    # Eclipse Smarthome DateTimeType
+    if EclipseDateTimeType and isinstance(value, EclipseDateTimeType):
+        return to_java_zoneddatetime(value.calendar)
+    # Legacy (OH1.x compat) DateTimeType
+    if LegacyDateTimeType and isinstance(value, LegacyDateTimeType):
+        return to_java_zoneddatetime(value.calendar)
 
     raise TypeError("Unknown type: {}".format(str(type(value))))
 
@@ -319,33 +344,43 @@ class _pythonTimezone(datetime.tzinfo):
         return datetime.timedelta(0)
 
 
-# def to_joda_datetime(value):
-#     """
-#     Converts any of the supported date types to ``org.joda.time.DateTime``. If
-#     ``value`` does not have timezone information, the system default will be
-#     used.
+def to_joda_datetime(value):
+    """
+    Converts any of the supported date types to ``org.joda.time.DateTime``. If
+    ``value`` does not have timezone information, the system default will be
+    used.
 
-#     Examples:
-#         .. code-block::
+    Examples:
+        .. code-block::
 
-#             joda_time = to_joda_datetime(items["date_item"])
+            joda_time = to_joda_datetime(items["date_item"])
 
-#     Args:
-#         value: the value to convert
+    Args:
+        value: the value to convert
 
-#     Returns:
-#         org.joda.time.DateTime: the converted value
+    Returns:
+        org.joda.time.DateTime: the converted value
+        None: if ``org.joda.time`` is not available
 
-#     Raises:
-#         TypeError: if the type of ``value`` is not suported by this package
-#     """
-#     if isinstance(value, DateTime):
-#         return value
+    Raises:
+        TypeError: if the type of ``value`` is not suported by this package
+    """
+    if JodaDateTime is None:
+        frame = inspect.stack()[1]
+        logging.getLogger("{}.date".format(LOG_PREFIX)).warn(
+            "'{func}' ({file}:{line}) called 'to_joda_datetime' but Joda is not available"
+            .format(file=frame.filename, line=frame.lineno, func=frame.function)
+        )
+        del frame
+        return None
 
-#     value_zoneddatetime = to_java_zoneddatetime(value)
-#     return DateTime(value_zoneddatetime.toInstant().toEpochMilli(),
-#         DateTimeZone.forTimeZone(TimeZone.getTimeZone(value_zoneddatetime.getZone()))
-#     )
+    if isinstance(value, JodaDateTime):
+        return value
+
+    value_zoneddatetime = to_java_zoneddatetime(value)
+    return JodaDateTime(value_zoneddatetime.toInstant().toEpochMilli(),
+        JodaDateTimeZone.forTimeZone(TimeZone.getTimeZone(value_zoneddatetime.getZone()))
+    )
 
 
 def to_java_calendar(value):
