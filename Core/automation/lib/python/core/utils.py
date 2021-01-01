@@ -39,7 +39,7 @@ from java.time import ZonedDateTime
 
 from core.date import to_java_zoneddatetime, to_joda_datetime
 from core.log import logging, LOG_PREFIX
-from core.jsr223.scope import itemRegistry, NULL, UNDEF, ON, OFF, OPEN, CLOSED, events, things
+from core.jsr223.scope import itemRegistry, StringType, NULL, UNDEF, ON, OFF, OPEN, CLOSED, events, things
 
 
 LOG = logging.getLogger(u"{}.core.utils".format(LOG_PREFIX))
@@ -57,14 +57,14 @@ def validate_item(item_or_item_name):
         in a valid format, else validated Item
     """
     item = item_or_item_name
-    if isinstance(item, basestring):
-        if itemRegistry.getItems(item) == []:
-            LOG.warn(u"'{}' is not in the ItemRegistry".format(item))
+    if isinstance(item, (basestring, unicode, StringType)):
+        if itemRegistry.getItems(str(item)) == []:
+            LOG.warn(u"'{}' is not in the ItemRegistry".format(str(item)))
             return None
         else:
-            item = itemRegistry.getItem(item_or_item_name)
-    elif not hasattr(item_or_item_name, 'name'):
-        LOG.warn(u"'{}' is not a Item or string".format(item))
+            item = itemRegistry.getItem(str(item))
+    elif not hasattr(item, 'name'):
+        LOG.warn(u"'{}' is not a Item or string".format(str(item)))
         return None
 
     if itemRegistry.getItems(item.name) == []:
