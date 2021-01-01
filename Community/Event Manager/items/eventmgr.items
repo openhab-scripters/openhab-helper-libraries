@@ -1,0 +1,6 @@
+DateTime    DateTime_Sunrise             "DateTime_Sunrise [%s]"    { eventmgr="event"  [id="Sunrise"] }
+DateTime    DateTime_Sunrise             "DateTime_Sunset [%s]"     { eventmgr="event"  [id="Sunset"] }
+
+String      String_AstroTimeOfDay        "AstroTimeOfDay [%s]"      { eventmgr="tod"  [id="AstroTimeOfDay"] }
+String      String_AlarmTimeOfDay        "AlarmTimeOfDay [%s]"      { eventmgr="tod"  [id="AlarmTimeOfDay"] }
+
