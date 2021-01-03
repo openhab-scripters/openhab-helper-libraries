@@ -6,6 +6,12 @@ The following steps will configure Visual Studio Code to recognize the Helper Li
 and provide examples of how to reduce the number of errors being displayed because VSCode
 does not have access to any openHAB packages.
 
+Python Version 
+========
+
+    Install Python 2.7 on the computer that Visual Studio Code is running on. Select version Python 
+    version 2.7 in VS Code (bottom left corner of the VS Code window).
+
 ENV File
 ========
 
