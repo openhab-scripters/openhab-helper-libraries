@@ -40,7 +40,8 @@ disable=
     arguments-differ,
     redefined-builtin,
     redefined-outer-name,
-    invalid-encoded-data
+    invalid-encoded-data,
+    unsubscriptable-object
 
 [TYPECHECK]
 
