@@ -21,7 +21,6 @@ from inspect import isclass
 
 from core.log import logging, LOG_PREFIX, log_traceback
 from core.jsr223.scope import SimpleRule, scriptExtension
-from core.jsr223 import get_automation_manager
 
 LOG = logging.getLogger("{}.core.rules".format(LOG_PREFIX))
 
@@ -126,7 +125,7 @@ def addRule(new_rule):
         Rule: the Rule object that was created
     """
     LOG.debug(u"Added rule '{}'".format(new_rule.name))
-    return get_automation_manager().addRule(new_rule)
+    return scriptExtension.get("automationManager").addRule(new_rule)
 
 # def set_uid_prefix(new_rule, prefix=None):
 #     """
