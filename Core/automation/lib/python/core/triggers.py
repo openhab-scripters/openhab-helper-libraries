@@ -96,7 +96,7 @@ def when(target):
         def item_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
-            
+
             if trigger_target in ["added", "removed", "updated"]:
                 event_names = {
                     "added": "ItemAddedEvent",
@@ -596,7 +596,7 @@ class GenericEventTrigger(Trigger):
     Attributes:
         trigger (Trigger): Trigger object to be added to a Rule
     """
-    def __init__(self, event_source, event_types, event_topic="smarthome/*", trigger_name=None):
+    def __init__(self, event_source, event_types, event_topic="*/*", trigger_name=None):
         trigger_name = validate_uid(trigger_name)
         self.trigger = TriggerBuilder.create().withId(trigger_name).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
             "eventTopic": event_topic,
@@ -640,8 +640,8 @@ class ItemEventTrigger(Trigger):
     def __init__(self, event_types, item_name=None, trigger_name=None):
         trigger_name = validate_uid(trigger_name)
         self.trigger = TriggerBuilder.create().withId(trigger_name).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
-            "eventTopic": "smarthome/items/*",
-            "eventSource": "smarthome/items/{}".format("{}/".format(item_name) if item_name else ""),
+            "eventTopic": "*/items/*",
+            "eventSource": "*/items/{}".format(item_name if item_name else ""),
             "eventTypes": event_types
         })).build()
 
@@ -678,8 +678,8 @@ class ThingEventTrigger(Trigger):
     def __init__(self, event_types, thing_uid=None, trigger_name=None):
         trigger_name = validate_uid(trigger_name)
         self.trigger = TriggerBuilder.create().withId(trigger_name).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
-            "eventTopic": "smarthome/things/*",
-            "eventSource": "smarthome/things/{}".format("{}/".format(thing_uid) if thing_uid else ""),
+            "eventTopic": "*/things/*",
+            "eventSource": "*/things/{}".format(thing_uid if thing_uid else ""),
             "eventTypes": event_types
         })).build()
 
