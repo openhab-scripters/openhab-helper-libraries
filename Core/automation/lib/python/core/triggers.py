@@ -75,7 +75,8 @@ def when(target):
 
         from org.quartz.CronExpression import isValidExpression
 
-        from core.jsr223.scope import itemRegistry, things
+        itemRegistry = scriptExtension.get("itemRegistry")
+        things = scriptExtension.get("things")
         from core.log import logging, LOG_PREFIX
 
         try:
