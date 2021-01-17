@@ -40,7 +40,8 @@ disable=
     arguments-differ,
     redefined-builtin,
     redefined-outer-name,
-    invalid-encoded-data
+    invalid-encoded-data,
+    raise-missing-from
 
 [TYPECHECK]
 
@@ -60,6 +61,8 @@ ignored-modules=
 
 additional-builtins=
     reload,
+    basestring,
+    unicode,
 
     # Default Preset
     DateTime,
