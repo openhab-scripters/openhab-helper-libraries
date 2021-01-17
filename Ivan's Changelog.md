@@ -5,6 +5,7 @@ This change log will keep track of what has been done in the `ivans-updates` bra
 ## Added
 
 * Custom logger class and simplier `getLogger` function that automatically prepends the `LOG_PREFIX`.
+* OH3.x support while maintaining backwards compatibility with OH2.x.
 
 ## Changed
 
