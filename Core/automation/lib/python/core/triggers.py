@@ -81,7 +81,7 @@ def when(target):
 
         try:
             from org.openhab.core.thing import ChannelUID, ThingUID, ThingStatus
-            from org.openab.core.thing.type import ChannelKind
+            from org.openhab.core.thing.type import ChannelKind
         except:
             from org.eclipse.smarthome.core.thing import ChannelUID, ThingUID, ThingStatus
             from org.eclipse.smarthome.core.thing.type import ChannelKind
