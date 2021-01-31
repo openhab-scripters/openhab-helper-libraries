@@ -545,7 +545,9 @@ Iterate over members of a Group
 
         .. code-block:: JavaScript
 
-            TODO
+            ir.getItem("gTest").members.forEach(function(item) {
+                // do stuff
+            }
 
     .. group-tab:: Groovy
 
