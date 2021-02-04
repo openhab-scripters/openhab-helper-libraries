@@ -19,10 +19,10 @@ from inspect import isclass
 # except:
 #     from org.eclipse.smarthome.automation import Rule as SmarthomeRule
 
-from core.log import logging, LOG_PREFIX, log_traceback
+from core.log import getLogger, log_traceback
 from core.jsr223.scope import SimpleRule, scriptExtension
 
-LOG = logging.getLogger("{}.core.rules".format(LOG_PREFIX))
+LOG = getLogger("core.rules")
 
 scriptExtension.importPreset("RuleSimple")
 
@@ -58,7 +58,7 @@ def rule(name=None, description=None, tags=None):
                 else:
                     self.name = name
                 # set_uid_prefix(self)
-                self.log = logging.getLogger(u"{}.{}".format(LOG_PREFIX, self.name))
+                self.log = getLogger(self.name)
                 class_.__init__(self, *args, **kwargs)
                 if description is not None:
                     self.description = description
@@ -95,7 +95,7 @@ class _FunctionRule(SimpleRule):
             else:
                 name = "JSR223-Jython"
         self.name = name
-        callback.log = logging.getLogger(u"{}.{}".format(LOG_PREFIX, name))
+        callback.log = getLogger(name)
         callback.name = name
         self.callback = callback
         if description is not None:

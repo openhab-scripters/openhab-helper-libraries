@@ -12,12 +12,12 @@ __all__ = [
 
 from core.jsr223.scope import scriptExtension
 from org.osgi.framework import FrameworkUtil
-from core.log import logging, LOG_PREFIX
+from core.log import getLogger
 
 _BUNDLE = FrameworkUtil.getBundle(type(scriptExtension))
 BUNDLE_CONTEXT = _BUNDLE.getBundleContext() if _BUNDLE else None
 REGISTERED_SERVICES = {}
-LOG = logging.getLogger("{}.core.osgi".format(LOG_PREFIX))
+LOG = getLogger("core.osgi")
 
 
 def get_service(class_or_name):

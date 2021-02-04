@@ -32,11 +32,11 @@ except:
 
 from org.joda.time import DateTime
 
-from core.log import logging, LOG_PREFIX
+from core.log import getLogger
 from core.jsr223.scope import itemRegistry, NULL, UNDEF, ON, OFF, OPEN, CLOSED, events, things
 
 
-LOG = logging.getLogger(u"{}.core.utils".format(LOG_PREFIX))
+LOG = getLogger(u"core.utils")
 
 
 def validate_item(item_or_item_name):

@@ -7,6 +7,7 @@ core modules and scripts.
 __all__ = [
     "LOG_PREFIX",
     "logging",
+    "getLogger",
     "log_traceback"
 ]
 
@@ -23,6 +24,7 @@ except:
     LOG_PREFIX = "jython"
     LoggerFactory.getLogger("{}.core.log".format(LOG_PREFIX)).warn("The 'configuration.py' file is missing from teh python.path!")
 
+TRACE = 5
 
 class Slf4jHandler(logging.Handler):
     def emit(self, record):
@@ -33,7 +35,7 @@ class Slf4jHandler(logging.Handler):
         logger = LoggerFactory.getLogger(logger_name)
         level = record.levelno
         if level == logging.CRITICAL:
-            logger.trace(message)
+            logger.error(message)
         elif level == logging.ERROR:
             logger.error(message)
         elif level == logging.DEBUG:
@@ -42,11 +44,34 @@ class Slf4jHandler(logging.Handler):
             logger.warn(message)
         elif level == logging.INFO:
             logger.info(message)
+        elif level == TRACE:
+            logger.trace(message)
+
+class Slf4jLogger(logging.Logger):
+    def trace(self, msg, *args, **kwargs):
+        """
+        Log 'msg % args' with severity 'TRACE'.
+        To pass exception information, use the keyword argument exc_info with
+        a true value, e.g.
+        logger.trace("Houston, we have a %s", "thorny problem", exc_info=1)
+        """
+        if self.isEnabledFor(TRACE):
+            self._log(TRACE, msg, args, **kwargs)
 
 
 HANDLER = Slf4jHandler()
-logging.root.setLevel(logging.DEBUG)
+logging.addLevelName(TRACE, "TRACE")
+logging.setLoggerClass(Slf4jLogger)
+logging.root.setLevel(TRACE)
 logging.root.handlers = [HANDLER]
+
+
+def getLogger(name, prefix=None):
+    if not prefix and name:
+        prefix = LOG_PREFIX
+    if name:
+        name = u"{}.{}".format(prefix.strip("."), name.strip("."))
+    return logging.getLogger(name)
 
 
 def log_traceback(function):

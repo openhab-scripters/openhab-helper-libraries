@@ -25,9 +25,9 @@ from core.jsr223.scope import scriptExtension
 scriptExtension.importPreset("RuleSupport")
 from core.jsr223.scope import Trigger, TriggerBuilder, Configuration
 from core.osgi import BUNDLE_CONTEXT
-from core.log import logging, LOG_PREFIX
+from core.log import getLogger
 
-LOG = logging.getLogger(u"{}.core.osgi.events".format(LOG_PREFIX))
+LOG = getLogger(u"core.osgi.events")
 
 
 def hashtable(*key_values):
@@ -50,13 +50,13 @@ class OsgiEventAdmin(object):
 
     _event_handler = None
     event_listeners = []
-    log = logging.getLogger(u"{}.core.osgi.events.OsgiEventAdmin".format(LOG_PREFIX))
+    log = getLogger(u"core.osgi.events.OsgiEventAdmin")
 
     # Singleton
     class OsgiEventHandler(EventHandler):
 
         def __init__(self):
-            self.log = logging.getLogger("{}.core.osgi.events.OsgiEventHandler")
+            self.log = getLogger("core.osgi.events.OsgiEventHandler")
             self.registration = BUNDLE_CONTEXT.registerService(
                 EventHandler, self, hashtable((EventConstants.EVENT_TOPIC, ["*"])))
             self.log.info("Registered openHAB OSGi event listener service")

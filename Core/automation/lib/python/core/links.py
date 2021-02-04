@@ -8,7 +8,7 @@ __all__ = [
 ]
 
 from core import osgi
-from core.log import logging, LOG_PREFIX
+from core.log import getLogger
 from core.utils import validate_item, validate_channel_uid
 
 try:
@@ -28,7 +28,7 @@ MANAGED_ITEM_CHANNEL_LINK_PROVIDER = osgi.get_service(
         "org.eclipse.smarthome.core.thing.link.ManagedItemChannelLinkProvider"
     )
 
-LOG = logging.getLogger(u"{}.core.links".format(LOG_PREFIX))
+LOG = getLogger(u"core.links")
 
 
 def add_link(item_or_item_name, channel_uid_or_string):

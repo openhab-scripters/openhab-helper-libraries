@@ -18,9 +18,9 @@ except:
     from org.eclipse.smarthome.core.service import AbstractWatchService
 
 import core
-from core.log import logging, log_traceback, LOG_PREFIX
+from core.log import getLogger, log_traceback
 
-LOG = logging.getLogger("{}.core.DirectoryEventTrigger".format(LOG_PREFIX))
+LOG = getLogger("core.DirectoryEventTrigger")
 core.DIRECTORY_TRIGGER_MODULE_ID = "jsr223.DirectoryEventTrigger"
 
 scriptExtension.importPreset("RuleSimple")

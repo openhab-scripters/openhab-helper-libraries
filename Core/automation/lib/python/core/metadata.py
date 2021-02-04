@@ -50,7 +50,7 @@ __all__ = [
 ]
 
 from core import osgi
-from core.log import logging, LOG_PREFIX
+from core.log import getLogger
 
 try:
     from org.openhab.core.items import Metadata, MetadataKey
@@ -63,7 +63,7 @@ METADATA_REGISTRY = osgi.get_service(
         "org.eclipse.smarthome.core.items.MetadataRegistry"
     )
 
-LOG = logging.getLogger(u"{}.core.metadata".format(LOG_PREFIX))
+LOG = getLogger(u"core.metadata")
 
 
 def get_all_namespaces(item_name):
@@ -84,7 +84,7 @@ def get_all_namespaces(item_name):
         list: a list of strings representing the namespace names found for the
         specified Item
     """
-    LOG.debug(u"get_all_namespaces: Item '{}'".format(item_name))
+    LOG.trace(u"get_all_namespaces: Item '{}'".format(item_name))
     return [metadata.UID.namespace for metadata in METADATA_REGISTRY.getAll() if metadata.UID.itemName == item_name]
 
 
@@ -108,7 +108,7 @@ def get_metadata(item_name, namespace):
         ``value`` and ``configuration`` dictionary, but will be ``None`` if
         the namespace or the Item does not exist
     """
-    LOG.debug(u"get_metadata: Item '{}', namespace '{}'".format(item_name, namespace))
+    LOG.trace(u"get_metadata: Item '{}', namespace '{}'".format(item_name, namespace))
     return METADATA_REGISTRY.get(MetadataKey(namespace, item_name))
 
 
@@ -140,14 +140,14 @@ def set_metadata(item_name, namespace, configuration, value=None, overwrite=Fals
         remove_metadata(item_name, namespace)
     metadata = get_metadata(item_name, namespace)
     if metadata is None or overwrite:
-        LOG.debug(u"set_metadata: adding or overwriting metadata namespace with 'value: {}, configuration: {}': Item '{}', namespace '{}'".format(value, configuration, item_name, namespace))
+        LOG.trace(u"set_metadata: adding or overwriting metadata namespace with 'value: {}, configuration: {}': Item '{}', namespace '{}'".format(value, configuration, item_name, namespace))
         METADATA_REGISTRY.add(Metadata(MetadataKey(namespace, item_name), value, configuration))
     else:
         if value is None:
             value = metadata.value
         new_configuration = dict(metadata.configuration).copy()
         new_configuration.update(configuration)
-        LOG.debug(u"set_metadata: setting metadata namespace to 'value: {}, configuration: {}': Item '{}', namespace '{}'".format(value, new_configuration, item_name, namespace))
+        LOG.trace(u"set_metadata: setting metadata namespace to 'value: {}, configuration: {}': Item '{}', namespace '{}'".format(value, new_configuration, item_name, namespace))
         METADATA_REGISTRY.update(Metadata(MetadataKey(namespace, item_name), value, new_configuration))
 
 
@@ -171,10 +171,10 @@ def remove_metadata(item_name, namespace=None):
             remove metadata in all namespaces for the specified Item
     """
     if namespace is None:
-        LOG.debug(u"remove_metadata (all): Item '{}'".format(item_name))
+        LOG.trace(u"remove_metadata (all): Item '{}'".format(item_name))
         METADATA_REGISTRY.removeItemMetadata(item_name)
     else:
-        LOG.debug(u"remove_metadata: Item '{}', namespace '{}'".format(item_name, namespace))
+        LOG.trace(u"remove_metadata: Item '{}', namespace '{}'".format(item_name, namespace))
         METADATA_REGISTRY.remove(MetadataKey(namespace, item_name))
 
 
@@ -200,7 +200,7 @@ def get_key_value(item_name, namespace, *args):
         Item or namespace does not exist, this function will return an empty
         dictionary.
     """
-    LOG.debug(u"get_key_value: Item '{}', namespace '{}', args '{}'".format(item_name, namespace, args))
+    LOG.trace(u"get_key_value: Item '{}', namespace '{}', args '{}'".format(item_name, namespace, args))
     metadata = get_metadata(item_name, namespace)
     if metadata is not None:
         result = metadata.configuration.get(args[0])
@@ -231,7 +231,7 @@ def set_key_value(item_name, namespace, *args):
             branches can be used)
         value (str, decimal, boolean, dict or None): value to set
     """
-    LOG.debug(u"set_key_value: Item '{}', namespace '{}', args '{}'".format(item_name, namespace, args))
+    LOG.trace(u"set_key_value: Item '{}', namespace '{}', args '{}'".format(item_name, namespace, args))
     if len(args) > 1:
         metadata = get_metadata(item_name, namespace)
         new_configuration = {}
@@ -266,7 +266,7 @@ def remove_key_value(item_name, namespace, *args):
         key (str): ``configuration`` key to remove (multiple keys in
             descending branches can be used)
     """
-    LOG.debug(u"remove_key_value: Item '{}', namespace '{}', args '{}'".format(item_name, namespace, args))
+    LOG.trace(u"remove_key_value: Item '{}', namespace '{}', args '{}'".format(item_name, namespace, args))
     if args:
         metadata = get_metadata(item_name, namespace)
         if metadata is not None:
@@ -305,7 +305,7 @@ def get_value(item_name, namespace):
         str or None: namespace ``value`` or ``None`` if the namespace or
         Item does not exist
     """
-    LOG.debug(u"get_value: Item '{}', namespace '{}'".format(item_name, namespace))
+    LOG.trace(u"get_value: Item '{}', namespace '{}'".format(item_name, namespace))
     metadata = get_metadata(item_name, namespace)
     if metadata is not None:
         return metadata.value
@@ -329,7 +329,7 @@ def set_value(item_name, namespace, value):
         namespace (str): name of the namespace
         value (str): new or updated namespace value
     """
-    LOG.debug(u"set_value: Item '{}', namespace '{}', value '{}'".format(item_name, namespace, value))
+    LOG.trace(u"set_value: Item '{}', namespace '{}', value '{}'".format(item_name, namespace, value))
     metadata = get_metadata(item_name, namespace)
     if metadata is not None:
         set_metadata(item_name, namespace, metadata.configuration, value, True)

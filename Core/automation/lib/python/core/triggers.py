@@ -77,7 +77,7 @@ def when(target):
 
         itemRegistry = scriptExtension.get("itemRegistry")
         things = scriptExtension.get("things")
-        from core.log import logging, LOG_PREFIX
+        from core.log import getLogger
 
         try:
             from org.openhab.core.thing import ChannelUID, ThingUID, ThingStatus
@@ -91,7 +91,7 @@ def when(target):
         except:
             from org.openhab.core.types import TypeParser
 
-        LOG = logging.getLogger(u"{}.core.triggers".format(LOG_PREFIX))
+        LOG = getLogger(u"core.triggers")
 
 
         def item_trigger(function):
@@ -130,14 +130,14 @@ def when(target):
                         function.triggers.append(ItemCommandTrigger(member.name, command=new_state, trigger_name=trigger_name).trigger)
                     else:
                         function.triggers.append(ItemStateChangeTrigger(member.name, previous_state=old_state, state=new_state, trigger_name=trigger_name).trigger)
-                    LOG.debug(u"when: Created item_trigger: '{}'".format(trigger_name))
+                    LOG.trace(u"when: Created item_trigger: '{}'".format(trigger_name))
             return function
 
         def cron_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
             function.triggers.append(CronTrigger(trigger_type, trigger_name=trigger_name).trigger)
-            LOG.debug(u"when: Created cron_trigger: '{}'".format(trigger_name))
+            LOG.trace(u"when: Created cron_trigger: '{}'".format(trigger_name))
             return function
 
         def system_trigger(function):
@@ -147,7 +147,7 @@ def when(target):
             function.triggers.append(StartupTrigger(trigger_name=trigger_name).trigger)
             #else:
             #    function.triggers.append(ShutdownTrigger(trigger_name=trigger_name).trigger)
-            LOG.debug(u"when: Created system_trigger: '{}'".format(trigger_name))
+            LOG.trace(u"when: Created system_trigger: '{}'".format(trigger_name))
             return function
 
         def thing_trigger(function):
@@ -168,14 +168,14 @@ def when(target):
             else:
                 event_types = "ThingStatusInfoChangedEvent" if trigger_type == "changed" else "ThingStatusInfoEvent"
                 function.triggers.append(ThingEventTrigger(event_types, trigger_target, trigger_name=trigger_name).trigger)
-            LOG.debug(u"when: Created thing_trigger: '{}'".format(trigger_name))
+            LOG.trace(u"when: Created thing_trigger: '{}'".format(trigger_name))
             return function
 
         def channel_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []
             function.triggers.append(ChannelEventTrigger(trigger_target, event=new_state, trigger_name=trigger_name).trigger)
-            LOG.debug(u"when: Created channel_trigger: '{}'".format(trigger_name))
+            LOG.trace(u"when: Created channel_trigger: '{}'".format(trigger_name))
             return function
 
         def directory_trigger(function):
@@ -191,7 +191,7 @@ def when(target):
             if event_kinds == []:
                 event_kinds = [ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY]
             function.triggers.append(DirectoryEventTrigger(trigger_target, event_kinds=event_kinds, watch_subdirectories=target_type == "Subdirectory", trigger_name=trigger_name).trigger)
-            LOG.debug(u"when: Created channel_trigger: '{}'".format(trigger_name))
+            LOG.trace(u"when: Created channel_trigger: '{}'".format(trigger_name))
             return function
 
         target_type = None
@@ -339,7 +339,7 @@ def when(target):
         elif target_type in ["Directory", "Subdirectory"] and any(event_kind for event_kind in trigger_type if event_kind not in ["created", "deleted", "modified"]):
             raise ValueError(u"when: \"{}\" could not be parsed. trigger_target '{}' is invalid for target_type '{}'.".format(target, trigger_target, target_type))
 
-        LOG.debug(u"when: target: '{}', target_type: '{}', trigger_target: '{}', trigger_type: '{}', old_state: '{}', new_state: '{}'".format(target, target_type, trigger_target, trigger_type, old_state, new_state))
+        LOG.trace(u"when: target: '{}', target_type: '{}', trigger_target: '{}', trigger_type: '{}', old_state: '{}', new_state: '{}'".format(target, target_type, trigger_target, trigger_type, old_state, new_state))
 
         trigger_name = validate_uid(trigger_name or target)
         if target_type in ["Item", "Member of", "Descendent of"]:

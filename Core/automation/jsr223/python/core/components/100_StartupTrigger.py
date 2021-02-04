@@ -7,14 +7,14 @@ scriptExtension.importPreset("RuleSupport")
 scriptExtension.importPreset("RuleFactories")
 
 import core
-from core.log import logging, LOG_PREFIX
+from core.log import getLogger
 
 try:
     from org.openhab.core.automation.handler import TriggerHandler
 except:
     from org.eclipse.smarthome.automation.handler import TriggerHandler
 
-LOG = logging.getLogger("{}.core.StartupTrigger".format(LOG_PREFIX))
+LOG = getLogger("core.StartupTrigger")
 
 core.STARTUP_MODULE_ID = "jsr223.StartupTrigger"
 

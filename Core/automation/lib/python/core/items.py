@@ -9,7 +9,7 @@ scriptExtension.importPreset(None)
 
 import core
 from core import osgi
-from core.log import logging, LOG_PREFIX
+from core.log import getLogger
 from core.links import remove_all_links
 
 ItemBuilderFactory = osgi.get_service(
@@ -24,7 +24,7 @@ ManagedItemProvider = osgi.get_service(
         "org.eclipse.smarthome.core.items.ManagedItemProvider"
     )
 
-log = logging.getLogger("{}.core.items".format(LOG_PREFIX))
+log = getLogger("core.items")
 
 def add_item(item_or_item_name, item_type=None, category=None, groups=None, label=None, tags=[], gi_base_type=None, group_function=None):
     """
