@@ -1,0 +1,53 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        // General
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "editor.renderWhitespace": "all",
+        "editor.rulers": [
+            80
+        ],
+
+        // Python
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.autoComplete.extraPaths": [
+            "./Core/automation/lib/python",
+            "./Community/Alexa Speak and Respond/automation/lib/python",
+            "./Community/Area Triggers and Actions/automation/lib/python",
+            "./Community/AutoRemote/automation/lib/python",
+            "./Community/ClickaTell/automation/lib/python",
+            "./Community/Delete and Rediscover Z-Wave Things/automation/lib/python",
+            "./Community/Esper/automation/lib/python",
+            "./Community/ideAlarm/automation/lib/python",
+            "./Community/Mode (Time of Day)/automation/lib/python",
+            "./Community/NOAA Weather Alerts/automation/lib/python",
+            "./Community/OpenWeatherMap/automation/lib/python",
+            "./Community/Sonos/automation/lib/python",
+            "./Community/Trash alert (Netherlands)/automation/lib/python",
+            "./Community/TTS (flite)/automation/lib/python",
+            "./Community/WeatherStationUploader/automation/lib/python"
+        ],
+
+        // Javascript
+        "typescript.validate.enable": false,
+        "typescript.format.enable": false,
+        "javascript.validate.enable": false,
+        //"javascript.format.enable": false,
+        "javascript.format.semicolons": "insert",
+        "eslint.format.enable": true,
+        "[javascript]": {
+            "editor.defaultFormatter": "dbaeumer.vscode-eslint" ,
+            "editor.formatOnSave": true,
+            "editor.formatOnSaveMode": "modifications",
+        },
+
+        // Sphinx
+        "restructuredtext.confPath": "${workspaceFolder}/Sphinx"
+    }
+}
