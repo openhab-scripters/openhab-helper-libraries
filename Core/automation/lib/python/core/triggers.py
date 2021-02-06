@@ -662,7 +662,7 @@ class ItemEventTrigger(Trigger):
         trigger_name = validate_uid(trigger_name)
         self.trigger = TriggerBuilder.create().withId(trigger_name).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
             "eventTopic": "*/items/*",
-            "eventSource": "*/items/{}".format(item_name if item_name else ""),
+            "eventSource": "/items/{}".format(item_name if item_name else ""),
             "eventTypes": event_types
         })).build()
 
@@ -700,7 +700,7 @@ class ThingEventTrigger(Trigger):
         trigger_name = validate_uid(trigger_name)
         self.trigger = TriggerBuilder.create().withId(trigger_name).withTypeUID("core.GenericEventTrigger").withConfiguration(Configuration({
             "eventTopic": "*/things/*",
-            "eventSource": "*/things/{}".format(thing_uid if thing_uid else ""),
+            "eventSource": "/things/{}".format(thing_uid if thing_uid else ""),
             "eventTypes": event_types
         })).build()
 

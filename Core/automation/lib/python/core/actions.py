@@ -56,8 +56,6 @@ except:
 
 STATIC_IMPORTS = [Exec, HTTP, Log, LogAction, Ping, ScriptExecution]
 
-STATIC_IMPORTS = [Exec, HTTP, LogAction, Ping, ScriptExecution]
-
 for action in STATIC_IMPORTS:
     name = str(action.simpleName)
     setattr(_MODULE, name, action)

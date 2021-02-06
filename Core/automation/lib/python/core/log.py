@@ -22,7 +22,7 @@ try:
     LOG_PREFIX = configuration.LOG_PREFIX
 except:
     LOG_PREFIX = "jython"
-    LoggerFactory.getLogger("{}.core.log".format(LOG_PREFIX)).warn("The 'configuration.py' file is missing from teh python.path!")
+    LoggerFactory.getLogger("{}.core.log".format(LOG_PREFIX)).warn("The 'configuration.py' file is missing from the python.path!")
 
 TRACE = 5
 
