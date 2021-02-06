@@ -43,13 +43,17 @@ except:
 try:
     # OH2.x compat1x or OH3
     from org.openhab.core.library.types import DateTimeType
+    from org.openhab.core.library.items import DateTimeItem
 except:
     DateTimeType = None
+    DateTimeItem = None
 
 try:
     from org.eclipse.smarthome.core.library.types import DateTimeType as EclipseDateTimeType
+    from org.eclipse.smarthome.core.library.items import DateTimeItem as EclipseDateTimeItem
 except:
     EclipseDateTimeType = None
+    EclipseDateTimeItem = None
 
 if 'org.eclipse.smarthome.automation' in sys.modules or 'org.openhab.core.automation' in sys.modules:
     # Workaround for Jython JSR223 bug where dates and datetimes are converted
@@ -277,6 +281,12 @@ def to_java_zoneddatetime(value):
         else:
             # OH3
             return value.getZonedDateTime()
+    # Eclipse Smarthome DateTimeItem
+    if EclipseDateTimeItem and isinstance(value, EclipseDateTimeItem):
+        return to_java_zoneddatetime(value.getState())
+    # openHAB DateTimeItem
+    if DateTimeItem and isinstance(value, DateTimeItem):
+        return to_java_zoneddatetime(value.getState())
 
     raise TypeError("Unknown type: {}".format(str(type(value))))
 
