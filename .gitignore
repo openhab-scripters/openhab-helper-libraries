@@ -14,3 +14,7 @@ Core/automation/jython/**
 
 # Python Virtual Environment
 .venv
+
+# Python Stubs
+Core/typings/*
+!Core/typings/core

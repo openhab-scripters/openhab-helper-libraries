@@ -7,6 +7,16 @@ __all__ = [
     "remove_link"
 ]
 
+try:
+    import typing as t
+    if t.TYPE_CHECKING:
+        try:
+            from org.openhab.core.thing.link import ItemChannelLinkRegistry, ManagedItemChannelLinkProvider
+        except:
+            from org.eclipse.smarthome.core.thing.link import ItemChannelLinkRegistry, ManagedItemChannelLinkProvider
+except:
+    pass
+
 from core import osgi
 from core.log import getLogger
 from core.utils import validate_item, validate_channel_uid
@@ -20,13 +30,13 @@ ITEM_CHANNEL_LINK_REGISTRY = osgi.get_service(
         "org.openhab.core.thing.link.ItemChannelLinkRegistry"
     ) or osgi.get_service(
         "org.eclipse.smarthome.core.thing.link.ItemChannelLinkRegistry"
-    )
+    ) # type: ItemChannelLinkRegistry
 
 MANAGED_ITEM_CHANNEL_LINK_PROVIDER = osgi.get_service(
         "org.openhab.core.thing.link.ManagedItemChannelLinkProvider"
     ) or osgi.get_service(
         "org.eclipse.smarthome.core.thing.link.ManagedItemChannelLinkProvider"
-    )
+    ) # type: ManagedItemChannelLinkProvider
 
 LOG = getLogger(u"core.links")
 

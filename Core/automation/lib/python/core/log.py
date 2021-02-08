@@ -11,6 +11,11 @@ __all__ = [
     "log_traceback"
 ]
 
+try:
+    import typing as t
+except:
+    pass
+
 import logging
 import traceback
 from functools import wraps
@@ -19,7 +24,7 @@ from org.slf4j import Logger, LoggerFactory
 
 try:
     import configuration
-    LOG_PREFIX = configuration.LOG_PREFIX
+    LOG_PREFIX = configuration.LOG_PREFIX # type: str
 except:
     LOG_PREFIX = "jython"
     LoggerFactory.getLogger("{}.core.log".format(LOG_PREFIX)).warn("The 'configuration.py' file is missing from the python.path!")
@@ -67,6 +72,7 @@ logging.root.handlers = [HANDLER]
 
 
 def getLogger(name, prefix=None):
+    # type: (t.Optional[str], str) -> Slf4jLogger
     if not prefix and name:
         prefix = LOG_PREFIX
     if name:

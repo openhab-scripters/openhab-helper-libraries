@@ -49,6 +49,17 @@ __all__ = [
     "remove_key_value"
 ]
 
+try:
+    import typing as t
+    if t.TYPE_CHECKING:
+        from java.lang import String
+        try:
+            from org.openhab.core.items import MetadataRegistry
+        except:
+            from org.eclipse.smarthome.core.items import MetadataRegistry
+except:
+    pass
+
 from core import osgi
 from core.log import getLogger
 
@@ -61,12 +72,13 @@ METADATA_REGISTRY = osgi.get_service(
         "org.openhab.core.items.MetadataRegistry"
     ) or osgi.get_service(
         "org.eclipse.smarthome.core.items.MetadataRegistry"
-    )
+    ) # type: MetadataRegistry
 
 LOG = getLogger(u"core.metadata")
 
 
 def get_all_namespaces(item_name):
+    # type: (str) -> t.List[String]
     """
     This function will return a list of an Item's namespaces.
 
@@ -89,6 +101,7 @@ def get_all_namespaces(item_name):
 
 
 def get_metadata(item_name, namespace):
+    # type: (str, str) -> t.Union[Metadata, None]
     """
     This function will return the Metadata object associated with the
     specified Item.
@@ -112,7 +125,14 @@ def get_metadata(item_name, namespace):
     return METADATA_REGISTRY.get(MetadataKey(namespace, item_name))
 
 
-def set_metadata(item_name, namespace, configuration, value=None, overwrite=False):
+def set_metadata(
+    item_name, # type: str
+    namespace, # type: str
+    configuration, # type: t.Mapping[str, t.Any]
+    value=None, # type: str
+    overwrite=False # type: bool
+):
+    # type: (...) -> None
     """
     This function creates or modifies Item metadata, optionally overwriting
     the existing data. If not overwriting, the provided keys and values will
@@ -152,6 +172,7 @@ def set_metadata(item_name, namespace, configuration, value=None, overwrite=Fals
 
 
 def remove_metadata(item_name, namespace=None):
+    # type: (str, str) -> None
     """
     This function removes the Item metadata for the specified namepsace or for
     all namespaces.
@@ -179,6 +200,7 @@ def remove_metadata(item_name, namespace=None):
 
 
 def get_key_value(item_name, namespace, *args):
+    # type: (str, str, str) -> t.Any
     """
     Ths function returns the ``configuration`` value for the specified key.
 
@@ -215,6 +237,7 @@ def get_key_value(item_name, namespace, *args):
 
 
 def set_key_value(item_name, namespace, *args):
+    # type: (str, str, t.Any) -> None
     """
     This function creates or updates a key value in the specified namespace.
 
@@ -251,6 +274,7 @@ def set_key_value(item_name, namespace, *args):
 
 
 def remove_key_value(item_name, namespace, *args):
+    # type: (str, str, str) -> None
     """
     This function removes a key from a namespace's ``configuration``.
 
@@ -287,6 +311,7 @@ def remove_key_value(item_name, namespace, *args):
 
 
 def get_value(item_name, namespace):
+    # type: (str, str) -> t.Union[str, None]
     """
     This function will return the Item metadata ``value`` for the specified
     namespace.
@@ -314,6 +339,7 @@ def get_value(item_name, namespace):
 
 
 def set_value(item_name, namespace, value):
+    # type: (str, str, str) -> None
     """
     This function creates or updates the Item metadata ``value`` for the
     specified namespace.

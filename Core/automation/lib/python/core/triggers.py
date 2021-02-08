@@ -23,12 +23,28 @@ for more details):
 * **StartupTrigger** - fires when the rule is activated **(implemented in Jython and requires S1566, 2.5M2 or newer)**
 * **DirectoryEventTrigger** - fires when a directory reports an Event **(implemented in Jython and requires S1566, 2.5M2 or newer)**
 """
-from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
+try:
+    # pylint: disable=unused-import
+    import typing
+    if typing.TYPE_CHECKING:
+        from core.jsr223.scope import (
+            itemRegistry as t_itemRegistry,
+            things as t_things
+        )
+        from java.nio.file import WatchEvent
+    # pylint: enable=unused-import
+except:
+    pass
 
 from core.jsr223.scope import scriptExtension
 scriptExtension.importPreset("RuleSupport")
 from core.jsr223.scope import TriggerBuilder, Configuration, Trigger
 from core.utils import validate_uid
+
+from java.nio.file import StandardWatchEventKinds
+ENTRY_CREATE = StandardWatchEventKinds.ENTRY_CREATE  # type: WatchEvent.Kind
+ENTRY_DELETE = StandardWatchEventKinds.ENTRY_DELETE  # type: WatchEvent.Kind
+ENTRY_MODIFY = StandardWatchEventKinds.ENTRY_MODIFY  # type: WatchEvent.Kind
 
 
 def when(target):
@@ -70,50 +86,50 @@ def when(target):
         target (string): the `rules DSL-like formatted trigger expression <https://www.openhab.org/docs/configuration/rules-dsl.html#rule-triggers>`_
             to parse
     """
+    from os import path
+
+    itemRegistry = scriptExtension.get("itemRegistry") # type: t_itemRegistry
+    things = scriptExtension.get("things") # type: t_things
+    from core.log import getLogger
+
     try:
-        from os import path
+        from org.openhab.core.thing import ChannelUID, ThingUID, ThingStatus
+        from org.openhab.core.thing.type import ChannelKind
+    except:
+        from org.eclipse.smarthome.core.thing import ChannelUID, ThingUID, ThingStatus
+        from org.eclipse.smarthome.core.thing.type import ChannelKind
 
-        itemRegistry = scriptExtension.get("itemRegistry")
-        things = scriptExtension.get("things")
-        from core.log import getLogger
+    try:
+        from org.eclipse.smarthome.core.types import TypeParser
+    except:
+        from org.openhab.core.types import TypeParser
 
-        try:
-            from org.openhab.core.thing import ChannelUID, ThingUID, ThingStatus
-            from org.openhab.core.thing.type import ChannelKind
-        except:
-            from org.eclipse.smarthome.core.thing import ChannelUID, ThingUID, ThingStatus
-            from org.eclipse.smarthome.core.thing.type import ChannelKind
+    try:
+        from org.quartz.CronExpression import isValidExpression
+    except:
+        # Quartz is removed in OH3, this needs to either impliment or match
+        # functionality in `org.openhab.core.internal.scheduler.CronAdjuster`
+        def isValidExpression(expr):
+            import re
 
-        try:
-            from org.eclipse.smarthome.core.types import TypeParser
-        except:
-            from org.openhab.core.types import TypeParser
+            expr = expr.strip()
+            if expr.startswith("@"):
+                return re.match(r"@(annually|yearly|monthly|weekly|daily|hourly|reboot)", expr) is not None
 
-        try:
-            from org.quartz.CronExpression import isValidExpression
-        except:
-            # Quartz is removed in OH3, this needs to either impliment or match
-            # functionality in `org.openhab.core.internal.scheduler.CronAdjuster`
-            def isValidExpression(expr):
-                import re
+            parts = expr.split()
+            if 6 <= len(parts) <= 7:
+                for i in range(len(parts)):
+                    if not re.match(
+                        r"\?|(\*|\d+)(\/\d+)?|(\d+|\w{3})(\/|-)(\d+|\w{3})|((\d+|\w{3}),)*(\d+|\w{3})", parts[i]
+                    ):
+                        return False
+                return True
+            return False
 
-                expr = expr.strip()
-                if expr.startswith("@"):
-                    return re.match(r"@(annually|yearly|monthly|weekly|daily|hourly|reboot)", expr) is not None
-
-                parts = expr.split()
-                if 6 <= len(parts) <= 7:
-                    for i in range(len(parts)):
-                        if not re.match(
-                            r"\?|(\*|\d+)(\/\d+)?|(\d+|\w{3})(\/|-)(\d+|\w{3})|((\d+|\w{3}),)*(\d+|\w{3})", parts[i]
-                        ):
-                            return False
-                    return True
-                return False
-
-        LOG = getLogger(u"core.triggers")
+    LOG = getLogger(u"core.triggers")
 
 
+    try:
         def item_trigger(function):
             if not hasattr(function, 'triggers'):
                 function.triggers = []

@@ -7,6 +7,8 @@ This change log will keep track of what has been done in the `ivans-updates` bra
   * Custom logger class and simplier `getLogger` function that automatically prepends the `LOG_PREFIX`.
   * OH3.x support while maintaining backwards compatibility with OH2.x.
   * Date functions can now accept DateTime Items.
+  * Type hints to make life easier! Inline where possible, stub files where not.
+    See the [openHAB Stubs](https://github.com/CrazyIvan359/openhab-stubs) repo for details.
 
 ## Changed
 
