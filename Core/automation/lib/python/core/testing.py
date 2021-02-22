@@ -21,6 +21,7 @@ turned on, it will run a testcase and store the test results in a string item.
 from __future__ import absolute_import
 
 import unittest
+from tempfile import TemporaryFile
 from core.log import logging
 from core.triggers import ItemStateUpdateTrigger
 from core.jsr223.scope import SimpleRule, scriptExtension, events, OnOffType
@@ -36,13 +37,16 @@ _RESULT_TEMPLATE = """{{
 }}"""
 
 
-def _run_test(test_case):
+def _run_test(test_case, out = None, verbosity=None):
     def _format_errors(errors):
         return u"{}".format(",\n    ".join('{{"name":"{}", "stack":"{}"}}'.format(
             test.id(), stack.replace('"', r'\"')) for test, stack in errors))
     loader = unittest.TestLoader()
     suite = loader.loadTestsFromTestCase(test_case)
-    runner = unittest.TextTestRunner(resultclass=unittest.TestResult)
+    if out is not None:
+        runner = unittest.TextTestRunner(out, verbosity=verbosity)
+    else:
+        runner = unittest.TextTestRunner()
     result = runner.run(suite)
     json_result = _RESULT_TEMPLATE.format(
         run=result.testsRun, errors=_format_errors(result.errors),
@@ -50,13 +54,24 @@ def _run_test(test_case):
     return (not (result.errors or result.failures), json_result)
 
 
-def run_test(test_case, logger=logging.root):
+def run_test(test_case, logger=logging.root, verbosity=None):
     logger.info(u"Running tests: '{}'".format(test_case.__name__))
-    status, result = _run_test(test_case)
-    if status:
-        logger.info(result)
+    if verbosity is not None:
+        output = TemporaryFile()
+        status, result = _run_test(test_case, output, verbosity)
+        output.seek(0)
+        for line in output.read().splitlines():
+            if status:
+                logger.info(line)
+            else:
+                logger.error(line)
+        output.close()
     else:
-        logger.error(result)
+        status, result = _run_test(test_case, verbosity)
+        if status:
+            logger.info(result)
+        else:
+            logger.error(result)
     return (status, result)
 
 
