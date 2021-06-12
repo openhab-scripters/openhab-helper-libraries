@@ -84,7 +84,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 
            .. tabs::
 
-               .. group-tab:: Using an ``/etc/default/openhab2`` file
+               .. group-tab:: Using an ``/etc/default/openhab`` file
 
                    This option is typically used with a package repository openHAB installation (includes openHABian).
                    If creating a new file, remember to set the permissions so that the `openhab` account has at least read access.
@@ -92,7 +92,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
 
                    .. code-block:: none
 
-                       EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab2/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab2/automation/jython -Dpython.path=/etc/openhab2/automation/lib/python"
+                       EXTRA_JAVA_OPTS="-Xbootclasspath/a:/etc/openhab/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/etc/openhab/automation/jython -Dpython.path=/etc/openhab/automation/lib/python"
 
                .. group-tab:: Using the ``start.sh`` script
 
@@ -101,7 +101,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
                    .. code-block:: none
 
                        # Add to the top of the file
-                       export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab2/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab2/conf/automation/jython -Dpython.path=/opt/openhab2/conf/automation/lib/python"
+                       export EXTRA_JAVA_OPTS="-Xbootclasspath/a:/opt/openhab/conf/automation/jython/jython-standalone-2.7.0.jar -Dpython.home=/opt/openhab/conf/automation/jython -Dpython.path=/opt/openhab/conf/automation/lib/python"
 
                .. group-tab:: Using the ``start.bat`` script
 
@@ -111,7 +111,7 @@ Instructions for installation in a Docker container are available :doc:`here <Do
                    .. code-block:: none
 
                        REM Add to the top of the file
-                       set EXTRA_JAVA_OPTS=-Xbootclasspath/a:C:\openhab2\conf\automation\jython\jython-standalone-2.7.0.jar -Dpython.home=C:\openhab2\conf\automation\jython -Dpython.path=C:\openhab2\conf\automation\lib\python
+                       set EXTRA_JAVA_OPTS=-Xbootclasspath/a:C:\openhab\conf\automation\jython\jython-standalone-2.7.0.jar -Dpython.home=C:\openhab\conf\automation\jython -Dpython.path=C:\openhab\conf\automation\lib\python
 
         #. Download the `standalone Jython 2.7.0 jar <http://www.jython.org/downloads.html>`_ and copy it to the path specified above in the EXTRA_JAVA_OPTS.
            A full installation of Jython can also be used, but the paths above would need to be modified.
