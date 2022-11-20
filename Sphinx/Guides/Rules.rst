@@ -10,7 +10,7 @@ Scripted rules can use ModuleTypes that are already present in openHAB, and also
 .. _Next-Generation Rule Engine: https://www.openhab.org/docs/configuration/rules-ng.html
 .. _Automation API: http://www.eclipse.org/smarthome/documentation/features/rules.html#java-api
 
-When a script is loaded, it is provided with a *JSR223 scope* that `predefines a number of variables <https://www.openhab.org/docs/configuration/jsr223.html#default-variables-no-preset-loading-required>`_.
+When a script is loaded, it is provided with a *JSR223 scope* that `predefines a number of variables <https://www.openhab.org/docs/configuration/jsr223.html#scriptextension-objects-all-jsr223-languages>`_.
 These include the most commonly used core types and values from openHAB (e.g., State, Command, OnOffType, etc.).
 This means you don't need an import statement to load them.
 
