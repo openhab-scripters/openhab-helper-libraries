@@ -207,7 +207,7 @@ Extensions
 
     .. note::
 
-        Trigger names must be unique within the scope of a rule instance, and can only contain alphanumeric characters, hythens, and underscores (no spaces)... ``[A-Za-z0-9_-]``.
+        Trigger names must be unique within the scope of a rule instance, and can only contain alphanumeric characters, hyphens, and underscores (no spaces)... ``[A-Za-z0-9_-]``.
 
     .. tabs::
 
